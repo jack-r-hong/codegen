@@ -2,9 +2,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.swagger</groupId>
-    <artifactId>typescript_express-swagger-codegen</artifactId>
+    <artifactId>typeScriptExpressServer-swagger-codegen</artifactId>
     <packaging>jar</packaging>
-    <name>typescript_express-swagger-codegen</name>
+    <name>typeScriptExpressServer-swagger-codegen</name>
     <version>1.0.0</version>
     <build>
         <plugins>

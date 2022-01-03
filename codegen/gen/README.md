@@ -1,4 +1,4 @@
-# Swagger Codegen for the typescript_express library
+# Swagger Codegen for the typeScriptExpressServer library
 
 ## Overview
 This is a boiler-plate project to generate your own client library with Swagger.  Its goal is
@@ -21,9 +21,9 @@ At this point, you've likely generated a client setup.  It will include somethin
 |-- src
 |--- main
 |---- java
-|----- custom.typescript_express.Typescript_expressGenerator.java // generator file
+|----- custom.typeScriptExpressServer.TypescriptexpressserverGenerator.java // generator file
 |---- resources
-|----- typescript_express // template files
+|----- typeScriptExpressServer // template files
 |----- META-INF
 |------ services
 |------- io.swagger.codegen.CodegenConfig
@@ -31,11 +31,11 @@ At this point, you've likely generated a client setup.  It will include somethin
 
 You _will_ need to make changes in at least the following:
 
-`Typescript_expressGenerator.java`
+`TypescriptexpressserverGenerator.java`
 
 Templates in this folder:
 
-`src/main/resources/typescript_express`
+`src/main/resources/typeScriptExpressServer`
 
 Once modified, you can run this:
 
@@ -46,14 +46,14 @@ mvn package
 In your generator project.  A single jar file will be produced in `target`.  You can now use that with codegen:
 
 ```
-java -cp /path/to/swagger-codegen-cli.jar:/path/to/your.jar io.swagger.codegen.Codegen -l typescript_express -i /path/to/swagger.yaml -o ./test
+java -cp /path/to/swagger-codegen-cli.jar:/path/to/your.jar io.swagger.codegen.Codegen -l typeScriptExpressServer -i /path/to/swagger.yaml -o ./test
 ```
 
 Now your templates are available to the client generator and you can write output values
 
 ## But how do I modify this?
-The `Typescript_expressGenerator.java` has comments in it--lots of comments.  There is no good substitute
-for reading the code more, though.  See how the `Typescript_expressGenerator` implements `CodegenConfig`.
+The `TypescriptexpressserverGenerator.java` has comments in it--lots of comments.  There is no good substitute
+for reading the code more, though.  See how the `TypescriptexpressserverGenerator` implements `CodegenConfig`.
 That class has the signature of all values that can be overridden.
 
 For the templates themselves, you have a number of values available to you for generation.
@@ -67,7 +67,7 @@ the object you have available during client generation:
 # -DdebugOperations prints operations passed to the template engine
 # -DdebugSupportingFiles prints additional data passed to the template engine
 
-java -DdebugOperations -cp /path/to/swagger-codegen-cli.jar:/path/to/your.jar io.swagger.codegen.Codegen -l typescript_express -i /path/to/swagger.yaml -o ./test
+java -DdebugOperations -cp /path/to/swagger-codegen-cli.jar:/path/to/your.jar io.swagger.codegen.Codegen -l typeScriptExpressServer -i /path/to/swagger.yaml -o ./test
 ```
 
 Will, for example, output the debug info for operations.  You can use this info

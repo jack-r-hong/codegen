@@ -1,4 +1,4 @@
-package custom.typescript_express;
+package custom.typeScriptExpressServer;
 
 import io.swagger.codegen.v3.*;
 import io.swagger.codegen.v3.generators.DefaultCodegenConfig;
@@ -6,7 +6,7 @@ import io.swagger.codegen.v3.generators.DefaultCodegenConfig;
 import java.util.*;
 import java.io.File;
 
-public class Typescript_expressGenerator extends DefaultCodegenConfig {
+public class TypescriptexpressserverGenerator extends DefaultCodegenConfig {
 
   // source folder where to write the files
   protected String sourceFolder = "src";
@@ -29,7 +29,7 @@ public class Typescript_expressGenerator extends DefaultCodegenConfig {
    * @return the friendly name for the generator
    */
   public String getName() {
-    return "typescript_express";
+    return "typeScriptExpressServer";
   }
 
   /**
@@ -39,14 +39,14 @@ public class Typescript_expressGenerator extends DefaultCodegenConfig {
    * @return A string value for the help message
    */
   public String getHelp() {
-    return "Generates a typescript_express client library.";
+    return "Generates a typeScriptExpressServer client library.";
   }
 
-  public Typescript_expressGenerator() {
+  public TypescriptexpressserverGenerator() {
     super();
 
     // set the output folder here
-    outputFolder = "generated-code/typescript_express";
+    outputFolder = "generated-code/typeScriptExpressServer";
 
     /**
      * Models.  You can write model files using the modelTemplateFiles map.
@@ -56,7 +56,7 @@ public class Typescript_expressGenerator extends DefaultCodegenConfig {
      */
     modelTemplateFiles.put(
       "model.mustache", // the template to use
-      ".sample");       // the extension for each file to write
+      ".ts");       // the extension for each file to write
 
     /**
      * Api classes.  You can write classes for each Api file with the apiTemplateFiles map.
@@ -65,23 +65,23 @@ public class Typescript_expressGenerator extends DefaultCodegenConfig {
      */
     apiTemplateFiles.put(
       "api.mustache",   // the template to use
-      ".sample");       // the extension for each file to write
+      ".ts");       // the extension for each file to write
 
     /**
      * Template Location.  This is the location which templates will be read from.  The generator
      * will use the resource stream to attempt to read the templates.
      */
-    templateDir = "typescript_express";
+    templateDir = "typeScriptExpressServer";
 
     /**
      * Api Package.  Optional, if needed, this can be used in templates
      */
-    apiPackage = "io.swagger.client.api";
+    apiPackage = "api";
 
     /**
      * Model Package.  Optional, if needed, this can be used in templates
      */
-    modelPackage = "io.swagger.client.model";
+    modelPackage = "model";
 
     /**
      * Reserved words.  Override this with reserved words specific to your language
@@ -112,11 +112,24 @@ public class Typescript_expressGenerator extends DefaultCodegenConfig {
      * Language Specific Primitives.  These types will not trigger imports by
      * the client generator
      */
-    languageSpecificPrimitives = new HashSet<String>(
-      Arrays.asList(
-        "Type1",      // replace these with your types
-        "Type2")
-    );
+    languageSpecificPrimitives = new HashSet<>(Arrays.asList(
+      "string",
+      "String",
+      "boolean",
+      "Boolean",
+      "Double",
+      "Integer",
+      "Long",
+      "Float",
+      "Object",
+      "Array",
+      "Date",
+      "number",
+      "any",
+      "File",
+      "Error",
+      "Map"
+      ));
   }
 
   /**

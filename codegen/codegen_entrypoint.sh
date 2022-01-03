@@ -1,7 +1,8 @@
 #!/bin/bash
  
-CODEGEN_LANG=typescript_express
+CODEGEN_LANG=typeScriptExpressServer
 CODEGEN_OUTPUT=/server
+CODEGEN_INPUT=http://petstore.swagger.io/v2/swagger.json
 
 
 
@@ -14,6 +15,6 @@ else
 
     java -cp  "/codegen/gen/target/$CODEGEN_LANG-swagger-codegen-1.0.0.jar:/swagger-codegen-cli.jar" \
     io.swagger.codegen.v3.cli.SwaggerCodegen generate -l $CODEGEN_LANG\
-    -i http://petstore.swagger.io/v2/swagger.json \
-    -o "$CODEGEN_OUTPUT"
+    -i $CODEGEN_INPUT \
+    -o $CODEGEN_OUTPUT
 fi
