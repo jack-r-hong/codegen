@@ -8,10 +8,36 @@ services:
       target: base
     volumes:
       - ./src:/home/node/app/src
+      - ./prisma:/home/node/app/prisma
       - ./nodemon.json:/home/node/app/nodemon.json
     container_name: ts-node-docker
     expose:
       - '4000'
     ports:
       - '4000:4000'
+    networks:
+      - backend
     command: npm run dev
+    depends_on: 
+      - db
+  db:
+    image: mysql:latest
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    # env_file:
+    #   - .env
+    networks:
+      - backend
+    
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+    networks:
+      - backend
+
+networks:
+  backend:

@@ -6,11 +6,15 @@ COPY package*.json ./
 
 RUN npm i
 
+
 COPY . .
 
-FROM base as production
+RUN npx prisma generate 
+    # && npx migrate dev --name init
 
-ENV NODE_PATH=./build
+# FROM base as production
 
-RUN npm run build
+# ENV NODE_PATH=./build
+
+# RUN npm run build
 

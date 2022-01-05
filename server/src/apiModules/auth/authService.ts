@@ -11,10 +11,17 @@ export class AuthService {
         private userModel: UserModel,
     ) {}
 
-    login(account :string, password  :string){
+    createUser([email, password, name]: string[]){
         return new Promise((resolve, reject) => {
-            this.userModel.read()
-            resolve(account)
+            const user = this.userModel.create([email, password, name])
+            resolve(user)
+        })
+    }
+
+    login(email :string, password  :string){
+        return new Promise((resolve, reject) => {
+            const user = this.userModel.read(email)
+            resolve(user)
         })
     }
 }

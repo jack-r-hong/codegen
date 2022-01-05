@@ -6,6 +6,64 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  email     String   @unique
+  name      String?
+  password  String
+  auth      Auth     @relation(fields: [authLevel], references: [authLevel])   
+  authLevel    Int
+
+  
+
+}
+
+model Auth {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  authLevel Int      @unique
+  detail1   Int
+  user      User? 
+
+}
+
+
+
+// model AnotherPost {
+//   authorFirstName String?
+//   authorLastName  String?
+//   id              Int          @id @default(autoincrement())
+//   title           String?
+//   AnotherUser     AnotherUser? @relation(fields: [authorFirstName, authorLastName], references: [firstName, lastName])
+
+//   @@index([authorFirstName, authorLastName], name: "authorFirstName")
+// }
+
+// model AnotherUser {
+//   firstName   String?
+//   id          Int           @id @default(autoincrement())
+//   lastName    String?
+//   AnotherPost AnotherPost[]
+
+//   @@unique([firstName, lastName], name: "name")
+// }
+
+// model Post {
+//   authorId Int?
+//   id       Int     @id @default(autoincrement())
+//   title    String?
+//   User     User?   @relation(fields: [authorId], references: [id])
+
+//   @@index([authorId], name: "author")
+// }
+
+// model User {
+//   id   Int     @id @default(autoincrement())
+//   name String?
+//   Post Post[]
+// }
