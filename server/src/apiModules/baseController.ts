@@ -1,7 +1,6 @@
 import {Request, Response, Router, RequestHandler, NextFunction  } from "express";
 import { checkSchema, validationResult  } from 'express-validator';
 
-
 export function Controller(mainPath: string) {
     return <T extends { new(...args: any[]): {} }>(Base: T) =>{
         return class extends Base {
@@ -42,7 +41,7 @@ export function Post(path: string)  {
 }
 
 export function Put(path: string)  {
-    return decoratorFactory('pet', path)
+    return decoratorFactory('put', path)
 }
 
 export function Delete(path: string)  {
@@ -60,8 +59,8 @@ function decoratorFactory(httpMethod: string, path: string) {
 const bedRequestHandler = (req: Request, res: Response, next: NextFunction) =>{
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        // next(errors);
-        return res.status(400).json({ errors: errors.array() });
+        next(errors);
+        return;
     }
 
     next();

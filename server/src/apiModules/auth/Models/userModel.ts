@@ -1,43 +1,93 @@
 import { Service } from 'typedi';
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient, User } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
 @Service()
 export class UserModel { 
 
-    create([email, password, name]: string[]){
-        return new Promise(async(res) => {
-            const result = await prisma.user.create({
-                data: { 
-                    email, 
-                    password, 
-                    name, 
-                    auth:{}
+    async create([email, password, name]: string[]){
+        const user: User = await prisma.user.create({
+            data: { 
+                email, 
+                password, 
+                name, 
+                authLevel: 1,
+            },
+        }).catch(e => {throw e});
+    
+        prisma.$disconnect();   
+        return user;
+    }
 
-                },
-              })
+    async findUsers(findManyOption: any){
+        const {type, take, skip, cursorField, cursor : cursornum} = findManyOption;
+        const cursor = type === 'cursor'? {
+            [cursorField]: cursornum
+        }: undefined;
+        const user: User[]|null = await prisma.user.findMany({
+            take,
+            skip,
+            orderBy: {
+                id: 'desc',
+            },
+            cursor
+        })
+            .catch(e => {throw e});
+    
+        prisma.$disconnect();   
+        return user;
+    }
+
+    async findUser(whereParm: string|number ){
         
-            res(result)         
-        })
-    }
-
-    read(email: string){
-        return new Promise(async(res) => {
-            const user = await prisma.user.findUnique({
+            let whereField :string;
+            switch(typeof whereParm){
+                case 'number':
+                    whereField = 'id';
+                    break;
+                case 'string':
+                    whereField = 'email';
+                    break;                   
+            }
+            const user: User|null = await prisma.user.findUnique({
                 where:{
-                    email: email
+                    [whereField] : whereParm
                 }
-            })            
-            res(user)         
+            }).catch(e => {throw e});
+
+            
+            prisma.$disconnect();   
+            return user;
+        
+    }
+
+    async update(id: number,password: string, name: string, authLevel?: number ){
+        const user: User = await prisma.user.update({
+            where:{
+                id
+            },
+            data:{
+                password,
+                name,
+                authLevel
+            }            
         })
+            .catch(e => {throw e});
+
+        prisma.$disconnect();   
+        return user;
     }
 
-    update(){
+    async delete(id: number){
 
-    }
+        const user: User = await prisma.user.delete({
+            where:{
+                id
+            }  
+        }).catch(e => {throw e});
 
-    delete(){
-
+        prisma.$disconnect();   
+        return user;
     }
 }

@@ -1,8 +1,10 @@
-import express, {Application, Router} from 'express';
+import express, {Application, Request, Response, NextFunction} from 'express';
+import { Result, ValidationError } from 'express-validator';
 import bodyParser  from 'body-parser';
 import compression  from 'compression';
 import cors from 'cors';
 import helmet  from "helmet";
+import httpErrors from 'http-errors'
 import { registerController}  from './apiModules';
 
 export class ExpressApp {
@@ -12,13 +14,11 @@ export class ExpressApp {
     constructor(){
         this.middleware();
         registerController(this.app);
+        this.errorHendler();
         this.listen();
     }
     
     private listen(): void{
-        // this.app.param('user',(req, res) =>{
-
-        // })
         this.app.listen(this.port, () => {
             console.log(`server running on port ${this.port}`);
         });        
@@ -43,5 +43,18 @@ export class ExpressApp {
         this.app.use(compression())
         this.app.use(bodyParser.urlencoded({ extended: false }));
         this.app.use(bodyParser.json())
+    }
+
+    private errorHendler(){
+        this.app.use((err :httpErrors.HttpError | Result , req :Request, res:Response, next:NextFunction) => {
+            if (err instanceof Result){
+                let err = httpErrors(400)
+                res.status(err.statusCode);
+                res.send(`${err.statusCode} ${err.message}`); 
+            }else{
+                res.status(err.statusCode);
+                res.send(`${err.statusCode} ${err.message}`);  
+            }
+        });
     }
 }
