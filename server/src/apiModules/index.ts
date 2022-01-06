@@ -1,15 +1,14 @@
-import { Application } from 'express'
-import { AuthController } from "./auth/authController"
+import {Application} from 'express';
+import {AuthController} from './auth/authController';
 
 const controllers = [
-    AuthController
-]
+  AuthController,
+];
 
 
 export const registerController = (app : Application) => {
-    controllers.forEach(controller =>{
-        new controller(app)
-        // new controller()
-
-    });
-}
+  controllers.forEach((Controller) =>{
+    new Controller(app);
+    // new controller()
+  });
+};
