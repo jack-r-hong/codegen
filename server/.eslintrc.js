@@ -18,6 +18,7 @@ module.exports = {
   'rules': {
     'linebreak-style': 0,
     'require-jsdoc': 0,
+    'new-cap': ['error', {'capIsNew': false}],
     // 'use-decorator/use-decorator': [1, {
     //   'params': [
     //     {

@@ -1,5 +1,5 @@
 
-import express, {Application, Request, Response} from 'express';
+import express, {Application, NextFunction, Request, Response} from 'express';
 import {Result} from 'express-validator';
 import bodyParser from 'body-parser';
 import compression from 'compression';
@@ -8,20 +8,19 @@ import helmet from 'helmet';
 import httpErrors from 'http-errors';
 import {registerController} from './apiModules';
 
+
 export class ExpressApp {
-  private app: Application = express();
-  private port: number = 4000;
+  public app: Application = express();
 
   constructor() {
     this.middleware();
     registerController(this.app);
     this.errorHendler();
-    this.listen();
   }
 
-  private listen(): void {
-    this.app.listen(this.port, () => {
-      console.log(`server running on port ${this.port}`);
+  public listen(port: number): void {
+    this.app.listen(port, () => {
+      console.log(`server running on port ${port}`);
     });
   }
 
@@ -47,19 +46,27 @@ export class ExpressApp {
   }
 
   private errorHendler() {
-    this.app.use((
+    const errorHandle = (
         err :httpErrors.HttpError | Result,
         req :Request,
         res:Response,
+        next: NextFunction,
     ) => {
+      console.log(err);
+
       if (err instanceof Result) {
         const err = httpErrors(400);
         res.status(err.statusCode);
         res.send(`${err.statusCode} ${err.message}`);
+      } else if (err instanceof httpErrors.HttpError) {
+        res.status(err.statusCode);
+        res.send(`${err.statusCode} ${err.message}`);
       } else {
+        const err = httpErrors(500);
         res.status(err.statusCode);
         res.send(`${err.statusCode} ${err.message}`);
       }
-    });
+    };
+    this.app.use(errorHandle);
   }
 }

@@ -26,6 +26,7 @@ export class UserModel {
     const cursor = type === 'cursor'? {
       [cursorField]: cursornum,
     }: undefined;
+
     const user: User[]|null = await prisma.user.findMany({
       take,
       skip,
@@ -65,15 +66,19 @@ export class UserModel {
     return user;
   }
 
-  async update(id: number, password: string, name: string, authLevel?: number ) {
-    const user: User = await prisma.user.update({
+  async update(
+      id: number,
+      password: string,
+      name: string,
+      authLevel?: number ) {
+    const user:void| User = await prisma.user.update({
       where: {
         id,
       },
       data: {
         password,
         name,
-        authLevel,
+        // authLevel,
       },
     })
         .catch((e) => {

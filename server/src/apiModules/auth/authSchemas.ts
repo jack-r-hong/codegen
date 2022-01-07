@@ -1,4 +1,4 @@
-import {Schema} from 'express-validator';
+import {Schema, ParamSchema} from 'express-validator';
 
 const user: Schema = {
   id: {
@@ -90,7 +90,7 @@ export const findManyValidator = (schema :Schema ) =>{
                 return false;
               })
             ) {
-              throw 'Error field.';
+              throw Error('Error field.');
             }
           } else {
             return 'offset';
@@ -126,7 +126,7 @@ export const updateUser: Schema = {
   id,
   name,
   password,
-  authLevel,
+  // authLevel,
 };
 
 export const deleteUser: Schema = {

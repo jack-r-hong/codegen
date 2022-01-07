@@ -31,6 +31,15 @@ export class AuthService {
   }
 
   async createUser([email, password, name]: string[]) {
+    const isDuplicate = await this.userModel.findUser(email)
+        .catch((e) =>{
+          throw e;
+        });
+
+    if (<null>isDuplicate) {
+      throw Error('Duplicate email');
+    }
+
     const user = await this.userModel.create([email, password, name])
         .catch((e) =>{
           throw e;
@@ -44,7 +53,6 @@ export class AuthService {
         .catch((e) =>{
           throw e;
         });
-
     return user;
   }
 

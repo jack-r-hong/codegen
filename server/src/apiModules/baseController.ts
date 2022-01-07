@@ -7,32 +7,39 @@ export function Controller(mainPath: string) {
       constructor(...args: any[]) {
         super(...args);
         const app = args[0];
+
+
         Object.getOwnPropertySymbols(Base.prototype).forEach((key) => {
-          const {path, method, hendle, middleware} = Base.prototype[key];
-          app[method](`${mainPath}${path}`, middleware, hendle);
+          const {path, method, handler, middleware} = Base.prototype[key];
+          app[method](
+              `${mainPath}${path}`,
+              middleware,
+              bedRequestHandler,
+              handler,
+          );
         });
       }
     };
   };
 }
 
-type Hendle = (req: Request, res: Response) => Router;
+type Handler = (req: Request, res: Response) => Router;
 
 class Meta {
   path: string;
   method: string;
-  hendle: RequestHandler;
+  handler: RequestHandler;
   middleware: RequestHandler[];
 
   constructor(
       path: string,
       method: string,
-      hendle: Hendle,
+      handler: Handler,
       middleware: RequestHandler[],
   ) {
     this.path = path;
     this.method = method;
-    this.hendle = hendle;
+    this.handler = handler;
     this.middleware = middleware;
   }
 }
@@ -77,7 +84,5 @@ export function Validator(schema: any) {
     const sym = Symbol.for(propertyKey);
     target[sym] = target[sym] || new Meta('', '', descriptor.value, []);
     target[sym].middleware.push(checkSchema(schema));
-
-    target[sym].middleware.push(bedRequestHandler);
   };
 }
