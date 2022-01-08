@@ -67,6 +67,10 @@ public class TypescriptexpressserverGenerator extends DefaultCodegenConfig {
       "api.mustache",   // the template to use
       ".ts");       // the extension for each file to write
 
+    apiTemplateFiles.put(
+      "controller.mustache",   // the template to use
+      ".ts");       // the extension for each file to write
+
     /**
      * Template Location.  This is the location which templates will be read from.  The generator
      * will use the resource stream to attempt to read the templates.
@@ -106,6 +110,11 @@ public class TypescriptexpressserverGenerator extends DefaultCodegenConfig {
     supportingFiles.add(new SupportingFile("myFile.mustache",   // the input template or file
       "",                                                       // the destination folder, relative `outputFolder`
       "myFile.sample")                                          // the output file
+    );
+
+    supportingFiles.add(new SupportingFile("controller.mustache",   // the input template or file
+      "",                                                       // the destination folder, relative `outputFolder`
+      "controller.ts")                                          // the output file
     );
 
     /**

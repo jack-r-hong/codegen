@@ -4,6 +4,7 @@ export {Container} from 'typedi';
 import {FindManyOption} from './authSchemas';
 import {UserModel} from './Models/userModel';
 import {User} from '@prisma/client';
+import {authErrors as e} from './authErrors';
 
 
 @Service()
@@ -18,6 +19,9 @@ export class AuthService {
           throw e;
         });
 
+    if (user === null) {
+      throw new e.NotFindError();
+    }
     return user;
   }
 
@@ -36,11 +40,12 @@ export class AuthService {
           throw e;
         });
 
-    if (<null>isDuplicate) {
-      throw Error('Duplicate email');
+
+    if (isDuplicate === null) {
+      throw new e.DuplicateUniqueField();
     }
 
-    const user = await this.userModel.create([email, password, name])
+    const user = await this.userModel.createUser([email, password, name])
         .catch((e) =>{
           throw e;
         });
@@ -74,7 +79,7 @@ export class AuthService {
     if ((<User>user).password === password) {
       return user;
     } else {
-      throw Error('wrongPassword');
+      throw new e.WrongPasswordError();
     }
   }
 }

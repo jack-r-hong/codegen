@@ -1,13 +1,42 @@
+
+# This is a sample api mustache template.  It is representing a ficticous 
+# language and won't be usable or compile to anything without lots of changes.
+# Use it as an example.  You can access the variables in the generator object
+# like such:
+
+# use the package from the `apiPackage` variable
+package: {{package}}
+
+# operations block
+{{#operations}}
+classname: {{classname}}
+
+# loop over each operation in the API:
+{{#operation}}
+
+# each operation has an `operationId`:
+operationId: {{operationId}}
+
+# and parameters:
+{{#allParams}}
+{{paramName}}: {{dataType}}
+{{/allParams}}
+
+{{/operation}}
+
+# end of operations block
+{{/operations}}
+
 import {Application, Request, Response, NextFunction} from 'express';
-import {errorHender} from './authErrors';
-import {Controller, Get, Post, Put, Delete, Validator} from '../baseController';
-import * as validSchemas from './authSchemas';
-import {AuthService, Container} from './authService';
+import {errorHender} from './errors';
+import {Controller as ControllerD, Get, Post, Put, Delete, Validator} from '../baseController';
+import * as validSchemas from './schemas';
+import {Service, Container} from './service';
 
 const authServiceInstance = Container.get(AuthService);
 
-@Controller('/auth')
-export class AuthController {
+@ControllerD('/auth')
+export class Controller {
   constructor(private app: Application) {}
 
   @Get('/user')

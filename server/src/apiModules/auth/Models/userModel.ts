@@ -5,7 +5,7 @@ const prisma = new PrismaClient();
 
 @Service()
 export class UserModel {
-  async create([email, password, name]: string[]) {
+  async createUser([email, password, name]: string[]) {
     const user: User = await prisma.user.create({
       data: {
         email,
@@ -22,18 +22,14 @@ export class UserModel {
   }
 
   async findUsers(findManyOption: any) {
-    const {type, take, skip, cursorField, cursor: cursornum} = findManyOption;
-    const cursor = type === 'cursor'? {
-      [cursorField]: cursornum,
-    }: undefined;
+    const {take, skip, sort, sequ} = findManyOption;
 
     const user: User[]|null = await prisma.user.findMany({
       take,
       skip,
       orderBy: {
-        id: 'desc',
+        [sort]: sequ,
       },
-      cursor,
     })
         .catch((e) => {
           throw e;

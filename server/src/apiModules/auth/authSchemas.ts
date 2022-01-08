@@ -1,4 +1,4 @@
-import {Schema, ParamSchema} from 'express-validator';
+import {Schema, CustomValidator} from 'express-validator';
 
 const user: Schema = {
   id: {
@@ -41,31 +41,46 @@ const user: Schema = {
   },
 };
 
-export interface FindManyOption {
-    type: string,
-    skip: number,
-    take: number,
-    // orderBy?: Object,
-    cursorField?: string;
-    cursor? :number
-}
-
-enum FindManyType{
-    offset='offset',
-    cursor='cursor'
-}
-
 const {id, email, password, name, authLevel} = user;
 
-export const findManyValidator = (schema :Schema ) =>{
-  const findManyOption:Schema = {
-    type: {
-      in: ['query'],
-      matches: {
-        options: /^(offset|cursor)$/,
-        errorMessage: 'Please input offset of cursor.',
+export enum Sequ{
+  Desc='desc',
+  Asc='asc'
+}
+
+export interface FindManyOption {
+    skip: number,
+    take: number,
+    sort?: string,
+    sequ?: Sequ
+}
+
+const addNullable = (schema:Schema, fields: string[]) => {
+  fields.forEach((ele) => {
+    schema[ele] = Object.assign({}, schema[ele], {
+      optional: {
+        options: {
+          nullable: true,
+        },
       },
-    },
+    } );
+  });
+};
+
+export const findManyValidator = (schema :Schema ) =>{
+  const isModelField: CustomValidator = (value, {req, location, path}) => {
+    const hasField = Object.keys(schema).some((e) =>{
+      if (e === value) return true;
+      return false;
+    });
+
+    if (!hasField) {
+      throw Error('Error field.');
+    }
+    return true;
+  };
+
+  const findManyOption:Schema = {
     skip: {
       in: ['query'],
       isInt: true,
@@ -74,33 +89,22 @@ export const findManyValidator = (schema :Schema ) =>{
       in: ['query'],
       isInt: true,
     },
-    // orderBy: {
-    //     in: ['query']
-    // },
-    cursorField: {
+    sort: {
       in: ['query'],
       custom: {
-        options: (value, {req, location, path}) => {
-          const {type} = <any>req.query;
-
-          if (type === FindManyType.cursor) {
-            if (
-              Object.keys(schema).some((e) =>{
-                if (e === value) return true;
-                return false;
-              })
-            ) {
-              throw Error('Error field.');
-            }
-          } else {
-            return 'offset';
-          }
-
-          return true;
-        },
+        options: isModelField,
+      },
+    },
+    sequ: {
+      in: ['query'],
+      matches: {
+        options: /^(a|de)sc$/,
       },
     },
   };
+
+  addNullable(findManyOption, ['sort', 'sequ'] );
+
   return findManyOption;
 };
 
@@ -122,12 +126,20 @@ export const getUser: Schema = {
 
 export const getUsers: Schema = findManyValidator(user);
 
-export const updateUser: Schema = {
-  id,
-  name,
-  password,
-  // authLevel,
-};
+export const updateUser: Schema = (
+  () => {
+    const schema = {
+      id,
+      name,
+      password,
+      authLevel,
+    };
+    addNullable(schema, ['password', 'name', 'authLevel']);
+
+    return schema;
+  }
+)();
+
 
 export const deleteUser: Schema = {
   id,

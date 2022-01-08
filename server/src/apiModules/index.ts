@@ -9,6 +9,5 @@ const controllers = [
 export const registerController = (app : Application) => {
   controllers.forEach((Controller) =>{
     new Controller(app);
-    // new controller()
   });
 };
