@@ -5,39 +5,48 @@ import io.swagger.codegen.v3.generators.DefaultCodegenConfig;
 
 import java.util.*;
 import java.io.File;
+import org.apache.commons.lang3.StringUtils;
 
 public class TypescriptexpressserverGenerator extends DefaultCodegenConfig {
 
   // source folder where to write the files
   protected String sourceFolder = "src";
   protected String apiVersion = "1.0.0";
+  protected String implFolder = "service";
 
-  /**
-   * Configures the type of generator.
-   * 
-   * @return  the CodegenType for this generator
-   * @see     io.swagger.codegen.CodegenType
-   */
   public CodegenType getTag() {
     return CodegenType.CLIENT;
   }
 
-  /**
-   * Configures a friendly name for the generator.  This will be used by the generator
-   * to select the library with the -l flag.
-   * 
-   * @return the friendly name for the generator
-   */
   public String getName() {
     return "typeScriptExpressServer";
   }
 
-  /**
-   * Returns human-friendly help for the generator.  Provide the consumer with help
-   * tips, parameters here
-   * 
-   * @return A string value for the help message
-   */
+  @Override
+  public String toApiName(String name) {
+      if (name.length() == 0) {
+          return "DefaultController";
+      }
+      return initialCaps(name);
+  }
+
+  @Override
+  public String toApiFilename(String name) {
+      return toApiName(name);
+  }
+
+  @Override
+  public String apiFilename(String templateName, String tag) {
+      String result = super.apiFilename(templateName, tag);
+
+      if ( templateName.equals("controller.mustache") ) {
+          String stringToMatch = File.separator + "controllers" + File.separator;
+          String replacement = File.separator + implFolder + File.separator;
+          result = StringUtils.replace(result, stringToMatch, replacement);
+      }
+      return result;
+  }
+
   public String getHelp() {
     return "Generates a typeScriptExpressServer client library.";
   }
@@ -48,12 +57,6 @@ public class TypescriptexpressserverGenerator extends DefaultCodegenConfig {
     // set the output folder here
     outputFolder = "generated-code/typeScriptExpressServer";
 
-    /**
-     * Models.  You can write model files using the modelTemplateFiles map.
-     * if you want to create one template for file, you can do so here.
-     * for multiple files for model, just put another entry in the `modelTemplateFiles` with
-     * a different extension
-     */
     modelTemplateFiles.put(
       "model.mustache", // the template to use
       ".ts");       // the extension for each file to write
@@ -63,9 +66,9 @@ public class TypescriptexpressserverGenerator extends DefaultCodegenConfig {
      * as with models, add multiple entries with different extensions for multiple files per
      * class
      */
-    apiTemplateFiles.put(
-      "api.mustache",   // the template to use
-      ".ts");       // the extension for each file to write
+    // apiTemplateFiles.put(
+    //   "api.mustache",   // the template to use
+    //   ".ts");       // the extension for each file to write
 
     apiTemplateFiles.put(
       "controller.mustache",   // the template to use
@@ -80,7 +83,7 @@ public class TypescriptexpressserverGenerator extends DefaultCodegenConfig {
     /**
      * Api Package.  Optional, if needed, this can be used in templates
      */
-    apiPackage = "api";
+    apiPackage = "apiModules";
 
     /**
      * Model Package.  Optional, if needed, this can be used in templates
@@ -101,6 +104,7 @@ public class TypescriptexpressserverGenerator extends DefaultCodegenConfig {
      * are available in models, apis, and supporting files
      */
     additionalProperties.put("apiVersion", apiVersion);
+    additionalProperties.put("implFolder", implFolder);
 
     /**
      * Supporting Files.  You can write single files for the generator with the
@@ -110,11 +114,6 @@ public class TypescriptexpressserverGenerator extends DefaultCodegenConfig {
     supportingFiles.add(new SupportingFile("myFile.mustache",   // the input template or file
       "",                                                       // the destination folder, relative `outputFolder`
       "myFile.sample")                                          // the output file
-    );
-
-    supportingFiles.add(new SupportingFile("controller.mustache",   // the input template or file
-      "",                                                       // the destination folder, relative `outputFolder`
-      "controller.ts")                                          // the output file
     );
 
     /**
@@ -166,8 +165,10 @@ public class TypescriptexpressserverGenerator extends DefaultCodegenConfig {
    */
   @Override
   public String apiFileFolder() {
+    // return outputFolder + "/" + sourceFolder + "/" + apiPackage().replace('.', File.separatorChar);
     return outputFolder + "/" + sourceFolder + "/" + apiPackage().replace('.', File.separatorChar);
   }
+
 
   @Override
   public String getArgumentsLocation() {
