@@ -1,10 +1,8 @@
-FROM openjdk:8-jdk-alpine
+FROM rust:1.31
 
-RUN set -x \
- && apk update && apk upgrade \
- && apk add wget \
- && apk add --no-cache bash ca-certificates maven \
- && wget https://repo1.maven.org/maven2/io/swagger/codegen/v3/swagger-codegen-cli/3.0.29/swagger-codegen-cli-3.0.29.jar -O swagger-codegen-cli.jar
+WORKDIR /usr/src/myapp
+COPY . .
 
-VOLUME  /root/.m2/repository
+RUN cargo install --path .
 
+CMD ["myapp"]

@@ -4,7 +4,7 @@ services:
   codegen:
     container_name: codegen
     build: .
-    entrypoint: /codegen/codegen_entrypoint.sh
+    # entrypoint: /codegen/codegen_entrypoint.sh
     volumes:
       - ../server:/server
       - .:/codegen
