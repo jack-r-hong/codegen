@@ -1,0 +1,56 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Category {
+    id  Int  @id @default(autoincrement())    @map("id")
+    name  String      @map("name")
+    pet Pet[]
+    
+}
+model Pet {
+    category   Category     @relation(fields: [id], references: [id])  
+    id  Int  @id @default(autoincrement())    @map("id")
+    name  String      @map("name")
+    photoUrls  String      @map("photo_urls")
+    status  String      @map("status")
+    pet TagsOnPet[]
+    
+}
+model Tag {
+    id  Int  @id @default(autoincrement())    @map("id")
+    name  String      @map("name")
+    pet TagsOnPet[]
+    
+}
+model User {
+    email  String      @map("email")
+    firstName  String      @map("first_name")
+    id  Int  @id @default(autoincrement())    @map("id")
+    lastName  String      @map("last_name")
+    password  String      @map("password")
+    phone  String      @map("phone")
+    test  String      @map("test")
+    userStatus  Int      @map("user_status")
+    username  String      @map("username")
+    
+}
+
+model TagsOnPet {
+  tag       Tag     @relation(fields: [tagId], references: [id])
+  tagId  Int
+  pet       Pet     @relation(fields: [petId], references: [id])
+  petId  Int
+
+  @@id([tagId, petId])
+    
+}
+

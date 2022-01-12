@@ -1,8 +1,8 @@
 FROM rust:1.31
 
-WORKDIR /usr/src/myapp
+WORKDIR /codegen
 COPY . .
 
 RUN cargo install --path .
 
-CMD ["myapp"]
+# CMD ["myapp"]

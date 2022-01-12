@@ -2,9 +2,9 @@ version: "3.9"
    
 services:
   codegen:
-    container_name: codegen
-    build: .
-    # entrypoint: /codegen/codegen_entrypoint.sh
+    image: "rust:latest"
     volumes:
       - ../server:/server
       - .:/codegen
+    environment:
+      - USER=Jack  

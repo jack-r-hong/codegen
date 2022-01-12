@@ -4,7 +4,7 @@ export {Container} from 'typedi';
 import {FindManyOption} from './authSchemas';
 import {UserModel} from './Models/userModel';
 import {User} from '@prisma/client';
-import {authErrors as e} from './authErrors';
+import {errors} from '../errors';
 
 
 @Service()
@@ -20,7 +20,7 @@ export class AuthService {
         });
 
     if (user === null) {
-      throw new e.NotFindError();
+      throw new errors.NotFindError();
     }
     return user;
   }
@@ -42,7 +42,7 @@ export class AuthService {
 
 
     if (isDuplicate === null) {
-      throw new e.DuplicateUniqueField();
+      throw new errors.DuplicateUniqueField();
     }
 
     const user = await this.userModel.createUser([email, password, name])
@@ -79,7 +79,7 @@ export class AuthService {
     if ((<User>user).password === password) {
       return user;
     } else {
-      throw new e.WrongPasswordError();
+      throw new errors.WrongPasswordError();
     }
   }
 }

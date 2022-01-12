@@ -1,0 +1,44 @@
+import {Application, Request, Response, NextFunction} from 'express';
+
+import {Controller, Get, Post, Put, Delete, Validator} from '../baseController';
+import {errorHender} from './{{tag}}Errors';
+import * as validSchemas from './{{tag}}Schemas';
+import {Service, Container} from './{{tag}}Service';
+
+import {
+{{#each data.data as |d|}}
+  {{#if d.parameters}}{{d.operation_id}}RequestConvert,{{/if}}
+{{/each}}
+} from './{{tag}}Parameters';
+
+const serviceInstance = Container.get(Service);
+
+@Controller('/{{tag}}')
+export class {{fpc tag}}Controller {
+  constructor(private app: Application) {}
+
+  {{#each data.data as |d|}}
+  @{{fpc d.method}}('{{path_parameter_format d.path}}')
+  @Validator(validSchemas.{{d.operation_id}})
+  async {{d.operation_id}}(req: Request, res: Response, next: NextFunction) {
+    {{#each d.parameters as |p|}}
+    const {{p.name}}: {{parameter_type p.schema.data_type}} = req.{{p.location}}.{{p.name}};
+    {{/each}}
+    serviceInstance.{{d.operation_id}}(
+      {{#if d.parameters}}
+      {{d.operation_id}}RequestConvert(
+        {{#each d.parameters as |p|}}
+        {{p.name}},
+        {{/each}}        
+      )
+      {{/if}}
+    ).then((result) =>{
+        res.json(result);
+    }).catch((e) => {
+      next(errorHender(e));
+    });
+  } 
+
+  {{/each}}
+}
+

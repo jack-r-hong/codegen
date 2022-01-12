@@ -1,0 +1,30 @@
+import {Service} from 'typedi';
+import {PrismaClient} from '@prisma/client';
+
+const prisma = new PrismaClient();
+
+@Service()
+export class {{{{fpc tag}}}}Model {
+{{#each data.data as |d|}}
+  async {{d.operation_id}}(
+    {{#each d.parameters as |p|}}
+    {{p.name}},
+    {{/each}}     
+  ) {
+    const user: User = await prisma.user.create({
+      data: {
+        email,
+        password,
+        name,
+        authLevel: 1,
+      },
+    }).catch((e) => {
+      throw e;
+    });
+
+    prisma.$disconnect();
+    return user;
+  }
+{{/each}}
+
+}

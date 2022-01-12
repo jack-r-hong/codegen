@@ -1,0 +1,47 @@
+import {Service} from 'typedi';
+export {Container} from 'typedi';
+{{!-- import {FindManyOption} from './authSchemas'; --}}
+import {UserModel} from './Models/userModel';
+{{!-- import {User} from '@prisma/client'; --}}
+import {errors} from '../errors';
+
+{{#each data.data as |d|}}
+export type {{fpc d.operation_id}}Request = {
+    {{#each d.parameters as |p|}}
+    {{p.name}}: {{parameter_type p.schema.data_type}}
+    {{/each}}
+}
+
+export const {{d.operation_id}}RequestConvert = (
+{{#each d.parameters as |p|}}
+  {{p.name}}: string,
+{{/each}}          
+):{{fpc d.operation_id}}Request => {
+
+  return{
+    {{#each d.parameters as |p|}}
+    {{p.name}}{{#if (is_int p.schema.data_type)}}: parseInt({{p.name}}){{else}}{{/if}},
+    {{/each}}        
+  };
+
+}
+{{/each}}
+
+@Service()
+export class {{fpc tag}}Service {
+  constructor(
+        private {{tag}}Model: {{fpc tag}}Model,
+  ) {}
+
+  async findUser(id: number) {
+    const user = await this.userModel.findUser(id)
+        .catch((e) =>{
+          throw e;
+        });
+
+    if (user === null) {
+      throw new errors.NotFindError();
+    }
+    return user;
+  }
+}

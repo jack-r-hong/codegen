@@ -1,0 +1,41 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+{{#each data as |d|}}
+model {{fpc @key}} {
+    {{#each d as |d2|}}
+        {{~#if d2.items.$ref}}
+        {{else}}
+    {{@key}}  {{parameter_type d2.type}} {{ref d2.$ref}} {{id_default @key}}
+            {{~#if d2.$ref}}
+    @relation(fields: [id], references: [id])  
+            {{else}}
+    @map("{{snake_case @key}}")
+            {{/if}}
+        {{~/if~}}    
+    {{/each}}  
+    {{foreign_key @key }}
+}
+{{/each}}
+
+{{#each mtm_tables as |t|}}
+model {{fpc t.name}} {
+  {{snake_case t.t1}}       {{t.t1}}     @relation(fields: [{{snake_case  t.t1}}Id], references: [id])
+  {{snake_case t.t1}}Id  Int
+  {{snake_case t.t2}}       {{t.t2}}     @relation(fields: [{{snake_case  t.t2}}Id], references: [id])
+  {{snake_case t.t2}}Id  Int
+
+  @@id([{{snake_case  t.t1}}Id, {{snake_case t.t2}}Id])
+    
+}
+
+{{/each}}
