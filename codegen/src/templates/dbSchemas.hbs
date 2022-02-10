@@ -10,7 +10,56 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-{{#each data as |d|}}
+{{#each schemas as |d|}}
+    {{#if (equal "database" d.description)}}
+model {{fpc @key}} {
+        {{#each d.properties as |d2|}}
+            {{~#if d2.$ref}}
+            {{else}}
+    {{@key}} 
+                {{~#if d2.nullable }}
+    {{parameter_type d2.type "schema" d2.format}}?
+                {{~else}}
+    {{parameter_type d2.type "schema" d2.format}}
+                {{~/if}}       
+                {{~#if "1" }}
+    {{ref d2.$ref}} 
+                {{~else}}
+
+                {{~/if}}       
+                {{~#if "1" }}
+    {{id_default @key}}
+                {{~else}}
+
+                {{~/if}}              
+                {{~#if d2.uniqueItems }}
+    @unique
+                {{~else}}
+
+                {{~/if}}   
+                {{~#if (equal @key "createdAt") }} 
+    @default(now())
+                {{~else}}
+                {{~/if}}  
+                {{~#if (equal @key "updatedAt") }} 
+    @default(now()) @updatedAt
+                {{~else}}
+
+                {{~/if}} 
+    @map("{{snake_case @key}}")                 
+            {{/if}}
+        {{~/each}}  
+    {{/if}}
+    {{foreign_key @key }}
+    // custom begin {{@key}}
+{{lookup ../custom @key}}
+    // custom end {{@key}}
+}
+{{/each}}
+
+
+
+{{!-- {{#each schemas as |d|}}
 model {{fpc @key}} {
     {{#each d as |d2|}}
         {{~#if d2.items.$ref}}
@@ -21,7 +70,12 @@ model {{fpc @key}} {
             {{else}}
     @map("{{snake_case @key}}")
             {{/if}}
-        {{~/if~}}    
+        {{~/if~}}
+        {{~#if d2.unique}}
+    @unique
+        {{~/if~}}
+
+        
     {{/each}}  
     {{foreign_key @key }}
 }
@@ -38,4 +92,4 @@ model {{fpc t.name}} {
     
 }
 
-{{/each}}
+{{/each}} --}}

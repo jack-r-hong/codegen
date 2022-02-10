@@ -10,20 +10,32 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Auth {
+    id    Int        @id @default(autoincrement())    @map("id")                 
+    level    Int            @unique    @map("level")                 
+    role    Int            @map("role")                 
+    user User[]
+    
+    // custom begin Auth
+
+    // custom end Auth
+}
 model User {
-  id            Int      @id @default(autoincrement())
-  createdAt     DateTime @default(now()) @map("created_at")
-  email         String   @unique
-  name          String?       @map("user_name")
-  password      String        @map("user_password")
-  auth          Auth      @relation(fields: [authLevel], references: [level])     
-  authLevel     Int        @map("auth_level")
+    createdAt    DateTime            @default(now())    @map("created_at")                 
+    email    String            @unique    @map("email")                 
+    id    Int        @id @default(autoincrement())    @map("id")                 
+    password    String            @map("password")                 
+    phone    String?            @map("phone")                 
+    updatedAt    DateTime            @default(now()) @updatedAt    @map("updated_at")                 
+    userStatus    Int            @map("user_status")                 
+    username    String            @unique    @map("username")                 
+    auth Auth? @relation(fields: [authLevel], references: [level])
+    authLevel Int @map("auth_level")
+    
+    // custom begin User
+
+    // custom end User
 }
 
-model Auth {
-  id        Int      @id @default(autoincrement())
-  updatedAt DateTime @updatedAt @ignore @map("updated_at")
-  role      Int
-  level     Int      @unique
-  user      User[]      
-}
+
+

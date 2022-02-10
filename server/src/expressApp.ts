@@ -7,6 +7,20 @@ import cors from 'cors';
 import helmet from 'helmet';
 import httpErrors from 'http-errors';
 import {registerController} from './apiModules';
+import cookieParser from 'cookie-parser';
+import {userInfoSession} from './sessions';
+import {errorHandle} from './errors';
+// import session, {Session} from 'express-session';
+// import redisStore from 'connect-redis';
+// import {redisClient} from './redisClient';
+
+// declare module 'express-session' {
+//  interface Session {
+//     userId: string;
+//     userStatus: number;
+//     authRole: number;
+//   }
+// }
 
 
 export class ExpressApp {
@@ -14,8 +28,9 @@ export class ExpressApp {
 
   constructor() {
     this.middleware();
+    this.sessionRegister();
     registerController(this.app);
-    this.errorHendler();
+    this.app.use(errorHandle);
   }
 
   public listen(port: number): void {
@@ -40,33 +55,15 @@ export class ExpressApp {
     };
     this.app.use(helmet());
     this.app.use(cors(corsOptions));
+
+
     this.app.use(compression());
+    this.app.use(cookieParser());
     this.app.use(bodyParser.urlencoded({extended: false}));
     this.app.use(bodyParser.json());
   }
 
-  private errorHendler() {
-    const errorHandle = (
-        err :httpErrors.HttpError | Result,
-        req :Request,
-        res:Response,
-        next: NextFunction,
-    ) => {
-      console.log(err);
-
-      if (err instanceof Result) {
-        const err = httpErrors(400);
-        res.status(err.statusCode);
-        res.send(`${err.statusCode} ${err.message}`);
-      } else if (err instanceof httpErrors.HttpError) {
-        res.status(err.statusCode);
-        res.send(`${err.statusCode} ${err.message}`);
-      } else {
-        const err = httpErrors(500);
-        res.status(err.statusCode);
-        res.send(`${err.statusCode} ${err.message}`);
-      }
-    };
-    this.app.use(errorHandle);
+  private sessionRegister() {
+    this.app.use(userInfoSession);
   }
 }

@@ -18,19 +18,30 @@ services:
     networks:
       - backend
     command: npm run dev
+    env_file:
+      - .env    
     depends_on: 
       - db
   db:
     image: mysql:latest
     command: --default-authentication-plugin=mysql_native_password
     restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-    # env_file:
-    #   - .env
+    env_file:
+      - .env
     networks:
       - backend
-    
+  redis:
+    restart: always
+    container_name: redis
+    image: redis:alpine
+    command: ["redis-server", "/etc/redis/redis.conf"]
+    ports:
+      - 6379:6379
+    volumes:
+      - /data/redis-data:/data  
+      - ./redis.conf:/etc/redis/redis.conf 
+    networks:
+      - backend         
   adminer:
     image: adminer
     restart: always

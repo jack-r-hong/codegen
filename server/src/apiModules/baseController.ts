@@ -4,7 +4,6 @@ import {checkSchema, Schema, validationResult} from 'express-validator';
 
 const vSymbol = Symbol('validator');
 
-// const mainRouter = Router();
 const subRouter = Router();
 
 export function Controller(mainPath: string) {
@@ -13,6 +12,7 @@ export function Controller(mainPath: string) {
       constructor(...args: any[]) {
         super(...args);
         const app :Application = args[0];
+
         app.use(mainPath, subRouter);
       }
     };

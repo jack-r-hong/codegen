@@ -1,30 +1,159 @@
 import {Service} from 'typedi';
-import {PrismaClient} from '@prisma/client';
+import {PrismaClient, {{fpc tag~}}  } from '@prisma/client';
+import * as requestTypes from './{{tag}}.parameters';
+import {errors} from '../../errors';
 
 const prisma = new PrismaClient();
 
-@Service()
-export class {{{{fpc tag}}}}Model {
-{{#each data.data as |d|}}
-  async {{d.operation_id}}(
-    {{#each d.parameters as |p|}}
-    {{p.name}},
-    {{/each}}     
-  ) {
-    const user: User = await prisma.user.create({
+{{~#*inline "createOne"}}
+    const {{../../tag}}: {{fpc ../../tag}} | null = await prisma.{{../../tag}}.create({
       data: {
-        email,
-        password,
-        name,
-        authLevel: 1,
+      {{#if d.requestBody.content.[application/json].schema.type}}
+        {{#if (equal d.requestBody.content.[application/json].schema.type "object") }}
+          {{#each d.requestBody.content.[application/json].schema.properties as |p|}}
+        {{@key}}: param.body{{fpc @key}},
+          {{/each}}
+        {{/if}}
+      {{/if}} 
       },
     }).catch((e) => {
       throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+{{/inline}}
+
+{{~#*inline "createMany"}}
+    const data = param.map((e) => {
+      return {
+        {{#if d.requestBody.content.[application/json].schema.type}}
+          {{#if (equal d.requestBody.content.[application/json].schema.type "array") }}
+            {{#each d.requestBody.content.[application/json].schema.items.properties as |p|}}
+        {{@key}}: e.body{{fpc @key}},
+            {{/each}}
+          {{/if}} 
+        {{/if}} 
+      };
     });
 
-    prisma.$disconnect();
-    return user;
-  }
-{{/each}}
+    const res: any = await prisma.{{../../tag}}.createMany({
+      data,
+      skipDuplicates: true,
+    }).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+{{/inline}}
 
+{{~#*inline "readOne"}}
+    const {{../../tag}}: any | null = await prisma.{{../../tag}}.findUnique({
+      where: {
+        {{#each d.parameters}}
+        {{name}}: param.{{in}}{{fpc name}},
+        {{/each}}
+      },
+      select: {
+        {{#each d.responses.200.content.[application/json].schema.properties}}
+        {{@key}}: true,
+        {{/each}}
+      },
+    }).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+
+    if (user === null) {
+      throw new errors.NotFindError;
+    }
+{{/inline}}
+
+{{~#*inline "readMany"}}
+    const {{../../tag}}: {{fpc ../../tag}}[] | null = await prisma.{{../../tag}}.findMany({
+      where: {
+        {{#each d.parameters}}
+        {{name}}: param.{{in}}{{fpc name}},
+        {{/each}}
+      },
+      select: {
+        {{#each d.responses.200.content.[application/json].schema.items.properties}}
+        {{@key}}: true,
+        {{/each}}
+      },
+    }).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+{{/inline}}
+
+{{~#*inline "updateOne"}}
+    const {{../../tag}}: {{fpc ../../tag}} | null = await prisma.{{../../tag}}.update({
+      where: {
+        {{#each d.parameters}}
+        {{name}}: param.{{in}}{{fpc name}},
+        {{/each}}
+      },
+      data: {
+      {{#if d.requestBody.content.[application/json].schema.type}}
+        {{#if (equal d.requestBody.content.[application/json].schema.type "object") }}
+          {{#each d.requestBody.content.[application/json].schema.properties as |p|}}
+        {{@key}}: param.body{{fpc @key}},
+          {{/each}}
+        {{/if}}
+      {{/if}} 
+      },
+    }).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+{{/inline}}
+
+{{~#*inline "deleteOne"}}
+    const {{../../tag}}: {{fpc ../../tag}} | null = await prisma.{{../../tag}}.delete({
+      where: {
+        {{#each d.parameters}}
+        {{name}}: param.{{in}}{{fpc name}},
+        {{/each}}
+      },
+    }).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+{{/inline}}
+
+{{#*inline "custom"}}
+    // custom begin {{d.operationId}}
+{{{lookup ../../custom d.operationId }}}
+    // custom end {{d.operationId}}
+{{/inline}}
+
+@Service()
+export class {{fpc tag}}Model {
+{{#each data.paths as |path|}}
+  {{#each path as |d|}}
+    {{#if (equal ../../tag d.tags.0) }}
+  async {{d.operationId}}(
+      param: requestTypes.{{fpc d.operationId}}Request
+        {{~#if (model_type_is_array d.operationId) ~}}
+[]
+        {{~else~}}
+        {{~/if}},
+  ) {
+{{ > (model_type d.operationId)}}
+      {{#if (equal (model_type d.operationId) "custom")  }}
+      {{else}}
+        {{#if (model_type_is_array d.operationId) }}
+    return res.count;
+        {{else}}
+    return {{../../tag}};
+        {{/if}}    
+      {{/if}}
+  }
+    {{/if}}
+  {{/each}}
+{{/each}}
 }

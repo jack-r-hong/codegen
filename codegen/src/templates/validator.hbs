@@ -1,0 +1,153 @@
+// eslint-disable-next-line no-unused-vars
+import {Schema, CustomValidator} from 'express-validator';
+import * as sessions from '../../sessions';
+// custom begin import
+{{{lookup ../../custom "import" }}}
+// custom end import
+
+{{~#*inline "schema"}}
+  {{p.name}}: {
+    in: '
+        {{~#if (equal p.in "path")~}}
+    params
+        {{~else~}}
+    {{p.in}}
+        {{/if~}}
+        ',
+        {{#if p.schema.nullable }}
+    optional: {
+      options: {
+        nullable: true,
+      },
+    },
+        {{/if}} 
+        {{#if (equal p.schema.type "integer") }}
+    isInt: true,
+        {{/if}}
+        {{#if p.required }}
+    notEmpty: true,
+        {{/if}}
+        {{#if (equal p.schema.format "email") }}
+    isEmail: true,
+        {{/if}}
+        {{#if (equal p.schema.format "password") }}
+    isStrongPassword: true,
+        {{/if}} 
+        {{#if (equal p.schema.format "phone") }}
+    isMobilePhone: true,
+        {{/if}} 
+        {{#if (equal p.schema.format "date-time") }}
+    matches: {
+      options: /\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z)/,
+    },
+        {{/if}}   
+        {{#if p.schema.enum }}
+    matches: {
+      options: /^(1|2|3)/,
+    },
+        {{/if}} 
+  },
+{{/inline}}
+
+{{~#*inline "body"}}
+  {{@key}}: {
+    in: 'body',
+        {{#if (equal p.type "integer") }}
+    isInt: true,
+        {{/if}}
+        {{#if p.nullable }}
+    optional: {
+      options: {
+        nullable: true,
+      },
+    },
+        {{/if}} 
+        {{#if p.required }}
+    notEmpty: true,
+        {{/if}}
+         {{#if (equal p.format "email") }}
+    isEmail: true,
+        {{/if}}    
+        {{#if (equal p.format "password") }}
+    isStrongPassword: true,
+        {{/if}}         
+        {{#if (equal p.format "phone") }}
+    isMobilePhone: true,
+        {{/if}} 
+        {{#if (equal p.format "date-time") }}
+    matches: {
+      options: /\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z)/,
+    }
+        {{/if}} 
+        {{#if p.enum }}
+    matches: {
+      options: /^(
+          {{~#each p.enum as |enum|~}}
+            {{~#if (gt @index 0)~}}
+            |
+            {{~/if~}}
+            {{enum}}
+          {{~/each~}}
+      )/,
+    },
+        {{/if}} 
+        {{#if (or p.maxLength p.minLength)}}
+    isLength: {
+      options: {
+          {{#if p.maxLength }}
+        max: {{p.maxLength}},
+          {{/if}} 
+          {{#if p.minLength }}
+        min: {{p.minLength}},
+          {{/if}} 
+      },
+
+    },
+        {{/if}}                            
+  },
+{{/inline}}
+
+{{#each data.paths as |path|}}
+    {{#each path as |d|}}
+      {{#if (equal ../../tag d.tags.0) }}
+export const {{d.operationId}}Validator: Schema = {
+        {{#each d.parameters as |p|}}
+{{ > schema}}
+        {{/each}}  
+        {{#if d.requestBody.content.[application/json].schema.type}}
+          {{#if (equal d.requestBody.content.[application/json].schema.type "object") }}
+            {{#each d.requestBody.content.[application/json].schema.properties as |p|}}
+{{ > body}}
+            {{/each}}
+          {{/if}}
+        {{/if}} 
+        {{#each d.security as |security|}}
+          {{#each security as |s|}}
+  {{camel_case @key}}: {
+    in: 'cookies',
+    custom: {
+      options: (value, {req, location, path}) => {
+        sessions.{{camel_case @key}}SessionVerify(req['session'].{{camel_case @key}});
+        return true;
+      },
+    },
+    {{!-- customSanitizer: {
+      options: (value, {req, location, path}) => {
+        try {
+          const v = userInfoApiKey.tokenVerify(value);
+
+          if (typeof v == 'object') {
+            return v['data'];
+          }
+        } catch (e) {
+
+        }
+      },
+    }, --}}
+  },
+          {{/each}}
+        {{/each}}
+};
+      {{/if}} 
+    {{/each}}
+{{/each}}

@@ -1,44 +1,45 @@
 import {Application, Request, Response, NextFunction} from 'express';
-
 import {Controller, Get, Post, Put, Delete, Validator} from '../baseController';
-import {errorHender} from './{{tag}}Errors';
-import * as validSchemas from './{{tag}}Schemas';
-import {Service, Container} from './{{tag}}Service';
+import { {{~fpc tag}}Service, Container} from './{{tag}}.service';
+import * as {{tag}}Params from './{{tag}}.parameters';
+import * as validSchemas from './{{tag}}.validator';
 
-import {
-{{#each data.data as |d|}}
-  {{#if d.parameters}}{{d.operation_id}}RequestConvert,{{/if}}
-{{/each}}
-} from './{{tag}}Parameters';
+const serviceInstance = Container.get({{fpc tag}}Service);
 
-const serviceInstance = Container.get(Service);
-
-@Controller('/{{tag}}')
+@Controller('')
 export class {{fpc tag}}Controller {
   constructor(private app: Application) {}
 
-  {{#each data.data as |d|}}
-  @{{fpc d.method}}('{{path_parameter_format d.path}}')
-  @Validator(validSchemas.{{d.operation_id}})
-  async {{d.operation_id}}(req: Request, res: Response, next: NextFunction) {
-    {{#each d.parameters as |p|}}
-    const {{p.name}}: {{parameter_type p.schema.data_type}} = req.{{p.location}}.{{p.name}};
+  {{#each data.paths as |path|}}
+    {{#each path as |data|}}
+      {{#if (equal ../../tag data.tags.0) }}
+  @{{fpc @key}}('{{~path_parameter_format @../key}}')
+  @Validator(validSchemas.{{data.operationId}}Validator)
+  async {{data.operationId}}(
+      req: Request,
+      res: Response,
+      next: NextFunction,
+  ) {
+    serviceInstance.{{data.operationId}}(
+        {{../../tag}}Params.{{fpc data.operationId}}RequestConvert(
+            req.body,
+            req.query,
+            req.params,
+        ),
+    )
+        .then((result) =>{
+    {{#if (equal (model_type data.operationId) "custom")  }}
+          // custom begin {{data.operationId}}
+{{{lookup ../../custom data.operationId }}}
+          // custom end {{data.operationId}}
+    {{else}}
+          res.json(result);
+    {{/if}}
+        }).catch((e) => {
+          next(e);
+        });
+  }
+      {{/if }}
     {{/each}}
-    serviceInstance.{{d.operation_id}}(
-      {{#if d.parameters}}
-      {{d.operation_id}}RequestConvert(
-        {{#each d.parameters as |p|}}
-        {{p.name}},
-        {{/each}}        
-      )
-      {{/if}}
-    ).then((result) =>{
-        res.json(result);
-    }).catch((e) => {
-      next(errorHender(e));
-    });
-  } 
-
   {{/each}}
 }
-
