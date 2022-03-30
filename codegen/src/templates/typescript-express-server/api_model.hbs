@@ -6,7 +6,7 @@ import {errors} from '../../errors';
 const prisma = new PrismaClient();
 
 {{~#*inline "createOne"}}
-    const {{../../tag}}: {{fpc ../../tag}} | null = await prisma.{{../../tag}}.create({
+    const res: {{fpc ../../tag}} | null = await prisma.{{../../tag}}.create({
       data: {
       {{#if d.requestBody.content.[application/json].schema.type}}
         {{#if (equal d.requestBody.content.[application/json].schema.type "object") }}
@@ -47,7 +47,7 @@ const prisma = new PrismaClient();
 {{/inline}}
 
 {{~#*inline "readOne"}}
-    const {{../../tag}}: any | null = await prisma.{{../../tag}}.findUnique({
+    const res: any | null = await prisma.{{../../tag}}.findUnique({
       where: {
         {{#each d.parameters}}
         {{name}}: param.{{in}}{{fpc name}},
@@ -64,13 +64,13 @@ const prisma = new PrismaClient();
       prisma.$disconnect();
     });
 
-    if (user === null) {
+    if (res === null) {
       throw new errors.NotFindError;
     }
 {{/inline}}
 
 {{~#*inline "readMany"}}
-    const {{../../tag}}: {{fpc ../../tag}}[] | null = await prisma.{{../../tag}}.findMany({
+    const res: {{fpc ../../tag}}[] | null = await prisma.{{../../tag}}.findMany({
       where: {
         {{#each d.parameters}}
         {{name}}: param.{{in}}{{fpc name}},
@@ -89,7 +89,7 @@ const prisma = new PrismaClient();
 {{/inline}}
 
 {{~#*inline "updateOne"}}
-    const {{../../tag}}: {{fpc ../../tag}} | null = await prisma.{{../../tag}}.update({
+    const res: {{fpc ../../tag}} | null = await prisma.{{../../tag}}.update({
       where: {
         {{#each d.parameters}}
         {{name}}: param.{{in}}{{fpc name}},
@@ -112,7 +112,7 @@ const prisma = new PrismaClient();
 {{/inline}}
 
 {{~#*inline "deleteOne"}}
-    const {{../../tag}}: {{fpc ../../tag}} | null = await prisma.{{../../tag}}.delete({
+    const res: {{fpc ../../tag}} | null = await prisma.{{../../tag}}.delete({
       where: {
         {{#each d.parameters}}
         {{name}}: param.{{in}}{{fpc name}},
@@ -149,7 +149,7 @@ export class {{fpc tag}}Model {
         {{#if (model_type_is_array d.operationId) }}
     return res.count;
         {{else}}
-    return {{../../tag}};
+    return res;
         {{/if}}    
       {{/if}}
   }

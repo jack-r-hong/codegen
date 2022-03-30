@@ -1,0 +1,67 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Auth {
+    id    Int        @id @default(autoincrement())    @map("id")                 
+    level    Int            @unique    @map("level")                 
+    role    Int            @map("role")                 
+    user User[]
+    
+    // custom begin Auth
+
+    // custom end Auth
+}
+model Photo {
+    afterLevel    Int            @map("after_level")                 
+    beforeLevel    Int            @map("before_level")                 
+    createdAt    DateTime            @default(now())    @map("created_at")                 
+    filePath1    String            @map("file_path_1")                 
+    filePath2    String            @map("file_path_2")                 
+    id    Int        @id @default(autoincrement())    @map("id")                 
+    name    String            @map("name")                 
+    process    Int            @map("process")                 
+    status    Int            @map("status")                 
+    photoComment PhotoComment[]
+    
+    // custom begin Photo
+
+    // custom end Photo
+}
+model PhotoComment {
+    createdAt    DateTime            @default(now())    @map("created_at")                 
+    id    Int        @id @default(autoincrement())    @map("id")                 
+    photo Photo? @relation(fields: [photoId], references: [id])
+    photoId Int @map("photo_id")
+    
+    // custom begin PhotoComment
+
+    // custom end PhotoComment
+}
+model User {
+    createdAt    DateTime            @default(now())    @map("created_at")                 
+    email    String            @unique    @map("email")                 
+    id    Int        @id @default(autoincrement())    @map("id")                 
+    password    String            @map("password")                 
+    phone    String?            @map("phone")                 
+    updatedAt    DateTime            @default(now()) @updatedAt    @map("updated_at")                 
+    userStatus    Int            @map("user_status")                 
+    username    String            @unique    @map("username")                 
+    auth Auth? @relation(fields: [authLevel], references: [level])
+    authLevel Int @map("auth_level")
+    
+    // custom begin User
+
+    // custom end User
+}
+
+
+

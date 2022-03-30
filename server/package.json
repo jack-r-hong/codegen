@@ -6,11 +6,12 @@
   "types": "src/index.d.ts",
   "scripts": {
     "start": "NODE_PATH=./build node build/index.js",
-    "build": "tsc -p .",
-    "dev": "nodemon src/index.ts",
+    "build": "webpack --mode production",
+    "dev": "npm run mig-dep && nodemon  -L src/index.ts",
     "test": "jest",
-    "migrate": "prisma migrate dev --name ",
-    "prisma_gen": "prisma generate ",
+    "mig-dev": "prisma migrate dev --name ",
+    "mig-dep": "prisma migrate deploy",
+    "gen": "prisma generate ",
     "lint": "eslint src/*.ts"
   },
   "author": "",

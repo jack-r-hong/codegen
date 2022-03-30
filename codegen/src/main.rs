@@ -28,7 +28,7 @@ struct Data {
     data: String,
 }
 
-fn swagger_loder() -> Json{
+fn swagger_loader() -> Json{
     let path = "./swagger/swagger.json";
     let data = fs::read_to_string(path).expect("Unable to read file");
     let mut res: serde_json::Value = serde_json::from_str(&data).expect("Unable to parse");
@@ -120,7 +120,7 @@ fn write_file(
 fn main() -> Result<(), Box<dyn Error>> {
     env_logger::init();
 
-    let swagger_data = swagger_loder();
+    let swagger_data = swagger_loader();
 
     // create the handlebars registry
     let mut handlebars = Handlebars::new();

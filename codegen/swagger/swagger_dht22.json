@@ -30,8 +30,8 @@
       "url" : "http://swagger.io"
     }
   }, {
-    "name" : "photo",
-    "description" : "photo"
+    "name" : "robot",
+    "description" : "User auth"
   } ],
   "paths" : {
     "/user" : {
@@ -490,12 +490,12 @@
         }
       }
     },
-    "/photo/{id}" : {
+    "/dht/{id}" : {
       "get" : {
-        "tags" : [ "photo" ],
+        "tags" : [ "robot" ],
         "summary" : "Create user",
         "description" : "This can only be done by the logged in user.",
-        "operationId" : "readOnePhoto",
+        "operationId" : "readOneDHTData",
         "parameters" : [ {
           "name" : "id",
           "in" : "path",
@@ -511,7 +511,141 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/Photo"
+                  "$ref" : "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/BadRequest"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/Unauthorized"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          },
+          "404" : {
+            "$ref" : "#/components/responses/NotFound"
+          },
+          "409" : {
+            "$ref" : "#/components/responses/Conflict"
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "robot" ],
+        "summary" : "Create user",
+        "description" : "This can only be done by the logged in user.",
+        "operationId" : "createOneDHTData",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "The name that needs to be fetched. Use user1 for testing.",
+          "required" : true,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/DHT22"
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/BadRequest"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/Unauthorized"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          },
+          "404" : {
+            "$ref" : "#/components/responses/NotFound"
+          },
+          "409" : {
+            "$ref" : "#/components/responses/Conflict"
+          }
+        }
+      }
+    },
+    "/cat_state/{id}" : {
+      "get" : {
+        "tags" : [ "robot" ],
+        "summary" : "Create user",
+        "description" : "This can only be done by the logged in user.",
+        "operationId" : "readOneCarState",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "The name that needs to be fetched. Use user1 for testing.",
+          "required" : true,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/BadRequest"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/Unauthorized"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          },
+          "404" : {
+            "$ref" : "#/components/responses/NotFound"
+          },
+          "409" : {
+            "$ref" : "#/components/responses/Conflict"
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "robot" ],
+        "summary" : "Create user",
+        "description" : "This can only be done by the logged in user.",
+        "operationId" : "createOneCarState",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "The name that needs to be fetched. Use user1 for testing.",
+          "required" : true,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/CarState"
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/User"
                 }
               }
             }
@@ -612,7 +746,7 @@
           }
         }
       },
-      "Photo" : {
+      "DHT22" : {
         "type" : "object",
         "description" : "database",
         "properties" : {
@@ -620,48 +754,19 @@
             "type" : "integer",
             "format" : "int64"
           },
-          "name" : {
-            "type" : "string",
-            "minLength" : 3,
-            "maxLength" : 30
-          },
-          "filePath1" : {
-            "type" : "string"
-          },
-          "filePath2" : {
-            "type" : "string"
-          },
-          "process" : {
-            "type" : "integer",
-            "format" : "int32",
-            "description" : "status map:\n * `1` - yet\n * `2` - schedule\n * `3` - complete\n",
-            "enum" : [ 1, 2 ]
-          },        
-          "status" : {
-            "type" : "integer",
-            "format" : "int32",
-            "description" : "status map:\n * `1` - yetPurify\n * `2` - purify\n * `3` - consult\n",
-            "enum" : [ 1, 2, 3 ]
-          },
-          "beforeLevel" : {
-            "type" : "integer",
-            "format" : "int32",
-            "description" : "status map:\n * `1` - A\n * `2` - B\n * `3` - C\n",
-            "enum" : [ 1, 2, 3 ]
-          },
-          "afterLevel" : {
-            "type" : "integer",
-            "format" : "int32",
-            "description" : "status map:\n * `1` - A\n * `2` - B\n * `3` - C\n",
-            "enum" : [ 1, 2, 3 ]
-          },
           "createdAt" : {
             "type" : "string",
             "format" : "date-time"
+          },
+          "temp" : {
+            "type" : "integer"
+          },
+          "humi" : {
+            "type" : "integer"
           }
         }
       },
-      "PhotoComment" : {
+      "CarState" : {
         "type" : "object",
         "description" : "database",
         "properties" : {
@@ -673,16 +778,61 @@
             "type" : "string",
             "format" : "date-time"
           },
-          "photoId" : {
-            "$ref" : "#/components/schemas/Photo/properties/id"
+          "alarm" : {
+            "type" : "integer"
           },
-          "photo" : {
-            "$ref" : "#/components/schemas/Photo"
+          "xAxios" : {
+            "type" : "integer"
+          },
+          "yAxios" : {
+            "type" : "integer"
           }
         }
-      }   
+      }
     },
     "requestBodies" : {
+      "CarState" : {
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "alarm" : {
+                  "$ref" : "#/components/schemas/CarState/properties/alarm"
+                },
+                "xAxios" : {
+                  "$ref" : "#/components/schemas/CarState/properties/xAxios"
+                },
+                "yAxios" : {
+                  "$ref" : "#/components/schemas/CarState/properties/yAxios"
+                }
+              }
+            }
+          }
+        }
+      },
+      "DHT22" : {
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "temp" : {
+                  "$ref" : "#/components/schemas/DHT22/properties/temp"
+                },
+                "humi" : {
+                  "$ref" : "#/components/schemas/DHT22/properties/humi"
+                },
+                "yAxios" : {
+                  "$ref" : "#/components/schemas/CarState/properties/yAxios"
+                }
+              }
+            }
+          }
+        },
+        "description" : "List of user object",
+        "required" : true
+      },
       "User" : {
         "content" : {
           "application/json" : {

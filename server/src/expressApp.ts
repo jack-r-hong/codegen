@@ -22,7 +22,6 @@ import {errorHandle} from './errors';
 //   }
 // }
 
-
 export class ExpressApp {
   public app: Application = express();
 
