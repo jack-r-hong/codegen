@@ -3,8 +3,26 @@ version: "3.9"
 services:
   codegen:
     image: "rust:latest"
+    container_name: ${GEN_TYPE}_codegen
+    working_dir: /codegen
+    stdin_open: true
+    tty: true    
+    # command: cargo run
     volumes:
-      - ../server:/server
+      - ${GEN_OUTPUT_DIR}/${GEN_OUTPUT_DIR_NAME}:/${GEN_OUTPUT_DIR_NAME}
+      # - ../server:/server
       - .:/codegen
     environment:
-      - USER=Jack  
+      - GEN_TYPE=${GEN_TYPE} 
+  # swager-editor:
+
+  #   image: "swaggerapi/swagger-editor:latest"	
+  #   container_name:   swager-editor
+  #   ports: 
+  #     - '80:8080'
+  #   volumes:
+  #     - ./swagger:/tmp
+  #   environment:
+  #     - SWAGGER_FILE=/tmp/swagger.json
+  #     - URL_SWAGGER2_CONVERTER=null
+

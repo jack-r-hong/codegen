@@ -29,7 +29,7 @@ struct Data {
 }
 
 fn swagger_loder() -> Json{
-    let path = "./test.json";
+    let path = "./swagger/swagger.json";
     let data = fs::read_to_string(path).expect("Unable to read file");
     let mut res: serde_json::Value = serde_json::from_str(&data).expect("Unable to parse");
 
@@ -98,12 +98,13 @@ fn write_file(
     handlebars: &mut Handlebars,
     render_data: Map<String, Json>, 
     out_file_path: &str, 
-    file_type: &str
+    file_type: &str,
+    template_path: &str,
+    api_input_data_type: &str,
 ) -> Result<(), Box<dyn Error>>{
-    let template_path = "./src/templates/";
     let mut controller_render_data = render_data.clone();
 
-    handlebars.register_template_file(file_type, template_path.to_owned()+ file_type + ".hbs")?;
+    handlebars.register_template_file(file_type, template_path.to_owned()+ api_input_data_type + "_" + file_type + ".hbs")?;
 
     let contents = fs::read_to_string(out_file_path);
 
@@ -126,7 +127,8 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     let api_path = "../server/src/apiModules/";
     let model_path = "../server/src/models/";
-    let template_path = "./src/templates/";
+    let template_type = "typescript-express-server";
+    let template_path = format!("./src/templates/{}/", template_type);
 
     // register template from a file and assign a name to it
     // deal with errors
@@ -162,32 +164,34 @@ fn main() -> Result<(), Box<dyn Error>> {
  
         fs::create_dir_all(api_path.to_owned() + "/" + tag_name )?;
 
+        let api_input_data_type = "api";
+
         // controller
 
         let file_type = "controller";
         let controller_file_path = format!("{}{}/{}.{}.ts", api_path, tag_name, tag_name, file_type);
-        write_file(&mut handlebars, render_data.clone(), &controller_file_path, file_type );
+        write_file(&mut handlebars, render_data.clone(), &controller_file_path, file_type, &template_path, api_input_data_type );
 
         // parameters
         let file_type = "parameters";
         let controller_file_path = format!("{}{}/{}.{}.ts", api_path, tag_name, tag_name, file_type);
-        write_file(&mut handlebars, render_data.clone(), &controller_file_path, file_type );
+        write_file(&mut handlebars, render_data.clone(), &controller_file_path, file_type, &template_path, api_input_data_type );
        
         // validator
 
         let file_type = "validator";
         let controller_file_path = format!("{}{}/{}.{}.ts", api_path, tag_name, tag_name, file_type);
-        write_file(&mut handlebars, render_data.clone(), &controller_file_path, file_type );
+        write_file(&mut handlebars, render_data.clone(), &controller_file_path, file_type, &template_path, api_input_data_type );
 
         //service
         let file_type = "service";
         let controller_file_path = format!("{}{}/{}.{}.ts", api_path, tag_name, tag_name, file_type);
-        write_file(&mut handlebars, render_data.clone(), &controller_file_path, file_type );
+        write_file(&mut handlebars, render_data.clone(), &controller_file_path, file_type, &template_path, api_input_data_type );
 
         // model
         let file_type = "model";
         let controller_file_path = format!("{}{}/{}.{}.ts", api_path, tag_name, tag_name, file_type);
-        write_file(&mut handlebars, render_data.clone(), &controller_file_path, file_type );            
+        write_file(&mut handlebars, render_data.clone(), &controller_file_path, file_type, &template_path, api_input_data_type );            
 
     }
 
@@ -197,7 +201,7 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     let file_type = "dbSchemas";
     let db_schema_path = "../server/prisma/schema.prisma";
-    write_file(&mut handlebars, db_schema_data, &db_schema_path, file_type );            
+    write_file(&mut handlebars, db_schema_data, &db_schema_path, file_type, &template_path, "db" );            
 
     Ok(())
 }

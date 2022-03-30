@@ -8,7 +8,7 @@ import helmet from 'helmet';
 import httpErrors from 'http-errors';
 import {registerController} from './apiModules';
 import cookieParser from 'cookie-parser';
-import {userInfoSession} from './sessions';
+// import {userInfoSession} from './sessions';
 import {errorHandle} from './errors';
 // import session, {Session} from 'express-session';
 // import redisStore from 'connect-redis';
@@ -64,6 +64,6 @@ export class ExpressApp {
   }
 
   private sessionRegister() {
-    this.app.use(userInfoSession);
+    // this.app.use(userInfoSession);
   }
 }
