@@ -42,18 +42,18 @@ services:
     #   - ./mysql:/var/lib/mysql
     ports:
       - 3306:3306
-  # redis:
-  #   restart: always
-  #   container_name: redis
-  #   image: redis:alpine
-  #   command: ["redis-server", "/etc/redis/redis.conf"]
-  #   ports:
-  #     - 6379:6379
-  #   volumes:
-  #     - /data/redis-data:/data  
-  #     - ./redis.conf:/etc/redis/redis.conf 
-  #   networks:
-  #     - backend         
+  redis:
+    restart: always
+    container_name: redis
+    image: redis:alpine
+    command: ["redis-server", "/etc/redis/redis.conf"]
+    ports:
+      - 6379:6379
+    volumes:
+      - /data/redis-data:/data  
+      - ./redis.conf:/etc/redis/redis.conf 
+    networks:
+      - backend         
   adminer:
     image: adminer
     restart: always

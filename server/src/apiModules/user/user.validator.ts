@@ -172,7 +172,7 @@ export const updateOneUserValidator: Schema = {
     },
   },
 };
-export const createManyUsersValidator: Schema = {
+export const createManyUserValidator: Schema = {
   userInfo: {
     in: 'cookies',
     custom: {

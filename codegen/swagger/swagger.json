@@ -79,7 +79,7 @@
       "post" : {
         "tags" : [ "user" ],
         "summary" : "Creates list of users with given input array",
-        "operationId" : "createManyUsers",
+        "operationId" : "createManyUser",
         "responses" : {
           "200" : {
             "description" : "Ok",
@@ -533,6 +533,85 @@
           }
         }
       }
+    },
+    "/photos" : {
+      "get" : {
+        "tags" : [ "photo" ],
+        "summary" : "get photo list",
+        "description" : "This can only be done by the logged in user.",
+        "operationId" : "readManyPhoto",
+        "responses" : {
+          "200" : {
+            "description" : "Ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Photo"
+                  }
+                  
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/BadRequest"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/Unauthorized"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          },
+          "404" : {
+            "$ref" : "#/components/responses/NotFound"
+          },
+          "409" : {
+            "$ref" : "#/components/responses/Conflict"
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "photo" ],
+        "summary" : "upload photo list",
+        "description" : "This can only be done by the logged in user.",
+        "operationId" : "uploadManyPhoto",
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/PhotoArray"
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Photo"
+                  }
+                  
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/BadRequest"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/Unauthorized"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          },
+          "404" : {
+            "$ref" : "#/components/responses/NotFound"
+          },
+          "409" : {
+            "$ref" : "#/components/responses/Conflict"
+          }
+        }
+      }
     }
   },
   "externalDocs" : {
@@ -629,31 +708,36 @@
             "type" : "string"
           },
           "filePath2" : {
-            "type" : "string"
+            "type" : "string",
+            "nullable": true
           },
           "process" : {
             "type" : "integer",
             "format" : "int32",
             "description" : "status map:\n * `1` - yet\n * `2` - schedule\n * `3` - complete\n",
-            "enum" : [ 1, 2 ]
+            "enum" : [ 1, 2, 3 ],
+            "default": 1
           },        
           "status" : {
             "type" : "integer",
             "format" : "int32",
             "description" : "status map:\n * `1` - yetPurify\n * `2` - purify\n * `3` - consult\n",
-            "enum" : [ 1, 2, 3 ]
+            "enum" : [ 1, 2, 3 ],
+            "default": 1
           },
           "beforeLevel" : {
             "type" : "integer",
             "format" : "int32",
             "description" : "status map:\n * `1` - A\n * `2` - B\n * `3` - C\n",
-            "enum" : [ 1, 2, 3 ]
+            "enum" : [ 1, 2, 3 ],
+            "default": 1
           },
           "afterLevel" : {
             "type" : "integer",
             "format" : "int32",
             "description" : "status map:\n * `1` - A\n * `2` - B\n * `3` - C\n",
-            "enum" : [ 1, 2, 3 ]
+            "enum" : [ 1, 2, 3 ],
+            "default": 1
           },
           "createdAt" : {
             "type" : "string",
@@ -760,6 +844,26 @@
                 "level" : {
                   "$ref" : "#/components/schemas/Auth/properties/level"
                 }
+              }
+            }
+          }
+        },
+        "description" : "List of user object",
+        "required" : true
+      },
+      "PhotoArray" : {
+        "content" : {
+          "multipart/form-data" : {
+            "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "files" : {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "binary"
+                    }
+                  }
               }
             }
           }

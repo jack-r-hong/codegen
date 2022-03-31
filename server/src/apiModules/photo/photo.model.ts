@@ -36,4 +36,49 @@ export class PhotoModel {
     }
     return res;
   }
+  async readManyPhoto(
+      param: requestTypes.ReadManyPhotoRequest,
+  ) {
+    const res: Photo[] | null = await prisma.photo.findMany({
+      where: {
+      },
+      select: {
+        afterLevel: true,
+        beforeLevel: true,
+        createdAt: true,
+        filePath1: true,
+        filePath2: true,
+        id: true,
+        name: true,
+        process: true,
+        status: true,
+      },
+    }).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+    return res;
+  }
+  async uploadManyPhoto(
+      param: requestTypes.UploadManyPhotoRequest,
+      files: Express.Multer.File[],
+  ) {
+    const data = files.map((e) => {
+      return {
+        name: e.originalname,
+        filePath1: e.path,
+      };
+    });
+
+    const res: any = await prisma.photo.createMany({
+      data,
+      skipDuplicates: true,
+    }).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+    return res;
+  }
 }

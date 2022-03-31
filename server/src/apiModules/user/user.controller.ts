@@ -1,5 +1,5 @@
 import {Application, Request, Response, NextFunction} from 'express';
-import {Controller, Get, Post, Put, Delete, Validator} from '../baseController';
+import {Controller, Get, Post, Put, Delete, Validator, FormData} from '../baseController';
 import {UserService, Container} from './user.service';
 import * as userParams from './user.parameters';
 import * as validSchemas from './user.validator';
@@ -135,14 +135,14 @@ export class UserController {
         });
   }
   @Post('/users')
-  @Validator(validSchemas.createManyUsersValidator)
-  async createManyUsers(
+  @Validator(validSchemas.createManyUserValidator)
+  async createManyUser(
       req: Request,
       res: Response,
       next: NextFunction,
   ) {
-    serviceInstance.createManyUsers(
-        userParams.CreateManyUsersRequestConvert(
+    serviceInstance.createManyUser(
+        userParams.CreateManyUserRequestConvert(
             req.body,
             req.query,
             req.params,

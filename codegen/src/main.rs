@@ -170,28 +170,28 @@ fn main() -> Result<(), Box<dyn Error>> {
 
         let file_type = "controller";
         let controller_file_path = format!("{}{}/{}.{}.ts", api_path, tag_name, tag_name, file_type);
-        write_file(&mut handlebars, render_data.clone(), &controller_file_path, file_type, &template_path, api_input_data_type );
+        write_file(&mut handlebars, render_data.clone(), &controller_file_path, file_type, &template_path, api_input_data_type )?;
 
         // parameters
         let file_type = "parameters";
         let controller_file_path = format!("{}{}/{}.{}.ts", api_path, tag_name, tag_name, file_type);
-        write_file(&mut handlebars, render_data.clone(), &controller_file_path, file_type, &template_path, api_input_data_type );
+        write_file(&mut handlebars, render_data.clone(), &controller_file_path, file_type, &template_path, api_input_data_type )?;
        
         // validator
 
         let file_type = "validator";
         let controller_file_path = format!("{}{}/{}.{}.ts", api_path, tag_name, tag_name, file_type);
-        write_file(&mut handlebars, render_data.clone(), &controller_file_path, file_type, &template_path, api_input_data_type );
+        write_file(&mut handlebars, render_data.clone(), &controller_file_path, file_type, &template_path, api_input_data_type )?;
 
         //service
         let file_type = "service";
         let controller_file_path = format!("{}{}/{}.{}.ts", api_path, tag_name, tag_name, file_type);
-        write_file(&mut handlebars, render_data.clone(), &controller_file_path, file_type, &template_path, api_input_data_type );
+        write_file(&mut handlebars, render_data.clone(), &controller_file_path, file_type, &template_path, api_input_data_type )?;
 
         // model
         let file_type = "model";
         let controller_file_path = format!("{}{}/{}.{}.ts", api_path, tag_name, tag_name, file_type);
-        write_file(&mut handlebars, render_data.clone(), &controller_file_path, file_type, &template_path, api_input_data_type );            
+        write_file(&mut handlebars, render_data.clone(), &controller_file_path, file_type, &template_path, api_input_data_type )?;            
 
     }
 
@@ -201,7 +201,7 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     let file_type = "dbSchemas";
     let db_schema_path = "../server/prisma/schema.prisma";
-    write_file(&mut handlebars, db_schema_data, &db_schema_path, file_type, &template_path, "db" );            
+    write_file(&mut handlebars, db_schema_data, &db_schema_path, file_type, &template_path, "db" )?;            
 
     Ok(())
 }

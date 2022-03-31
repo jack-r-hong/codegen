@@ -1,5 +1,5 @@
 import {Application, Request, Response, NextFunction} from 'express';
-import {Controller, Get, Post, Put, Delete, Validator} from '../baseController';
+import {Controller, Get, Post, Put, Delete, Validator, FormData} from '../baseController';
 import { {{~fpc tag}}Service, Container} from './{{tag}}.service';
 import * as {{tag}}Params from './{{tag}}.parameters';
 import * as validSchemas from './{{tag}}.validator';
@@ -15,6 +15,9 @@ export class {{fpc tag}}Controller {
       {{#if (equal ../../tag data.tags.0) }}
   @{{fpc @key}}('{{~path_parameter_format @../key}}')
   @Validator(validSchemas.{{data.operationId}}Validator)
+  {{#if (equal (model_type data.operationId) "uploadMany")  }}
+  @FormData()
+  {{/if}}
   async {{data.operationId}}(
       req: Request,
       res: Response,
@@ -26,6 +29,9 @@ export class {{fpc tag}}Controller {
             req.query,
             req.params,
         ),
+        {{#if (equal (model_type data.operationId) "uploadMany")  }}
+        req.files as Express.Multer.File[],
+        {{/if}}
     )
         .then((result) =>{
     {{#if (equal (model_type data.operationId) "custom")  }}

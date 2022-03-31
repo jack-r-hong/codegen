@@ -11,3 +11,7 @@ export const readOnePhotoValidator: Schema = {
     notEmpty: true,
   },
 };
+export const readManyPhotoValidator: Schema = {
+};
+export const uploadManyPhotoValidator: Schema = {
+};

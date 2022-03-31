@@ -8,6 +8,8 @@ import helmet from 'helmet';
 import httpErrors from 'http-errors';
 import {registerController} from './apiModules';
 import cookieParser from 'cookie-parser';
+
+// var upload = multer();
 // import {userInfoSession} from './sessions';
 import {errorHandle} from './errors';
 // import session, {Session} from 'express-session';
@@ -58,7 +60,7 @@ export class ExpressApp {
 
     this.app.use(compression());
     this.app.use(cookieParser());
-    this.app.use(bodyParser.urlencoded({extended: false}));
+    this.app.use(bodyParser.urlencoded({extended: true}));
     this.app.use(bodyParser.json());
   }
 

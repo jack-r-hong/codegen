@@ -1,5 +1,5 @@
 import {Application, Request, Response, NextFunction} from 'express';
-import {Controller, Get, Post, Put, Delete, Validator} from '../baseController';
+import {Controller, Get, Post, Put, Delete, Validator, FormData} from '../baseController';
 import {AuthService, Container} from './auth.service';
 import * as authParams from './auth.parameters';
 import * as validSchemas from './auth.validator';

@@ -415,6 +415,8 @@ pub fn model_type_helper(
         operation if operation.starts_with("createMany") => "createMany",
         operation if operation.starts_with("deleteOne") => "deleteOne",
         operation if operation.starts_with("deleteMany") => "deleteMany",
+        operation if operation.starts_with("uploadOne") => "uploadOne",
+        operation if operation.starts_with("uploadMany") => "uploadMany",
         _ => "custom"
     
     };

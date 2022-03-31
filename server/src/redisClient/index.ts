@@ -9,8 +9,8 @@ export const redisClient = createClient({
   legacyMode: true,
 });
 
-redisClient.on('error', (err) => console.log('Redis Client Error', err));
-redisClient.connect().catch(console.error);
+// redisClient.on('error', (err) => console.log('Redis Client Error', err));
+// redisClient.connect().catch(console.error);
 
 // await client.connect();
 

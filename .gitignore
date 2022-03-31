@@ -2,3 +2,4 @@ codegen/gen/target/
 server/node_modules/
 server/.env
 server/package-lock.json
+server/uploads

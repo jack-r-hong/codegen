@@ -1,8 +1,12 @@
 import {Application, Request, Response, Router, RequestHandler, NextFunction}
   from 'express';
 import {checkSchema, Schema, validationResult} from 'express-validator';
+import multer from 'multer';
+import {v1 as uuidv1} from 'uuid';
+
 
 const vSymbol = Symbol('validator');
+const formDataSymbol = Symbol('formData');
 
 const subRouter = Router();
 
@@ -53,6 +57,11 @@ function decoratorFactory(method :Method, path :string) {
       middlewares.push(validator);
     }
 
+    if (Reflect.hasOwnMetadata(formDataSymbol, target, propertyKey)) {
+      const formData = Reflect.getMetadata(formDataSymbol, target, propertyKey);
+      middlewares.push(formData);
+    }
+
     subRouter[method](path, middlewares, bedRequestHandler, descriptor.value);
     return descriptor;
   };
@@ -76,5 +85,34 @@ export function Validator(schema: Schema) {
           vSymbol, checkSchema(schema),
           target, propertyKey);
     }
+  };
+}
+
+
+export function FormData() {
+  const storage = multer.diskStorage({
+    destination: function(req, file, cb) {
+      cb(null, './uploads/');
+    },
+
+    filename: function(req: any, file: any, cb: any) {
+      cb(null, `${uuidv1()}-${file.originalname}`);
+    },
+  });
+  const fileFilter = (req: any, file: any, cb: any) => {
+    if (file.mimetype === 'image/jpg' ||
+       file.mimetype ==='image/jpeg' ||
+       file.mimetype === 'image/png') {
+      cb(null, true);
+    } else {
+      cb(new Error('Image uploaded is not of type jpg/jpegor png'), false);
+    }
+  };
+  const upload = multer({storage, fileFilter});
+
+  return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
+    Reflect.defineMetadata(
+        formDataSymbol, upload.array('files', 10),
+        target, propertyKey);
   };
 }

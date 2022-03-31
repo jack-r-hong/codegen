@@ -31,12 +31,17 @@ model {{fpc @key}} {
     {{id_default @key}}
                 {{~else}}
 
-                {{~/if}}              
+                {{~/if}}                              
                 {{~#if d2.uniqueItems }}
     @unique
                 {{~else}}
 
                 {{~/if}}   
+                {{~#if d2.default }} 
+    @default({{d2.default}})
+                {{~else}}
+                
+                {{~/if}}                  
                 {{~#if (equal @key "createdAt") }} 
     @default(now())
                 {{~else}}

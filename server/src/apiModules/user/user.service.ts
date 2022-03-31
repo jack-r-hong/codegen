@@ -67,10 +67,10 @@ export class UserService {
     });
     return res;
   }
-  async createManyUsers(
-      param :requestTypes.CreateManyUsersRequest[],
+  async createManyUser(
+      param :requestTypes.CreateManyUserRequest[],
   ) {
-    const res = await this.userModel.createManyUsers(
+    const res = await this.userModel.createManyUser(
         param,
     ).catch((e) =>{
       throw e;

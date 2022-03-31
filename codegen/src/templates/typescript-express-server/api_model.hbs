@@ -125,6 +125,24 @@ const prisma = new PrismaClient();
     });
 {{/inline}}
 
+{{~#*inline "uploadMany"}}
+    const data = files.map((e) => {
+      return {
+        name: e.originalname,
+        filePath1: e.path,
+      };
+    });
+
+    const res: any = await prisma.{{../../tag}}.createMany({
+      data,
+      skipDuplicates: true,
+    }).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+{{/inline}}
+
 {{#*inline "custom"}}
     // custom begin {{d.operationId}}
 {{{lookup ../../custom d.operationId }}}
@@ -142,6 +160,9 @@ export class {{fpc tag}}Model {
 []
         {{~else~}}
         {{~/if}},
+        {{#if (equal (model_type d.operationId) "uploadMany")  }}
+      files: Express.Multer.File[],
+        {{/if}}
   ) {
 {{ > (model_type d.operationId)}}
       {{#if (equal (model_type d.operationId) "custom")  }}

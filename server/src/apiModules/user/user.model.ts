@@ -102,8 +102,8 @@ export class UserModel {
     });
     return res;
   }
-  async createManyUsers(
-      param: requestTypes.CreateManyUsersRequest[],
+  async createManyUser(
+      param: requestTypes.CreateManyUserRequest[],
   ) {
     const data = param.map((e) => {
       return {

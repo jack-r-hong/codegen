@@ -21,15 +21,15 @@ model Auth {
     // custom end Auth
 }
 model Photo {
-    afterLevel    Int            @map("after_level")                 
-    beforeLevel    Int            @map("before_level")                 
+    afterLevel    Int            @default(1)    @map("after_level")                 
+    beforeLevel    Int            @default(1)    @map("before_level")                 
     createdAt    DateTime            @default(now())    @map("created_at")                 
     filePath1    String            @map("file_path_1")                 
-    filePath2    String            @map("file_path_2")                 
+    filePath2    String?            @map("file_path_2")                 
     id    Int        @id @default(autoincrement())    @map("id")                 
     name    String            @map("name")                 
-    process    Int            @map("process")                 
-    status    Int            @map("status")                 
+    process    Int            @default(1)    @map("process")                 
+    status    Int            @default(1)    @map("status")                 
     photoComment PhotoComment[]
     
     // custom begin Photo

@@ -99,7 +99,7 @@ export const UpdateOneUserRequestConvert = (
     bodyUsername: body.username,
   };
 };
-export type CreateManyUsersRequest = {
+export type CreateManyUserRequest = {
     bodyAuthLevel: number,
     bodyEmail: string,
     bodyPassword: string,
@@ -108,7 +108,7 @@ export type CreateManyUsersRequest = {
     bodyUsername: string,
 }
 
-export const CreateManyUsersRequestConvert = (
+export const CreateManyUserRequestConvert = (
     body: any,
     query: any,
     path: any,

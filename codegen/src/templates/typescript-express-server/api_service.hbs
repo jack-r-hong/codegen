@@ -24,6 +24,9 @@ export class {{fpc tag}}Service {
 []
         {{~else~}}
         {{~/if}},
+        {{#if (equal (model_type d.operationId) "uploadMany")  }}
+      files: Express.Multer.File[],
+        {{/if}}
   ) {
     {{#if (equal (model_type d.operationId) "custom")  }}
     // custom begin {{d.operationId}}
@@ -32,6 +35,9 @@ export class {{fpc tag}}Service {
     {{else}}
     const res = await this.{{../../tag}}Model.{{d.operationId}}(
         param,
+      {{#if (equal (model_type d.operationId) "uploadMany")  }}
+        files,
+      {{/if}}
     ).catch((e) =>{
       throw e;
     });
