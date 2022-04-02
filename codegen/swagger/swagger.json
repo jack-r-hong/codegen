@@ -696,6 +696,55 @@
             "$ref" : "#/components/responses/Conflict"
           }
         }
+      },
+      "delete" : {
+        "tags" : [ "photo" ],
+        "summary" : "get photo list",
+        "description" : "This can only be done by the logged in user.",
+        "operationId" : "deleteManyPhoto",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "query",
+          "description" : "name that need to be updated",
+          "required" : true,
+          "schema" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer"
+            }
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Photo"
+                  }
+                  
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/BadRequest"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/Unauthorized"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          },
+          "404" : {
+            "$ref" : "#/components/responses/NotFound"
+          },
+          "409" : {
+            "$ref" : "#/components/responses/Conflict"
+          }
+        }
       }
     }
   },

@@ -51,6 +51,26 @@ export class PhotoController {
           next(e);
         });
   }
+  @Delete('/photos')
+  @Validator(validSchemas.deleteManyPhotoValidator)
+  async deleteManyPhoto(
+      req: photoParams.DeleteManyPhotoRequest,
+      res: Response,
+      next: NextFunction,
+  ) {
+    serviceInstance.deleteManyPhoto(
+        photoParams.DeleteManyPhotoRequestConvert(
+            req.body,
+            req.query,
+            req.params,
+        ),
+    )
+        .then((result) =>{
+          res.json(result);
+        }).catch((e) => {
+          next(e);
+        });
+  }
   @Get('/photos')
   @Validator(validSchemas.readManyPhotoValidator)
   async readManyPhoto(

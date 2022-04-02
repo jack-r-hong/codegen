@@ -114,35 +114,9 @@ const prisma = new PrismaClient();
 {{/inline}}
 
 {{~#*inline "updateMany"}}
-   {{!-- const data = param.map((e) => { --}}
-      {{!-- return {
-        {{#if d.requestBody.content.[application/json].schema.type}}
-          {{#if (equal d.requestBody.content.[application/json].schema.type "array") }}
-            {{#each d.requestBody.content.[application/json].schema.items.properties as |p|}}
-        {{@key}}: e.body{{fpc @key}},
-            {{/each}}
-          {{/if}} 
-        {{/if}} 
-      };
-    }); --}}
     const res = {
       count: 0,
     };
-
-    const data = param.bodyDataList.map((e: any ) => {
-      const temp: any = {};
-      Object.keys(e).forEach((e2) => {
-        const key: string = e2.charAt(4).toLowerCase() +
-        e2.substring(4).slice(1);
-
-
-        if (key !== param.bodyWhereField) {
-          temp[key] = e[e2];
-        }
-      });
-
-      return temp;
-    });
 
     await Promise.all(
         param.bodyDataList.map((e: any) => {
@@ -177,6 +151,22 @@ const prisma = new PrismaClient();
       where: {
         {{#each d.parameters}}
         {{name}}: param.{{in}}{{fpc name}},
+        {{/each}}
+      },
+    }).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+{{/inline}}
+
+{{~#*inline "deleteMany"}}
+    const res = await prisma.{{../../tag}}.deleteMany({
+      where: {
+        {{#each d.parameters}}
+        {{name}}: {
+          in: param.{{in}}{{fpc name}},
+        },
         {{/each}}
       },
     }).catch((e) => {

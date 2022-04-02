@@ -118,11 +118,10 @@ interface TypedRequest<
     }
 
     type DeleteOneUserReqQuery = {
-        id: string
     }
 
     type DeleteOneUserReqParams = {
-        id: string
+          id: string
     }
 
     export interface DeleteOneUserRequest extends TypedRequest<
@@ -142,18 +141,17 @@ interface TypedRequest<
     path: DeleteOneUserReqParams,
     ): DeleteOneUserParams => {
       return {
-          pathId: parseInt(path.id),
+            pathId: parseInt(path.id),
       };
     };
     type ReadOneUserReqBody = {
     }
 
     type ReadOneUserReqQuery = {
-        id: string
     }
 
     type ReadOneUserReqParams = {
-        id: string
+          id: string
     }
 
     export interface ReadOneUserRequest extends TypedRequest<
@@ -173,7 +171,7 @@ interface TypedRequest<
     path: ReadOneUserReqParams,
     ): ReadOneUserParams => {
       return {
-          pathId: parseInt(path.id),
+            pathId: parseInt(path.id),
       };
     };
     type UpdateOneUserReqBody = {
@@ -186,11 +184,10 @@ interface TypedRequest<
     }
 
     type UpdateOneUserReqQuery = {
-        id: string
     }
 
     type UpdateOneUserReqParams = {
-        id: string
+          id: string
     }
 
     export interface UpdateOneUserRequest extends TypedRequest<

@@ -13,11 +13,10 @@ interface TypedRequest<
     }
 
     type ReadOnePhotoReqQuery = {
-        id: string
     }
 
     type ReadOnePhotoReqParams = {
-        id: string
+          id: string
     }
 
     export interface ReadOnePhotoRequest extends TypedRequest<
@@ -37,7 +36,7 @@ interface TypedRequest<
     path: ReadOnePhotoReqParams,
     ): ReadOnePhotoParams => {
       return {
-          pathId: parseInt(path.id),
+            pathId: parseInt(path.id),
       };
     };
     type UpdateOnePhotoReqBody = {
@@ -49,11 +48,10 @@ interface TypedRequest<
     }
 
     type UpdateOnePhotoReqQuery = {
-        id: string
     }
 
     type UpdateOnePhotoReqParams = {
-        id: string
+          id: string
     }
 
     export interface UpdateOnePhotoRequest extends TypedRequest<
@@ -85,6 +83,36 @@ interface TypedRequest<
                 bodyProcess: parseInt(body.process),
                 bodyStatus: parseInt(body.status),
         };
+    };
+    type DeleteManyPhotoReqBody = {
+    }
+
+    type DeleteManyPhotoReqQuery = {
+          id: string[]
+    }
+
+    type DeleteManyPhotoReqParams = {
+    }
+
+    export interface DeleteManyPhotoRequest extends TypedRequest<
+      DeleteManyPhotoReqBody,
+      DeleteManyPhotoReqQuery,
+      DeleteManyPhotoReqParams
+    >{
+    }
+
+    export type DeleteManyPhotoParams = {
+        queryId: number[]
+    }
+
+    export const DeleteManyPhotoRequestConvert = (
+    body: DeleteManyPhotoReqBody,
+    query: DeleteManyPhotoReqQuery,
+    path: DeleteManyPhotoReqParams,
+    ): DeleteManyPhotoParams => {
+      return {
+            queryId: query.id.map((e) => parseInt(e)),
+      };
     };
     type ReadManyPhotoReqBody = {
     }

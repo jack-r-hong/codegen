@@ -35,20 +35,26 @@ interface TypedRequest<
 
     type {{fpc data.operationId}}ReqQuery = {
     {{#each data.parameters as |p|}}
-      {{#if (equal p.schema.type "array") }}
-        {{ p.name}}: string[]
+      {{#if (equal p.in "query") }}
+        {{#if (equal p.schema.type "array") }}
+          {{ p.name}}: string[]
+        {{else}}
+          {{ p.name}}: string
+        {{/if}}
       {{else}}
-        {{ p.name}}: string
       {{/if}}
     {{/each}}
     }
 
     type {{fpc data.operationId}}ReqParams = {
     {{#each data.parameters as |p|}}
-      {{#if (equal p.schema.type "array") }}
-        {{ p.name}}: string[]
+      {{#if (equal p.in "path") }}
+        {{#if (equal p.schema.type "array") }}
+          {{ p.name}}: string[]
+        {{else}}
+          {{ p.name}}: string
+        {{/if}}
       {{else}}
-        {{ p.name}}: string
       {{/if}}
     {{/each}}
     }
@@ -133,11 +139,19 @@ interface TypedRequest<
     {{!-- params --}}
       return {
       {{#each data.parameters as |p|}}
-        {{#if (equal p.schema.type "integer") }}
-          {{p.in}}{{fpc p.name}}: parseInt({{p.in}}.{{p.name}}),
+        {{#if (equal p.schema.type "array") }}
+          {{#if (equal p.schema.items.type "integer") }}
+            {{p.in}}{{fpc p.name}}: {{p.in}}.{{p.name}}.map((e) => parseInt(e)),
+          {{else}}
+            {{p.in}}{{fpc p.name}}: {{p.in}}.{{ p.name}},
+          {{/if}}        
         {{else}}
-          {{p.in}}{{fpc p.name}}: {{p.in}}.{{p.name}},
-        {{/if}}
+          {{#if (equal p.schema.type "integer") }}
+            {{p.in}}{{fpc p.name}}: parseInt({{p.in}}.{{p.name}}),
+          {{else}}
+            {{p.in}}{{fpc p.name}}: {{p.in}}.{{p.name}},
+          {{/if}}
+        {{/if}}    
       {{/each}}
       };
     {{/if}}

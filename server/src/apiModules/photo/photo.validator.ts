@@ -54,6 +54,12 @@ export const updateOnePhotoValidator: Schema = {
     },
   },
 };
+export const deleteManyPhotoValidator: Schema = {
+  id: {
+    in: 'query',
+    notEmpty: true,
+  },
+};
 export const readManyPhotoValidator: Schema = {
 };
 export const uploadManyPhotoValidator: Schema = {

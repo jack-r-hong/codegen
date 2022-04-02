@@ -46,11 +46,10 @@ interface TypedRequest<
     }
 
     type DeleteOneAuthReqQuery = {
-        id: string
     }
 
     type DeleteOneAuthReqParams = {
-        id: string
+          id: string
     }
 
     export interface DeleteOneAuthRequest extends TypedRequest<
@@ -70,7 +69,7 @@ interface TypedRequest<
     path: DeleteOneAuthReqParams,
     ): DeleteOneAuthParams => {
       return {
-          pathId: parseInt(path.id),
+            pathId: parseInt(path.id),
       };
     };
     type UpdateOneAuthReqBody = {
@@ -79,11 +78,10 @@ interface TypedRequest<
     }
 
     type UpdateOneAuthReqQuery = {
-        id: string
     }
 
     type UpdateOneAuthReqParams = {
-        id: string
+          id: string
     }
 
     export interface UpdateOneAuthRequest extends TypedRequest<

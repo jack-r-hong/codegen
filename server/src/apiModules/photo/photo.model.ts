@@ -58,6 +58,22 @@ export class PhotoModel {
     });
     return res;
   }
+  async deleteManyPhoto(
+      param: requestTypes.DeleteManyPhotoParams,
+  ) {
+    const res = await prisma.photo.deleteMany({
+      where: {
+        id: {
+          in: param.queryId,
+        },
+      },
+    }).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+    return res.count;
+  }
   async readManyPhoto(
       param: requestTypes.ReadManyPhotoParams,
   ) {
@@ -110,21 +126,6 @@ export class PhotoModel {
     const res = {
       count: 0,
     };
-
-    const data = param.bodyDataList.map((e: any ) => {
-      const temp: any = {};
-      Object.keys(e).forEach((e2) => {
-        const key: string = e2.charAt(4).toLowerCase() +
-        e2.substring(4).slice(1);
-
-
-        if (key !== param.bodyWhereField) {
-          temp[key] = e[e2];
-        }
-      });
-
-      return temp;
-    });
 
     await Promise.all(
         param.bodyDataList.map((e: any) => {

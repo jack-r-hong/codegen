@@ -33,6 +33,16 @@ export class PhotoService {
     });
     return res;
   }
+  async deleteManyPhoto(
+      param :requestTypes.DeleteManyPhotoParams,
+  ) {
+    const res = await this.photoModel.deleteManyPhoto(
+        param,
+    ).catch((e) =>{
+      throw e;
+    });
+    return res;
+  }
   async readManyPhoto(
       param :requestTypes.ReadManyPhotoParams,
   ) {
