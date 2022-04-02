@@ -24,12 +24,14 @@ const prisma = new PrismaClient();
 {{/inline}}
 
 {{~#*inline "createMany"}}
-    const data = param.map((e) => {
+    const data = param.bodyDataList.map((e) => {
       return {
         {{#if d.requestBody.content.[application/json].schema.type}}
-          {{#if (equal d.requestBody.content.[application/json].schema.type "array") }}
-            {{#each d.requestBody.content.[application/json].schema.items.properties as |p|}}
+          {{#if (equal d.requestBody.content.[application/json].schema.type "object") }}
+            {{#each d.requestBody.content.[application/json].schema.properties as |p|}}
+              {{#each p.items.properties as i}}
         {{@key}}: e.body{{fpc @key}},
+              {{/each}} 
             {{/each}}
           {{/if}} 
         {{/if}} 
@@ -111,6 +113,65 @@ const prisma = new PrismaClient();
     });
 {{/inline}}
 
+{{~#*inline "updateMany"}}
+   {{!-- const data = param.map((e) => { --}}
+      {{!-- return {
+        {{#if d.requestBody.content.[application/json].schema.type}}
+          {{#if (equal d.requestBody.content.[application/json].schema.type "array") }}
+            {{#each d.requestBody.content.[application/json].schema.items.properties as |p|}}
+        {{@key}}: e.body{{fpc @key}},
+            {{/each}}
+          {{/if}} 
+        {{/if}} 
+      };
+    }); --}}
+    const res = {
+      count: 0,
+    };
+
+    const data = param.bodyDataList.map((e: any ) => {
+      const temp: any = {};
+      Object.keys(e).forEach((e2) => {
+        const key: string = e2.charAt(4).toLowerCase() +
+        e2.substring(4).slice(1);
+
+
+        if (key !== param.bodyWhereField) {
+          temp[key] = e[e2];
+        }
+      });
+
+      return temp;
+    });
+
+    await Promise.all(
+        param.bodyDataList.map((e: any) => {
+          const data: any = {};
+          const where: any = {};
+          Object.keys(e).forEach((k) => {
+            const key: string = k.charAt(4).toLowerCase() +
+            k.substring(4).slice(1);
+
+            if (key === param.bodyWhereField) {
+              where[param.bodyWhereField] = e[k];
+            } else {
+              data[key] = e[k];
+            }
+          });
+
+          res.count++;
+          return prisma.{{../../tag}}.update({
+            data,
+            where,
+          });
+        }),
+    ).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+{{/inline}}
+
 {{~#*inline "deleteOne"}}
     const res: {{fpc ../../tag}} | null = await prisma.{{../../tag}}.delete({
       where: {
@@ -155,11 +216,7 @@ export class {{fpc tag}}Model {
   {{#each path as |d|}}
     {{#if (equal ../../tag d.tags.0) }}
   async {{d.operationId}}(
-      param: requestTypes.{{fpc d.operationId}}Request
-        {{~#if (model_type_is_array d.operationId) ~}}
-[]
-        {{~else~}}
-        {{~/if}},
+      param: requestTypes.{{fpc d.operationId}}Params,
         {{#if (equal (model_type d.operationId) "uploadMany")  }}
       files: Express.Multer.File[],
         {{/if}}

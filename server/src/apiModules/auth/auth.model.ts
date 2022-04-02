@@ -8,7 +8,7 @@ const prisma = new PrismaClient();
 @Service()
 export class AuthModel {
   async createOneAuth(
-      param: requestTypes.CreateOneAuthRequest,
+      param: requestTypes.CreateOneAuthParams,
   ) {
     const res: Auth | null = await prisma.auth.create({
       data: {
@@ -23,7 +23,7 @@ export class AuthModel {
     return res;
   }
   async deleteOneAuth(
-      param: requestTypes.DeleteOneAuthRequest,
+      param: requestTypes.DeleteOneAuthParams,
   ) {
     const res: Auth | null = await prisma.auth.delete({
       where: {
@@ -37,7 +37,7 @@ export class AuthModel {
     return res;
   }
   async updateOneAuth(
-      param: requestTypes.UpdateOneAuthRequest,
+      param: requestTypes.UpdateOneAuthParams,
   ) {
     const res: Auth | null = await prisma.auth.update({
       where: {
@@ -55,7 +55,7 @@ export class AuthModel {
     return res;
   }
   async readManyAuth(
-      param: requestTypes.ReadManyAuthRequest,
+      param: requestTypes.ReadManyAuthParams,
   ) {
     const res: Auth[] | null = await prisma.auth.findMany({
       where: {

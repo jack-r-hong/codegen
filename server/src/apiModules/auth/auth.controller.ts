@@ -1,5 +1,6 @@
-import {Application, Request, Response, NextFunction} from 'express';
-import {Controller, Get, Post, Put, Delete, Validator, FormData} from '../baseController';
+import {Application, Response, NextFunction} from 'express';
+import {Controller, Get, Post, Put,
+Delete, Validator, FormData} from '../baseController';
 import {AuthService, Container} from './auth.service';
 import * as authParams from './auth.parameters';
 import * as validSchemas from './auth.validator';
@@ -13,7 +14,7 @@ export class AuthController {
   @Post('/auth')
   @Validator(validSchemas.createOneAuthValidator)
   async createOneAuth(
-      req: Request,
+      req: authParams.CreateOneAuthRequest,
       res: Response,
       next: NextFunction,
   ) {
@@ -33,7 +34,7 @@ export class AuthController {
   @Delete('/auth/:id')
   @Validator(validSchemas.deleteOneAuthValidator)
   async deleteOneAuth(
-      req: Request,
+      req: authParams.DeleteOneAuthRequest,
       res: Response,
       next: NextFunction,
   ) {
@@ -53,7 +54,7 @@ export class AuthController {
   @Put('/auth/:id')
   @Validator(validSchemas.updateOneAuthValidator)
   async updateOneAuth(
-      req: Request,
+      req: authParams.UpdateOneAuthRequest,
       res: Response,
       next: NextFunction,
   ) {
@@ -73,7 +74,7 @@ export class AuthController {
   @Get('/auths')
   @Validator(validSchemas.readManyAuthValidator)
   async readManyAuth(
-      req: Request,
+      req: authParams.ReadManyAuthRequest,
       res: Response,
       next: NextFunction,
   ) {

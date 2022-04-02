@@ -1,57 +1,141 @@
+import {Request} from 'express';
+import {Query, ParamsDictionary} from 'express-serve-static-core';
 
-export type CreateOneAuthRequest = {
-    bodyLevel: number,
-    bodyRole: number,
-}
+interface TypedRequest<
+  T,
+  U extends Query,
+  P extends ParamsDictionary
+> extends Request {
+  body: T,
+  query: U,
+  params: P,
+}    type CreateOneAuthReqBody = {
+          level: string,
+          role: string,
+    }
 
-export const CreateOneAuthRequestConvert = (
-    body: any,
-    query: any,
-    path: any,
-) => {
-  return {
-    bodyLevel: parseInt(body.level),
-    bodyRole: parseInt(body.role),
-  };
-};
-export type DeleteOneAuthRequest = {
-    pathId: number
-}
+    type CreateOneAuthReqQuery = {
+    }
 
-export const DeleteOneAuthRequestConvert = (
-    body: any,
-    query: any,
-    path: any,
-) => {
-  return {
-    pathId: parseInt(path.id),
-  };
-};
-export type UpdateOneAuthRequest = {
-    pathId: number
-    bodyLevel: number,
-    bodyRole: number,
-}
+    type CreateOneAuthReqParams = {
+    }
 
-export const UpdateOneAuthRequestConvert = (
-    body: any,
-    query: any,
-    path: any,
-) => {
-  return {
-    pathId: parseInt(path.id),
-    bodyLevel: parseInt(body.level),
-    bodyRole: parseInt(body.role),
-  };
-};
-export type ReadManyAuthRequest = {
-}
+    export interface CreateOneAuthRequest extends TypedRequest<
+      CreateOneAuthReqBody,
+      CreateOneAuthReqQuery,
+      CreateOneAuthReqParams
+    >{
+    }
 
-export const ReadManyAuthRequestConvert = (
-    body: any,
-    query: any,
-    path: any,
-) => {
-  return {
-  };
-};
+    export type CreateOneAuthParams = {
+          bodyLevel: number,
+          bodyRole: number,
+    }
+
+    export const CreateOneAuthRequestConvert = (
+    body: CreateOneAuthReqBody,
+    query: CreateOneAuthReqQuery,
+    path: CreateOneAuthReqParams,
+    ): CreateOneAuthParams => {
+        return {
+                bodyLevel: parseInt(body.level),
+                bodyRole: parseInt(body.role),
+        };
+    };
+    type DeleteOneAuthReqBody = {
+    }
+
+    type DeleteOneAuthReqQuery = {
+        id: string
+    }
+
+    type DeleteOneAuthReqParams = {
+        id: string
+    }
+
+    export interface DeleteOneAuthRequest extends TypedRequest<
+      DeleteOneAuthReqBody,
+      DeleteOneAuthReqQuery,
+      DeleteOneAuthReqParams
+    >{
+    }
+
+    export type DeleteOneAuthParams = {
+        pathId: number
+    }
+
+    export const DeleteOneAuthRequestConvert = (
+    body: DeleteOneAuthReqBody,
+    query: DeleteOneAuthReqQuery,
+    path: DeleteOneAuthReqParams,
+    ): DeleteOneAuthParams => {
+      return {
+          pathId: parseInt(path.id),
+      };
+    };
+    type UpdateOneAuthReqBody = {
+          level: string,
+          role: string,
+    }
+
+    type UpdateOneAuthReqQuery = {
+        id: string
+    }
+
+    type UpdateOneAuthReqParams = {
+        id: string
+    }
+
+    export interface UpdateOneAuthRequest extends TypedRequest<
+      UpdateOneAuthReqBody,
+      UpdateOneAuthReqQuery,
+      UpdateOneAuthReqParams
+    >{
+    }
+
+    export type UpdateOneAuthParams = {
+        pathId: number
+          bodyLevel: number,
+          bodyRole: number,
+    }
+
+    export const UpdateOneAuthRequestConvert = (
+    body: UpdateOneAuthReqBody,
+    query: UpdateOneAuthReqQuery,
+    path: UpdateOneAuthReqParams,
+    ): UpdateOneAuthParams => {
+        return {
+            pathId: parseInt(path.id),
+                bodyLevel: parseInt(body.level),
+                bodyRole: parseInt(body.role),
+        };
+    };
+    type ReadManyAuthReqBody = {
+    }
+
+    type ReadManyAuthReqQuery = {
+    }
+
+    type ReadManyAuthReqParams = {
+    }
+
+    export interface ReadManyAuthRequest extends TypedRequest<
+      ReadManyAuthReqBody,
+      ReadManyAuthReqQuery,
+      ReadManyAuthReqParams
+    >{
+    }
+
+    export type ReadManyAuthParams = {
+    }
+
+    export const ReadManyAuthRequestConvert = (
+    body: ReadManyAuthReqBody,
+    query: ReadManyAuthReqQuery,
+    path: ReadManyAuthReqParams,
+    ): ReadManyAuthParams => {
+      return {
+      };
+    };
+
+

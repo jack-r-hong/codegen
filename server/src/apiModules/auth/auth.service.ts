@@ -14,7 +14,7 @@ export class AuthService {
         private authModel: AuthModel,
   ) {}
   async createOneAuth(
-      param :requestTypes.CreateOneAuthRequest,
+      param :requestTypes.CreateOneAuthParams,
   ) {
     const res = await this.authModel.createOneAuth(
         param,
@@ -24,7 +24,7 @@ export class AuthService {
     return res;
   }
   async deleteOneAuth(
-      param :requestTypes.DeleteOneAuthRequest,
+      param :requestTypes.DeleteOneAuthParams,
   ) {
     const res = await this.authModel.deleteOneAuth(
         param,
@@ -34,7 +34,7 @@ export class AuthService {
     return res;
   }
   async updateOneAuth(
-      param :requestTypes.UpdateOneAuthRequest,
+      param :requestTypes.UpdateOneAuthParams,
   ) {
     const res = await this.authModel.updateOneAuth(
         param,
@@ -44,7 +44,7 @@ export class AuthService {
     return res;
   }
   async readManyAuth(
-      param :requestTypes.ReadManyAuthRequest,
+      param :requestTypes.ReadManyAuthParams,
   ) {
     const res = await this.authModel.readManyAuth(
         param,

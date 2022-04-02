@@ -26,6 +26,7 @@ model Photo {
     createdAt    DateTime            @default(now())    @map("created_at")                 
     filePath1    String            @map("file_path_1")                 
     filePath2    String?            @map("file_path_2")                 
+    filePath3    String?            @map("file_path_3")                 
     id    Int        @id @default(autoincrement())    @map("id")                 
     name    String            @map("name")                 
     process    Int            @default(1)    @map("process")                 

@@ -1,88 +1,149 @@
+import {Request} from 'express';
+import {Query, ParamsDictionary} from 'express-serve-static-core';
 
-{{!-- {{#with (lookup data.components.schemas (fpc tag)) }}
-export type {{fpc ../tag}} = {
-  {{#each properties as |param|}}
-   {{@key}}: {{parameter_type param.type}},
-  {{/each}}
+interface TypedRequest<
+  T,
+  U extends Query,
+  P extends ParamsDictionary
+> extends Request {
+  body: T,
+  query: U,
+  params: P,
 }
-{{/with}} --}}
 
 {{~#each data.paths as |path|}}
-  {{#each path as |data|}}
-    {{#if (equal ../../tag data.tags.0) }}
-export type {{fpc data.operationId}}Request = {
-      {{#each data.parameters as |p|}}
-    {{p.in}}{{fpc p.name}}: {{parameter_type p.schema.type}}
-      {{/each}}
-      {{#if data.requestBody.content.[application/json].schema.type}}
-        {{#if (equal data.requestBody.content.[application/json].schema.type "object") }}
-          {{#each data.requestBody.content.[application/json].schema.properties as |p|}}
-    body{{fpc @key}}: {{parameter_type p.type}},
-          {{/each}}
-        {{/if}}
-        {{#if (equal data.requestBody.content.[application/json].schema.type "array") }}
-          {{#each data.requestBody.content.[application/json].schema.items.properties as |p|}}
-    body{{fpc @key}}: {{parameter_type p.type}},
-          {{/each}}
-        {{/if}}       
-      {{/if}}
-}
-
-export const {{fpc data.operationId}}RequestConvert = (
-    body: any,
-    query: any,
-    path: any,
-) => {
-    {{#if data.requestBody.content.[application/json].schema.type}}
-      {{#if (equal data.requestBody.content.[application/json].schema.type "array") }}
-  const arrayBody = body.map((e: any) => {
-    return {
-        {{#each data.requestBody.content.[application/json].schema.items.properties as |p|}}
-            {{#if (equal p.type "integer") }}
-      body{{fpc @key}}: parseInt(e.{{@key}}),
-            {{else}}
-      body{{fpc @key}}: e.{{@key}},
-            {{/if}}    
-        {{/each}}
-    };
-  });
-      {{/if}}       
-    {{/if}}  
-      {{#if data.requestBody.content.[application/json].schema.type}}
-        {{#if (equal data.requestBody.content.[application/json].schema.type "array") }}
-  return arrayBody;
+{{#each path as |data|}}
+  {{!-- filler tag --}}
+  {{#if (equal ../../tag data.tags.0) }}
+    type {{fpc data.operationId}}ReqBody = {
+      {{#each data.requestBody.content.[application/json].schema.properties as |p|}}
+        {{#if (equal p.type "array") }}
+          {{ @key}}: {
+              {{#each p.items.properties as i}}
+                {{#if (equal p.type "integer") }}
+                  {{ @key}}: string,
+                {{else}}
+                  {{ @key}}: string,
+                {{/if}}
+              {{/each}} 
+          }[],
         {{else}}
-  return {
+          {{ @key}}: string,
+        {{/if}}        
+      {{/each}}      
+    }
+
+    type {{fpc data.operationId}}ReqQuery = {
+    {{#each data.parameters as |p|}}
+      {{#if (equal p.schema.type "array") }}
+        {{ p.name}}: string[]
+      {{else}}
+        {{ p.name}}: string
+      {{/if}}
+    {{/each}}
+    }
+
+    type {{fpc data.operationId}}ReqParams = {
+    {{#each data.parameters as |p|}}
+      {{#if (equal p.schema.type "array") }}
+        {{ p.name}}: string[]
+      {{else}}
+        {{ p.name}}: string
+      {{/if}}
+    {{/each}}
+    }
+
+    export interface {{fpc data.operationId}}Request extends TypedRequest<
+      {{fpc data.operationId}}ReqBody,
+      {{fpc data.operationId}}ReqQuery,
+      {{fpc data.operationId}}ReqParams
+    >{
+    }
+
+    export type {{fpc data.operationId}}Params = {
+    {{#each data.parameters as |p|}}
+      {{#if (equal p.schema.type "array") }}
+        {{p.in}}{{fpc p.name}}: {{parameter_type p.schema.items.type}}[]
+      {{else}}
+        {{p.in}}{{fpc p.name}}: {{parameter_type p.schema.type}}
+      {{/if}}
+    {{/each}}
+    {{#if data.requestBody.content.[application/json].schema.type}}
+      {{#if (equal data.requestBody.content.[application/json].schema.type "object") }}
+        {{#each data.requestBody.content.[application/json].schema.properties as |p|}}
+          {{#if (equal p.type "array")}}
+          body{{fpc @key}}: {
+            {{#each p.items.properties as |i|}}
+              body{{fpc @key}}: {{parameter_type i.type}},
+            {{/each}}            
+          }[],
+          {{else}}    
+          body{{fpc @key}}: {{parameter_type p.type}},
+          {{/if~}}
+        {{/each}}
+      {{/if}}
+      {{#if (equal data.requestBody.content.[application/json].schema.type "array") }}
+        {{#each data.requestBody.content.[application/json].schema.items.properties as |p|}}
+          body{{fpc @key}}: {{parameter_type p.type}},
+        {{/each}}
+      {{/if}}
+    {{/if}}
+    }
+
+    export const {{fpc data.operationId}}RequestConvert = (
+    body: {{fpc data.operationId}}ReqBody,
+    query: {{fpc data.operationId}}ReqQuery,
+    path: {{fpc data.operationId}}ReqParams,
+    ): {{fpc data.operationId}}Params => {
+      {{!-- body --}}
+    {{#if data.requestBody.content.[application/json].schema.type}}
+        return {
         {{#each data.parameters as |p|}}
           {{#if (equal p.schema.type "integer") }}
-    {{p.in}}{{fpc p.name}}: parseInt({{p.in}}.{{p.name}}),
+            {{p.in}}{{fpc p.name}}: parseInt({{p.in}}.{{p.name}}),
           {{else}}
-    {{p.in}}{{fpc p.name}}: {{p.in}}.{{p.name}},
-          {{/if}}    
-        {{/each}}
-          {{#if (equal data.requestBody.content.[application/json].schema.type "object") }}
-            {{#each data.requestBody.content.[application/json].schema.properties as |p|}}
-              {{#if (equal p.type "integer") }}
-    body{{fpc @key}}: parseInt(body.{{@key}}),
-              {{else}}
-    body{{fpc @key}}: body.{{@key}},
-              {{/if}}    
-            {{/each}}
+            {{p.in}}{{fpc p.name}}: {{p.in}}.{{p.name}},
           {{/if}}
-  };
-        {{/if}}  
-        {{else}}
-  return {
+        {{/each}}
+        {{#if (equal data.requestBody.content.[application/json].schema.type "object") }}
+          {{#each data.requestBody.content.[application/json].schema.properties as |p|}}
+            {{#if (equal p.type "array") }}
+              body{{fpc @key}}: body.{{ @key}}.map((e :any) => {
+                return {
+                  {{#each p.items.properties as |i|}}
+                    {{#if (equal i.type "integer") }}
+                      body{{fpc @key}}: parseInt(e.{{@key}}),
+                    {{else}}
+                      body{{fpc @key}}: e.{{@key}},
+                    {{/if}}
+                  {{/each}} 
+                };
+              }),
+            {{else}}
+              {{#if (equal p.type "integer") }}
+                body{{fpc @key}}: parseInt(body.{{@key}}),
+              {{else}}
+                body{{fpc @key}}: body.{{@key}},
+              {{/if}}
+            {{/if}}        
+          {{/each}}
+        {{/if}}
+        };
+    {{else}}
+    {{!-- params --}}
+      return {
       {{#each data.parameters as |p|}}
         {{#if (equal p.schema.type "integer") }}
-    {{p.in}}{{fpc p.name}}: parseInt({{p.in}}.{{p.name}}),
+          {{p.in}}{{fpc p.name}}: parseInt({{p.in}}.{{p.name}}),
         {{else}}
-    {{p.in}}{{fpc p.name}}: {{p.in}}.{{p.name}},
-        {{/if}}    
-      {{/each}}    
-  };
-      {{/if}}   
-};
+          {{p.in}}{{fpc p.name}}: {{p.in}}.{{p.name}},
+        {{/if}}
+      {{/each}}
+      };
     {{/if}}
-  {{/each}}
+    };
+  {{/if}}
 {{/each}}
+{{/each}}
+
+

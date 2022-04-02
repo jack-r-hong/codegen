@@ -14,7 +14,7 @@ export class PhotoService {
         private photoModel: PhotoModel,
   ) {}
   async readOnePhoto(
-      param :requestTypes.ReadOnePhotoRequest,
+      param :requestTypes.ReadOnePhotoParams,
   ) {
     const res = await this.photoModel.readOnePhoto(
         param,
@@ -23,8 +23,18 @@ export class PhotoService {
     });
     return res;
   }
+  async updateOnePhoto(
+      param :requestTypes.UpdateOnePhotoParams,
+  ) {
+    const res = await this.photoModel.updateOnePhoto(
+        param,
+    ).catch((e) =>{
+      throw e;
+    });
+    return res;
+  }
   async readManyPhoto(
-      param :requestTypes.ReadManyPhotoRequest,
+      param :requestTypes.ReadManyPhotoParams,
   ) {
     const res = await this.photoModel.readManyPhoto(
         param,
@@ -34,12 +44,22 @@ export class PhotoService {
     return res;
   }
   async uploadManyPhoto(
-      param :requestTypes.UploadManyPhotoRequest,
+      param :requestTypes.UploadManyPhotoParams,
       files: Express.Multer.File[],
   ) {
     const res = await this.photoModel.uploadManyPhoto(
         param,
         files,
+    ).catch((e) =>{
+      throw e;
+    });
+    return res;
+  }
+  async updateManyPhoto(
+      param :requestTypes.UpdateManyPhotoParams,
+  ) {
+    const res = await this.photoModel.updateManyPhoto(
+        param,
     ).catch((e) =>{
       throw e;
     });

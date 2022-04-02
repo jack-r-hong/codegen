@@ -173,6 +173,9 @@ export const updateOneUserValidator: Schema = {
   },
 };
 export const createManyUserValidator: Schema = {
+  dataList: {
+    in: 'body',
+  },
   userInfo: {
     in: 'cookies',
     custom: {

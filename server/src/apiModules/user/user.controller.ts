@@ -1,5 +1,6 @@
-import {Application, Request, Response, NextFunction} from 'express';
-import {Controller, Get, Post, Put, Delete, Validator, FormData} from '../baseController';
+import {Application, Response, NextFunction} from 'express';
+import {Controller, Get, Post, Put,
+Delete, Validator, FormData} from '../baseController';
 import {UserService, Container} from './user.service';
 import * as userParams from './user.parameters';
 import * as validSchemas from './user.validator';
@@ -13,7 +14,7 @@ export class UserController {
   @Post('/user')
   @Validator(validSchemas.createOneUserValidator)
   async createOneUser(
-      req: Request,
+      req: userParams.CreateOneUserRequest,
       res: Response,
       next: NextFunction,
   ) {
@@ -33,7 +34,7 @@ export class UserController {
   @Post('/user/login')
   @Validator(validSchemas.loginUserValidator)
   async loginUser(
-      req: Request,
+      req: userParams.LoginUserRequest,
       res: Response,
       next: NextFunction,
   ) {
@@ -55,7 +56,7 @@ export class UserController {
   @Post('/user/logout')
   @Validator(validSchemas.logoutUserValidator)
   async logoutUser(
-      req: Request,
+      req: userParams.LogoutUserRequest,
       res: Response,
       next: NextFunction,
   ) {
@@ -77,7 +78,7 @@ export class UserController {
   @Delete('/user/:id')
   @Validator(validSchemas.deleteOneUserValidator)
   async deleteOneUser(
-      req: Request,
+      req: userParams.DeleteOneUserRequest,
       res: Response,
       next: NextFunction,
   ) {
@@ -97,7 +98,7 @@ export class UserController {
   @Get('/user/:id')
   @Validator(validSchemas.readOneUserValidator)
   async readOneUser(
-      req: Request,
+      req: userParams.ReadOneUserRequest,
       res: Response,
       next: NextFunction,
   ) {
@@ -117,7 +118,7 @@ export class UserController {
   @Put('/user/:id')
   @Validator(validSchemas.updateOneUserValidator)
   async updateOneUser(
-      req: Request,
+      req: userParams.UpdateOneUserRequest,
       res: Response,
       next: NextFunction,
   ) {
@@ -137,7 +138,7 @@ export class UserController {
   @Post('/users')
   @Validator(validSchemas.createManyUserValidator)
   async createManyUser(
-      req: Request,
+      req: userParams.CreateManyUserRequest,
       res: Response,
       next: NextFunction,
   ) {

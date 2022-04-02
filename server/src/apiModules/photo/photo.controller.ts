@@ -1,5 +1,6 @@
-import {Application, Request, Response, NextFunction} from 'express';
-import {Controller, Get, Post, Put, Delete, Validator, FormData} from '../baseController';
+import {Application, Response, NextFunction} from 'express';
+import {Controller, Get, Post, Put,
+Delete, Validator, FormData} from '../baseController';
 import {PhotoService, Container} from './photo.service';
 import * as photoParams from './photo.parameters';
 import * as validSchemas from './photo.validator';
@@ -13,7 +14,7 @@ export class PhotoController {
   @Get('/photo/:id')
   @Validator(validSchemas.readOnePhotoValidator)
   async readOnePhoto(
-      req: Request,
+      req: photoParams.ReadOnePhotoRequest,
       res: Response,
       next: NextFunction,
   ) {
@@ -30,10 +31,30 @@ export class PhotoController {
           next(e);
         });
   }
+  @Put('/photo/:id')
+  @Validator(validSchemas.updateOnePhotoValidator)
+  async updateOnePhoto(
+      req: photoParams.UpdateOnePhotoRequest,
+      res: Response,
+      next: NextFunction,
+  ) {
+    serviceInstance.updateOnePhoto(
+        photoParams.UpdateOnePhotoRequestConvert(
+            req.body,
+            req.query,
+            req.params,
+        ),
+    )
+        .then((result) =>{
+          res.json(result);
+        }).catch((e) => {
+          next(e);
+        });
+  }
   @Get('/photos')
   @Validator(validSchemas.readManyPhotoValidator)
   async readManyPhoto(
-      req: Request,
+      req: photoParams.ReadManyPhotoRequest,
       res: Response,
       next: NextFunction,
   ) {
@@ -54,7 +75,7 @@ export class PhotoController {
   @Validator(validSchemas.uploadManyPhotoValidator)
   @FormData()
   async uploadManyPhoto(
-      req: Request,
+      req: photoParams.UploadManyPhotoRequest,
       res: Response,
       next: NextFunction,
   ) {
@@ -65,6 +86,26 @@ export class PhotoController {
             req.params,
         ),
         req.files as Express.Multer.File[],
+    )
+        .then((result) =>{
+          res.json(result);
+        }).catch((e) => {
+          next(e);
+        });
+  }
+  @Put('/photos')
+  @Validator(validSchemas.updateManyPhotoValidator)
+  async updateManyPhoto(
+      req: photoParams.UpdateManyPhotoRequest,
+      res: Response,
+      next: NextFunction,
+  ) {
+    serviceInstance.updateManyPhoto(
+        photoParams.UpdateManyPhotoRequestConvert(
+            req.body,
+            req.query,
+            req.params,
+        ),
     )
         .then((result) =>{
           res.json(result);

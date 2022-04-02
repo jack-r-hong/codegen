@@ -8,7 +8,7 @@ const prisma = new PrismaClient();
 @Service()
 export class PhotoModel {
   async readOnePhoto(
-      param: requestTypes.ReadOnePhotoRequest,
+      param: requestTypes.ReadOnePhotoParams,
   ) {
     const res: any | null = await prisma.photo.findUnique({
       where: {
@@ -20,6 +20,7 @@ export class PhotoModel {
         createdAt: true,
         filePath1: true,
         filePath2: true,
+        filePath3: true,
         id: true,
         name: true,
         process: true,
@@ -36,8 +37,29 @@ export class PhotoModel {
     }
     return res;
   }
+  async updateOnePhoto(
+      param: requestTypes.UpdateOnePhotoParams,
+  ) {
+    const res: Photo | null = await prisma.photo.update({
+      where: {
+        id: param.pathId,
+      },
+      data: {
+        afterLevel: param.bodyAfterLevel,
+        beforeLevel: param.bodyBeforeLevel,
+        filePath2: param.bodyFilePath2,
+        process: param.bodyProcess,
+        status: param.bodyStatus,
+      },
+    }).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+    return res;
+  }
   async readManyPhoto(
-      param: requestTypes.ReadManyPhotoRequest,
+      param: requestTypes.ReadManyPhotoParams,
   ) {
     const res: Photo[] | null = await prisma.photo.findMany({
       where: {
@@ -48,6 +70,7 @@ export class PhotoModel {
         createdAt: true,
         filePath1: true,
         filePath2: true,
+        filePath3: true,
         id: true,
         name: true,
         process: true,
@@ -61,7 +84,7 @@ export class PhotoModel {
     return res;
   }
   async uploadManyPhoto(
-      param: requestTypes.UploadManyPhotoRequest,
+      param: requestTypes.UploadManyPhotoParams,
       files: Express.Multer.File[],
   ) {
     const data = files.map((e) => {
@@ -80,5 +103,55 @@ export class PhotoModel {
       prisma.$disconnect();
     });
     return res;
+  }
+  async updateManyPhoto(
+      param: requestTypes.UpdateManyPhotoParams,
+  ) {
+    const res = {
+      count: 0,
+    };
+
+    const data = param.bodyDataList.map((e: any ) => {
+      const temp: any = {};
+      Object.keys(e).forEach((e2) => {
+        const key: string = e2.charAt(4).toLowerCase() +
+        e2.substring(4).slice(1);
+
+
+        if (key !== param.bodyWhereField) {
+          temp[key] = e[e2];
+        }
+      });
+
+      return temp;
+    });
+
+    await Promise.all(
+        param.bodyDataList.map((e: any) => {
+          const data: any = {};
+          const where: any = {};
+          Object.keys(e).forEach((k) => {
+            const key: string = k.charAt(4).toLowerCase() +
+            k.substring(4).slice(1);
+
+            if (key === param.bodyWhereField) {
+              where[param.bodyWhereField] = e[k];
+            } else {
+              data[key] = e[k];
+            }
+          });
+
+          res.count++;
+          return prisma.photo.update({
+            data,
+            where,
+          });
+        }),
+    ).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+    return res.count;
   }
 }

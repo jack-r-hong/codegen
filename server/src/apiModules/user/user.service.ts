@@ -14,7 +14,7 @@ export class UserService {
         private userModel: UserModel,
   ) {}
   async createOneUser(
-      param :requestTypes.CreateOneUserRequest,
+      param :requestTypes.CreateOneUserParams,
   ) {
     const res = await this.userModel.createOneUser(
         param,
@@ -24,21 +24,21 @@ export class UserService {
     return res;
   }
   async loginUser(
-      param :requestTypes.LoginUserRequest,
+      param :requestTypes.LoginUserParams,
   ) {
     // custom begin loginUser
 
     // custom end loginUser
   }
   async logoutUser(
-      param :requestTypes.LogoutUserRequest,
+      param :requestTypes.LogoutUserParams,
   ) {
     // custom begin logoutUser
 
     // custom end logoutUser
   }
   async deleteOneUser(
-      param :requestTypes.DeleteOneUserRequest,
+      param :requestTypes.DeleteOneUserParams,
   ) {
     const res = await this.userModel.deleteOneUser(
         param,
@@ -48,7 +48,7 @@ export class UserService {
     return res;
   }
   async readOneUser(
-      param :requestTypes.ReadOneUserRequest,
+      param :requestTypes.ReadOneUserParams,
   ) {
     const res = await this.userModel.readOneUser(
         param,
@@ -58,7 +58,7 @@ export class UserService {
     return res;
   }
   async updateOneUser(
-      param :requestTypes.UpdateOneUserRequest,
+      param :requestTypes.UpdateOneUserParams,
   ) {
     const res = await this.userModel.updateOneUser(
         param,
@@ -68,7 +68,7 @@ export class UserService {
     return res;
   }
   async createManyUser(
-      param :requestTypes.CreateManyUserRequest[],
+      param :requestTypes.CreateManyUserParams,
   ) {
     const res = await this.userModel.createManyUser(
         param,

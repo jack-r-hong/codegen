@@ -532,6 +532,51 @@
             "$ref" : "#/components/responses/Conflict"
           }
         }
+      },
+      "put" : {
+        "tags" : [ "photo" ],
+        "summary" : "Create user",
+        "description" : "This can only be done by the logged in user.",
+        "operationId" : "updateOnePhoto",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "The name that needs to be fetched. Use user1 for testing.",
+          "required" : true,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/Photo"
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Photo"
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/BadRequest"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/Unauthorized"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          },
+          "404" : {
+            "$ref" : "#/components/responses/NotFound"
+          },
+          "409" : {
+            "$ref" : "#/components/responses/Conflict"
+          }
+        }
       }
     },
     "/photos" : {
@@ -577,6 +622,46 @@
         "summary" : "upload photo list",
         "description" : "This can only be done by the logged in user.",
         "operationId" : "uploadManyPhoto",
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/UploadPhoto"
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Photo"
+                  }
+                  
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/BadRequest"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/Unauthorized"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          },
+          "404" : {
+            "$ref" : "#/components/responses/NotFound"
+          },
+          "409" : {
+            "$ref" : "#/components/responses/Conflict"
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "photo" ],
+        "summary" : "get photo list",
+        "description" : "This can only be done by the logged in user.",
+        "operationId" : "updateManyPhoto",
         "requestBody" : {
           "$ref" : "#/components/requestBodies/PhotoArray"
         },
@@ -711,6 +796,10 @@
             "type" : "string",
             "nullable": true
           },
+          "filePath3" : {
+            "type" : "string",
+            "nullable": true
+          },
           "process" : {
             "type" : "integer",
             "format" : "int32",
@@ -721,8 +810,8 @@
           "status" : {
             "type" : "integer",
             "format" : "int32",
-            "description" : "status map:\n * `1` - yetPurify\n * `2` - purify\n * `3` - consult\n",
-            "enum" : [ 1, 2, 3 ],
+            "description" : "status map:\n * `1` - yetPurify\n * `2` - purify\n * `3` - purifying\n * `4` - consult\n",
+            "enum" : [ 1, 2, 3, 4 ],
             "default": 1
           },
           "beforeLevel" : {
@@ -802,30 +891,37 @@
         "content" : {
           "application/json" : {
             "schema" : {
-              "type" : "array",
-              "items" : {
-                "type" : "object",
-                "properties" : {
-                  "username" : {
-                    "$ref" : "#/components/schemas/User/properties/username"
-                  },
-                  "email" : {
-                    "$ref" : "#/components/schemas/User/properties/email"
-                  },
-                  "password" : {
-                    "$ref" : "#/components/schemas/User/properties/password"
-                  },
-                  "phone" : {
-                    "$ref" : "#/components/schemas/User/properties/phone"
-                  },
-                  "userStatus" : {
-                    "$ref" : "#/components/schemas/User/properties/userStatus"
-                  },
-                  "authLevel" : {
-                    "$ref" : "#/components/schemas/Auth/properties/level"
+              "type" : "object",
+              "properties" : {
+                "dataList": {
+                "type" : "array",
+                "items" : {
+                  "type" : "object",
+                  "properties" : {
+                    "username" : {
+                      "$ref" : "#/components/schemas/User/properties/username"
+                    },
+                    "email" : {
+                      "$ref" : "#/components/schemas/User/properties/email"
+                    },
+                    "password" : {
+                      "$ref" : "#/components/schemas/User/properties/password"
+                    },
+                    "phone" : {
+                      "$ref" : "#/components/schemas/User/properties/phone"
+                    },
+                    "userStatus" : {
+                      "$ref" : "#/components/schemas/User/properties/userStatus"
+                    },
+                    "authLevel" : {
+                      "$ref" : "#/components/schemas/Auth/properties/level"
+                    }
                   }
+                }                  
                 }
+
               }
+
             }
           }
         },
@@ -851,7 +947,78 @@
         "description" : "List of user object",
         "required" : true
       },
+      "Photo" : {
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "status" : {
+                  "$ref" : "#/components/schemas/Photo/properties/status"
+                },
+                "process" : {
+                  "$ref" : "#/components/schemas/Photo/properties/process"
+                },
+                "beforeLevel" : {
+                  "$ref" : "#/components/schemas/Photo/properties/beforeLevel"
+                },
+                "afterLevel" : {
+                  "$ref" : "#/components/schemas/Photo/properties/afterLevel"
+                },
+                "filePath2" : {
+                  "$ref" : "#/components/schemas/Photo/properties/filePath2"
+                }
+              }
+            }
+          }
+        },
+        "description" : "List of user object",
+        "required" : true
+      },
       "PhotoArray" : {
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "whereField": {
+                  "type" : "string",
+                  "example" : "id"
+                },
+                "dataList":  {
+                  "type" : "array",
+                  "items" : {
+                    "type" : "object",
+                    "properties" : {
+                      "id" : {
+                        "$ref" : "#/components/schemas/Photo/properties/id"
+                      },                      
+                      "status" : {
+                        "$ref" : "#/components/schemas/Photo/properties/status"
+                      },
+                      "process" : {
+                        "$ref" : "#/components/schemas/Photo/properties/process"
+                      },
+                      "beforeLevel" : {
+                        "$ref" : "#/components/schemas/Photo/properties/beforeLevel"
+                      },
+                      "afterLevel" : {
+                        "$ref" : "#/components/schemas/Photo/properties/afterLevel"
+                      },
+                      "filePath2" : {
+                        "$ref" : "#/components/schemas/Photo/properties/filePath2"
+                      }
+                    }
+                  }                
+                }
+              }
+            }
+          }
+        },
+        "description" : "List of user object",
+        "required" : true
+      },
+      "UploadPhoto" : {
         "content" : {
           "multipart/form-data" : {
             "schema" : {

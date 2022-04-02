@@ -1,5 +1,6 @@
-import {Application, Request, Response, NextFunction} from 'express';
-import {Controller, Get, Post, Put, Delete, Validator, FormData} from '../baseController';
+import {Application, Response, NextFunction} from 'express';
+import {Controller, Get, Post, Put,
+Delete, Validator, FormData} from '../baseController';
 import { {{~fpc tag}}Service, Container} from './{{tag}}.service';
 import * as {{tag}}Params from './{{tag}}.parameters';
 import * as validSchemas from './{{tag}}.validator';
@@ -19,7 +20,7 @@ export class {{fpc tag}}Controller {
   @FormData()
   {{/if}}
   async {{data.operationId}}(
-      req: Request,
+      req: {{../../tag}}Params.{{fpc data.operationId}}Request,
       res: Response,
       next: NextFunction,
   ) {

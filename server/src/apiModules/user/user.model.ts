@@ -8,7 +8,7 @@ const prisma = new PrismaClient();
 @Service()
 export class UserModel {
   async createOneUser(
-      param: requestTypes.CreateOneUserRequest,
+      param: requestTypes.CreateOneUserParams,
   ) {
     const res: User | null = await prisma.user.create({
       data: {
@@ -27,21 +27,21 @@ export class UserModel {
     return res;
   }
   async loginUser(
-      param: requestTypes.LoginUserRequest,
+      param: requestTypes.LoginUserParams,
   ) {
     // custom begin loginUser
 
     // custom end loginUser
   }
   async logoutUser(
-      param: requestTypes.LogoutUserRequest,
+      param: requestTypes.LogoutUserParams,
   ) {
     // custom begin logoutUser
 
     // custom end logoutUser
   }
   async deleteOneUser(
-      param: requestTypes.DeleteOneUserRequest,
+      param: requestTypes.DeleteOneUserParams,
   ) {
     const res: User | null = await prisma.user.delete({
       where: {
@@ -55,7 +55,7 @@ export class UserModel {
     return res;
   }
   async readOneUser(
-      param: requestTypes.ReadOneUserRequest,
+      param: requestTypes.ReadOneUserParams,
   ) {
     const res: any | null = await prisma.user.findUnique({
       where: {
@@ -81,7 +81,7 @@ export class UserModel {
     return res;
   }
   async updateOneUser(
-      param: requestTypes.UpdateOneUserRequest,
+      param: requestTypes.UpdateOneUserParams,
   ) {
     const res: User | null = await prisma.user.update({
       where: {
@@ -103,9 +103,9 @@ export class UserModel {
     return res;
   }
   async createManyUser(
-      param: requestTypes.CreateManyUserRequest[],
+      param: requestTypes.CreateManyUserParams,
   ) {
-    const data = param.map((e) => {
+    const data = param.bodyDataList.map((e) => {
       return {
         authLevel: e.bodyAuthLevel,
         email: e.bodyEmail,
