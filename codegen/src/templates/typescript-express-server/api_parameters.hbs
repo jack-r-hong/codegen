@@ -141,7 +141,9 @@ interface TypedRequest<
       {{#each data.parameters as |p|}}
         {{#if (equal p.schema.type "array") }}
           {{#if (equal p.schema.items.type "integer") }}
-            {{p.in}}{{fpc p.name}}: {{p.in}}.{{p.name}}.map((e) => parseInt(e)),
+            {{p.in}}{{fpc p.name}}: typeof {{p.in}}.{{p.name}} === 'string'? 
+               [parseInt({{p.in}}.{{p.name}})] :
+              {{p.in}}.{{p.name}}.map((e) => parseInt(e)),
           {{else}}
             {{p.in}}{{fpc p.name}}: {{p.in}}.{{ p.name}},
           {{/if}}        

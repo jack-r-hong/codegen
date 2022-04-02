@@ -111,13 +111,17 @@ interface TypedRequest<
     path: DeleteManyPhotoReqParams,
     ): DeleteManyPhotoParams => {
       return {
-            queryId: query.id.map((e) => parseInt(e)),
+            queryId: typeof query.id === 'string'? 
+               [parseInt(query.id)] :
+              query.id.map((e) => parseInt(e)),
       };
     };
     type ReadManyPhotoReqBody = {
     }
 
     type ReadManyPhotoReqQuery = {
+          orderBy: string
+          orderByField: string
     }
 
     type ReadManyPhotoReqParams = {
@@ -131,6 +135,8 @@ interface TypedRequest<
     }
 
     export type ReadManyPhotoParams = {
+        queryOrderBy: string
+        queryOrderByField: string
     }
 
     export const ReadManyPhotoRequestConvert = (
@@ -139,6 +145,8 @@ interface TypedRequest<
     path: ReadManyPhotoReqParams,
     ): ReadManyPhotoParams => {
       return {
+            queryOrderBy: query.orderBy,
+            queryOrderByField: query.orderByField,
       };
     };
     type UploadManyPhotoReqBody = {

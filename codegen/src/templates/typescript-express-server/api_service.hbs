@@ -33,6 +33,9 @@ export class {{fpc tag}}Service {
 {{{lookup ../../custom d.operationId }}}
     // custom end {{d.operationId}}
     {{else}}
+    // custom begin {{d.operationId}}
+{{{lookup ../../custom d.operationId }}}
+    // custom end {{d.operationId}}
     const res = await this.{{../../tag}}Model.{{d.operationId}}(
         param,
       {{#if (equal (model_type d.operationId) "uploadMany")  }}

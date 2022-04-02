@@ -585,6 +585,25 @@
         "summary" : "get photo list",
         "description" : "This can only be done by the logged in user.",
         "operationId" : "readManyPhoto",
+        "parameters" : [ {
+          "name" : "orderBy",
+          "in" : "query",
+          "description" : "The name that needs to be fetched. Use user1 for testing.",
+          "schema" : {
+            "type" : "string",
+            "default": "desc"
+          }
+        },
+        {
+          "name" : "orderByField",
+          "in" : "query",
+          "description" : "The name that needs to be fetched. Use user1 for testing.",
+          "schema" : {
+            "type" : "string",
+            "default": "id"
+          }
+        }
+      ],
         "responses" : {
           "200" : {
             "description" : "Ok",

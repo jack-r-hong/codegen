@@ -61,6 +61,12 @@ export const deleteManyPhotoValidator: Schema = {
   },
 };
 export const readManyPhotoValidator: Schema = {
+  orderBy: {
+    in: 'query',
+  },
+  orderByField: {
+    in: 'query',
+  },
 };
 export const uploadManyPhotoValidator: Schema = {
 };

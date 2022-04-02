@@ -92,6 +92,9 @@ export class PhotoModel {
         process: true,
         status: true,
       },
+      orderBy: {
+        [param.queryOrderByField]: param.queryOrderBy,
+      },
     }).catch((e) => {
       throw e;
     }).finally(() => {
@@ -106,7 +109,7 @@ export class PhotoModel {
     const data = files.map((e) => {
       return {
         name: e.originalname,
-        filePath1: e.path,
+        filePath1: e.path.replace('\\', '/'),
       };
     });
 

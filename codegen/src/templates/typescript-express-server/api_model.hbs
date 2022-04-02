@@ -74,15 +74,29 @@ const prisma = new PrismaClient();
 {{~#*inline "readMany"}}
     const res: {{fpc ../../tag}}[] | null = await prisma.{{../../tag}}.findMany({
       where: {
-        {{#each d.parameters}}
-        {{name}}: param.{{in}}{{fpc name}},
-        {{/each}}
+      {{#each d.parameters}}
+        {{#if (equal name "orderBy")}}
+        {{else}}
+          {{#if (equal name "orderByField")}}
+          {{else}}
+          {{name}}: param.{{in}}{{fpc name}},
+          {{/if}}
+        {{/if}}
+      {{/each}}
       },
       select: {
         {{#each d.responses.200.content.[application/json].schema.items.properties}}
         {{@key}}: true,
         {{/each}}
       },
+      {{#each d.parameters}}
+        {{#if (equal name "orderBy")}}
+      orderBy: {
+        [param.queryOrderByField]: param.queryOrderBy,
+      },
+        {{else}}
+        {{/if}}
+      {{/each}}
     }).catch((e) => {
       throw e;
     }).finally(() => {
@@ -180,7 +194,7 @@ const prisma = new PrismaClient();
     const data = files.map((e) => {
       return {
         name: e.originalname,
-        filePath1: e.path,
+        filePath1: e.path.replace('\\', '/'),
       };
     });
 

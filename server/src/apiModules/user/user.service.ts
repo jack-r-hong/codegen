@@ -16,6 +16,9 @@ export class UserService {
   async createOneUser(
       param :requestTypes.CreateOneUserParams,
   ) {
+    // custom begin createOneUser
+
+    // custom end createOneUser
     const res = await this.userModel.createOneUser(
         param,
     ).catch((e) =>{
@@ -40,6 +43,9 @@ export class UserService {
   async deleteOneUser(
       param :requestTypes.DeleteOneUserParams,
   ) {
+    // custom begin deleteOneUser
+
+    // custom end deleteOneUser
     const res = await this.userModel.deleteOneUser(
         param,
     ).catch((e) =>{
@@ -50,6 +56,9 @@ export class UserService {
   async readOneUser(
       param :requestTypes.ReadOneUserParams,
   ) {
+    // custom begin readOneUser
+
+    // custom end readOneUser
     const res = await this.userModel.readOneUser(
         param,
     ).catch((e) =>{
@@ -60,6 +69,9 @@ export class UserService {
   async updateOneUser(
       param :requestTypes.UpdateOneUserParams,
   ) {
+    // custom begin updateOneUser
+
+    // custom end updateOneUser
     const res = await this.userModel.updateOneUser(
         param,
     ).catch((e) =>{
@@ -70,6 +82,9 @@ export class UserService {
   async createManyUser(
       param :requestTypes.CreateManyUserParams,
   ) {
+    // custom begin createManyUser
+
+    // custom end createManyUser
     const res = await this.userModel.createManyUser(
         param,
     ).catch((e) =>{
