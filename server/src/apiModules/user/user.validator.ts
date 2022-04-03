@@ -4,6 +4,12 @@ import * as sessions from '../../sessions';
 // custom begin import
 
 // custom end import
+export const oauthcallbackValidator: Schema = {
+  code: {
+    in: 'query',
+    notEmpty: true,
+  },
+};
 export const createOneUserValidator: Schema = {
   authLevel: {
     in: 'body',
@@ -57,6 +63,25 @@ export const createOneUserValidator: Schema = {
         sessions.userInfoSessionVerify(req['session'].userInfo);
         return true;
       },
+    },
+  },
+};
+export const googleLoginUrlValidator: Schema = {
+};
+export const googleLoginUserValidator: Schema = {
+  email: {
+    in: 'body',
+    isEmail: true,
+  },
+  password: {
+    in: 'body',
+    isStrongPassword: true,
+    isLength: {
+      options: {
+        max: 30,
+        min: 8,
+      },
+
     },
   },
 };

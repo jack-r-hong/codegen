@@ -7,6 +7,13 @@ const prisma = new PrismaClient();
 
 @Service()
 export class UserModel {
+  async oauthcallback(
+      param: requestTypes.OauthcallbackParams,
+  ) {
+    // custom begin oauthcallback
+
+    // custom end oauthcallback
+  }
   async createOneUser(
       param: requestTypes.CreateOneUserParams,
   ) {
@@ -25,6 +32,20 @@ export class UserModel {
       prisma.$disconnect();
     });
     return res;
+  }
+  async googleLoginUrl(
+      param: requestTypes.GoogleLoginUrlParams,
+  ) {
+    // custom begin googleLoginUrl
+
+    // custom end googleLoginUrl
+  }
+  async googleLoginUser(
+      param: requestTypes.GoogleLoginUserParams,
+  ) {
+    // custom begin googleLoginUser
+
+    // custom end googleLoginUser
   }
   async loginUser(
       param: requestTypes.LoginUserParams,

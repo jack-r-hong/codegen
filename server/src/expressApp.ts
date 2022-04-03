@@ -8,6 +8,7 @@ import helmet from 'helmet';
 import httpErrors from 'http-errors';
 import {registerController} from './apiModules';
 import cookieParser from 'cookie-parser';
+import morgan from 'morgan';
 
 // var upload = multer();
 // import {userInfoSession} from './sessions';
@@ -56,6 +57,7 @@ export class ExpressApp {
       origin: '*',
       preflightContinue: false,
     };
+    this.app.use(morgan('combined', {}));
     this.app.use(helmet());
     this.app.use(cors(corsOptions));
     this.app.use('/uploads', express.static('./uploads'));

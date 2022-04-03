@@ -11,6 +11,29 @@ const serviceInstance = Container.get(UserService);
 export class UserController {
   constructor(private app: Application) {}
 
+  @Get('/oauthcallback')
+  @Validator(validSchemas.oauthcallbackValidator)
+  async oauthcallback(
+      req: userParams.OauthcallbackRequest,
+      res: Response,
+      next: NextFunction,
+  ) {
+    serviceInstance.oauthcallback(
+        userParams.OauthcallbackRequestConvert(
+            req.body,
+            req.query,
+            req.params,
+        ),
+    )
+        .then((result) =>{
+          // custom begin oauthcallback
+          res.json(result);
+
+          // custom end oauthcallback
+        }).catch((e) => {
+          next(e);
+        });
+  }
   @Post('/user')
   @Validator(validSchemas.createOneUserValidator)
   async createOneUser(
@@ -27,6 +50,51 @@ export class UserController {
     )
         .then((result) =>{
           res.json(result);
+        }).catch((e) => {
+          next(e);
+        });
+  }
+  @Get('/user/google/login')
+  @Validator(validSchemas.googleLoginUrlValidator)
+  async googleLoginUrl(
+      req: userParams.GoogleLoginUrlRequest,
+      res: Response,
+      next: NextFunction,
+  ) {
+    serviceInstance.googleLoginUrl(
+        userParams.GoogleLoginUrlRequestConvert(
+            req.body,
+            req.query,
+            req.params,
+        ),
+    )
+        .then((result) =>{
+          // custom begin googleLoginUrl
+          res.json(result);
+
+          // custom end googleLoginUrl
+        }).catch((e) => {
+          next(e);
+        });
+  }
+  @Post('/user/google/login')
+  @Validator(validSchemas.googleLoginUserValidator)
+  async googleLoginUser(
+      req: userParams.GoogleLoginUserRequest,
+      res: Response,
+      next: NextFunction,
+  ) {
+    serviceInstance.googleLoginUser(
+        userParams.GoogleLoginUserRequestConvert(
+            req.body,
+            req.query,
+            req.params,
+        ),
+    )
+        .then((result) =>{
+          // custom begin googleLoginUser
+
+          // custom end googleLoginUser
         }).catch((e) => {
           next(e);
         });

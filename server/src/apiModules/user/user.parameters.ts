@@ -9,7 +9,37 @@ interface TypedRequest<
   body: T,
   query: U,
   params: P,
-}    type CreateOneUserReqBody = {
+}    type OauthcallbackReqBody = {
+    }
+
+    type OauthcallbackReqQuery = {
+          code: string
+    }
+
+    type OauthcallbackReqParams = {
+    }
+
+    export interface OauthcallbackRequest extends TypedRequest<
+      OauthcallbackReqBody,
+      OauthcallbackReqQuery,
+      OauthcallbackReqParams
+    >{
+    }
+
+    export type OauthcallbackParams = {
+        queryCode: string
+    }
+
+    export const OauthcallbackRequestConvert = (
+    body: OauthcallbackReqBody,
+    query: OauthcallbackReqQuery,
+    path: OauthcallbackReqParams,
+    ): OauthcallbackParams => {
+      return {
+            queryCode: query.code,
+      };
+    };
+    type CreateOneUserReqBody = {
           authLevel: string,
           email: string,
           password: string,
@@ -52,6 +82,66 @@ interface TypedRequest<
                 bodyPhone: body.phone,
                 bodyUserStatus: parseInt(body.userStatus),
                 bodyUsername: body.username,
+        };
+    };
+    type GoogleLoginUrlReqBody = {
+    }
+
+    type GoogleLoginUrlReqQuery = {
+    }
+
+    type GoogleLoginUrlReqParams = {
+    }
+
+    export interface GoogleLoginUrlRequest extends TypedRequest<
+      GoogleLoginUrlReqBody,
+      GoogleLoginUrlReqQuery,
+      GoogleLoginUrlReqParams
+    >{
+    }
+
+    export type GoogleLoginUrlParams = {
+    }
+
+    export const GoogleLoginUrlRequestConvert = (
+    body: GoogleLoginUrlReqBody,
+    query: GoogleLoginUrlReqQuery,
+    path: GoogleLoginUrlReqParams,
+    ): GoogleLoginUrlParams => {
+      return {
+      };
+    };
+    type GoogleLoginUserReqBody = {
+          email: string,
+          password: string,
+    }
+
+    type GoogleLoginUserReqQuery = {
+    }
+
+    type GoogleLoginUserReqParams = {
+    }
+
+    export interface GoogleLoginUserRequest extends TypedRequest<
+      GoogleLoginUserReqBody,
+      GoogleLoginUserReqQuery,
+      GoogleLoginUserReqParams
+    >{
+    }
+
+    export type GoogleLoginUserParams = {
+          bodyEmail: string,
+          bodyPassword: string,
+    }
+
+    export const GoogleLoginUserRequestConvert = (
+    body: GoogleLoginUserReqBody,
+    query: GoogleLoginUserReqQuery,
+    path: GoogleLoginUserReqParams,
+    ): GoogleLoginUserParams => {
+        return {
+                bodyEmail: body.email,
+                bodyPassword: body.password,
         };
     };
     type LoginUserReqBody = {
