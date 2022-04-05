@@ -1,14 +1,25 @@
-import {Application, Request, Response, Router, RequestHandler, NextFunction}
+import {Application, Request,
+  Response, Router, RequestHandler, NextFunction, IRouterMatcher}
   from 'express';
 import {checkSchema, Schema, validationResult} from 'express-validator';
 import multer from 'multer';
 import {v1 as uuidv1} from 'uuid';
 
-
-const vSymbol = Symbol('validator');
-const formDataSymbol = Symbol('formData');
+import rateLimit from 'express-rate-limit';
+import RedisStore from 'rate-limit-redis';
+import {redisLimiterClient as redisClient} from '../redisClient';
 
 const subRouter = Router();
+
+export enum ExpressMethod{
+  Get='get',
+  Post='post',
+  Put='put',
+  Delete='delete',
+}
+
+type ExpressHttpMethods = {[_key in keyof typeof ExpressMethod]: Function }
+
 
 export function Controller(mainPath: string) {
   return <T extends { new(...args: any[]): {} }>(Base: T) =>{
@@ -16,56 +27,84 @@ export function Controller(mainPath: string) {
       constructor(...args: any[]) {
         super(...args);
         const app :Application = args[0];
-
+        app.get;
         app.use(`/api/${mainPath}`, subRouter);
       }
     };
   };
 }
 
-enum Method{
-  Get='get',
-  Post='post',
-  Put='put',
-  Delete='delete'
-}
 
-export function Get(path: string) {
-  return decoratorFactory(Method.Get, path);
-}
+class DecoratorHander {
+  private static _instance: DecoratorHander;
+  private _keys: Symbol[ ]= [];
 
-export function Post(path: string) {
-  return decoratorFactory(Method.Post, path);
-}
+  constructor( ) {}
 
-export function Put(path: string) {
-  return decoratorFactory(Method.Put, path);
-}
-
-
-export function Delete(path: string) {
-  return decoratorFactory(Method.Delete, path);
-}
-
-
-function decoratorFactory(method :Method, path :string) {
-  return (target: any, propertyKey:any, descriptor: PropertyDescriptor) => {
-    const middlewares:RequestHandler[] = [];
-
-    if (Reflect.hasOwnMetadata(vSymbol, target, propertyKey)) {
-      const validator = Reflect.getMetadata(vSymbol, target, propertyKey);
-      middlewares.push(validator);
+  public static getInstance(): DecoratorHander {
+    if (!DecoratorHander._instance) {
+      DecoratorHander._instance = new DecoratorHander();
     }
 
-    if (Reflect.hasOwnMetadata(formDataSymbol, target, propertyKey)) {
-      const formData = Reflect.getMetadata(formDataSymbol, target, propertyKey);
-      middlewares.push(formData);
+    return DecoratorHander._instance;
+  }
+
+  public expressMethodDecoratorFactory(method :ExpressMethod, path :string) {
+    return (target: any, propertyKey:any, descriptor: PropertyDescriptor) => {
+      const middlewares: RequestHandler[] = [];
+
+      this._keys.forEach((key) => {
+        if (Reflect.hasOwnMetadata(key, target, propertyKey)) {
+          const middleware = Reflect.getMetadata(
+              key, target, propertyKey);
+          middlewares.push(middleware);
+        }
+      });
+
+
+      subRouter[method](path, middlewares, bedRequestHandler, descriptor.value);
+      return descriptor;
+    };
+  }
+
+  public middlewareDecoratorFactory(key: string, middleware: any) {
+    return (
+        target: any,
+        propertyKey: string,
+        descriptor: PropertyDescriptor,
+    ) => {
+      const keySymbol = Symbol(key);
+      if (!Reflect.hasOwnMetadata(keySymbol, target, propertyKey)) {
+        this._keys.push(keySymbol);
+        Reflect.defineMetadata(
+            keySymbol, middleware,
+            target, propertyKey,
+        );
+      }
+    };
+  }
+
+  public exportMethod(): ExpressHttpMethods {
+    const methods: any = {};
+
+    for (const method in ExpressMethod) {
+      if ( typeof method as keyof typeof ExpressMethod) {
+        methods[method] = function(path: string) {
+          return decoratorHander.expressMethodDecoratorFactory(
+              ExpressMethod[method as keyof typeof ExpressMethod], path,
+          );
+        };
+      }
     }
 
-    subRouter[method](path, middlewares, bedRequestHandler, descriptor.value);
-    return descriptor;
-  };
-};
+    return methods;
+  }
+}
+
+const decoratorHander = DecoratorHander.getInstance();
+
+export const httpMethods: ExpressHttpMethods =
+decoratorHander.exportMethod();
 
 const bedRequestHandler:RequestHandler =
 (req: Request, res: Response, next: NextFunction) =>{
@@ -79,15 +118,10 @@ const bedRequestHandler:RequestHandler =
 };
 
 export function Validator(schema: Schema) {
-  return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
-    if (!Reflect.hasOwnMetadata(vSymbol, target, propertyKey)) {
-      Reflect.defineMetadata(
-          vSymbol, checkSchema(schema),
-          target, propertyKey);
-    }
-  };
+  return decoratorHander.middlewareDecoratorFactory(
+      'validator', checkSchema(schema),
+  );
 }
-
 
 export function FormData() {
   const storage = multer.diskStorage({
@@ -110,9 +144,22 @@ export function FormData() {
   };
   const upload = multer({storage, fileFilter});
 
-  return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
-    Reflect.defineMetadata(
-        formDataSymbol, upload.array('files', 10),
-        target, propertyKey);
-  };
+  return decoratorHander.middlewareDecoratorFactory(
+      'FormData', upload.array('files', 10),
+  );
+}
+
+export function limiter(minutes = 15, max = 100) {
+  const limit = rateLimit({
+    windowMs: minutes * 60 * 1000, // 15 minutes
+    max,
+    standardHeaders: true,
+    legacyHeaders: false,
+    store: new RedisStore({
+      sendCommand: (...args: string[]) => redisClient.sendCommand(args),
+    }),
+  });
+  return decoratorHander.middlewareDecoratorFactory(
+      'limiter', limit,
+  );
 }

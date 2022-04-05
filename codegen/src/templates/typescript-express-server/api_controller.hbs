@@ -1,9 +1,16 @@
 import {Application, Response, NextFunction} from 'express';
-import {Controller, Get, Post, Put,
-Delete, Validator, FormData} from '../baseController';
+import {
+  Controller,
+  Validator,
+  FormData,
+  limiter,
+  httpMethods,
+} from '../baseController';
 import { {{~fpc tag}}Service, Container} from './{{tag}}.service';
 import * as {{tag}}Params from './{{tag}}.parameters';
 import * as validSchemas from './{{tag}}.validator';
+
+const {Get, Post, Put, Delete} = httpMethods;
 
 const serviceInstance = Container.get({{fpc tag}}Service);
 

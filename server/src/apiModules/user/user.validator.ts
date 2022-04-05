@@ -66,22 +66,12 @@ export const createOneUserValidator: Schema = {
     },
   },
 };
-export const googleLoginUrlValidator: Schema = {
-};
-export const googleLoginUserValidator: Schema = {
-  email: {
-    in: 'body',
-    isEmail: true,
-  },
-  password: {
-    in: 'body',
-    isStrongPassword: true,
-    isLength: {
-      options: {
-        max: 30,
-        min: 8,
-      },
-
+export const googleLoginValidator: Schema = {
+  process: {
+    in: 'query',
+    notEmpty: true,
+    matches: {
+      options: /^(start|wait)/,
     },
   },
 };

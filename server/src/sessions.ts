@@ -2,7 +2,7 @@
 // eslint-disable-next-line no-unused-vars
 import session, {Session} from 'express-session';
 import redisStore from 'connect-redis';
-import {redisClient} from './redisClient';
+import {redisSessionClient as redisClient} from './redisClient';
 import {errors} from './errors';
 
 export type UserInfo = {

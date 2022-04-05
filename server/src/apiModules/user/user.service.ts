@@ -4,7 +4,10 @@ import {UserModel} from './user.model';
 import * as requestTypes from './user.parameters';
 import {errors} from '../../errors';
 // custom begin import
-import {googleApi} from '../../googleApiClient';
+import {GoogleApiOperation} from '../../googleApiClient';
+const googleApi = GoogleApiOperation.getInstance();
+import {EventEmitter} from 'events';
+const ee = new EventEmitter();
 
 // custom end import
 
@@ -18,8 +21,9 @@ export class UserService {
       param :requestTypes.OauthcallbackParams,
   ) {
     // custom begin oauthcallback
-
+    ee.emit('foo');
     return googleApi.getUserInfo(param.queryCode);
+
     // custom end oauthcallback
   }
   async createOneUser(
@@ -35,23 +39,12 @@ export class UserService {
     });
     return res;
   }
-  async googleLoginUrl(
-      param :requestTypes.GoogleLoginUrlParams,
+  async googleLogin(
+      param :requestTypes.GoogleLoginParams,
   ) {
-    // custom begin googleLoginUrl
+    // custom begin googleLogin
 
-    const url = googleApi.getAuthUrl();
-
-    return url;
-
-    // custom end googleLoginUrl
-  }
-  async googleLoginUser(
-      param :requestTypes.GoogleLoginUserParams,
-  ) {
-    // custom begin googleLoginUser
-
-    // custom end googleLoginUser
+    // custom end googleLogin
   }
   async loginUser(
       param :requestTypes.LoginUserParams,

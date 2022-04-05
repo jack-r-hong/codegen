@@ -1,9 +1,16 @@
 import {Application, Response, NextFunction} from 'express';
-import {Controller, Get, Post, Put,
-Delete, Validator, FormData} from '../baseController';
+import {
+  Controller,
+  Validator,
+  FormData,
+  limiter,
+  httpMethods,
+} from '../baseController';
 import {PhotoService, Container} from './photo.service';
 import * as photoParams from './photo.parameters';
 import * as validSchemas from './photo.validator';
+
+const {Get, Post, Put, Delete} = httpMethods;
 
 const serviceInstance = Container.get(PhotoService);
 

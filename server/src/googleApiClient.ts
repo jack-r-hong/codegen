@@ -1,20 +1,22 @@
 
 import path from 'path';
 import {google} from 'googleapis';
+import {OAuth2Client} from 'google-auth-library';
 
 const people = google.people('v1');
 
-
 export class GoogleApiOperation {
-  oauth2Client: any;
+  private static instance: GoogleApiOperation;
+
+  private oauth2Client: OAuth2Client;
+
 
   scopes: string[] = [
-    'email',
     'https://www.googleapis.com/auth/userinfo.email',
     'https://www.googleapis.com/auth/userinfo.profile',
   ];
 
-  constructor() {
+  private constructor() {
     const keyFile = require(path.join(__dirname, '../oauth2.keys.json'));
     const keys = keyFile.installed || keyFile.web;
     const redirectUri = keys.redirect_uris[keys.redirect_uris.length - 1];
@@ -34,15 +36,23 @@ export class GoogleApiOperation {
     });
   }
 
-  getAuthUrl() {
+  public static getInstance(): GoogleApiOperation {
+    if (!GoogleApiOperation.instance) {
+      GoogleApiOperation.instance = new GoogleApiOperation();
+    }
+
+    return GoogleApiOperation.instance;
+  }
+
+  public getAuthUrl() {
     return this.oauth2Client.generateAuthUrl({
       access_type: 'offline',
       scope: this.scopes,
-      /* prompt: 'consent', */
+      prompt: 'consent',
     });
   }
 
-  async getUserInfo(code: string) {
+  public async getUserInfo(code: string) {
     const {tokens} = await this.oauth2Client.getToken(code);
     this.oauth2Client.setCredentials(tokens);
 
@@ -56,4 +66,4 @@ export class GoogleApiOperation {
   }
 }
 
-export const googleApi = new GoogleApiOperation();
+GoogleApiOperation.getInstance();

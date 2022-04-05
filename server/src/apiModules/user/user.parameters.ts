@@ -84,65 +84,35 @@ interface TypedRequest<
                 bodyUsername: body.username,
         };
     };
-    type GoogleLoginUrlReqBody = {
+    type GoogleLoginReqBody = {
     }
 
-    type GoogleLoginUrlReqQuery = {
+    type GoogleLoginReqQuery = {
+          process: string
     }
 
-    type GoogleLoginUrlReqParams = {
+    type GoogleLoginReqParams = {
     }
 
-    export interface GoogleLoginUrlRequest extends TypedRequest<
-      GoogleLoginUrlReqBody,
-      GoogleLoginUrlReqQuery,
-      GoogleLoginUrlReqParams
+    export interface GoogleLoginRequest extends TypedRequest<
+      GoogleLoginReqBody,
+      GoogleLoginReqQuery,
+      GoogleLoginReqParams
     >{
     }
 
-    export type GoogleLoginUrlParams = {
+    export type GoogleLoginParams = {
+        queryProcess: string
     }
 
-    export const GoogleLoginUrlRequestConvert = (
-    body: GoogleLoginUrlReqBody,
-    query: GoogleLoginUrlReqQuery,
-    path: GoogleLoginUrlReqParams,
-    ): GoogleLoginUrlParams => {
+    export const GoogleLoginRequestConvert = (
+    body: GoogleLoginReqBody,
+    query: GoogleLoginReqQuery,
+    path: GoogleLoginReqParams,
+    ): GoogleLoginParams => {
       return {
+            queryProcess: query.process,
       };
-    };
-    type GoogleLoginUserReqBody = {
-          email: string,
-          password: string,
-    }
-
-    type GoogleLoginUserReqQuery = {
-    }
-
-    type GoogleLoginUserReqParams = {
-    }
-
-    export interface GoogleLoginUserRequest extends TypedRequest<
-      GoogleLoginUserReqBody,
-      GoogleLoginUserReqQuery,
-      GoogleLoginUserReqParams
-    >{
-    }
-
-    export type GoogleLoginUserParams = {
-          bodyEmail: string,
-          bodyPassword: string,
-    }
-
-    export const GoogleLoginUserRequestConvert = (
-    body: GoogleLoginUserReqBody,
-    query: GoogleLoginUserReqQuery,
-    path: GoogleLoginUserReqParams,
-    ): GoogleLoginUserParams => {
-        return {
-                bodyEmail: body.email,
-                bodyPassword: body.password,
-        };
     };
     type LoginUserReqBody = {
           email: string,

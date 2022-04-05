@@ -122,100 +122,43 @@
       "get" : {
         "tags" : [ "user" ],
         "summary" : "Logs user into the system",
-        "operationId" : "googleLoginUrl",
+        "operationId" : "googleLogin",
+        "parameters" : [ {
+          "name" : "process",
+          "in" : "query",
+          "description" : "The name that needs to be fetched. Use user1 for testing.",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "enum": [
+              "start",
+              "wait"
+            ]
+          }
+        } ],
         "responses" : {
           "200" : {
             "description" : "successful operation",
             "headers" : {
-              "X-Rate-Limit" : {
+              "RateLimit-Limit" : {
                 "description" : "calls per hour allowed by the user",
                 "schema" : {
                   "type" : "integer",
                   "format" : "int32"
                 }
               },
-              "X-Expires-After" : {
-                "description" : "date in UTC when token expires",
-                "schema" : {
-                  "type" : "string",
-                  "format" : "date-time"
-                }
-              },
-              "Set-Cookie" : {
-                "description" : "date in UTC when token expires",
-                "schema" : {
-                  "type" : "string",
-                  "format" : "jwt"
-                }
-              }
-            },
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "type" : "object",
-                  "properties" : {
-                    "id" : {
-                      "type" : "integer"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "400" : {
-            "$ref" : "#/components/responses/BadRequest"
-          },
-          "401" : {
-            "$ref" : "#/components/responses/Unauthorized"
-          },
-          "403" : {
-            "$ref" : "#/components/responses/Forbidden"
-          },
-          "404" : {
-            "$ref" : "#/components/responses/NotFound"
-          },
-          "409" : {
-            "$ref" : "#/components/responses/Conflict"
-          }
-        }
-      },
-      "post" : {
-        "tags" : [ "user" ],
-        "summary" : "Logs user into the system",
-        "operationId" : "googleLoginUser",
-        "requestBody" : {
-          "content" : {
-            "application/json" : {
-              "schema" : {
-                "type" : "object",
-                "properties" : {
-                  "email" : {
-                    "$ref" : "#/components/schemas/User/properties/email"
-                  },
-                  "password" : {
-                    "$ref" : "#/components/schemas/User/properties/password"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses" : {
-          "200" : {
-            "description" : "successful operation",
-            "headers" : {
-              "X-Rate-Limit" : {
+              "RateLimit-Remaining" : {
                 "description" : "calls per hour allowed by the user",
                 "schema" : {
                   "type" : "integer",
                   "format" : "int32"
                 }
               },
-              "X-Expires-After" : {
-                "description" : "date in UTC when token expires",
+              "RateLimit-Reset" : {
+                "description" : "calls per hour allowed by the user",
                 "schema" : {
-                  "type" : "string",
-                  "format" : "date-time"
+                  "type" : "integer",
+                  "format" : "int32"
                 }
               },
               "Set-Cookie" : {

@@ -1,9 +1,16 @@
 import {Application, Response, NextFunction} from 'express';
-import {Controller, Get, Post, Put,
-Delete, Validator, FormData} from '../baseController';
+import {
+  Controller,
+  Validator,
+  FormData,
+  limiter,
+  httpMethods,
+} from '../baseController';
 import {UserService, Container} from './user.service';
 import * as userParams from './user.parameters';
 import * as validSchemas from './user.validator';
+
+const {Get, Post, Put, Delete} = httpMethods;
 
 const serviceInstance = Container.get(UserService);
 
@@ -55,46 +62,23 @@ export class UserController {
         });
   }
   @Get('/user/google/login')
-  @Validator(validSchemas.googleLoginUrlValidator)
-  async googleLoginUrl(
-      req: userParams.GoogleLoginUrlRequest,
+  @Validator(validSchemas.googleLoginValidator)
+  async googleLogin(
+      req: userParams.GoogleLoginRequest,
       res: Response,
       next: NextFunction,
   ) {
-    serviceInstance.googleLoginUrl(
-        userParams.GoogleLoginUrlRequestConvert(
+    serviceInstance.googleLogin(
+        userParams.GoogleLoginRequestConvert(
             req.body,
             req.query,
             req.params,
         ),
     )
         .then((result) =>{
-          // custom begin googleLoginUrl
-          res.json(result);
+          // custom begin googleLogin
 
-          // custom end googleLoginUrl
-        }).catch((e) => {
-          next(e);
-        });
-  }
-  @Post('/user/google/login')
-  @Validator(validSchemas.googleLoginUserValidator)
-  async googleLoginUser(
-      req: userParams.GoogleLoginUserRequest,
-      res: Response,
-      next: NextFunction,
-  ) {
-    serviceInstance.googleLoginUser(
-        userParams.GoogleLoginUserRequestConvert(
-            req.body,
-            req.query,
-            req.params,
-        ),
-    )
-        .then((result) =>{
-          // custom begin googleLoginUser
-
-          // custom end googleLoginUser
+          // custom end googleLogin
         }).catch((e) => {
           next(e);
         });

@@ -33,19 +33,12 @@ export class UserModel {
     });
     return res;
   }
-  async googleLoginUrl(
-      param: requestTypes.GoogleLoginUrlParams,
+  async googleLogin(
+      param: requestTypes.GoogleLoginParams,
   ) {
-    // custom begin googleLoginUrl
+    // custom begin googleLogin
 
-    // custom end googleLoginUrl
-  }
-  async googleLoginUser(
-      param: requestTypes.GoogleLoginUserParams,
-  ) {
-    // custom begin googleLoginUser
-
-    // custom end googleLoginUser
+    // custom end googleLogin
   }
   async loginUser(
       param: requestTypes.LoginUserParams,

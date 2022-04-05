@@ -43,7 +43,14 @@ import * as sessions from '../../sessions';
         {{/if}}   
         {{#if p.schema.enum }}
     matches: {
-      options: /^(1|2|3)/,
+      options: /^(
+          {{~#each p.schema.enum as |enum|~}}
+            {{~#if (gt @index 0)~}}
+            |
+            {{~/if~}}
+            {{enum}}
+          {{~/each~}}
+      )/,
     },
         {{/if}} 
   },

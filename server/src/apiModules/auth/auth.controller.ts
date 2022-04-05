@@ -1,9 +1,16 @@
 import {Application, Response, NextFunction} from 'express';
-import {Controller, Get, Post, Put,
-Delete, Validator, FormData} from '../baseController';
+import {
+  Controller,
+  Validator,
+  FormData,
+  limiter,
+  httpMethods,
+} from '../baseController';
 import {AuthService, Container} from './auth.service';
 import * as authParams from './auth.parameters';
 import * as validSchemas from './auth.validator';
+
+const {Get, Post, Put, Delete} = httpMethods;
 
 const serviceInstance = Container.get(AuthService);
 
