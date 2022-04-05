@@ -1,6 +1,7 @@
 import {Application, Request,
   Response, Router, RequestHandler, NextFunction, IRouterMatcher}
   from 'express';
+import {Service, Container, Inject} from 'typedi';
 import {checkSchema, Schema, validationResult} from 'express-validator';
 import multer from 'multer';
 import {v1 as uuidv1} from 'uuid';
@@ -33,21 +34,24 @@ export function Controller(mainPath: string) {
     };
   };
 }
-
-
+@Service('test')
 class DecoratorHander {
   private static _instance: DecoratorHander;
-  private _keys: Symbol[ ]= [];
+  private _keys: Symbol[]= [];
 
-  constructor( ) {}
+  private constructor() {}
 
-  public static getInstance(): DecoratorHander {
+  public get keys() {
+    return this._keys;
+  }
+
+  public static getInstance = (): DecoratorHander => {
     if (!DecoratorHander._instance) {
       DecoratorHander._instance = new DecoratorHander();
     }
 
     return DecoratorHander._instance;
-  }
+  };
 
   public expressMethodDecoratorFactory(method :ExpressMethod, path :string) {
     return (target: any, propertyKey:any, descriptor: PropertyDescriptor) => {
@@ -87,10 +91,12 @@ class DecoratorHander {
   public exportMethod(): ExpressHttpMethods {
     const methods: any = {};
 
+    // Container.get(DecoratorHander.getInstance());
+
     for (const method in ExpressMethod) {
       if ( typeof method as keyof typeof ExpressMethod) {
         methods[method] = function(path: string) {
-          return decoratorHander.expressMethodDecoratorFactory(
+          return DecoratorHander._instance.expressMethodDecoratorFactory(
               ExpressMethod[method as keyof typeof ExpressMethod], path,
           );
         };
@@ -100,11 +106,72 @@ class DecoratorHander {
     return methods;
   }
 }
+@Service()
+class MiddlewareDecorator {
+  private _decoratorHander;
+  constructor() {
+    this._decoratorHander = DecoratorHander.getInstance();
+  }
 
-const decoratorHander = DecoratorHander.getInstance();
+  @Inject('test')
+    decoratorHander!: DecoratorHander;
+
+  Validator = (schema: Schema) => {
+    // return this.decoratorHander.middlewareDecoratorFactory(
+    //     'validator', checkSchema(schema),
+    // );
+    return this._decoratorHander.middlewareDecoratorFactory(
+        'validator', checkSchema(schema),
+    );
+  };
+
+
+  limiter = (minutes = 15, max = 100) => {
+    const limit = rateLimit({
+      windowMs: minutes * 60 * 1000, // 15 minutes
+      max,
+      standardHeaders: true,
+      legacyHeaders: false,
+      store: new RedisStore({
+        sendCommand: (...args: string[]) => redisClient.sendCommand(args),
+      }),
+    });
+    return this._decoratorHander.middlewareDecoratorFactory(
+        'limiter', limit,
+    );
+  };
+
+  FormData = () => {
+    const storage = multer.diskStorage({
+      destination: function(req, file, cb) {
+        cb(null, './uploads/');
+      },
+
+      filename: function(req: any, file: any, cb: any) {
+        cb(null, `${uuidv1()}-${file.originalname}`);
+      },
+    });
+    const fileFilter = (req: any, file: any, cb: any) => {
+      if (file.mimetype === 'image/jpg' ||
+         file.mimetype ==='image/jpeg' ||
+         file.mimetype === 'image/png') {
+        cb(null, true);
+      } else {
+        cb(new Error('Image uploaded is not of type jpg/jpegor png'), false);
+      }
+    };
+    const upload = multer({storage, fileFilter});
+
+    return this._decoratorHander.middlewareDecoratorFactory(
+        'FormData', upload.array('files', 10),
+    );
+  };
+}
+
+export const middlewareDecorator = Container.get(MiddlewareDecorator);
 
 export const httpMethods: ExpressHttpMethods =
-decoratorHander.exportMethod();
+DecoratorHander.getInstance().exportMethod();
 
 const bedRequestHandler:RequestHandler =
 (req: Request, res: Response, next: NextFunction) =>{
@@ -116,50 +183,3 @@ const bedRequestHandler:RequestHandler =
 
   next();
 };
-
-export function Validator(schema: Schema) {
-  return decoratorHander.middlewareDecoratorFactory(
-      'validator', checkSchema(schema),
-  );
-}
-
-export function FormData() {
-  const storage = multer.diskStorage({
-    destination: function(req, file, cb) {
-      cb(null, './uploads/');
-    },
-
-    filename: function(req: any, file: any, cb: any) {
-      cb(null, `${uuidv1()}-${file.originalname}`);
-    },
-  });
-  const fileFilter = (req: any, file: any, cb: any) => {
-    if (file.mimetype === 'image/jpg' ||
-       file.mimetype ==='image/jpeg' ||
-       file.mimetype === 'image/png') {
-      cb(null, true);
-    } else {
-      cb(new Error('Image uploaded is not of type jpg/jpegor png'), false);
-    }
-  };
-  const upload = multer({storage, fileFilter});
-
-  return decoratorHander.middlewareDecoratorFactory(
-      'FormData', upload.array('files', 10),
-  );
-}
-
-export function limiter(minutes = 15, max = 100) {
-  const limit = rateLimit({
-    windowMs: minutes * 60 * 1000, // 15 minutes
-    max,
-    standardHeaders: true,
-    legacyHeaders: false,
-    store: new RedisStore({
-      sendCommand: (...args: string[]) => redisClient.sendCommand(args),
-    }),
-  });
-  return decoratorHander.middlewareDecoratorFactory(
-      'limiter', limit,
-  );
-}

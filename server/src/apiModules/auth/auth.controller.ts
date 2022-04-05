@@ -1,22 +1,24 @@
 import {Application, Response, NextFunction} from 'express';
+import {Inject, Service} from 'typedi';
 import {
   Controller,
-  Validator,
-  FormData,
-  limiter,
   httpMethods,
+  middlewareDecorator,
 } from '../baseController';
-import {AuthService, Container} from './auth.service';
+import {AuthService} from './auth.service';
 import * as authParams from './auth.parameters';
 import * as validSchemas from './auth.validator';
 
 const {Get, Post, Put, Delete} = httpMethods;
+const {Validator, FormData, limiter} = middlewareDecorator;
 
-const serviceInstance = Container.get(AuthService);
-
+@Service('Controller')
 @Controller('')
 export class AuthController {
   constructor(private app: Application) {}
+
+  @Inject()
+    service!: AuthService;
 
   @Post('/auth')
   @Validator(validSchemas.createOneAuthValidator)
@@ -25,7 +27,7 @@ export class AuthController {
       res: Response,
       next: NextFunction,
   ) {
-    serviceInstance.createOneAuth(
+    this.service.createOneAuth(
         authParams.CreateOneAuthRequestConvert(
             req.body,
             req.query,
@@ -45,7 +47,7 @@ export class AuthController {
       res: Response,
       next: NextFunction,
   ) {
-    serviceInstance.deleteOneAuth(
+    this.service.deleteOneAuth(
         authParams.DeleteOneAuthRequestConvert(
             req.body,
             req.query,
@@ -65,7 +67,7 @@ export class AuthController {
       res: Response,
       next: NextFunction,
   ) {
-    serviceInstance.updateOneAuth(
+    this.service.updateOneAuth(
         authParams.UpdateOneAuthRequestConvert(
             req.body,
             req.query,
@@ -85,7 +87,7 @@ export class AuthController {
       res: Response,
       next: NextFunction,
   ) {
-    serviceInstance.readManyAuth(
+    this.service.readManyAuth(
         authParams.ReadManyAuthRequestConvert(
             req.body,
             req.query,

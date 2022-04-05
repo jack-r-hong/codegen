@@ -1,22 +1,24 @@
 import {Application, Response, NextFunction} from 'express';
+import {Inject, Service} from 'typedi';
 import {
   Controller,
-  Validator,
-  FormData,
-  limiter,
   httpMethods,
+  middlewareDecorator,
 } from '../baseController';
-import { {{~fpc tag}}Service, Container} from './{{tag}}.service';
+import { {{~fpc tag}}Service} from './{{tag}}.service';
 import * as {{tag}}Params from './{{tag}}.parameters';
 import * as validSchemas from './{{tag}}.validator';
 
 const {Get, Post, Put, Delete} = httpMethods;
+const {Validator, FormData, limiter} = middlewareDecorator;
 
-const serviceInstance = Container.get({{fpc tag}}Service);
-
+@Service('Controller')
 @Controller('')
 export class {{fpc tag}}Controller {
   constructor(private app: Application) {}
+
+  @Inject()
+    service!: {{fpc tag}}Service;
 
   {{#each data.paths as |path|}}
     {{#each path as |data|}}
@@ -31,7 +33,7 @@ export class {{fpc tag}}Controller {
       res: Response,
       next: NextFunction,
   ) {
-    serviceInstance.{{data.operationId}}(
+    this.service.{{data.operationId}}(
         {{../../tag}}Params.{{fpc data.operationId}}RequestConvert(
             req.body,
             req.query,

@@ -1,22 +1,24 @@
 import {Application, Response, NextFunction} from 'express';
+import {Inject, Service} from 'typedi';
 import {
   Controller,
-  Validator,
-  FormData,
-  limiter,
   httpMethods,
+  middlewareDecorator,
 } from '../baseController';
-import {PhotoService, Container} from './photo.service';
+import {PhotoService} from './photo.service';
 import * as photoParams from './photo.parameters';
 import * as validSchemas from './photo.validator';
 
 const {Get, Post, Put, Delete} = httpMethods;
+const {Validator, FormData, limiter} = middlewareDecorator;
 
-const serviceInstance = Container.get(PhotoService);
-
+@Service('Controller')
 @Controller('')
 export class PhotoController {
   constructor(private app: Application) {}
+
+  @Inject()
+    service!: PhotoService;
 
   @Get('/photo/:id')
   @Validator(validSchemas.readOnePhotoValidator)
@@ -25,7 +27,7 @@ export class PhotoController {
       res: Response,
       next: NextFunction,
   ) {
-    serviceInstance.readOnePhoto(
+    this.service.readOnePhoto(
         photoParams.ReadOnePhotoRequestConvert(
             req.body,
             req.query,
@@ -45,7 +47,7 @@ export class PhotoController {
       res: Response,
       next: NextFunction,
   ) {
-    serviceInstance.updateOnePhoto(
+    this.service.updateOnePhoto(
         photoParams.UpdateOnePhotoRequestConvert(
             req.body,
             req.query,
@@ -65,7 +67,7 @@ export class PhotoController {
       res: Response,
       next: NextFunction,
   ) {
-    serviceInstance.deleteManyPhoto(
+    this.service.deleteManyPhoto(
         photoParams.DeleteManyPhotoRequestConvert(
             req.body,
             req.query,
@@ -85,7 +87,7 @@ export class PhotoController {
       res: Response,
       next: NextFunction,
   ) {
-    serviceInstance.readManyPhoto(
+    this.service.readManyPhoto(
         photoParams.ReadManyPhotoRequestConvert(
             req.body,
             req.query,
@@ -106,7 +108,7 @@ export class PhotoController {
       res: Response,
       next: NextFunction,
   ) {
-    serviceInstance.uploadManyPhoto(
+    this.service.uploadManyPhoto(
         photoParams.UploadManyPhotoRequestConvert(
             req.body,
             req.query,
@@ -127,7 +129,7 @@ export class PhotoController {
       res: Response,
       next: NextFunction,
   ) {
-    serviceInstance.updateManyPhoto(
+    this.service.updateManyPhoto(
         photoParams.UpdateManyPhotoRequestConvert(
             req.body,
             req.query,

@@ -1,22 +1,24 @@
 import {Application, Response, NextFunction} from 'express';
+import {Inject, Service} from 'typedi';
 import {
   Controller,
-  Validator,
-  FormData,
-  limiter,
   httpMethods,
+  middlewareDecorator,
 } from '../baseController';
-import {UserService, Container} from './user.service';
+import {UserService} from './user.service';
 import * as userParams from './user.parameters';
 import * as validSchemas from './user.validator';
 
 const {Get, Post, Put, Delete} = httpMethods;
+const {Validator, FormData, limiter} = middlewareDecorator;
 
-const serviceInstance = Container.get(UserService);
-
+@Service('Controller')
 @Controller('')
 export class UserController {
   constructor(private app: Application) {}
+
+  @Inject()
+    service!: UserService;
 
   @Get('/oauthcallback')
   @Validator(validSchemas.oauthcallbackValidator)
@@ -25,7 +27,7 @@ export class UserController {
       res: Response,
       next: NextFunction,
   ) {
-    serviceInstance.oauthcallback(
+    this.service.oauthcallback(
         userParams.OauthcallbackRequestConvert(
             req.body,
             req.query,
@@ -48,7 +50,7 @@ export class UserController {
       res: Response,
       next: NextFunction,
   ) {
-    serviceInstance.createOneUser(
+    this.service.createOneUser(
         userParams.CreateOneUserRequestConvert(
             req.body,
             req.query,
@@ -68,7 +70,7 @@ export class UserController {
       res: Response,
       next: NextFunction,
   ) {
-    serviceInstance.googleLogin(
+    this.service.googleLogin(
         userParams.GoogleLoginRequestConvert(
             req.body,
             req.query,
@@ -77,6 +79,7 @@ export class UserController {
     )
         .then((result) =>{
           // custom begin googleLogin
+          res.json(result);
 
           // custom end googleLogin
         }).catch((e) => {
@@ -90,7 +93,7 @@ export class UserController {
       res: Response,
       next: NextFunction,
   ) {
-    serviceInstance.loginUser(
+    this.service.loginUser(
         userParams.LoginUserRequestConvert(
             req.body,
             req.query,
@@ -112,7 +115,7 @@ export class UserController {
       res: Response,
       next: NextFunction,
   ) {
-    serviceInstance.logoutUser(
+    this.service.logoutUser(
         userParams.LogoutUserRequestConvert(
             req.body,
             req.query,
@@ -134,7 +137,7 @@ export class UserController {
       res: Response,
       next: NextFunction,
   ) {
-    serviceInstance.deleteOneUser(
+    this.service.deleteOneUser(
         userParams.DeleteOneUserRequestConvert(
             req.body,
             req.query,
@@ -154,7 +157,7 @@ export class UserController {
       res: Response,
       next: NextFunction,
   ) {
-    serviceInstance.readOneUser(
+    this.service.readOneUser(
         userParams.ReadOneUserRequestConvert(
             req.body,
             req.query,
@@ -174,7 +177,7 @@ export class UserController {
       res: Response,
       next: NextFunction,
   ) {
-    serviceInstance.updateOneUser(
+    this.service.updateOneUser(
         userParams.UpdateOneUserRequestConvert(
             req.body,
             req.query,
@@ -194,7 +197,7 @@ export class UserController {
       res: Response,
       next: NextFunction,
   ) {
-    serviceInstance.createManyUser(
+    this.service.createManyUser(
         userParams.CreateManyUserRequestConvert(
             req.body,
             req.query,
