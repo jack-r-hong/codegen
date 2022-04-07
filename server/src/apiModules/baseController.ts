@@ -1,7 +1,7 @@
 import {Application, Request,
   Response, Router, RequestHandler, NextFunction, IRouterMatcher}
   from 'express';
-import {Service, Container, Inject} from 'typedi';
+import {Service, Container, Inject, Token} from 'typedi';
 import {checkSchema, Schema, validationResult} from 'express-validator';
 import multer from 'multer';
 import {v1 as uuidv1} from 'uuid';
@@ -12,6 +12,8 @@ import {redisLimiterClient as redisClient} from '../redisClient';
 
 const subRouter = Router();
 
+export const ControllerToken = new Token<Controller>('ControllerToken');
+
 export enum ExpressMethod{
   Get='get',
   Post='post',
@@ -21,20 +23,20 @@ export enum ExpressMethod{
 
 type ExpressHttpMethods = {[_key in keyof typeof ExpressMethod]: Function }
 
-
-export function Controller(mainPath: string) {
-  return <T extends { new(...args: any[]): {} }>(Base: T) =>{
-    return class extends Base {
-      constructor(...args: any[]) {
-        super(...args);
-        const app :Application = args[0];
-        app.get;
-        app.use(`/api/${mainPath}`, subRouter);
-      }
-    };
-  };
+export interface Controller {
+  appUse: AppUse;
 }
-@Service('test')
+
+@Service('app.use')
+export class AppUse {
+  constructor() {}
+
+  use(app: Application) {
+    app.use('/api', subRouter);
+  }
+}
+
+@Service()
 class DecoratorHander {
   private static _instance: DecoratorHander;
   private _keys: Symbol[]= [];
@@ -113,18 +115,14 @@ class MiddlewareDecorator {
     this._decoratorHander = DecoratorHander.getInstance();
   }
 
-  @Inject('test')
+  @Inject()
     decoratorHander!: DecoratorHander;
 
   Validator = (schema: Schema) => {
-    // return this.decoratorHander.middlewareDecoratorFactory(
-    //     'validator', checkSchema(schema),
-    // );
     return this._decoratorHander.middlewareDecoratorFactory(
         'validator', checkSchema(schema),
     );
   };
-
 
   limiter = (minutes = 15, max = 100) => {
     const limit = rateLimit({

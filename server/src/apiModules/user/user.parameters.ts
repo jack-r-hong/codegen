@@ -9,7 +9,37 @@ interface TypedRequest<
   body: T,
   query: U,
   params: P,
-}    type OauthcallbackReqBody = {
+}    type GoogleLoginReqBody = {
+    }
+
+    type GoogleLoginReqQuery = {
+          process: string
+    }
+
+    type GoogleLoginReqParams = {
+    }
+
+    export interface GoogleLoginRequest extends TypedRequest<
+      GoogleLoginReqBody,
+      GoogleLoginReqQuery,
+      GoogleLoginReqParams
+    >{
+    }
+
+    export type GoogleLoginParams = {
+        queryProcess: string
+    }
+
+    export const GoogleLoginRequestConvert = (
+    body: GoogleLoginReqBody,
+    query: GoogleLoginReqQuery,
+    path: GoogleLoginReqParams,
+    ): GoogleLoginParams => {
+      return {
+            queryProcess: query.process,
+      };
+    };
+    type OauthcallbackReqBody = {
     }
 
     type OauthcallbackReqQuery = {
@@ -40,12 +70,12 @@ interface TypedRequest<
       };
     };
     type CreateOneUserReqBody = {
-          authLevel: string,
-          email: string,
-          password: string,
-          phone: string,
-          userStatus: string,
-          username: string,
+authLevel: string, 
+email: string, 
+password: string, 
+phone: string          | null, 
+userStatus: string, 
+username: string, 
     }
 
     type CreateOneUserReqQuery = {
@@ -62,12 +92,12 @@ interface TypedRequest<
     }
 
     export type CreateOneUserParams = {
-          bodyAuthLevel: number,
-          bodyEmail: string,
-          bodyPassword: string,
-          bodyPhone: string,
-          bodyUserStatus: number,
-          bodyUsername: string,
+bodyAuthLevel: number,
+bodyEmail: string,
+bodyPassword: string,
+bodyPhone: string            | null,
+bodyUserStatus: number,
+bodyUsername: string,
     }
 
     export const CreateOneUserRequestConvert = (
@@ -84,39 +114,9 @@ interface TypedRequest<
                 bodyUsername: body.username,
         };
     };
-    type GoogleLoginReqBody = {
-    }
-
-    type GoogleLoginReqQuery = {
-          process: string
-    }
-
-    type GoogleLoginReqParams = {
-    }
-
-    export interface GoogleLoginRequest extends TypedRequest<
-      GoogleLoginReqBody,
-      GoogleLoginReqQuery,
-      GoogleLoginReqParams
-    >{
-    }
-
-    export type GoogleLoginParams = {
-        queryProcess: string
-    }
-
-    export const GoogleLoginRequestConvert = (
-    body: GoogleLoginReqBody,
-    query: GoogleLoginReqQuery,
-    path: GoogleLoginReqParams,
-    ): GoogleLoginParams => {
-      return {
-            queryProcess: query.process,
-      };
-    };
     type LoginUserReqBody = {
-          email: string,
-          password: string,
+email: string, 
+password: string, 
     }
 
     type LoginUserReqQuery = {
@@ -133,8 +133,8 @@ interface TypedRequest<
     }
 
     export type LoginUserParams = {
-          bodyEmail: string,
-          bodyPassword: string,
+bodyEmail: string,
+bodyPassword: string,
     }
 
     export const LoginUserRequestConvert = (
@@ -182,6 +182,7 @@ interface TypedRequest<
 
     type DeleteOneUserReqParams = {
           id: string
+,   
     }
 
     export interface DeleteOneUserRequest extends TypedRequest<
@@ -192,7 +193,7 @@ interface TypedRequest<
     }
 
     export type DeleteOneUserParams = {
-        pathId: number
+        pathId: string
     }
 
     export const DeleteOneUserRequestConvert = (
@@ -201,7 +202,7 @@ interface TypedRequest<
     path: DeleteOneUserReqParams,
     ): DeleteOneUserParams => {
       return {
-            pathId: parseInt(path.id),
+            pathId: path.id,
       };
     };
     type ReadOneUserReqBody = {
@@ -212,6 +213,7 @@ interface TypedRequest<
 
     type ReadOneUserReqParams = {
           id: string
+,   
     }
 
     export interface ReadOneUserRequest extends TypedRequest<
@@ -222,7 +224,7 @@ interface TypedRequest<
     }
 
     export type ReadOneUserParams = {
-        pathId: number
+        pathId: string
     }
 
     export const ReadOneUserRequestConvert = (
@@ -231,16 +233,16 @@ interface TypedRequest<
     path: ReadOneUserReqParams,
     ): ReadOneUserParams => {
       return {
-            pathId: parseInt(path.id),
+            pathId: path.id,
       };
     };
     type UpdateOneUserReqBody = {
-          authLevel: string,
-          email: string,
-          password: string,
-          phone: string,
-          userStatus: string,
-          username: string,
+authLevel: string, 
+email: string, 
+password: string, 
+phone: string          | null, 
+userStatus: string, 
+username: string, 
     }
 
     type UpdateOneUserReqQuery = {
@@ -248,6 +250,7 @@ interface TypedRequest<
 
     type UpdateOneUserReqParams = {
           id: string
+,   
     }
 
     export interface UpdateOneUserRequest extends TypedRequest<
@@ -258,13 +261,13 @@ interface TypedRequest<
     }
 
     export type UpdateOneUserParams = {
-        pathId: number
-          bodyAuthLevel: number,
-          bodyEmail: string,
-          bodyPassword: string,
-          bodyPhone: string,
-          bodyUserStatus: number,
-          bodyUsername: string,
+        pathId: string
+bodyAuthLevel: number,
+bodyEmail: string,
+bodyPassword: string,
+bodyPhone: string            | null,
+bodyUserStatus: number,
+bodyUsername: string,
     }
 
     export const UpdateOneUserRequestConvert = (
@@ -273,7 +276,7 @@ interface TypedRequest<
     path: UpdateOneUserReqParams,
     ): UpdateOneUserParams => {
         return {
-            pathId: parseInt(path.id),
+            pathId: path.id,
                 bodyAuthLevel: parseInt(body.authLevel),
                 bodyEmail: body.email,
                 bodyPassword: body.password,
@@ -290,7 +293,7 @@ interface TypedRequest<
                   phone: string,
                   userStatus: string,
                   username: string,
-          }[],
+          }[], 
     }
 
     type CreateManyUserReqQuery = {
@@ -311,7 +314,7 @@ interface TypedRequest<
               bodyAuthLevel: number,
               bodyEmail: string,
               bodyPassword: string,
-              bodyPhone: string,
+              bodyPhone: string|null,
               bodyUserStatus: number,
               bodyUsername: string,
           }[],

@@ -26,10 +26,15 @@ interface TypedRequest<
                   {{ @key}}: string,
                 {{/if}}
               {{/each}} 
-          }[],
-        {{else}}
-          {{ @key}}: string,
-        {{/if}}        
+          }[]
+        {{~else~}}
+          {{ @key}}: string
+        {{~/if~}}        
+        {{~#if p.nullable }}
+          | null
+        {{~else~}}
+        {{~/if~}}  
+        , 
       {{/each}}      
     }
 
@@ -54,6 +59,11 @@ interface TypedRequest<
         {{else}}
           {{ p.name}}: string
         {{/if}}
+        {{~#if p.nullable }}
+          | null
+        {{~else~}}
+        {{~/if~}}  
+        ,   
       {{else}}
       {{/if}}
     {{/each}}
@@ -80,12 +90,22 @@ interface TypedRequest<
           {{#if (equal p.type "array")}}
           body{{fpc @key}}: {
             {{#each p.items.properties as |i|}}
-              body{{fpc @key}}: {{parameter_type i.type}},
+              body{{fpc @key}}: {{parameter_type i.type}}
+            {{~#if i.nullable ~}}
+              |null
+            {{~else~}}
+            {{~/if~}}  
+            ,
             {{/each}}            
-          }[],
-          {{else}}    
-          body{{fpc @key}}: {{parameter_type p.type}},
-          {{/if~}}
+          }[]
+          {{~else~}}    
+          body{{fpc @key}}: {{parameter_type p.type}}
+          {{~/if~}}
+          {{~#if p.nullable }}
+            | null
+          {{~else~}}
+          {{~/if~}}
+          ,
         {{/each}}
       {{/if}}
       {{#if (equal data.requestBody.content.[application/json].schema.type "array") }}

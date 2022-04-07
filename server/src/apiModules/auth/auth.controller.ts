@@ -1,24 +1,28 @@
-import {Application, Response, NextFunction} from 'express';
-import {Inject, Service} from 'typedi';
+import {Response, NextFunction} from 'express';
+import {Inject, Service, Container} from 'typedi';
 import {
   Controller,
   httpMethods,
   middlewareDecorator,
+  ControllerToken,
+  AppUse,
 } from '../baseController';
 import {AuthService} from './auth.service';
 import * as authParams from './auth.parameters';
 import * as validSchemas from './auth.validator';
 
+// eslint-disable-next-line no-unused-vars
 const {Get, Post, Put, Delete} = httpMethods;
+// eslint-disable-next-line no-unused-vars
 const {Validator, FormData, limiter} = middlewareDecorator;
 
-@Service('Controller')
-@Controller('')
-export class AuthController {
-  constructor(private app: Application) {}
+@Service({id: ControllerToken, multiple: true})
+export class AuthController implements Controller {
+  constructor() {}
 
-  @Inject()
-    service!: AuthService;
+  static service = Container.get(AuthService);
+  @Inject('app.use')
+    appUse!: AppUse;
 
   @Post('/auth')
   @Validator(validSchemas.createOneAuthValidator)
@@ -27,12 +31,13 @@ export class AuthController {
       res: Response,
       next: NextFunction,
   ) {
-    this.service.createOneAuth(
+    AuthController.service.createOneAuth(
         authParams.CreateOneAuthRequestConvert(
             req.body,
             req.query,
             req.params,
         ),
+        req.session,
     )
         .then((result) =>{
           res.json(result);
@@ -47,12 +52,13 @@ export class AuthController {
       res: Response,
       next: NextFunction,
   ) {
-    this.service.deleteOneAuth(
+    AuthController.service.deleteOneAuth(
         authParams.DeleteOneAuthRequestConvert(
             req.body,
             req.query,
             req.params,
         ),
+        req.session,
     )
         .then((result) =>{
           res.json(result);
@@ -67,12 +73,13 @@ export class AuthController {
       res: Response,
       next: NextFunction,
   ) {
-    this.service.updateOneAuth(
+    AuthController.service.updateOneAuth(
         authParams.UpdateOneAuthRequestConvert(
             req.body,
             req.query,
             req.params,
         ),
+        req.session,
     )
         .then((result) =>{
           res.json(result);
@@ -87,12 +94,13 @@ export class AuthController {
       res: Response,
       next: NextFunction,
   ) {
-    this.service.readManyAuth(
+    AuthController.service.readManyAuth(
         authParams.ReadManyAuthRequestConvert(
             req.body,
             req.query,
             req.params,
         ),
+        req.session,
     )
         .then((result) =>{
           res.json(result);

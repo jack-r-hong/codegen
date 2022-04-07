@@ -4,3 +4,4 @@ server/.env
 server/package-lock.json
 server/uploads
 server/oauth2.keys.json
+server/src/certreq

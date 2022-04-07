@@ -50,7 +50,7 @@ model PhotoComment {
 model User {
     createdAt    DateTime            @default(now())    @map("created_at")                 
     email    String            @unique    @map("email")                 
-    id    Int        @id @default(autoincrement())    @map("id")                 
+    id    String        @id @default(uuid())    @map("id")                 
     password    String            @map("password")                 
     phone    String?            @map("phone")                 
     updatedAt    DateTime            @default(now()) @updatedAt    @map("updated_at")                 

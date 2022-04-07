@@ -4,6 +4,15 @@ import * as sessions from '../../sessions';
 // custom begin import
 
 // custom end import
+export const googleLoginValidator: Schema = {
+  process: {
+    in: 'query',
+    notEmpty: true,
+    matches: {
+      options: /^(start|wait)/,
+    },
+  },
+};
 export const oauthcallbackValidator: Schema = {
   code: {
     in: 'query',
@@ -56,22 +65,13 @@ export const createOneUserValidator: Schema = {
 
     },
   },
-  userInfo: {
+  cookieAuth: {
     in: 'cookies',
     custom: {
       options: (value, {req, location, path}) => {
-        sessions.userInfoSessionVerify(req['session'].userInfo);
+        sessions.cookieAuthSessionVerify(req['session'].cookieAuth);
         return true;
       },
-    },
-  },
-};
-export const googleLoginValidator: Schema = {
-  process: {
-    in: 'query',
-    notEmpty: true,
-    matches: {
-      options: /^(start|wait)/,
     },
   },
 };
@@ -97,14 +97,13 @@ export const logoutUserValidator: Schema = {
 export const deleteOneUserValidator: Schema = {
   id: {
     in: 'params',
-    isInt: true,
     notEmpty: true,
   },
-  userInfo: {
+  cookieAuth: {
     in: 'cookies',
     custom: {
       options: (value, {req, location, path}) => {
-        sessions.userInfoSessionVerify(req['session'].userInfo);
+        sessions.cookieAuthSessionVerify(req['session'].cookieAuth);
         return true;
       },
     },
@@ -113,14 +112,13 @@ export const deleteOneUserValidator: Schema = {
 export const readOneUserValidator: Schema = {
   id: {
     in: 'params',
-    isInt: true,
     notEmpty: true,
   },
-  userInfo: {
+  cookieAuth: {
     in: 'cookies',
     custom: {
       options: (value, {req, location, path}) => {
-        sessions.userInfoSessionVerify(req['session'].userInfo);
+        sessions.cookieAuthSessionVerify(req['session'].cookieAuth);
         return true;
       },
     },
@@ -129,7 +127,6 @@ export const readOneUserValidator: Schema = {
 export const updateOneUserValidator: Schema = {
   id: {
     in: 'params',
-    isInt: true,
     notEmpty: true,
   },
   authLevel: {
@@ -177,11 +174,11 @@ export const updateOneUserValidator: Schema = {
 
     },
   },
-  userInfo: {
+  cookieAuth: {
     in: 'cookies',
     custom: {
       options: (value, {req, location, path}) => {
-        sessions.userInfoSessionVerify(req['session'].userInfo);
+        sessions.cookieAuthSessionVerify(req['session'].cookieAuth);
         return true;
       },
     },
@@ -191,11 +188,11 @@ export const createManyUserValidator: Schema = {
   dataList: {
     in: 'body',
   },
-  userInfo: {
+  cookieAuth: {
     in: 'cookies',
     custom: {
       options: (value, {req, location, path}) => {
-        sessions.userInfoSessionVerify(req['session'].userInfo);
+        sessions.cookieAuthSessionVerify(req['session'].cookieAuth);
         return true;
       },
     },

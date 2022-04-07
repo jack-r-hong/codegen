@@ -10,8 +10,8 @@ interface TypedRequest<
   query: U,
   params: P,
 }    type CreateOneAuthReqBody = {
-          level: string,
-          role: string,
+level: string, 
+role: string, 
     }
 
     type CreateOneAuthReqQuery = {
@@ -28,8 +28,8 @@ interface TypedRequest<
     }
 
     export type CreateOneAuthParams = {
-          bodyLevel: number,
-          bodyRole: number,
+bodyLevel: number,
+bodyRole: number,
     }
 
     export const CreateOneAuthRequestConvert = (
@@ -50,6 +50,7 @@ interface TypedRequest<
 
     type DeleteOneAuthReqParams = {
           id: string
+,   
     }
 
     export interface DeleteOneAuthRequest extends TypedRequest<
@@ -73,8 +74,8 @@ interface TypedRequest<
       };
     };
     type UpdateOneAuthReqBody = {
-          level: string,
-          role: string,
+level: string, 
+role: string, 
     }
 
     type UpdateOneAuthReqQuery = {
@@ -82,6 +83,7 @@ interface TypedRequest<
 
     type UpdateOneAuthReqParams = {
           id: string
+,   
     }
 
     export interface UpdateOneAuthRequest extends TypedRequest<
@@ -93,8 +95,8 @@ interface TypedRequest<
 
     export type UpdateOneAuthParams = {
         pathId: number
-          bodyLevel: number,
-          bodyRole: number,
+bodyLevel: number,
+bodyRole: number,
     }
 
     export const UpdateOneAuthRequestConvert = (

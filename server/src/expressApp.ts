@@ -1,15 +1,14 @@
 
+// eslint-disable-next-line no-unused-vars
 import express, {Application, NextFunction, Request, Response} from 'express';
-import {Result} from 'express-validator';
 import bodyParser from 'body-parser';
 import compression from 'compression';
 import cors from 'cors';
 import helmet from 'helmet';
-import httpErrors from 'http-errors';
 import {registerController} from './apiModules';
 import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
-import {userInfoSession} from './sessions';
+import {cookieAuthSession} from './sessions';
 import rateLimit from 'express-rate-limit';
 import RedisStore from 'rate-limit-redis';
 import {redisLimiterClient as redisClient} from './redisClient';
@@ -40,16 +39,31 @@ export class ExpressApp {
         'Content-Type',
         'Accept',
         'X-Access-Token',
+        'Cookie',
+        'Authorization',
+        'X-Api-Key',
       ],
+      // allowedHeaders: '*',
+      exposedHeaders: '*',
+      // exposedHeaders: [
+      //   'date',
+      //   'Set-Cookie',
+      //   'Content-Type',
+      //   'Authorization',
+      //   'X-Api-Key',
+      // ],
       credentials: true,
       methods: 'GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE',
-      // origin: '127.0.0.1',
-      origin: '*',
-      preflightContinue: false,
+      origin: ['http://localhost:8000', 'http://127.0.0.1:8000'],
+      // origin: '*',
+      preflightContinue: true,
+      // preflightContinue: false,
     };
-    this.app.use(morgan('combined', {}));
+
+
     this.app.use(helmet());
     this.app.use(cors(corsOptions));
+    this.app.use(morgan('combined', {}));
     this.app.use('/uploads', express.static('./uploads'));
     // this.app.use('/api/', this._rateLimit());
 
@@ -60,7 +74,7 @@ export class ExpressApp {
   }
 
   private sessionRegister() {
-    this.app.use(userInfoSession);
+    this.app.use(cookieAuthSession);
   }
 
   private _rateLimit() {

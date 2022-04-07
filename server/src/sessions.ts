@@ -6,32 +6,49 @@ import {redisSessionClient as redisClient} from './redisClient';
 import {errors} from './errors';
 
 export type UserInfo = {
-    userId: string;
+    id: string;
     userStatus: number;
     authRole: number;
+}
+
+export enum GoogleLoginTokenStatus{
+  // eslint-disable-next-line no-unused-vars
+  Wait = 1,
+  // eslint-disable-next-line no-unused-vars
+  End = 2
+}
+
+export type GoogleLoginToken = {
+  id: string;
+  status: GoogleLoginTokenStatus;
+  data: string
 }
 
 declare module 'express-session' {
  // eslint-disable-next-line no-unused-vars
   interface Session {
-    userInfo?: UserInfo
+    userInfo?: UserInfo,
+    googleLoginToken?: GoogleLoginToken
   }
 }
 
 const RedisStore = redisStore(session);
 
-export const userInfoSession = session({
+export const cookieAuthSession = session({
   secret: process.env['TOKEN_SECRET'] as string,
   store: new RedisStore({client: redisClient}),
   resave: false,
-  saveUninitialized: false,
-  name: 'userInfo',
+  saveUninitialized: true,
+  name: 'JSESSIONID',
   cookie: {
+    sameSite: 'none',
     httpOnly: true,
+    secure: true,
+    maxAge: 100000,
   },
 });
 
-export const userInfoSessionVerify = (
+export const cookieAuthSessionVerify = (
     userInfo: UserInfo,
 ) => {
   if (!userInfo) {

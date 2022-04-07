@@ -221,6 +221,9 @@ export class {{fpc tag}}Model {
     {{#if (equal ../../tag d.tags.0) }}
   async {{d.operationId}}(
       param: requestTypes.{{fpc d.operationId}}Params,
+        {{#if (equal (model_type d.operationId) "custom")  }}
+      customParam: any,
+        {{/if}}
         {{#if (equal (model_type d.operationId) "uploadMany")  }}
       files: Express.Multer.File[],
         {{/if}}

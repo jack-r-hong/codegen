@@ -17,6 +17,7 @@ interface TypedRequest<
 
     type ReadOnePhotoReqParams = {
           id: string
+,   
     }
 
     export interface ReadOnePhotoRequest extends TypedRequest<
@@ -40,11 +41,11 @@ interface TypedRequest<
       };
     };
     type UpdateOnePhotoReqBody = {
-          afterLevel: string,
-          beforeLevel: string,
-          filePath2: string,
-          process: string,
-          status: string,
+afterLevel: string, 
+beforeLevel: string, 
+filePath2: string          | null, 
+process: string, 
+status: string, 
     }
 
     type UpdateOnePhotoReqQuery = {
@@ -52,6 +53,7 @@ interface TypedRequest<
 
     type UpdateOnePhotoReqParams = {
           id: string
+,   
     }
 
     export interface UpdateOnePhotoRequest extends TypedRequest<
@@ -63,11 +65,11 @@ interface TypedRequest<
 
     export type UpdateOnePhotoParams = {
         pathId: number
-          bodyAfterLevel: number,
-          bodyBeforeLevel: number,
-          bodyFilePath2: string,
-          bodyProcess: number,
-          bodyStatus: number,
+bodyAfterLevel: number,
+bodyBeforeLevel: number,
+bodyFilePath2: string            | null,
+bodyProcess: number,
+bodyStatus: number,
     }
 
     export const UpdateOnePhotoRequestConvert = (
@@ -184,8 +186,8 @@ interface TypedRequest<
                   id: string,
                   process: string,
                   status: string,
-          }[],
-          whereField: string,
+          }[], 
+whereField: string, 
     }
 
     type UpdateManyPhotoReqQuery = {
@@ -205,12 +207,12 @@ interface TypedRequest<
           bodyDataList: {
               bodyAfterLevel: number,
               bodyBeforeLevel: number,
-              bodyFilePath2: string,
+              bodyFilePath2: string|null,
               bodyId: number,
               bodyProcess: number,
               bodyStatus: number,
           }[],
-          bodyWhereField: string,
+bodyWhereField: string,
     }
 
     export const UpdateManyPhotoRequestConvert = (

@@ -7,8 +7,35 @@ const prisma = new PrismaClient();
 
 @Service()
 export class UserModel {
+  async googleLogin(
+      param: requestTypes.GoogleLoginParams,
+      customParam: any,
+  ) {
+    // custom begin googleLogin
+    const res = await prisma.user.findUnique({
+      where: {
+        email: customParam.email,
+      },
+      select: {
+        email: true,
+        id: true,
+        updatedAt: true,
+        username: true,
+        auth: true,
+        userStatus: true,
+      },
+    }).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+    return res;
+
+    // custom end googleLogin
+  }
   async oauthcallback(
       param: requestTypes.OauthcallbackParams,
+      customParam: any,
   ) {
     // custom begin oauthcallback
 
@@ -33,15 +60,9 @@ export class UserModel {
     });
     return res;
   }
-  async googleLogin(
-      param: requestTypes.GoogleLoginParams,
-  ) {
-    // custom begin googleLogin
-
-    // custom end googleLogin
-  }
   async loginUser(
       param: requestTypes.LoginUserParams,
+      customParam: any,
   ) {
     // custom begin loginUser
 
@@ -49,6 +70,7 @@ export class UserModel {
   }
   async logoutUser(
       param: requestTypes.LogoutUserParams,
+      customParam: any,
   ) {
     // custom begin logoutUser
 

@@ -1,5 +1,4 @@
-import {Service} from 'typedi';
-export {Container} from 'typedi';
+import {Service, Inject} from 'typedi';
 import {PhotoModel} from './photo.model';
 import * as requestTypes from './photo.parameters';
 import {errors} from '../../errors';
@@ -11,11 +10,12 @@ import fs from 'fs';
 
 @Service()
 export class PhotoService {
-  constructor(
-        private photoModel: PhotoModel,
-  ) {}
+  @Inject()
+  private photoModel!: PhotoModel;
+
   async readOnePhoto(
       param :requestTypes.ReadOnePhotoParams,
+      session: Express.Request['session'],
   ) {
     // custom begin readOnePhoto
 
@@ -29,6 +29,7 @@ export class PhotoService {
   }
   async updateOnePhoto(
       param :requestTypes.UpdateOnePhotoParams,
+      session: Express.Request['session'],
   ) {
     // custom begin updateOnePhoto
 
@@ -42,6 +43,7 @@ export class PhotoService {
   }
   async deleteManyPhoto(
       param :requestTypes.DeleteManyPhotoParams,
+      session: Express.Request['session'],
   ) {
     // custom begin deleteManyPhoto
     const data = await this.photoModel.readManyPhoto(
@@ -74,6 +76,7 @@ export class PhotoService {
   }
   async readManyPhoto(
       param :requestTypes.ReadManyPhotoParams,
+      session: Express.Request['session'],
   ) {
     // custom begin readManyPhoto
 
@@ -87,6 +90,7 @@ export class PhotoService {
   }
   async uploadManyPhoto(
       param :requestTypes.UploadManyPhotoParams,
+      session: Express.Request['session'],
       files: Express.Multer.File[],
   ) {
     // custom begin uploadManyPhoto
@@ -102,6 +106,7 @@ export class PhotoService {
   }
   async updateManyPhoto(
       param :requestTypes.UpdateManyPhotoParams,
+      session: Express.Request['session'],
   ) {
     // custom begin updateManyPhoto
 

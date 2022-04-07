@@ -1,24 +1,28 @@
-import {Application, Response, NextFunction} from 'express';
-import {Inject, Service} from 'typedi';
+import {Response, NextFunction} from 'express';
+import {Inject, Service, Container} from 'typedi';
 import {
   Controller,
   httpMethods,
   middlewareDecorator,
+  ControllerToken,
+  AppUse,
 } from '../baseController';
 import {PhotoService} from './photo.service';
 import * as photoParams from './photo.parameters';
 import * as validSchemas from './photo.validator';
 
+// eslint-disable-next-line no-unused-vars
 const {Get, Post, Put, Delete} = httpMethods;
+// eslint-disable-next-line no-unused-vars
 const {Validator, FormData, limiter} = middlewareDecorator;
 
-@Service('Controller')
-@Controller('')
-export class PhotoController {
-  constructor(private app: Application) {}
+@Service({id: ControllerToken, multiple: true})
+export class PhotoController implements Controller {
+  constructor() {}
 
-  @Inject()
-    service!: PhotoService;
+  static service = Container.get(PhotoService);
+  @Inject('app.use')
+    appUse!: AppUse;
 
   @Get('/photo/:id')
   @Validator(validSchemas.readOnePhotoValidator)
@@ -27,12 +31,13 @@ export class PhotoController {
       res: Response,
       next: NextFunction,
   ) {
-    this.service.readOnePhoto(
+    PhotoController.service.readOnePhoto(
         photoParams.ReadOnePhotoRequestConvert(
             req.body,
             req.query,
             req.params,
         ),
+        req.session,
     )
         .then((result) =>{
           res.json(result);
@@ -47,12 +52,13 @@ export class PhotoController {
       res: Response,
       next: NextFunction,
   ) {
-    this.service.updateOnePhoto(
+    PhotoController.service.updateOnePhoto(
         photoParams.UpdateOnePhotoRequestConvert(
             req.body,
             req.query,
             req.params,
         ),
+        req.session,
     )
         .then((result) =>{
           res.json(result);
@@ -67,12 +73,13 @@ export class PhotoController {
       res: Response,
       next: NextFunction,
   ) {
-    this.service.deleteManyPhoto(
+    PhotoController.service.deleteManyPhoto(
         photoParams.DeleteManyPhotoRequestConvert(
             req.body,
             req.query,
             req.params,
         ),
+        req.session,
     )
         .then((result) =>{
           res.json(result);
@@ -87,12 +94,13 @@ export class PhotoController {
       res: Response,
       next: NextFunction,
   ) {
-    this.service.readManyPhoto(
+    PhotoController.service.readManyPhoto(
         photoParams.ReadManyPhotoRequestConvert(
             req.body,
             req.query,
             req.params,
         ),
+        req.session,
     )
         .then((result) =>{
           res.json(result);
@@ -108,12 +116,13 @@ export class PhotoController {
       res: Response,
       next: NextFunction,
   ) {
-    this.service.uploadManyPhoto(
+    PhotoController.service.uploadManyPhoto(
         photoParams.UploadManyPhotoRequestConvert(
             req.body,
             req.query,
             req.params,
         ),
+        req.session,
         req.files as Express.Multer.File[],
     )
         .then((result) =>{
@@ -129,12 +138,13 @@ export class PhotoController {
       res: Response,
       next: NextFunction,
   ) {
-    this.service.updateManyPhoto(
+    PhotoController.service.updateManyPhoto(
         photoParams.UpdateManyPhotoRequestConvert(
             req.body,
             req.query,
             req.params,
         ),
+        req.session,
     )
         .then((result) =>{
           res.json(result);

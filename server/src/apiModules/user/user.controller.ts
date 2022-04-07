@@ -1,25 +1,54 @@
-import {Application, Response, NextFunction} from 'express';
-import {Inject, Service} from 'typedi';
+import {Response, NextFunction} from 'express';
+import {Inject, Service, Container} from 'typedi';
 import {
   Controller,
   httpMethods,
   middlewareDecorator,
+  ControllerToken,
+  AppUse,
 } from '../baseController';
 import {UserService} from './user.service';
 import * as userParams from './user.parameters';
 import * as validSchemas from './user.validator';
 
+// eslint-disable-next-line no-unused-vars
 const {Get, Post, Put, Delete} = httpMethods;
+// eslint-disable-next-line no-unused-vars
 const {Validator, FormData, limiter} = middlewareDecorator;
 
-@Service('Controller')
-@Controller('')
-export class UserController {
-  constructor(private app: Application) {}
+@Service({id: ControllerToken, multiple: true})
+export class UserController implements Controller {
+  constructor() {}
 
-  @Inject()
-    service!: UserService;
+  static service = Container.get(UserService);
+  @Inject('app.use')
+    appUse!: AppUse;
 
+  @Get('/google/login')
+  @Validator(validSchemas.googleLoginValidator)
+  async googleLogin(
+      req: userParams.GoogleLoginRequest,
+      res: Response,
+      next: NextFunction,
+  ) {
+    UserController.service.googleLogin(
+        userParams.GoogleLoginRequestConvert(
+            req.body,
+            req.query,
+            req.params,
+        ),
+        req.session,
+    )
+        .then((result) =>{
+          // custom begin googleLogin
+
+          res.json({result});
+
+          // custom end googleLogin
+        }).catch((e) => {
+          next(e);
+        });
+  }
   @Get('/oauthcallback')
   @Validator(validSchemas.oauthcallbackValidator)
   async oauthcallback(
@@ -27,12 +56,13 @@ export class UserController {
       res: Response,
       next: NextFunction,
   ) {
-    this.service.oauthcallback(
+    UserController.service.oauthcallback(
         userParams.OauthcallbackRequestConvert(
             req.body,
             req.query,
             req.params,
         ),
+        req.session,
     )
         .then((result) =>{
           // custom begin oauthcallback
@@ -50,38 +80,16 @@ export class UserController {
       res: Response,
       next: NextFunction,
   ) {
-    this.service.createOneUser(
+    UserController.service.createOneUser(
         userParams.CreateOneUserRequestConvert(
             req.body,
             req.query,
             req.params,
         ),
+        req.session,
     )
         .then((result) =>{
           res.json(result);
-        }).catch((e) => {
-          next(e);
-        });
-  }
-  @Get('/user/google/login')
-  @Validator(validSchemas.googleLoginValidator)
-  async googleLogin(
-      req: userParams.GoogleLoginRequest,
-      res: Response,
-      next: NextFunction,
-  ) {
-    this.service.googleLogin(
-        userParams.GoogleLoginRequestConvert(
-            req.body,
-            req.query,
-            req.params,
-        ),
-    )
-        .then((result) =>{
-          // custom begin googleLogin
-          res.json(result);
-
-          // custom end googleLogin
         }).catch((e) => {
           next(e);
         });
@@ -93,12 +101,13 @@ export class UserController {
       res: Response,
       next: NextFunction,
   ) {
-    this.service.loginUser(
+    UserController.service.loginUser(
         userParams.LoginUserRequestConvert(
             req.body,
             req.query,
             req.params,
         ),
+        req.session,
     )
         .then((result) =>{
           // custom begin loginUser
@@ -115,12 +124,13 @@ export class UserController {
       res: Response,
       next: NextFunction,
   ) {
-    this.service.logoutUser(
+    UserController.service.logoutUser(
         userParams.LogoutUserRequestConvert(
             req.body,
             req.query,
             req.params,
         ),
+        req.session,
     )
         .then((result) =>{
           // custom begin logoutUser
@@ -137,12 +147,13 @@ export class UserController {
       res: Response,
       next: NextFunction,
   ) {
-    this.service.deleteOneUser(
+    UserController.service.deleteOneUser(
         userParams.DeleteOneUserRequestConvert(
             req.body,
             req.query,
             req.params,
         ),
+        req.session,
     )
         .then((result) =>{
           res.json(result);
@@ -157,12 +168,13 @@ export class UserController {
       res: Response,
       next: NextFunction,
   ) {
-    this.service.readOneUser(
+    UserController.service.readOneUser(
         userParams.ReadOneUserRequestConvert(
             req.body,
             req.query,
             req.params,
         ),
+        req.session,
     )
         .then((result) =>{
           res.json(result);
@@ -177,12 +189,13 @@ export class UserController {
       res: Response,
       next: NextFunction,
   ) {
-    this.service.updateOneUser(
+    UserController.service.updateOneUser(
         userParams.UpdateOneUserRequestConvert(
             req.body,
             req.query,
             req.params,
         ),
+        req.session,
     )
         .then((result) =>{
           res.json(result);
@@ -197,12 +210,13 @@ export class UserController {
       res: Response,
       next: NextFunction,
   ) {
-    this.service.createManyUser(
+    UserController.service.createManyUser(
         userParams.CreateManyUserRequestConvert(
             req.body,
             req.query,
             req.params,
         ),
+        req.session,
     )
         .then((result) =>{
           res.json(result);

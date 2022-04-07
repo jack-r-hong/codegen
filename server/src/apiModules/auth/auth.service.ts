@@ -1,5 +1,4 @@
-import {Service} from 'typedi';
-export {Container} from 'typedi';
+import {Service, Inject} from 'typedi';
 import {AuthModel} from './auth.model';
 import * as requestTypes from './auth.parameters';
 import {errors} from '../../errors';
@@ -10,11 +9,12 @@ import {errors} from '../../errors';
 
 @Service()
 export class AuthService {
-  constructor(
-        private authModel: AuthModel,
-  ) {}
+  @Inject()
+  private authModel!: AuthModel;
+
   async createOneAuth(
       param :requestTypes.CreateOneAuthParams,
+      session: Express.Request['session'],
   ) {
     // custom begin createOneAuth
 
@@ -28,6 +28,7 @@ export class AuthService {
   }
   async deleteOneAuth(
       param :requestTypes.DeleteOneAuthParams,
+      session: Express.Request['session'],
   ) {
     // custom begin deleteOneAuth
 
@@ -41,6 +42,7 @@ export class AuthService {
   }
   async updateOneAuth(
       param :requestTypes.UpdateOneAuthParams,
+      session: Express.Request['session'],
   ) {
     // custom begin updateOneAuth
 
@@ -54,6 +56,7 @@ export class AuthService {
   }
   async readManyAuth(
       param :requestTypes.ReadManyAuthParams,
+      session: Express.Request['session'],
   ) {
     // custom begin readManyAuth
 

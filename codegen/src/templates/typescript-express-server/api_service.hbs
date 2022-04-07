@@ -1,5 +1,4 @@
-import {Service} from 'typedi';
-export {Container} from 'typedi';
+import {Service, Inject} from 'typedi';
 {{!-- import {FindManyOption} from './authSchemas'; --}}
 import { {{~fpc tag}}Model} from './{{tag}}.model';
 import * as requestTypes from './{{tag}}.parameters';
@@ -12,14 +11,15 @@ import {errors} from '../../errors';
 
 @Service()
 export class {{fpc tag}}Service {
-  constructor(
-        private {{tag}}Model: {{fpc tag}}Model,
-  ) {}
+  @Inject()
+  private {{tag}}Model!: {{fpc tag}}Model;
+
 {{#each data.paths as |path|}}
   {{#each path as |d|}}
   {{#if (equal ../../tag d.tags.0) }}
   async {{d.operationId}}(
       param :requestTypes.{{fpc d.operationId}}Params,
+      session: Express.Request['session'],
         {{!-- {{~#if (model_type_is_array d.operationId) ~}}
 []
         {{~else~}}

@@ -1,24 +1,28 @@
-import {Application, Response, NextFunction} from 'express';
-import {Inject, Service} from 'typedi';
+import {Response, NextFunction} from 'express';
+import {Inject, Service, Container} from 'typedi';
 import {
   Controller,
   httpMethods,
   middlewareDecorator,
+  ControllerToken,
+  AppUse,
 } from '../baseController';
 import { {{~fpc tag}}Service} from './{{tag}}.service';
 import * as {{tag}}Params from './{{tag}}.parameters';
 import * as validSchemas from './{{tag}}.validator';
 
+// eslint-disable-next-line no-unused-vars
 const {Get, Post, Put, Delete} = httpMethods;
+// eslint-disable-next-line no-unused-vars
 const {Validator, FormData, limiter} = middlewareDecorator;
 
-@Service('Controller')
-@Controller('')
-export class {{fpc tag}}Controller {
-  constructor(private app: Application) {}
+@Service({id: ControllerToken, multiple: true})
+export class {{fpc tag}}Controller implements Controller {
+  constructor() {}
 
-  @Inject()
-    service!: {{fpc tag}}Service;
+  static service = Container.get({{fpc tag}}Service);
+  @Inject('app.use')
+    appUse!: AppUse;
 
   {{#each data.paths as |path|}}
     {{#each path as |data|}}
@@ -33,12 +37,13 @@ export class {{fpc tag}}Controller {
       res: Response,
       next: NextFunction,
   ) {
-    this.service.{{data.operationId}}(
+    {{fpc ../../tag}}Controller.service.{{data.operationId}}(
         {{../../tag}}Params.{{fpc data.operationId}}RequestConvert(
             req.body,
             req.query,
             req.params,
         ),
+        req.session,
         {{#if (equal (model_type data.operationId) "uploadMany")  }}
         req.files as Express.Multer.File[],
         {{/if}}

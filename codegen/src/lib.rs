@@ -214,10 +214,16 @@ pub fn id_default_helper(
     let param = h
         .param(0)
         .ok_or(RenderError::new("Param 0 is required for format pascal case helper."))?;
-    
-    
-    let rendered =   if param.value().as_str().unwrap_or("error") == "id" {
-        "@id @default(autoincrement())"
+    let param2 = h
+        .param(1)
+        .ok_or(RenderError::new("Param 1 is required for format pascal case helper."))?;
+
+    let rendered = if param.value().as_str().unwrap_or("error") == "id" {
+        if param2.value().as_str().unwrap_or("error") == "uuid"{
+            "@id @default(uuid())"
+        }else{
+            "@id @default(autoincrement())"
+        }
     }else{
         ""
     };
