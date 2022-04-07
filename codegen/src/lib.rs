@@ -271,14 +271,24 @@ pub fn foreign_key_helper(
     for (schema, v) in ctx.data()["schemas"].as_object().unwrap() {
         for (k2, v2) in v["properties"].as_object().unwrap(){
             for (k3, v3) in v2.as_object().unwrap(){
-                if k3.as_str() == "$ref"{
+                if k3 == "$ref"{
                     // println!("v2 {:?}", v2["type"]);
                     // println!("v3: {:?}", v3.as_str().unwrap() );
                     // println!("k2: {:?}", k2);
                     let vec: Vec<&str> = v3.as_str().unwrap().split('/').collect();
                     // vec[3]: table name, k2: FOREIGN KEY,  vec[5]: REFERENCES FIELD
+                    
+                    if vec.len() > 5 {
 
-                    if vec.len() > 4 {
+                        
+                        // print!("{}:default {}\r\n", k2, "");
+
+                        let exrends = match (v2["default"].as_i64(), v2["default"].as_str()) {
+                            (Some(x), _) => format!("@default({})", x),
+                            (_, Some(x)) => format!("@default(\"{}\")", x),
+                            _ =>  String::from("")
+                        };
+
                         map.insert(
                             vec[3].to_string(),
                             to_json([
@@ -286,17 +296,12 @@ pub fn foreign_key_helper(
                                 k2, 
                                 vec[5],
                                 v2["type"].as_str().unwrap(),
-                                schema.as_str()
+                                schema.as_str(),
+                                exrends.as_str()
                             ])
-                        );                        
+                        );        
                     }
-
-
-                    
-                    // if v3.as_str().unwrap().contains(param.value().as_str().unwrap()){
-                    //     let row =  to_camel_case(schema.as_str()).to_owned() + " " + schema.as_str() + "[]";
-                    //     data.push(row.to_string());
-                    // }
+                
                 }
 
                 // if k3.as_str() == "items" {
@@ -344,10 +349,11 @@ pub fn foreign_key_helper(
             );
             data.push(
                 format!(
-                    "{} {} @map(\"{}\")", 
+                    "{} {} @map(\"{}\") {}", 
                     arr[1].as_str().unwrap(), 
                     type_convert(arr[3].as_str().unwrap(), "schema", ""),
                     to_snake_case(arr[1].as_str().unwrap()), 
+                    arr[5].as_str().unwrap(), 
                 )
             );
         } 
@@ -362,7 +368,7 @@ pub fn foreign_key_helper(
     // println!("{:?}", param.value().as_str().unwrap() );
     // println!("{:?}", data);
     
-    let rendered:String = data.iter().map(|x| x.to_owned() + "\r\n    ").collect();
+    let rendered:String = data.iter().map(|x| x.to_owned() + "\r\n  ").collect();
     
     out.write(rendered.as_ref())?;
 

@@ -13,7 +13,7 @@ interface TypedRequest<
 
 
 type CreateOneAuthReqBody = {
-  level: string|null,
+  level: string|undefined,
 role: string,
 }
 
@@ -31,17 +31,18 @@ export interface CreateOneAuthRequest extends TypedRequest<
 }
 
 export type CreateOneAuthParams = {
-bodyLevel: number|null,
+bodyLevel: number|undefined,
 bodyRole: number,
 }
+
 export const CreateOneAuthRequestConvert = (
     body: CreateOneAuthReqBody,
     query: CreateOneAuthReqQuery,
     path: CreateOneAuthReqParams,
 ): CreateOneAuthParams => {
   return {
-    bodyLevel: body.level? parseInt(body.level):null,
-    bodyRole: body.role? parseInt(body.role):null,
+    bodyLevel: body.level? parseInt(body.level):undefined,
+    bodyRole: parseInt(body.role),
   };
 };
 type DeleteOneAuthReqBody = {
@@ -65,6 +66,7 @@ export interface DeleteOneAuthRequest extends TypedRequest<
 export type DeleteOneAuthParams = {
       pathId: number
 }
+
 export const DeleteOneAuthRequestConvert = (
     body: DeleteOneAuthReqBody,
     query: DeleteOneAuthReqQuery,
@@ -75,7 +77,7 @@ export const DeleteOneAuthRequestConvert = (
   };
 };
 type UpdateOneAuthReqBody = {
-  level: string|null,
+  level: string|undefined,
 role: string,
 }
 
@@ -96,9 +98,10 @@ export interface UpdateOneAuthRequest extends TypedRequest<
 
 export type UpdateOneAuthParams = {
       pathId: number
-bodyLevel: number|null,
+bodyLevel: number|undefined,
 bodyRole: number,
 }
+
 export const UpdateOneAuthRequestConvert = (
     body: UpdateOneAuthReqBody,
     query: UpdateOneAuthReqQuery,
@@ -106,8 +109,8 @@ export const UpdateOneAuthRequestConvert = (
 ): UpdateOneAuthParams => {
   return {
     pathId: parseInt(path.id),
-    bodyLevel: body.level? parseInt(body.level):null,
-    bodyRole: body.role? parseInt(body.role):null,
+    bodyLevel: body.level? parseInt(body.level):undefined,
+    bodyRole: parseInt(body.role),
   };
 };
 type ReadManyAuthReqBody = {
@@ -128,6 +131,7 @@ export interface ReadManyAuthRequest extends TypedRequest<
 
 export type ReadManyAuthParams = {
 }
+
 export const ReadManyAuthRequestConvert = (
     body: ReadManyAuthReqBody,
     query: ReadManyAuthReqQuery,

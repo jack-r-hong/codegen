@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE `Photo` ALTER COLUMN `process` DROP DEFAULT;
+
+-- AlterTable
+ALTER TABLE `User` MODIFY `auth_level` INTEGER NOT NULL DEFAULT 100;

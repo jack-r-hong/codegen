@@ -51,8 +51,8 @@ export class UserModel {
 
     // custom end googleLogin
   }
-  async createOneUser(
-      param: requestTypes.CreateOneUserParams,
+  async createOneRegisterUser(
+      param: requestTypes.CreateOneRegisterUserParams,
   ) {
     const res: User | null = await prisma.user.create({
       data: {
@@ -148,28 +148,30 @@ export class UserModel {
     });
     return res;
   }
-  async createManyUser(
-      param: requestTypes.CreateManyUserParams,
+  async readManyUser(
+      param: requestTypes.ReadManyUserParams,
   ) {
-    const data = param.bodyDataList.map((e) => {
-      return {
-        authLevel: e.bodyAuthLevel,
-        email: e.bodyEmail,
-        password: e.bodyPassword,
-        phone: e.bodyPhone,
-        userStatus: e.bodyUserStatus,
-        username: e.bodyUsername,
-      };
-    });
-
-    const res: any = await prisma.user.createMany({
-      data,
-      skipDuplicates: true,
+    const res: User[] | null = await prisma.user.findMany({
+      where: {
+      },
+      select: {
+        auth: true,
+        authLevel: true,
+        createdAt: true,
+        email: true,
+        googleId: true,
+        id: true,
+        password: true,
+        phone: true,
+        updatedAt: true,
+        userStatus: true,
+        username: true,
+      },
     }).catch((e) => {
       throw e;
     }).finally(() => {
       prisma.$disconnect();
     });
-    return res.count;
+    return res;
   }
 }

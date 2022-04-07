@@ -33,6 +33,7 @@ export interface ReadOnePhotoRequest extends TypedRequest<
 export type ReadOnePhotoParams = {
       pathId: number
 }
+
 export const ReadOnePhotoRequestConvert = (
     body: ReadOnePhotoReqBody,
     query: ReadOnePhotoReqQuery,
@@ -43,11 +44,11 @@ export const ReadOnePhotoRequestConvert = (
   };
 };
 type UpdateOnePhotoReqBody = {
-  afterLevel: string|null,
-beforeLevel: string|null,
+  afterLevel: string|undefined,
+beforeLevel: string|undefined,
 filePath2: string|null,
-process: string|null,
-status: string|null,
+process: string|undefined,
+status: string|undefined,
 }
 
 type UpdateOnePhotoReqQuery = {
@@ -67,12 +68,13 @@ export interface UpdateOnePhotoRequest extends TypedRequest<
 
 export type UpdateOnePhotoParams = {
       pathId: number
-bodyAfterLevel: number|null,
-bodyBeforeLevel: number|null,
+bodyAfterLevel: number|undefined,
+bodyBeforeLevel: number|undefined,
 bodyFilePath2: string|null,
-bodyProcess: number|null,
-bodyStatus: number|null,
+bodyProcess: number|undefined,
+bodyStatus: number|undefined,
 }
+
 export const UpdateOnePhotoRequestConvert = (
     body: UpdateOnePhotoReqBody,
     query: UpdateOnePhotoReqQuery,
@@ -80,11 +82,11 @@ export const UpdateOnePhotoRequestConvert = (
 ): UpdateOnePhotoParams => {
   return {
     pathId: parseInt(path.id),
-    bodyAfterLevel: body.afterLevel? parseInt(body.afterLevel):null,
-    bodyBeforeLevel: body.beforeLevel? parseInt(body.beforeLevel):null,
+    bodyAfterLevel: body.afterLevel? parseInt(body.afterLevel):undefined,
+    bodyBeforeLevel: body.beforeLevel? parseInt(body.beforeLevel):undefined,
     bodyFilePath2: body.filePath2,
-    bodyProcess: body.process? parseInt(body.process):null,
-    bodyStatus: body.status? parseInt(body.status):null,
+    bodyProcess: body.process? parseInt(body.process):undefined,
+    bodyStatus: body.status? parseInt(body.status):undefined,
   };
 };
 type DeleteManyPhotoReqBody = {
@@ -107,15 +109,16 @@ export interface DeleteManyPhotoRequest extends TypedRequest<
 export type DeleteManyPhotoParams = {
       queryId: number[]
 }
+
 export const DeleteManyPhotoRequestConvert = (
     body: DeleteManyPhotoReqBody,
     query: DeleteManyPhotoReqQuery,
     path: DeleteManyPhotoReqParams,
 ): DeleteManyPhotoParams => {
   return {
-          queryId: typeof query.id === 'string'? 
-              [parseInt(query.id)] :
-            query.id.map((e) => parseInt(e)),
+    queryId: typeof query.id === 'string'?
+    [parseInt(query.id)] :
+  query.id.map((e) => parseInt(e)),
   };
 };
 type ReadManyPhotoReqBody = {
@@ -140,6 +143,7 @@ export type ReadManyPhotoParams = {
       queryOrderBy: string
       queryOrderByField: string
 }
+
 export const ReadManyPhotoRequestConvert = (
     body: ReadManyPhotoReqBody,
     query: ReadManyPhotoReqQuery,
@@ -168,6 +172,7 @@ export interface UploadManyPhotoRequest extends TypedRequest<
 
 export type UploadManyPhotoParams = {
 }
+
 export const UploadManyPhotoRequestConvert = (
     body: UploadManyPhotoReqBody,
     query: UploadManyPhotoReqQuery,
@@ -203,15 +208,16 @@ export interface UpdateManyPhotoRequest extends TypedRequest<
 
 export type UpdateManyPhotoParams = {
         bodyDataList: {
-            bodyAfterLevel: number|null,
-            bodyBeforeLevel: number|null,
+            bodyAfterLevel: number|undefined,
+            bodyBeforeLevel: number|undefined,
             bodyFilePath2: string|null,
             bodyId: number,
-            bodyProcess: number|null,
-            bodyStatus: number|null,
+            bodyProcess: number|undefined,
+            bodyStatus: number|undefined,
         }[],
 bodyWhereField: string,
 }
+
 export const UpdateManyPhotoRequestConvert = (
     body: UpdateManyPhotoReqBody,
     query: UpdateManyPhotoReqQuery,
@@ -220,12 +226,12 @@ export const UpdateManyPhotoRequestConvert = (
   return {
     bodyDataList: body.dataList.map((body :any) => {
       return {
-        bodyAfterLevel: body.afterLevel? parseInt(body.afterLevel):null,
-        bodyBeforeLevel: body.beforeLevel? parseInt(body.beforeLevel):null,
+        bodyAfterLevel: body.afterLevel? parseInt(body.afterLevel):undefined,
+        bodyBeforeLevel: body.beforeLevel? parseInt(body.beforeLevel):undefined,
         bodyFilePath2: body.filePath2,
-        bodyId: body.id? parseInt(body.id):null,
-        bodyProcess: body.process? parseInt(body.process):null,
-        bodyStatus: body.status? parseInt(body.status):null,
+        bodyId: parseInt(body.id),
+        bodyProcess: body.process? parseInt(body.process):undefined,
+        bodyStatus: body.status? parseInt(body.status):undefined,
       };
     }),
     bodyWhereField: body.whereField,

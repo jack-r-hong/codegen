@@ -38,14 +38,14 @@ export class UserService {
 
     // custom end googleLogin
   }
-  async createOneUser(
-      param :requestTypes.CreateOneUserParams,
+  async createOneRegisterUser(
+      param :requestTypes.CreateOneRegisterUserParams,
       session: Express.Request['session'],
   ) {
-    // custom begin createOneUser
+    // custom begin createOneRegisterUser
 
-    // custom end createOneUser
-    const res = await this.userModel.createOneUser(
+    // custom end createOneRegisterUser
+    const res = await this.userModel.createOneRegisterUser(
         param,
     ).catch((e) =>{
       throw e;
@@ -110,14 +110,14 @@ export class UserService {
     });
     return res;
   }
-  async createManyUser(
-      param :requestTypes.CreateManyUserParams,
+  async readManyUser(
+      param :requestTypes.ReadManyUserParams,
       session: Express.Request['session'],
   ) {
-    // custom begin createManyUser
+    // custom begin readManyUser
 
-    // custom end createManyUser
-    const res = await this.userModel.createManyUser(
+    // custom end readManyUser
+    const res = await this.userModel.readManyUser(
         param,
     ).catch((e) =>{
       throw e;

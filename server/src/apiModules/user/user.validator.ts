@@ -16,10 +16,15 @@ export const googleLoginValidator: Schema = {
     in: 'body',
   },
 };
-export const createOneUserValidator: Schema = {
+export const createOneRegisterUserValidator: Schema = {
   authLevel: {
     in: 'body',
     isInt: true,
+    optional: {
+      options: {
+        nullable: true,
+      },
+    },
   },
   email: {
     in: 'body',
@@ -48,6 +53,11 @@ export const createOneUserValidator: Schema = {
   userStatus: {
     in: 'body',
     isInt: true,
+    optional: {
+      options: {
+        nullable: true,
+      },
+    },
     matches: {
       options: /^(1|2|3)/,
     },
@@ -60,15 +70,6 @@ export const createOneUserValidator: Schema = {
         min: 3,
       },
 
-    },
-  },
-  cookieAuth: {
-    in: 'cookies',
-    custom: {
-      options: (value, {req, location, path}) => {
-        sessions.cookieAuthSessionVerify(req['session'].cookieAuth);
-        return true;
-      },
     },
   },
 };
@@ -129,6 +130,11 @@ export const updateOneUserValidator: Schema = {
   authLevel: {
     in: 'body',
     isInt: true,
+    optional: {
+      options: {
+        nullable: true,
+      },
+    },
   },
   email: {
     in: 'body',
@@ -157,6 +163,11 @@ export const updateOneUserValidator: Schema = {
   userStatus: {
     in: 'body',
     isInt: true,
+    optional: {
+      options: {
+        nullable: true,
+      },
+    },
     matches: {
       options: /^(1|2|3)/,
     },
@@ -181,10 +192,7 @@ export const updateOneUserValidator: Schema = {
     },
   },
 };
-export const createManyUserValidator: Schema = {
-  dataList: {
-    in: 'body',
-  },
+export const readManyUserValidator: Schema = {
   cookieAuth: {
     in: 'cookies',
     custom: {

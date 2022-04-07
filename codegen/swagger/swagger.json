@@ -39,7 +39,7 @@
         "tags" : [ "user" ],
         "summary" : "Create user",
         "description" : "This can only be done by the logged in user.",
-        "operationId" : "createOneUser",
+        "operationId" : "createOneRegisterUser",
         "requestBody" : {
           "$ref" : "#/components/requestBodies/User"
         },
@@ -69,17 +69,14 @@
           "409" : {
             "$ref" : "#/components/responses/Conflict"
           }
-        },
-        "security" : [ {
-          "cookieAuth" : [ ]
-        } ]
+        }
       }
     },
     "/users" : {
-      "post" : {
+      "get" : {
         "tags" : [ "user" ],
         "summary" : "Creates list of users with given input array",
-        "operationId" : "createManyUser",
+        "operationId" : "readManyUser",
         "responses" : {
           "200" : {
             "description" : "Ok",
@@ -109,9 +106,6 @@
           "409" : {
             "$ref" : "#/components/responses/Conflict"
           }
-        },
-        "requestBody" : {
-          "$ref" : "#/components/requestBodies/UserArray"
         },
         "security" : [ {
           "cookieAuth" : [ ]
@@ -904,7 +898,8 @@
             "default" : 2
           },
           "authLevel" : {
-            "$ref" : "#/components/schemas/Auth/properties/level"
+            "$ref" : "#/components/schemas/Auth/properties/level",
+            "default" : 2
           },
           "auth" : {
             "$ref" : "#/components/schemas/Auth"
@@ -1196,14 +1191,24 @@
       }
     },
     "parameters" : {
+      "createdAt" : {
+        "name" : "createdAt",
+        "in" : "query",
+        "description" : "number of items to skip",
+        "required" : true,
+        "schema" : {
+          "type" : "string",
+          "format" : "date-time"
+        }
+      },
       "updatedAt" : {
         "name" : "updatedAt",
         "in" : "query",
         "description" : "number of items to skip",
         "required" : true,
         "schema" : {
-          "type" : "integer",
-          "format" : "int32"
+          "type" : "string",
+          "format" : "date-time"
         }
       }
     },

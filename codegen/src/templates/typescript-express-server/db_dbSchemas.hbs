@@ -16,46 +16,23 @@ model {{fpc @key}} {
         {{#each d.properties as |d2|}}
             {{~#if d2.$ref}}
             {{else}}
-    {{@key}} 
-                {{~#if d2.nullable }}
-    {{parameter_type d2.type "schema" d2.format}}?
-                {{~else}}
-    {{parameter_type d2.type "schema" d2.format}}
-                {{~/if}}       
-                {{~#if "1" }}
-    {{ref d2.$ref}} 
-                {{~else}}
-
-                {{~/if}}       
-                {{~#if "1" }}
-    {{id_default @key d2.format}}
-                {{~else}}
-
-                {{~/if}}                              
-                {{~#if d2.uniqueItems }}
-    @unique
-                {{~else}}
-
-                {{~/if}}   
-                {{~#if d2.default }} 
-    @default({{d2.default}})
-                {{~else}}
-                
-                {{~/if}}                  
-                {{~#if (equal @key "createdAt") }} 
-    @default(now())
-                {{~else}}
-                {{~/if}}  
-                {{~#if (equal @key "updatedAt") }} 
-    @default(now()) @updatedAt
-                {{~else}}
-
-                {{~/if}} 
-    @map("{{snake_case @key}}")                 
+                {{~ space}}  {{@key}}  {{space}}
+                {{~#if d2.nullable ~}}
+                    {{~ space}} {{parameter_type d2.type "schema" d2.format~}}? {{space~}}
+                {{~else~}}
+                    {{~ space}} {{parameter_type d2.type "schema" d2.format~}} {{space~}}
+                {{/if}}    
+                {{~ref d2.$ref}} 
+                {{~ space}} {{id_default @key d2.format ~}}
+                {{~#if d2.uniqueItems}} @unique {{/if}}   
+                {{~#if d2.default }} @default({{d2.default}}) {{/if}}                  
+                {{~#if (equal @key "createdAt") }} @default(now()){{/if}}  
+                {{~#if (equal @key "updatedAt") }}  @default(now()) @updatedAt{{/if}} 
+                {{~space}} @map("{{snake_case @key}}")                 
             {{/if}}
         {{~/each}}  
     {{/if}}
-    {{foreign_key @key }}
+  {{foreign_key @key }}
     // custom begin {{@key}}
 {{lookup ../custom @key}}
     // custom end {{@key}}

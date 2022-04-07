@@ -16,7 +16,7 @@ interface TypedRequest<
     |null
   {{~else~}}
     {{~#if p.default ~}}
-      |null
+      |undefined
     {{~/if~}}
   {{~/if~}},
 {{/inline}}
@@ -118,7 +118,11 @@ export type {{fpc data.operationId}}Params = {
 
 {{~#*inline "RequestConvertBody"}}
   {{#if (equal p.type "integer") ~}}
-    body{{fpc @key}}: body.{{@key}}? parseInt(body.{{@key}}):null,
+    {{#if (or  p.nullable p.default) ~}}
+    body{{fpc @key}}: body.{{@key}}? parseInt(body.{{@key}}):undefined,
+    {{else ~}}
+    body{{fpc @key}}: parseInt(body.{{@key}}),
+    {{/if}}
   {{else ~}}
     body{{fpc @key}}: body.{{@key}},
   {{/if}}
@@ -167,15 +171,19 @@ export type {{fpc data.operationId}}Params = {
   {{~p.in}}{{fpc p.name}}: parseInt({{p.in}}.{{p.name}}),
 {{/inline}}
 
+{{#*inline "RequestConvertReturn2typeof"}}
+    {{p.in}}{{fpc p.name}}: typeof {{p.in}}.{{p.name}} === 'string'?
+    [parseInt({{p.in}}.{{p.name}})] :
+  {{p.in}}.{{p.name}}.map((e) => parseInt(e)),
+{{/inline}}
+
 {{~#*inline "RequestConvertReturn2"}}
     {{!-- params --}}
   return {
     {{#each data.parameters as |p|}}
       {{#if (equal p.schema.type "array") }}
-        {{#if (equal p.schema.items.type "integer") }}
-          {{p.in}}{{fpc p.name}}: typeof {{p.in}}.{{p.name}} === 'string'? 
-              [parseInt({{p.in}}.{{p.name}})] :
-            {{p.in}}.{{p.name}}.map((e) => parseInt(e)),
+        {{#if (equal p.schema.items.type "integer") ~}}
+          {{> RequestConvertReturn2typeof}}
         {{else}}
     {{> RequestConvertParametersStringType}}
         {{/if}}        

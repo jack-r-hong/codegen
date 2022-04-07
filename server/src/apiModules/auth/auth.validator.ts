@@ -8,6 +8,11 @@ export const createOneAuthValidator: Schema = {
   level: {
     in: 'body',
     isInt: true,
+    optional: {
+      options: {
+        nullable: true,
+      },
+    },
   },
   role: {
     in: 'body',
@@ -39,6 +44,11 @@ export const updateOneAuthValidator: Schema = {
   level: {
     in: 'body',
     isInt: true,
+    optional: {
+      options: {
+        nullable: true,
+      },
+    },
   },
   role: {
     in: 'body',

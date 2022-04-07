@@ -49,14 +49,14 @@ export class UserController implements Controller {
         });
   }
   @Post('/user')
-  @Validator(validSchemas.createOneUserValidator)
-  async createOneUser(
-      req: userParams.CreateOneUserRequest,
+  @Validator(validSchemas.createOneRegisterUserValidator)
+  async createOneRegisterUser(
+      req: userParams.CreateOneRegisterUserRequest,
       res: Response,
       next: NextFunction,
   ) {
-    UserController.service.createOneUser(
-        userParams.CreateOneUserRequestConvert(
+    UserController.service.createOneRegisterUser(
+        userParams.CreateOneRegisterUserRequestConvert(
             req.body,
             req.query,
             req.params,
@@ -178,15 +178,15 @@ export class UserController implements Controller {
           next(e);
         });
   }
-  @Post('/users')
-  @Validator(validSchemas.createManyUserValidator)
-  async createManyUser(
-      req: userParams.CreateManyUserRequest,
+  @Get('/users')
+  @Validator(validSchemas.readManyUserValidator)
+  async readManyUser(
+      req: userParams.ReadManyUserRequest,
       res: Response,
       next: NextFunction,
   ) {
-    UserController.service.createManyUser(
-        userParams.CreateManyUserRequestConvert(
+    UserController.service.readManyUser(
+        userParams.ReadManyUserRequestConvert(
             req.body,
             req.query,
             req.params,

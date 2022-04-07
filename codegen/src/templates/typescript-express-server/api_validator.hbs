@@ -20,6 +20,13 @@ import * as sessions from '../../sessions';
         nullable: true,
       },
     },
+        {{/if}}
+        {{#if p.schema.nullable }}
+    optional: {
+      options: {
+        nullable: true,
+      },
+    },
         {{/if}} 
         {{#if (equal p.schema.type "integer") }}
     isInt: true,
@@ -63,6 +70,13 @@ import * as sessions from '../../sessions';
     isInt: true,
         {{/if}}
         {{#if p.nullable }}
+    optional: {
+      options: {
+        nullable: true,
+      },
+    },
+        {{/if}} 
+        {{#if p.default }}
     optional: {
       options: {
         nullable: true,
@@ -119,12 +133,12 @@ import * as sessions from '../../sessions';
       {{#if (equal ../../tag d.tags.0) }}
 export const {{d.operationId}}Validator: Schema = {
         {{#each d.parameters as |p|}}
-{{ > schema}}
+          {{~ > schema}}
         {{/each}}  
         {{#if d.requestBody.content.[application/json].schema.type}}
           {{#if (equal d.requestBody.content.[application/json].schema.type "object") }}
             {{#each d.requestBody.content.[application/json].schema.properties as |p|}}
-{{ > body}}
+              {{~ > body}}
             {{/each}}
           {{/if}}
         {{/if}} 

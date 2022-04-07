@@ -36,6 +36,7 @@ bodyEmail: string,
 bodyId: string,
 bodyName: string,
 }
+
 export const GoogleLoginRequestConvert = (
     body: GoogleLoginReqBody,
     query: GoogleLoginReqQuery,
@@ -47,47 +48,48 @@ export const GoogleLoginRequestConvert = (
     bodyName: body.name,
   };
 };
-type CreateOneUserReqBody = {
-  authLevel: string|null,
+type CreateOneRegisterUserReqBody = {
+  authLevel: string|undefined,
 email: string,
 password: string,
 phone: string|null,
-userStatus: string|null,
+userStatus: string|undefined,
 username: string,
 }
 
-type CreateOneUserReqQuery = {
+type CreateOneRegisterUserReqQuery = {
 }
 
-type CreateOneUserReqParams = {
+type CreateOneRegisterUserReqParams = {
 }
 
-export interface CreateOneUserRequest extends TypedRequest<
-  CreateOneUserReqBody,
-  CreateOneUserReqQuery,
-  CreateOneUserReqParams
+export interface CreateOneRegisterUserRequest extends TypedRequest<
+  CreateOneRegisterUserReqBody,
+  CreateOneRegisterUserReqQuery,
+  CreateOneRegisterUserReqParams
 >{
 }
 
-export type CreateOneUserParams = {
-bodyAuthLevel: number|null,
+export type CreateOneRegisterUserParams = {
+bodyAuthLevel: number|undefined,
 bodyEmail: string,
 bodyPassword: string,
 bodyPhone: string|null,
-bodyUserStatus: number|null,
+bodyUserStatus: number|undefined,
 bodyUsername: string,
 }
-export const CreateOneUserRequestConvert = (
-    body: CreateOneUserReqBody,
-    query: CreateOneUserReqQuery,
-    path: CreateOneUserReqParams,
-): CreateOneUserParams => {
+
+export const CreateOneRegisterUserRequestConvert = (
+    body: CreateOneRegisterUserReqBody,
+    query: CreateOneRegisterUserReqQuery,
+    path: CreateOneRegisterUserReqParams,
+): CreateOneRegisterUserParams => {
   return {
-    bodyAuthLevel: body.authLevel? parseInt(body.authLevel):null,
+    bodyAuthLevel: body.authLevel? parseInt(body.authLevel):undefined,
     bodyEmail: body.email,
     bodyPassword: body.password,
     bodyPhone: body.phone,
-    bodyUserStatus: body.userStatus? parseInt(body.userStatus):null,
+    bodyUserStatus: body.userStatus? parseInt(body.userStatus):undefined,
     bodyUsername: body.username,
   };
 };
@@ -113,6 +115,7 @@ export type LoginUserParams = {
 bodyEmail: string,
 bodyPassword: string,
 }
+
 export const LoginUserRequestConvert = (
     body: LoginUserReqBody,
     query: LoginUserReqQuery,
@@ -141,6 +144,7 @@ export interface LogoutUserRequest extends TypedRequest<
 
 export type LogoutUserParams = {
 }
+
 export const LogoutUserRequestConvert = (
     body: LogoutUserReqBody,
     query: LogoutUserReqQuery,
@@ -170,6 +174,7 @@ export interface DeleteOneUserRequest extends TypedRequest<
 export type DeleteOneUserParams = {
       pathId: string
 }
+
 export const DeleteOneUserRequestConvert = (
     body: DeleteOneUserReqBody,
     query: DeleteOneUserReqQuery,
@@ -200,6 +205,7 @@ export interface ReadOneUserRequest extends TypedRequest<
 export type ReadOneUserParams = {
       pathId: string
 }
+
 export const ReadOneUserRequestConvert = (
     body: ReadOneUserReqBody,
     query: ReadOneUserReqQuery,
@@ -210,11 +216,11 @@ export const ReadOneUserRequestConvert = (
   };
 };
 type UpdateOneUserReqBody = {
-  authLevel: string|null,
+  authLevel: string|undefined,
 email: string,
 password: string,
 phone: string|null,
-userStatus: string|null,
+userStatus: string|undefined,
 username: string,
 }
 
@@ -235,13 +241,14 @@ export interface UpdateOneUserRequest extends TypedRequest<
 
 export type UpdateOneUserParams = {
       pathId: string
-bodyAuthLevel: number|null,
+bodyAuthLevel: number|undefined,
 bodyEmail: string,
 bodyPassword: string,
 bodyPhone: string|null,
-bodyUserStatus: number|null,
+bodyUserStatus: number|undefined,
 bodyUsername: string,
 }
+
 export const UpdateOneUserRequestConvert = (
     body: UpdateOneUserReqBody,
     query: UpdateOneUserReqQuery,
@@ -249,64 +256,39 @@ export const UpdateOneUserRequestConvert = (
 ): UpdateOneUserParams => {
   return {
     pathId: path.id,
-    bodyAuthLevel: body.authLevel? parseInt(body.authLevel):null,
+    bodyAuthLevel: body.authLevel? parseInt(body.authLevel):undefined,
     bodyEmail: body.email,
     bodyPassword: body.password,
     bodyPhone: body.phone,
-    bodyUserStatus: body.userStatus? parseInt(body.userStatus):null,
+    bodyUserStatus: body.userStatus? parseInt(body.userStatus):undefined,
     bodyUsername: body.username,
   };
 };
-type CreateManyUserReqBody = {
-          dataList: {
-                authLevel: string,
-                email: string,
-                password: string,
-                phone: string,
-                userStatus: string,
-                username: string,
-        }[],
+type ReadManyUserReqBody = {
+  }
+
+type ReadManyUserReqQuery = {
 }
 
-type CreateManyUserReqQuery = {
+type ReadManyUserReqParams = {
 }
 
-type CreateManyUserReqParams = {
-}
-
-export interface CreateManyUserRequest extends TypedRequest<
-  CreateManyUserReqBody,
-  CreateManyUserReqQuery,
-  CreateManyUserReqParams
+export interface ReadManyUserRequest extends TypedRequest<
+  ReadManyUserReqBody,
+  ReadManyUserReqQuery,
+  ReadManyUserReqParams
 >{
 }
 
-export type CreateManyUserParams = {
-        bodyDataList: {
-            bodyAuthLevel: number|null,
-            bodyEmail: string,
-            bodyPassword: string,
-            bodyPhone: string|null,
-            bodyUserStatus: number|null,
-            bodyUsername: string,
-        }[],
+export type ReadManyUserParams = {
 }
-export const CreateManyUserRequestConvert = (
-    body: CreateManyUserReqBody,
-    query: CreateManyUserReqQuery,
-    path: CreateManyUserReqParams,
-): CreateManyUserParams => {
+
+export const ReadManyUserRequestConvert = (
+    body: ReadManyUserReqBody,
+    query: ReadManyUserReqQuery,
+    path: ReadManyUserReqParams,
+): ReadManyUserParams => {
   return {
-    bodyDataList: body.dataList.map((body :any) => {
-      return {
-        bodyAuthLevel: body.authLevel? parseInt(body.authLevel):null,
-        bodyEmail: body.email,
-        bodyPassword: body.password,
-        bodyPhone: body.phone,
-        bodyUserStatus: body.userStatus? parseInt(body.userStatus):null,
-        bodyUsername: body.username,
-      };
-    }),
   };
 };
 

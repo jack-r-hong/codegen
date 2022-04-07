@@ -20,6 +20,11 @@ export const updateOnePhotoValidator: Schema = {
   afterLevel: {
     in: 'body',
     isInt: true,
+    optional: {
+      options: {
+        nullable: true,
+      },
+    },
     matches: {
       options: /^(1|2|3)/,
     },
@@ -27,6 +32,11 @@ export const updateOnePhotoValidator: Schema = {
   beforeLevel: {
     in: 'body',
     isInt: true,
+    optional: {
+      options: {
+        nullable: true,
+      },
+    },
     matches: {
       options: /^(1|2|3)/,
     },
@@ -42,6 +52,11 @@ export const updateOnePhotoValidator: Schema = {
   process: {
     in: 'body',
     isInt: true,
+    optional: {
+      options: {
+        nullable: true,
+      },
+    },
     matches: {
       options: /^(1|2|3)/,
     },
@@ -49,6 +64,11 @@ export const updateOnePhotoValidator: Schema = {
   status: {
     in: 'body',
     isInt: true,
+    optional: {
+      options: {
+        nullable: true,
+      },
+    },
     matches: {
       options: /^(1|2|3|4)/,
     },

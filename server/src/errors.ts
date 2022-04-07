@@ -52,6 +52,9 @@ export const errorHandle = (
     res:Response,
     next: NextFunction,
 ) => {
+  // if env = dev
+  console.log(err);
+
   const error = (() => {
     switch (true) {
       case err instanceof Result:
