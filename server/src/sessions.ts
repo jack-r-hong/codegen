@@ -11,24 +11,10 @@ export type UserInfo = {
     authRole: number;
 }
 
-export enum GoogleLoginTokenStatus{
-  // eslint-disable-next-line no-unused-vars
-  Wait = 1,
-  // eslint-disable-next-line no-unused-vars
-  End = 2
-}
-
-export type GoogleLoginToken = {
-  id: string;
-  status: GoogleLoginTokenStatus;
-  data: string
-}
-
 declare module 'express-session' {
  // eslint-disable-next-line no-unused-vars
   interface Session {
-    userInfo?: UserInfo,
-    googleLoginToken?: GoogleLoginToken
+    userInfo?: UserInfo
   }
 }
 

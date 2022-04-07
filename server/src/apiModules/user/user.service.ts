@@ -3,23 +3,6 @@ import {UserModel} from './user.model';
 import * as requestTypes from './user.parameters';
 import {errors} from '../../errors';
 // custom begin import
-import {GoogleApiOperation} from '../../googleApiClient';
-const googleApi = GoogleApiOperation.getInstance();
-import {EventEmitter} from 'events';
-class GoogleLoginEmitter extends EventEmitter {
-  override emit(id: symbol, action: GoogleLoginAction, data: string) {
-    return super.emit(id, action, data);
-  }
-  override once(
-      id: symbol,
-      listener: ( action: GoogleLoginAction, data: string) => void): this {
-    return super.once(id, listener);
-  }
-}
-enum GoogleLoginAction{
-  Ok=1
-}
-const gLoginEmitter = new GoogleLoginEmitter();
 
 // custom end import
 
@@ -34,82 +17,26 @@ export class UserService {
       session: Express.Request['session'],
   ) {
     // custom begin googleLogin
-    console.log(param.queryProcess);
-
-    switch (param.queryProcess) {
-      case 'start':
-        console.log(session.googleLoginToken);
-        
-        const id = Symbol('googleLogin');
-        session.googleLoginToken = {
-          id: 'googleLogin',
-          status: 1,
-          data: '',
+    const user = await this.userModel.googleLogin(param, '');
+    if (user) {
+      const {id, userStatus, auth, username, googleId, email} = user;
+      if (googleId) {
+        session.userInfo = {
+          id,
+          authRole: auth?.role!,
+          userStatus,
         };
-        console.log('start', session.googleLoginToken );
-        const url = googleApi.getAuthUrl();
-        return url;
-      case 'wait':
-        console.log('wait', session.googleLoginToken );
-        return '???';
-        // const res = await new Promise((resolve, reject) => {
-        //   gLoginEmitter.once(
-        //       session.googleLoginToken!.id,
-        //       async (action, data) => {
-        //         switch (action) {
-        //           case GoogleLoginAction.Ok:
-        //             // session.destroy(() => {});
-        //             const user = await googleApi.getUserInfo(data)
-        //                 .catch((e)=>{
-        //                   throw e;
-        //                 });
-        //             if (user) {
-        //               const email = user!.emailAddresses![0]?.value!;
-        //               const res = await this.userModel.googleLogin(
-        //                   param,
-        //                   {email},
-        //               )
-        //                   .catch((e) => {
-        //                     throw e;
-        //                   });
-        //               if (res !== null ) {
-        //                 resolve( 'signUp');
-        //               } else {
-        //                 return resolve('ok');
-        //               }
-        //               session.userInfo = {
-        //                 id: '',
-        //                 userStatus: res.userStatus,
-        //                 authRole: res.auth?.role!,
-        //               };
-        //             } else {
-        //               throw new errors.AuthenticationFailedError;
-        //             }
-        //           default:
-        //             throw new errors.AuthenticationFailedError;
-        //         }
-        //       });
-        // });
-        // return res;
-      default:
-        return 'error';
+      }
+      return {
+        isBind: googleId? true: false,
+        username,
+        email,
+      };
+    } else {
+      throw new errors.LoginFailError;
     }
 
     // custom end googleLogin
-  }
-  async oauthcallback(
-      param :requestTypes.OauthcallbackParams,
-      session: Express.Request['session'],
-  ) {
-    // custom begin oauthcallback
-    console.log('oauthcallback', session.googleLoginToken);
-
-
-    // gLoginEmitter.emit(
-    //     session.googleLoginToken!.id, GoogleLoginAction.Ok, param.queryCode,
-    // );
-
-    // custom end oauthcallback
   }
   async createOneUser(
       param :requestTypes.CreateOneUserParams,

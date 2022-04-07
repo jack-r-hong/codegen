@@ -5,18 +5,15 @@ import * as sessions from '../../sessions';
 
 // custom end import
 export const googleLoginValidator: Schema = {
-  process: {
-    in: 'query',
-    notEmpty: true,
-    matches: {
-      options: /^(start|wait)/,
-    },
+  email: {
+    in: 'body',
+    isEmail: true,
   },
-};
-export const oauthcallbackValidator: Schema = {
-  code: {
-    in: 'query',
-    notEmpty: true,
+  id: {
+    in: 'body',
+  },
+  name: {
+    in: 'body',
   },
 };
 export const createOneUserValidator: Schema = {

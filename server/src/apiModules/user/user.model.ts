@@ -12,34 +12,44 @@ export class UserModel {
       customParam: any,
   ) {
     // custom begin googleLogin
-    const res = await prisma.user.findUnique({
+    const select = {
+      email: true,
+      id: true,
+      updatedAt: true,
+      username: true,
+      auth: {
+        select: {
+          role: true,
+        },
+      },
+      userStatus: true,
+      googleId: true,
+    };
+    const googleIdExists = await prisma.user.findUnique({
       where: {
-        email: customParam.email,
+        googleId: param.bodyId,
       },
-      select: {
-        email: true,
-        id: true,
-        updatedAt: true,
-        username: true,
-        auth: true,
-        userStatus: true,
-      },
+      select,
     }).catch((e) => {
       throw e;
     }).finally(() => {
       prisma.$disconnect();
     });
-    return res;
+    if (googleIdExists) return googleIdExists;
+    else {
+      return await prisma.user.findUnique({
+        where: {
+          email: param.bodyEmail,
+        },
+        select,
+      }).catch((e) => {
+        throw e;
+      }).finally(() => {
+        prisma.$disconnect();
+      });
+    }
 
     // custom end googleLogin
-  }
-  async oauthcallback(
-      param: requestTypes.OauthcallbackParams,
-      customParam: any,
-  ) {
-    // custom begin oauthcallback
-
-    // custom end oauthcallback
   }
   async createOneUser(
       param: requestTypes.CreateOneUserParams,

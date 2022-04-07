@@ -9,334 +9,305 @@ interface TypedRequest<
   body: T,
   query: U,
   params: P,
-}    type GoogleLoginReqBody = {
-    }
+}
 
-    type GoogleLoginReqQuery = {
-          process: string
-    }
 
-    type GoogleLoginReqParams = {
-    }
+type GoogleLoginReqBody = {
+  email: string,
+id: string,
+name: string,
+}
 
-    export interface GoogleLoginRequest extends TypedRequest<
-      GoogleLoginReqBody,
-      GoogleLoginReqQuery,
-      GoogleLoginReqParams
-    >{
-    }
+type GoogleLoginReqQuery = {
+}
 
-    export type GoogleLoginParams = {
-        queryProcess: string
-    }
+type GoogleLoginReqParams = {
+}
 
-    export const GoogleLoginRequestConvert = (
+export interface GoogleLoginRequest extends TypedRequest<
+  GoogleLoginReqBody,
+  GoogleLoginReqQuery,
+  GoogleLoginReqParams
+>{
+}
+
+export type GoogleLoginParams = {
+bodyEmail: string,
+bodyId: string,
+bodyName: string,
+}
+export const GoogleLoginRequestConvert = (
     body: GoogleLoginReqBody,
     query: GoogleLoginReqQuery,
     path: GoogleLoginReqParams,
-    ): GoogleLoginParams => {
-      return {
-            queryProcess: query.process,
-      };
-    };
-    type OauthcallbackReqBody = {
-    }
+): GoogleLoginParams => {
+  return {
+    bodyEmail: body.email,
+    bodyId: body.id,
+    bodyName: body.name,
+  };
+};
+type CreateOneUserReqBody = {
+  authLevel: string|null,
+email: string,
+password: string,
+phone: string|null,
+userStatus: string|null,
+username: string,
+}
 
-    type OauthcallbackReqQuery = {
-          code: string
-    }
+type CreateOneUserReqQuery = {
+}
 
-    type OauthcallbackReqParams = {
-    }
+type CreateOneUserReqParams = {
+}
 
-    export interface OauthcallbackRequest extends TypedRequest<
-      OauthcallbackReqBody,
-      OauthcallbackReqQuery,
-      OauthcallbackReqParams
-    >{
-    }
+export interface CreateOneUserRequest extends TypedRequest<
+  CreateOneUserReqBody,
+  CreateOneUserReqQuery,
+  CreateOneUserReqParams
+>{
+}
 
-    export type OauthcallbackParams = {
-        queryCode: string
-    }
-
-    export const OauthcallbackRequestConvert = (
-    body: OauthcallbackReqBody,
-    query: OauthcallbackReqQuery,
-    path: OauthcallbackReqParams,
-    ): OauthcallbackParams => {
-      return {
-            queryCode: query.code,
-      };
-    };
-    type CreateOneUserReqBody = {
-authLevel: string, 
-email: string, 
-password: string, 
-phone: string          | null, 
-userStatus: string, 
-username: string, 
-    }
-
-    type CreateOneUserReqQuery = {
-    }
-
-    type CreateOneUserReqParams = {
-    }
-
-    export interface CreateOneUserRequest extends TypedRequest<
-      CreateOneUserReqBody,
-      CreateOneUserReqQuery,
-      CreateOneUserReqParams
-    >{
-    }
-
-    export type CreateOneUserParams = {
-bodyAuthLevel: number,
+export type CreateOneUserParams = {
+bodyAuthLevel: number|null,
 bodyEmail: string,
 bodyPassword: string,
-bodyPhone: string            | null,
-bodyUserStatus: number,
+bodyPhone: string|null,
+bodyUserStatus: number|null,
 bodyUsername: string,
-    }
-
-    export const CreateOneUserRequestConvert = (
+}
+export const CreateOneUserRequestConvert = (
     body: CreateOneUserReqBody,
     query: CreateOneUserReqQuery,
     path: CreateOneUserReqParams,
-    ): CreateOneUserParams => {
-        return {
-                bodyAuthLevel: parseInt(body.authLevel),
-                bodyEmail: body.email,
-                bodyPassword: body.password,
-                bodyPhone: body.phone,
-                bodyUserStatus: parseInt(body.userStatus),
-                bodyUsername: body.username,
-        };
-    };
-    type LoginUserReqBody = {
-email: string, 
-password: string, 
-    }
+): CreateOneUserParams => {
+  return {
+    bodyAuthLevel: body.authLevel? parseInt(body.authLevel):null,
+    bodyEmail: body.email,
+    bodyPassword: body.password,
+    bodyPhone: body.phone,
+    bodyUserStatus: body.userStatus? parseInt(body.userStatus):null,
+    bodyUsername: body.username,
+  };
+};
+type LoginUserReqBody = {
+  email: string,
+password: string,
+}
 
-    type LoginUserReqQuery = {
-    }
+type LoginUserReqQuery = {
+}
 
-    type LoginUserReqParams = {
-    }
+type LoginUserReqParams = {
+}
 
-    export interface LoginUserRequest extends TypedRequest<
-      LoginUserReqBody,
-      LoginUserReqQuery,
-      LoginUserReqParams
-    >{
-    }
+export interface LoginUserRequest extends TypedRequest<
+  LoginUserReqBody,
+  LoginUserReqQuery,
+  LoginUserReqParams
+>{
+}
 
-    export type LoginUserParams = {
+export type LoginUserParams = {
 bodyEmail: string,
 bodyPassword: string,
-    }
-
-    export const LoginUserRequestConvert = (
+}
+export const LoginUserRequestConvert = (
     body: LoginUserReqBody,
     query: LoginUserReqQuery,
     path: LoginUserReqParams,
-    ): LoginUserParams => {
-        return {
-                bodyEmail: body.email,
-                bodyPassword: body.password,
-        };
-    };
-    type LogoutUserReqBody = {
-    }
+): LoginUserParams => {
+  return {
+    bodyEmail: body.email,
+    bodyPassword: body.password,
+  };
+};
+type LogoutUserReqBody = {
+  }
 
-    type LogoutUserReqQuery = {
-    }
+type LogoutUserReqQuery = {
+}
 
-    type LogoutUserReqParams = {
-    }
+type LogoutUserReqParams = {
+}
 
-    export interface LogoutUserRequest extends TypedRequest<
-      LogoutUserReqBody,
-      LogoutUserReqQuery,
-      LogoutUserReqParams
-    >{
-    }
+export interface LogoutUserRequest extends TypedRequest<
+  LogoutUserReqBody,
+  LogoutUserReqQuery,
+  LogoutUserReqParams
+>{
+}
 
-    export type LogoutUserParams = {
-    }
-
-    export const LogoutUserRequestConvert = (
+export type LogoutUserParams = {
+}
+export const LogoutUserRequestConvert = (
     body: LogoutUserReqBody,
     query: LogoutUserReqQuery,
     path: LogoutUserReqParams,
-    ): LogoutUserParams => {
-      return {
-      };
-    };
-    type DeleteOneUserReqBody = {
-    }
+): LogoutUserParams => {
+  return {
+  };
+};
+type DeleteOneUserReqBody = {
+  }
 
-    type DeleteOneUserReqQuery = {
-    }
+type DeleteOneUserReqQuery = {
+}
 
-    type DeleteOneUserReqParams = {
-          id: string
-,   
-    }
+type DeleteOneUserReqParams = {
+      id: string
+,
+}
 
-    export interface DeleteOneUserRequest extends TypedRequest<
-      DeleteOneUserReqBody,
-      DeleteOneUserReqQuery,
-      DeleteOneUserReqParams
-    >{
-    }
+export interface DeleteOneUserRequest extends TypedRequest<
+  DeleteOneUserReqBody,
+  DeleteOneUserReqQuery,
+  DeleteOneUserReqParams
+>{
+}
 
-    export type DeleteOneUserParams = {
-        pathId: string
-    }
-
-    export const DeleteOneUserRequestConvert = (
+export type DeleteOneUserParams = {
+      pathId: string
+}
+export const DeleteOneUserRequestConvert = (
     body: DeleteOneUserReqBody,
     query: DeleteOneUserReqQuery,
     path: DeleteOneUserReqParams,
-    ): DeleteOneUserParams => {
-      return {
-            pathId: path.id,
-      };
-    };
-    type ReadOneUserReqBody = {
-    }
+): DeleteOneUserParams => {
+  return {
+    pathId: path.id,
+  };
+};
+type ReadOneUserReqBody = {
+  }
 
-    type ReadOneUserReqQuery = {
-    }
+type ReadOneUserReqQuery = {
+}
 
-    type ReadOneUserReqParams = {
-          id: string
-,   
-    }
+type ReadOneUserReqParams = {
+      id: string
+,
+}
 
-    export interface ReadOneUserRequest extends TypedRequest<
-      ReadOneUserReqBody,
-      ReadOneUserReqQuery,
-      ReadOneUserReqParams
-    >{
-    }
+export interface ReadOneUserRequest extends TypedRequest<
+  ReadOneUserReqBody,
+  ReadOneUserReqQuery,
+  ReadOneUserReqParams
+>{
+}
 
-    export type ReadOneUserParams = {
-        pathId: string
-    }
-
-    export const ReadOneUserRequestConvert = (
+export type ReadOneUserParams = {
+      pathId: string
+}
+export const ReadOneUserRequestConvert = (
     body: ReadOneUserReqBody,
     query: ReadOneUserReqQuery,
     path: ReadOneUserReqParams,
-    ): ReadOneUserParams => {
-      return {
-            pathId: path.id,
-      };
-    };
-    type UpdateOneUserReqBody = {
-authLevel: string, 
-email: string, 
-password: string, 
-phone: string          | null, 
-userStatus: string, 
-username: string, 
-    }
+): ReadOneUserParams => {
+  return {
+    pathId: path.id,
+  };
+};
+type UpdateOneUserReqBody = {
+  authLevel: string|null,
+email: string,
+password: string,
+phone: string|null,
+userStatus: string|null,
+username: string,
+}
 
-    type UpdateOneUserReqQuery = {
-    }
+type UpdateOneUserReqQuery = {
+}
 
-    type UpdateOneUserReqParams = {
-          id: string
-,   
-    }
+type UpdateOneUserReqParams = {
+      id: string
+,
+}
 
-    export interface UpdateOneUserRequest extends TypedRequest<
-      UpdateOneUserReqBody,
-      UpdateOneUserReqQuery,
-      UpdateOneUserReqParams
-    >{
-    }
+export interface UpdateOneUserRequest extends TypedRequest<
+  UpdateOneUserReqBody,
+  UpdateOneUserReqQuery,
+  UpdateOneUserReqParams
+>{
+}
 
-    export type UpdateOneUserParams = {
-        pathId: string
-bodyAuthLevel: number,
+export type UpdateOneUserParams = {
+      pathId: string
+bodyAuthLevel: number|null,
 bodyEmail: string,
 bodyPassword: string,
-bodyPhone: string            | null,
-bodyUserStatus: number,
+bodyPhone: string|null,
+bodyUserStatus: number|null,
 bodyUsername: string,
-    }
-
-    export const UpdateOneUserRequestConvert = (
+}
+export const UpdateOneUserRequestConvert = (
     body: UpdateOneUserReqBody,
     query: UpdateOneUserReqQuery,
     path: UpdateOneUserReqParams,
-    ): UpdateOneUserParams => {
-        return {
-            pathId: path.id,
-                bodyAuthLevel: parseInt(body.authLevel),
-                bodyEmail: body.email,
-                bodyPassword: body.password,
-                bodyPhone: body.phone,
-                bodyUserStatus: parseInt(body.userStatus),
-                bodyUsername: body.username,
-        };
-    };
-    type CreateManyUserReqBody = {
+): UpdateOneUserParams => {
+  return {
+    pathId: path.id,
+    bodyAuthLevel: body.authLevel? parseInt(body.authLevel):null,
+    bodyEmail: body.email,
+    bodyPassword: body.password,
+    bodyPhone: body.phone,
+    bodyUserStatus: body.userStatus? parseInt(body.userStatus):null,
+    bodyUsername: body.username,
+  };
+};
+type CreateManyUserReqBody = {
           dataList: {
-                  authLevel: string,
-                  email: string,
-                  password: string,
-                  phone: string,
-                  userStatus: string,
-                  username: string,
-          }[], 
-    }
+                authLevel: string,
+                email: string,
+                password: string,
+                phone: string,
+                userStatus: string,
+                username: string,
+        }[],
+}
 
-    type CreateManyUserReqQuery = {
-    }
+type CreateManyUserReqQuery = {
+}
 
-    type CreateManyUserReqParams = {
-    }
+type CreateManyUserReqParams = {
+}
 
-    export interface CreateManyUserRequest extends TypedRequest<
-      CreateManyUserReqBody,
-      CreateManyUserReqQuery,
-      CreateManyUserReqParams
-    >{
-    }
+export interface CreateManyUserRequest extends TypedRequest<
+  CreateManyUserReqBody,
+  CreateManyUserReqQuery,
+  CreateManyUserReqParams
+>{
+}
 
-    export type CreateManyUserParams = {
-          bodyDataList: {
-              bodyAuthLevel: number,
-              bodyEmail: string,
-              bodyPassword: string,
-              bodyPhone: string|null,
-              bodyUserStatus: number,
-              bodyUsername: string,
-          }[],
-    }
-
-    export const CreateManyUserRequestConvert = (
+export type CreateManyUserParams = {
+        bodyDataList: {
+            bodyAuthLevel: number|null,
+            bodyEmail: string,
+            bodyPassword: string,
+            bodyPhone: string|null,
+            bodyUserStatus: number|null,
+            bodyUsername: string,
+        }[],
+}
+export const CreateManyUserRequestConvert = (
     body: CreateManyUserReqBody,
     query: CreateManyUserReqQuery,
     path: CreateManyUserReqParams,
-    ): CreateManyUserParams => {
-        return {
-              bodyDataList: body.dataList.map((e :any) => {
-                return {
-                      bodyAuthLevel: parseInt(e.authLevel),
-                      bodyEmail: e.email,
-                      bodyPassword: e.password,
-                      bodyPhone: e.phone,
-                      bodyUserStatus: parseInt(e.userStatus),
-                      bodyUsername: e.username,
-                };
-              }),
-        };
-    };
+): CreateManyUserParams => {
+  return {
+    bodyDataList: body.dataList.map((body :any) => {
+      return {
+        bodyAuthLevel: body.authLevel? parseInt(body.authLevel):null,
+        bodyEmail: body.email,
+        bodyPassword: body.password,
+        bodyPhone: body.phone,
+        bodyUserStatus: body.userStatus? parseInt(body.userStatus):null,
+        bodyUsername: body.username,
+      };
+    }),
+  };
+};
 
 

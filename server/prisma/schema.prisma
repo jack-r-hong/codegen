@@ -12,7 +12,7 @@ datasource db {
 
 model Auth {
     id    Int        @id @default(autoincrement())    @map("id")                 
-    level    Int            @unique    @map("level")                 
+    level    Int            @unique    @default(100)    @map("level")                 
     role    Int            @map("role")                 
     user User[]
     
@@ -50,11 +50,12 @@ model PhotoComment {
 model User {
     createdAt    DateTime            @default(now())    @map("created_at")                 
     email    String            @unique    @map("email")                 
+    googleId    String?            @unique    @map("google_id")                 
     id    String        @id @default(uuid())    @map("id")                 
     password    String            @map("password")                 
     phone    String?            @map("phone")                 
     updatedAt    DateTime            @default(now()) @updatedAt    @map("updated_at")                 
-    userStatus    Int            @map("user_status")                 
+    userStatus    Int            @default(2)    @map("user_status")                 
     username    String            @unique    @map("username")                 
     auth Auth? @relation(fields: [authLevel], references: [level])
     authLevel Int @map("auth_level")

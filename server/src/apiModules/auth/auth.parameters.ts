@@ -9,133 +9,132 @@ interface TypedRequest<
   body: T,
   query: U,
   params: P,
-}    type CreateOneAuthReqBody = {
-level: string, 
-role: string, 
-    }
+}
 
-    type CreateOneAuthReqQuery = {
-    }
 
-    type CreateOneAuthReqParams = {
-    }
+type CreateOneAuthReqBody = {
+  level: string|null,
+role: string,
+}
 
-    export interface CreateOneAuthRequest extends TypedRequest<
-      CreateOneAuthReqBody,
-      CreateOneAuthReqQuery,
-      CreateOneAuthReqParams
-    >{
-    }
+type CreateOneAuthReqQuery = {
+}
 
-    export type CreateOneAuthParams = {
-bodyLevel: number,
+type CreateOneAuthReqParams = {
+}
+
+export interface CreateOneAuthRequest extends TypedRequest<
+  CreateOneAuthReqBody,
+  CreateOneAuthReqQuery,
+  CreateOneAuthReqParams
+>{
+}
+
+export type CreateOneAuthParams = {
+bodyLevel: number|null,
 bodyRole: number,
-    }
-
-    export const CreateOneAuthRequestConvert = (
+}
+export const CreateOneAuthRequestConvert = (
     body: CreateOneAuthReqBody,
     query: CreateOneAuthReqQuery,
     path: CreateOneAuthReqParams,
-    ): CreateOneAuthParams => {
-        return {
-                bodyLevel: parseInt(body.level),
-                bodyRole: parseInt(body.role),
-        };
-    };
-    type DeleteOneAuthReqBody = {
-    }
+): CreateOneAuthParams => {
+  return {
+    bodyLevel: body.level? parseInt(body.level):null,
+    bodyRole: body.role? parseInt(body.role):null,
+  };
+};
+type DeleteOneAuthReqBody = {
+  }
 
-    type DeleteOneAuthReqQuery = {
-    }
+type DeleteOneAuthReqQuery = {
+}
 
-    type DeleteOneAuthReqParams = {
-          id: string
-,   
-    }
+type DeleteOneAuthReqParams = {
+      id: string
+,
+}
 
-    export interface DeleteOneAuthRequest extends TypedRequest<
-      DeleteOneAuthReqBody,
-      DeleteOneAuthReqQuery,
-      DeleteOneAuthReqParams
-    >{
-    }
+export interface DeleteOneAuthRequest extends TypedRequest<
+  DeleteOneAuthReqBody,
+  DeleteOneAuthReqQuery,
+  DeleteOneAuthReqParams
+>{
+}
 
-    export type DeleteOneAuthParams = {
-        pathId: number
-    }
-
-    export const DeleteOneAuthRequestConvert = (
+export type DeleteOneAuthParams = {
+      pathId: number
+}
+export const DeleteOneAuthRequestConvert = (
     body: DeleteOneAuthReqBody,
     query: DeleteOneAuthReqQuery,
     path: DeleteOneAuthReqParams,
-    ): DeleteOneAuthParams => {
-      return {
-            pathId: parseInt(path.id),
-      };
-    };
-    type UpdateOneAuthReqBody = {
-level: string, 
-role: string, 
-    }
+): DeleteOneAuthParams => {
+  return {
+    pathId: parseInt(path.id),
+  };
+};
+type UpdateOneAuthReqBody = {
+  level: string|null,
+role: string,
+}
 
-    type UpdateOneAuthReqQuery = {
-    }
+type UpdateOneAuthReqQuery = {
+}
 
-    type UpdateOneAuthReqParams = {
-          id: string
-,   
-    }
+type UpdateOneAuthReqParams = {
+      id: string
+,
+}
 
-    export interface UpdateOneAuthRequest extends TypedRequest<
-      UpdateOneAuthReqBody,
-      UpdateOneAuthReqQuery,
-      UpdateOneAuthReqParams
-    >{
-    }
+export interface UpdateOneAuthRequest extends TypedRequest<
+  UpdateOneAuthReqBody,
+  UpdateOneAuthReqQuery,
+  UpdateOneAuthReqParams
+>{
+}
 
-    export type UpdateOneAuthParams = {
-        pathId: number
-bodyLevel: number,
+export type UpdateOneAuthParams = {
+      pathId: number
+bodyLevel: number|null,
 bodyRole: number,
-    }
-
-    export const UpdateOneAuthRequestConvert = (
+}
+export const UpdateOneAuthRequestConvert = (
     body: UpdateOneAuthReqBody,
     query: UpdateOneAuthReqQuery,
     path: UpdateOneAuthReqParams,
-    ): UpdateOneAuthParams => {
-        return {
-            pathId: parseInt(path.id),
-                bodyLevel: parseInt(body.level),
-                bodyRole: parseInt(body.role),
-        };
-    };
-    type ReadManyAuthReqBody = {
-    }
+): UpdateOneAuthParams => {
+  return {
+    pathId: parseInt(path.id),
+    bodyLevel: body.level? parseInt(body.level):null,
+    bodyRole: body.role? parseInt(body.role):null,
+  };
+};
+type ReadManyAuthReqBody = {
+  }
 
-    type ReadManyAuthReqQuery = {
-    }
+type ReadManyAuthReqQuery = {
+}
 
-    type ReadManyAuthReqParams = {
-    }
+type ReadManyAuthReqParams = {
+}
 
-    export interface ReadManyAuthRequest extends TypedRequest<
-      ReadManyAuthReqBody,
-      ReadManyAuthReqQuery,
-      ReadManyAuthReqParams
-    >{
-    }
+export interface ReadManyAuthRequest extends TypedRequest<
+  ReadManyAuthReqBody,
+  ReadManyAuthReqQuery,
+  ReadManyAuthReqParams
+>{
+}
 
-    export type ReadManyAuthParams = {
-    }
-
-    export const ReadManyAuthRequestConvert = (
+export type ReadManyAuthParams = {
+}
+export const ReadManyAuthRequestConvert = (
     body: ReadManyAuthReqBody,
     query: ReadManyAuthReqQuery,
     path: ReadManyAuthReqParams,
-    ): ReadManyAuthParams => {
-      return {
-      };
-    };
+): ReadManyAuthParams => {
+  return {
+  };
+};
 
 

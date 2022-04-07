@@ -3,6 +3,7 @@ import {Prisma} from '@prisma/client';
 import {Result} from 'express-validator';
 import {Request, Response, NextFunction} from 'express';
 
+
 class WrongPasswordError extends Error {
   constructor(message?: string) {
     super(message);
@@ -30,11 +31,19 @@ class AuthenticationFailedError extends Error {
   }
 }
 
+class LoginFailError extends Error {
+  constructor(message?: string) {
+    super(message);
+    this.name = 'LoginFailError';
+  }
+}
+
 export const errors = {
   WrongPasswordError,
   NotFindError,
   DuplicateUniqueField,
   AuthenticationFailedError,
+  LoginFailError,
 };
 
 export const errorHandle = (
@@ -43,8 +52,6 @@ export const errorHandle = (
     res:Response,
     next: NextFunction,
 ) => {
-  console.log(err);
-
   const error = (() => {
     switch (true) {
       case err instanceof Result:
@@ -64,6 +71,8 @@ export const errorHandle = (
 
         return httpErrors(400);
       case err instanceof WrongPasswordError:
+        return httpErrors(401);
+      case err instanceof LoginFailError:
         return httpErrors(401);
       case err instanceof AuthenticationFailedError:
         return httpErrors(403);

@@ -24,7 +24,7 @@ export class UserController implements Controller {
   @Inject('app.use')
     appUse!: AppUse;
 
-  @Get('/google/login')
+  @Post('/google/login')
   @Validator(validSchemas.googleLoginValidator)
   async googleLogin(
       req: userParams.GoogleLoginRequest,
@@ -41,34 +41,9 @@ export class UserController implements Controller {
     )
         .then((result) =>{
           // custom begin googleLogin
-
           res.json({result});
 
           // custom end googleLogin
-        }).catch((e) => {
-          next(e);
-        });
-  }
-  @Get('/oauthcallback')
-  @Validator(validSchemas.oauthcallbackValidator)
-  async oauthcallback(
-      req: userParams.OauthcallbackRequest,
-      res: Response,
-      next: NextFunction,
-  ) {
-    UserController.service.oauthcallback(
-        userParams.OauthcallbackRequestConvert(
-            req.body,
-            req.query,
-            req.params,
-        ),
-        req.session,
-    )
-        .then((result) =>{
-          // custom begin oauthcallback
-          res.json(result);
-
-          // custom end oauthcallback
         }).catch((e) => {
           next(e);
         });

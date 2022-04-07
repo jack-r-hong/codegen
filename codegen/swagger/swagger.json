@@ -119,48 +119,35 @@
       }
     },
     "/google/login" : {
-      "get" : {
+      "post" : {
         "tags" : [ "user" ],
         "summary" : "Logs user into the system",
         "operationId" : "googleLogin",
-        "parameters" : [ {
-          "name" : "process",
-          "in" : "query",
-          "description" : "The name that needs to be fetched. Use user1 for testing.",
-          "required" : true,
-          "schema" : {
-            "type" : "string",
-            "enum": [
-              "start",
-              "wait"
-            ]
-          }
-        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties": {
+                  "id": {
+                    "type" : "string"
+                  },
+                  "name" : {
+                    "type": "string"
+                  },
+                  "email" :{
+                    "type": "string",
+                    "format": "email"
+                  }
+                }
+              }
+            }
+          }  
+        },
         "responses" : {
           "200" : {
             "description" : "successful operation",
             "headers" : {
-              "RateLimit-Limit" : {
-                "description" : "calls per hour allowed by the user",
-                "schema" : {
-                  "type" : "integer",
-                  "format" : "int32"
-                }
-              },
-              "RateLimit-Remaining" : {
-                "description" : "calls per hour allowed by the user",
-                "schema" : {
-                  "type" : "integer",
-                  "format" : "int32"
-                }
-              },
-              "RateLimit-Reset" : {
-                "description" : "calls per hour allowed by the user",
-                "schema" : {
-                  "type" : "integer",
-                  "format" : "int32"
-                }
-              },
               "Set-Cookie" : {
                 "description" : "date in UTC when token expires",
                 "schema" : {
@@ -174,9 +161,16 @@
                 "schema" : {
                   "type" : "object",
                   "properties" : {
-                    "id" : {
-                      "type" : "integer"
+                    "email" : {
+                      "type" : "string"
+                    },
+                    "username" : {
+                      "type" : "string"
+                    },
+                    "isBind" : {
+                      "type" : "boolean"
                     }
+                    
                   }
                 }
               }
@@ -186,81 +180,12 @@
             "$ref" : "#/components/responses/BadRequest"
           },
           "401" : {
-            "$ref" : "#/components/responses/Unauthorized"
+            "$ref" : "#/components/responses/Unauthorized",
+            "remark": "to register page"
           },
           "403" : {
             "$ref" : "#/components/responses/Forbidden"
-          },
-          "404" : {
-            "$ref" : "#/components/responses/NotFound"
-          },
-          "409" : {
-            "$ref" : "#/components/responses/Conflict"
-          }
-        }
-      }
-    },
-    "/oauthcallback" : {
-      "get" : {
-        "tags" : [ "user" ],
-        "summary" : "Logs user into the system",
-        "operationId" : "oauthcallback",
-        "parameters" : [ {
-          "name" : "code",
-          "in" : "query",
-          "description" : "The name that needs to be fetched. Use user1 for testing.",
-          "required" : true,
-          "schema" : {
-            "type" : "string"
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "successful operation",
-            "headers" : {
-              "X-Rate-Limit" : {
-                "description" : "calls per hour allowed by the user",
-                "schema" : {
-                  "type" : "integer",
-                  "format" : "int32"
-                }
-              },
-              "X-Expires-After" : {
-                "description" : "date in UTC when token expires",
-                "schema" : {
-                  "type" : "string",
-                  "format" : "date-time"
-                }
-              },
-              "Set-Cookie" : {
-                "description" : "date in UTC when token expires",
-                "schema" : {
-                  "type" : "string",
-                  "format" : "jwt"
-                }
-              }
-            },
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "type" : "object",
-                  "properties" : {
-                    "id" : {
-                      "type" : "integer"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "400" : {
-            "$ref" : "#/components/responses/BadRequest"
-          },
-          "401" : {
-            "$ref" : "#/components/responses/Unauthorized"
-          },
-          "403" : {
-            "$ref" : "#/components/responses/Forbidden"
+            
           },
           "404" : {
             "$ref" : "#/components/responses/NotFound"
@@ -936,6 +861,11 @@
             "type" : "string",
             "format" : "uuid"
           },
+          "googleId" : {
+            "type" : "string",
+            "uniqueItems": true,
+            "nullable" : true
+          },
           "username" : {
             "type" : "string",
             "uniqueItems" : true,
@@ -970,7 +900,8 @@
             "type" : "integer",
             "format" : "int32",
             "description" : "status map:\n * `1` - Normal\n * `2` - Unverified\n * `3` - Locking\n",
-            "enum" : [ 1, 2, 3 ]
+            "enum" : [ 1, 2, 3 ],
+            "default" : 2
           },
           "authLevel" : {
             "$ref" : "#/components/schemas/Auth/properties/level"
@@ -995,7 +926,8 @@
           "level" : {
             "type" : "integer",
             "format" : "int64",
-            "uniqueItems" : true
+            "uniqueItems" : true,
+            "default" : 100
           }
         }
       },
@@ -1098,7 +1030,8 @@
                   "$ref" : "#/components/schemas/User/properties/phone"
                 },
                 "userStatus" : {
-                  "$ref" : "#/components/schemas/User/properties/userStatus"
+                  "$ref" : "#/components/schemas/User/properties/userStatus",
+                  "nullable" : true
                 },
                 "authLevel" : {
                   "$ref" : "#/components/schemas/Auth/properties/level"
