@@ -51,30 +51,36 @@ export class UserModel {
 
     // custom end googleLogin
   }
-  async createOneRegisterUser(
-      param: requestTypes.CreateOneRegisterUserParams,
+  async loginUser(
+      param: requestTypes.LoginUserParams,
+      customParam: any,
   ) {
-    const res: User | null = await prisma.user.create({
-      data: {
-        authLevel: param.bodyAuthLevel,
-        email: param.bodyEmail,
-        password: param.bodyPassword,
-        phone: param.bodyPhone,
-        userStatus: param.bodyUserStatus,
-        username: param.bodyUsername,
+    // custom begin loginUser
+    const select = {
+      email: true,
+      password: true,
+      id: true,
+      updatedAt: true,
+      username: true,
+      auth: {
+        select: {
+          role: true,
+        },
       },
+      googleId: true,
+      userStatus: true,
+    };
+    const res = await prisma.user.findUnique({
+      where: {
+        email: param.bodyEmail,
+      },
+      select,
     }).catch((e) => {
       throw e;
     }).finally(() => {
       prisma.$disconnect();
     });
     return res;
-  }
-  async loginUser(
-      param: requestTypes.LoginUserParams,
-      customParam: any,
-  ) {
-    // custom begin loginUser
 
     // custom end loginUser
   }
@@ -85,6 +91,29 @@ export class UserModel {
     // custom begin logoutUser
 
     // custom end logoutUser
+  }
+  async registerUser(
+      param: requestTypes.RegisterUserParams,
+      customParam: any,
+  ) {
+    // custom begin registerUser
+    const res: User | null = await prisma.user.create({
+      data: {
+        authLevel: param.bodyAuthLevel,
+        email: param.bodyEmail,
+        phone: param.bodyPhone,
+        userStatus: param.bodyUserStatus,
+        username: param.bodyUsername,
+        password: customParam.password,
+      },
+    }).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+    return res;
+
+    // custom end registerUser
   }
   async deleteOneUser(
       param: requestTypes.DeleteOneUserParams,
@@ -151,20 +180,10 @@ export class UserModel {
   async readManyUser(
       param: requestTypes.ReadManyUserParams,
   ) {
-    const res: User[] | null = await prisma.user.findMany({
+    const res: any[] | null = await prisma.user.findMany({
       where: {
       },
       select: {
-        auth: true,
-        authLevel: true,
-        createdAt: true,
-        email: true,
-        googleId: true,
-        id: true,
-        password: true,
-        phone: true,
-        updatedAt: true,
-        userStatus: true,
         username: true,
       },
     }).catch((e) => {

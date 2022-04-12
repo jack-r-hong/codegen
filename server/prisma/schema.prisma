@@ -56,7 +56,7 @@ model User {
   phone  String?   @map("phone")                 
   updatedAt  DateTime   @default(now()) @updatedAt @map("updated_at")                 
   userStatus  Int  @default(2)  @map("user_status")                 
-  username  String  @unique  @map("username")                 
+  username  String  @map("username")                 
   auth Auth? @relation(fields: [authLevel], references: [level])
   authLevel Int @map("auth_level") @default(100)
   

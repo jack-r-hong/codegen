@@ -16,7 +16,26 @@ export const googleLoginValidator: Schema = {
     in: 'body',
   },
 };
-export const createOneRegisterUserValidator: Schema = {
+export const loginUserValidator: Schema = {
+  email: {
+    in: 'body',
+    isEmail: true,
+  },
+  password: {
+    in: 'body',
+    isStrongPassword: true,
+    isLength: {
+      options: {
+        max: 30,
+        min: 8,
+      },
+
+    },
+  },
+};
+export const logoutUserValidator: Schema = {
+};
+export const registerUserValidator: Schema = {
   authLevel: {
     in: 'body',
     isInt: true,
@@ -72,25 +91,6 @@ export const createOneRegisterUserValidator: Schema = {
 
     },
   },
-};
-export const loginUserValidator: Schema = {
-  email: {
-    in: 'body',
-    isEmail: true,
-  },
-  password: {
-    in: 'body',
-    isStrongPassword: true,
-    isLength: {
-      options: {
-        max: 30,
-        min: 8,
-      },
-
-    },
-  },
-};
-export const logoutUserValidator: Schema = {
 };
 export const deleteOneUserValidator: Schema = {
   id: {

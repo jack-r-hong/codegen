@@ -3,6 +3,7 @@ import {UserModel} from './user.model';
 import * as requestTypes from './user.parameters';
 import {errors} from '../../errors';
 // custom begin import
+import bcrypt from 'bcrypt';
 
 // custom end import
 
@@ -17,7 +18,9 @@ export class UserService {
       session: Express.Request['session'],
   ) {
     // custom begin googleLogin
-    const user = await this.userModel.googleLogin(param, '');
+    const user = await this.userModel.googleLogin(param, '').catch((e) =>{
+      throw e;
+    });
     if (user) {
       const {id, userStatus, auth, username, googleId, email} = user;
       if (googleId) {
@@ -38,25 +41,35 @@ export class UserService {
 
     // custom end googleLogin
   }
-  async createOneRegisterUser(
-      param :requestTypes.CreateOneRegisterUserParams,
-      session: Express.Request['session'],
-  ) {
-    // custom begin createOneRegisterUser
-
-    // custom end createOneRegisterUser
-    const res = await this.userModel.createOneRegisterUser(
-        param,
-    ).catch((e) =>{
-      throw e;
-    });
-    return res;
-  }
   async loginUser(
       param :requestTypes.LoginUserParams,
       session: Express.Request['session'],
   ) {
     // custom begin loginUser
+    const res = await this.userModel.loginUser(param, null).catch((e) =>{
+      throw e;
+    });
+
+    if (res !== null) {
+      const {id, auth, userStatus, password, googleId, email, username} = res;
+
+      const match = await bcrypt.compare(param.bodyPassword, password);
+
+      if (match) {
+        session.userInfo = {
+          id,
+          authRole: auth?.role!,
+          userStatus,
+        };
+
+        return {
+          isBind: googleId? true: false,
+          username,
+          email,
+        };
+      }
+    }
+    throw new errors.LoginFailError;
 
     // custom end loginUser
   }
@@ -67,6 +80,39 @@ export class UserService {
     // custom begin logoutUser
 
     // custom end logoutUser
+  }
+  async registerUser(
+      param :requestTypes.RegisterUserParams,
+      session: Express.Request['session'],
+  ) {
+    // custom begin registerUser
+    const saltRounds = 10;
+    const myPlaintextPassword = param.bodyPassword;
+
+    const {hash, salt} = await new Promise((resolve, reject) => {
+      bcrypt.genSalt(saltRounds, function(err, salt) {
+        if (err) throw err;
+        bcrypt.hash(myPlaintextPassword, salt, function(err, hash) {
+          if (err) throw err;
+
+          resolve({hash, salt});
+        });
+      });
+    });
+
+    const res = await this.userModel.registerUser(param, {
+      password: hash,
+      salt: salt,
+    }).catch((e) =>{
+      throw e;
+    });
+
+    return {
+      email: res.email,
+      username: res.username,
+    };
+
+    // custom end registerUser
   }
   async deleteOneUser(
       param :requestTypes.DeleteOneUserParams,

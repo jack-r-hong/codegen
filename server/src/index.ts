@@ -17,10 +17,9 @@ const httpsServer = https.createServer(credentials, app.app);
 const PORT = 4000;
 const SSLPORT = 4443;
 
-
 httpServer.listen(PORT, function() {
-  console.log('HTTP Server is running on: http://localhost:%s', PORT);
+  console.log('HTTP Server is running on: http://0.0.0.0:%s', PORT);
 });
 httpsServer.listen(SSLPORT, function() {
-  console.log('HTTPS Server is running on: https://localhost:%s', SSLPORT);
+  console.log('HTTPS Server is running on: https://0.0.0.0:%s', SSLPORT);
 });

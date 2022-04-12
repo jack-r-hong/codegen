@@ -48,51 +48,6 @@ export const GoogleLoginRequestConvert = (
     bodyName: body.name,
   };
 };
-type CreateOneRegisterUserReqBody = {
-  authLevel: string|undefined,
-email: string,
-password: string,
-phone: string|null,
-userStatus: string|undefined,
-username: string,
-}
-
-type CreateOneRegisterUserReqQuery = {
-}
-
-type CreateOneRegisterUserReqParams = {
-}
-
-export interface CreateOneRegisterUserRequest extends TypedRequest<
-  CreateOneRegisterUserReqBody,
-  CreateOneRegisterUserReqQuery,
-  CreateOneRegisterUserReqParams
->{
-}
-
-export type CreateOneRegisterUserParams = {
-bodyAuthLevel: number|undefined,
-bodyEmail: string,
-bodyPassword: string,
-bodyPhone: string|null,
-bodyUserStatus: number|undefined,
-bodyUsername: string,
-}
-
-export const CreateOneRegisterUserRequestConvert = (
-    body: CreateOneRegisterUserReqBody,
-    query: CreateOneRegisterUserReqQuery,
-    path: CreateOneRegisterUserReqParams,
-): CreateOneRegisterUserParams => {
-  return {
-    bodyAuthLevel: body.authLevel? parseInt(body.authLevel):undefined,
-    bodyEmail: body.email,
-    bodyPassword: body.password,
-    bodyPhone: body.phone,
-    bodyUserStatus: body.userStatus? parseInt(body.userStatus):undefined,
-    bodyUsername: body.username,
-  };
-};
 type LoginUserReqBody = {
   email: string,
 password: string,
@@ -151,6 +106,51 @@ export const LogoutUserRequestConvert = (
     path: LogoutUserReqParams,
 ): LogoutUserParams => {
   return {
+  };
+};
+type RegisterUserReqBody = {
+  authLevel: string|undefined,
+email: string,
+password: string,
+phone: string|null,
+userStatus: string|undefined,
+username: string,
+}
+
+type RegisterUserReqQuery = {
+}
+
+type RegisterUserReqParams = {
+}
+
+export interface RegisterUserRequest extends TypedRequest<
+  RegisterUserReqBody,
+  RegisterUserReqQuery,
+  RegisterUserReqParams
+>{
+}
+
+export type RegisterUserParams = {
+bodyAuthLevel: number|undefined,
+bodyEmail: string,
+bodyPassword: string,
+bodyPhone: string|null,
+bodyUserStatus: number|undefined,
+bodyUsername: string,
+}
+
+export const RegisterUserRequestConvert = (
+    body: RegisterUserReqBody,
+    query: RegisterUserReqQuery,
+    path: RegisterUserReqParams,
+): RegisterUserParams => {
+  return {
+    bodyAuthLevel: body.authLevel? parseInt(body.authLevel):undefined,
+    bodyEmail: body.email,
+    bodyPassword: body.password,
+    bodyPhone: body.phone,
+    bodyUserStatus: body.userStatus? parseInt(body.userStatus):undefined,
+    bodyUsername: body.username,
   };
 };
 type DeleteOneUserReqBody = {

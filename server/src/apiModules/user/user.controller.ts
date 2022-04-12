@@ -48,28 +48,7 @@ export class UserController implements Controller {
           next(e);
         });
   }
-  @Post('/user')
-  @Validator(validSchemas.createOneRegisterUserValidator)
-  async createOneRegisterUser(
-      req: userParams.CreateOneRegisterUserRequest,
-      res: Response,
-      next: NextFunction,
-  ) {
-    UserController.service.createOneRegisterUser(
-        userParams.CreateOneRegisterUserRequestConvert(
-            req.body,
-            req.query,
-            req.params,
-        ),
-        req.session,
-    )
-        .then((result) =>{
-          res.json(result);
-        }).catch((e) => {
-          next(e);
-        });
-  }
-  @Post('/user/login')
+  @Post('/login')
   @Validator(validSchemas.loginUserValidator)
   async loginUser(
       req: userParams.LoginUserRequest,
@@ -86,13 +65,14 @@ export class UserController implements Controller {
     )
         .then((result) =>{
           // custom begin loginUser
+          res.json({result});
 
           // custom end loginUser
         }).catch((e) => {
           next(e);
         });
   }
-  @Post('/user/logout')
+  @Post('/logout')
   @Validator(validSchemas.logoutUserValidator)
   async logoutUser(
       req: userParams.LogoutUserRequest,
@@ -111,6 +91,30 @@ export class UserController implements Controller {
           // custom begin logoutUser
 
           // custom end logoutUser
+        }).catch((e) => {
+          next(e);
+        });
+  }
+  @Post('/user')
+  @Validator(validSchemas.registerUserValidator)
+  async registerUser(
+      req: userParams.RegisterUserRequest,
+      res: Response,
+      next: NextFunction,
+  ) {
+    UserController.service.registerUser(
+        userParams.RegisterUserRequestConvert(
+            req.body,
+            req.query,
+            req.params,
+        ),
+        req.session,
+    )
+        .then((result) =>{
+          // custom begin registerUser
+          res.json({result});
+
+          // custom end registerUser
         }).catch((e) => {
           next(e);
         });

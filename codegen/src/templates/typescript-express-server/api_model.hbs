@@ -72,7 +72,7 @@ const prisma = new PrismaClient();
 {{/inline}}
 
 {{~#*inline "readMany"}}
-    const res: {{fpc ../../tag}}[] | null = await prisma.{{../../tag}}.findMany({
+    const res: any[] | null = await prisma.{{../../tag}}.findMany({
       where: {
       {{#each d.parameters}}
         {{#if (equal name "orderBy")}}

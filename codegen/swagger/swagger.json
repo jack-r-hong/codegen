@@ -39,7 +39,7 @@
         "tags" : [ "user" ],
         "summary" : "Create user",
         "description" : "This can only be done by the logged in user.",
-        "operationId" : "createOneRegisterUser",
+        "operationId" : "registerUser",
         "requestBody" : {
           "$ref" : "#/components/requestBodies/User"
         },
@@ -85,7 +85,13 @@
                 "schema" : {
                   "type" : "array",
                   "items" : {
-                    "$ref" : "#/components/schemas/User"
+                    "type" : "object",
+                    "properties" : {
+                      "username" : {
+                        "$ref" : "#/components/schemas/User/properties/username"
+                      }
+                    
+                    }                    
                   }
                 }
               }
@@ -190,7 +196,7 @@
         }
       }
     },
-    "/user/login" : {
+    "/login" : {
       "post" : {
         "tags" : [ "user" ],
         "summary" : "Logs user into the system",
@@ -269,7 +275,7 @@
         }
       }
     },
-    "/user/logout" : {
+    "/logout" : {
       "post" : {
         "tags" : [ "user" ],
         "summary" : "Logs out current logged in user session",
@@ -862,7 +868,6 @@
           },
           "username" : {
             "type" : "string",
-            "uniqueItems" : true,
             "minLength" : 3,
             "maxLength" : 30
           },

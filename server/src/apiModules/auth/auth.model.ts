@@ -57,7 +57,7 @@ export class AuthModel {
   async readManyAuth(
       param: requestTypes.ReadManyAuthParams,
   ) {
-    const res: Auth[] | null = await prisma.auth.findMany({
+    const res: any[] | null = await prisma.auth.findMany({
       where: {
       },
       select: {

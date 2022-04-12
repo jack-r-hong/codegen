@@ -77,7 +77,7 @@ export class PhotoModel {
   async readManyPhoto(
       param: requestTypes.ReadManyPhotoParams,
   ) {
-    const res: Photo[] | null = await prisma.photo.findMany({
+    const res: any[] | null = await prisma.photo.findMany({
       where: {
       },
       select: {
