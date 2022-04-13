@@ -89,6 +89,7 @@ export class UserController implements Controller {
     )
         .then((result) =>{
           // custom begin logoutUser
+          res.json(result);
 
           // custom end logoutUser
         }).catch((e) => {

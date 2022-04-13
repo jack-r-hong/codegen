@@ -105,6 +105,7 @@ export class UserModel {
         userStatus: param.bodyUserStatus,
         username: param.bodyUsername,
         password: customParam.password,
+        googleId: param.bodyGoogleId,
       },
     }).catch((e) => {
       throw e;
@@ -165,6 +166,7 @@ export class UserModel {
       data: {
         authLevel: param.bodyAuthLevel,
         email: param.bodyEmail,
+        googleId: param.bodyGoogleId,
         password: param.bodyPassword,
         phone: param.bodyPhone,
         userStatus: param.bodyUserStatus,

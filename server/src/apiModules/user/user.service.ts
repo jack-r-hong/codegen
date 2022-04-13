@@ -49,19 +49,15 @@ export class UserService {
     const res = await this.userModel.loginUser(param, null).catch((e) =>{
       throw e;
     });
-
     if (res !== null) {
       const {id, auth, userStatus, password, googleId, email, username} = res;
-
       const match = await bcrypt.compare(param.bodyPassword, password);
-
       if (match) {
         session.userInfo = {
           id,
           authRole: auth?.role!,
           userStatus,
         };
-
         return {
           isBind: googleId? true: false,
           username,
@@ -88,25 +84,21 @@ export class UserService {
     // custom begin registerUser
     const saltRounds = 10;
     const myPlaintextPassword = param.bodyPassword;
-
     const {hash, salt} = await new Promise((resolve, reject) => {
       bcrypt.genSalt(saltRounds, function(err, salt) {
         if (err) throw err;
         bcrypt.hash(myPlaintextPassword, salt, function(err, hash) {
           if (err) throw err;
-
           resolve({hash, salt});
         });
       });
     });
-
     const res = await this.userModel.registerUser(param, {
       password: hash,
       salt: salt,
     }).catch((e) =>{
       throw e;
     });
-
     return {
       email: res.email,
       username: res.username,

@@ -1035,6 +1035,10 @@
                 },
                 "authLevel" : {
                   "$ref" : "#/components/schemas/Auth/properties/level"
+                },
+                "googleId" : {
+                  "$ref" : "#/components/schemas/User/properties/googleId",
+                  "nullable" : true
                 }
               }
             }

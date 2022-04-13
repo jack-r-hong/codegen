@@ -49,6 +49,14 @@ export const registerUserValidator: Schema = {
     in: 'body',
     isEmail: true,
   },
+  googleId: {
+    in: 'body',
+    optional: {
+      options: {
+        nullable: true,
+      },
+    },
+  },
   password: {
     in: 'body',
     isStrongPassword: true,
@@ -139,6 +147,14 @@ export const updateOneUserValidator: Schema = {
   email: {
     in: 'body',
     isEmail: true,
+  },
+  googleId: {
+    in: 'body',
+    optional: {
+      options: {
+        nullable: true,
+      },
+    },
   },
   password: {
     in: 'body',
