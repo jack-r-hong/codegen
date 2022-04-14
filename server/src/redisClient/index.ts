@@ -3,8 +3,7 @@ import {createClient, RedisClientOptions} from 'redis';
 const options: RedisClientOptions = {
   socket: {
     port: 6379,
-    // host: 'redis',
-    host: 'localhost',
+    host: process.env['REDIS_HOSTNAME'],
   },
   password: 'root',
 };
@@ -18,9 +17,15 @@ class RedisClient {
     );
 
     client.on('error', (err) => console.log('Redis Client Error', err));
-    client.connect().catch(console.error);
+
 
     this.client = client;
+    this.connect().then(() => {});
+  }
+
+  async connect(){
+    await this.client.connect();
+    await this.client.ping();
   }
 }
 

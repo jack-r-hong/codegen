@@ -54,7 +54,7 @@ export class ExpressApp {
       // ],
       credentials: true,
       methods: 'GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE',
-      origin: ['http://localhost:8000', 'http://127.0.0.1:8000'],
+      origin: ['http://localhost:8000', 'http://127.0.0.1:8000', `https://${process.env['HOSTNAME']}`, `https://${process.env['FRONT_END_HOST']}` ],
       // origin: '*',
       preflightContinue: true,
       // preflightContinue: false,

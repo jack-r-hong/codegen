@@ -4,7 +4,7 @@ WORKDIR /usr/src/app/
 
 COPY package*.json ./
 # COPY src ./src
-COPY nodemon.json ./
+COPY other ./other
 COPY tsconfig.json ./
 
 COPY prisma ./prisma

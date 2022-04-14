@@ -5,8 +5,8 @@ import https from 'https';
 
 import {ExpressApp} from './expressApp';
 
-const privateKey = fs.readFileSync('./src/certreq/private.pem', 'utf8');
-const certificate = fs.readFileSync('./src/certreq/file.crt', 'utf8');
+const privateKey = fs.readFileSync('./certreq/localhost.key', 'utf8');
+const certificate = fs.readFileSync('./certreq/localhost.crt', 'utf8');
 const credentials = {key: privateKey, cert: certificate};
 
 const app = new ExpressApp();
@@ -23,3 +23,5 @@ httpServer.listen(PORT, function() {
 httpsServer.listen(SSLPORT, function() {
   console.log('HTTPS Server is running on: https://0.0.0.0:%s', SSLPORT);
 });
+
+

@@ -4,29 +4,32 @@ version: '3.9'
 services:
   ts-node-server:
     build:
-      context: .
-      dockerfile: Dockerfile
-      target: base
+      context: ../
+      dockerfile: docker_product/product.Dockerfile
+      # target: base
     volumes:
-      - ./:/usr/src/app
-      # - ./src:/usr/src/app/src
-      # - ./prisma:/usr/src/app/prisma
-      # - ./nodemon.json:/home/node/app/nodemon.json
+      - ./src:/usr/src/app/src
+    #   - ./prisma:/usr/src/app/prisma
+    #   - ./other:/usr/src/app/other
     container_name: ts-node-server
     working_dir: /usr/src/app/
     ports:
       - '4000:4000'
+      - '4443:4443'
     networks:
       - backend
-    command: npm run dev
+    command: npm start
     env_file:
-      - .env    
+      - ../.env    
+    environment:
+      - HOSTNAME=${HOSTNAME}
+      - FRONT_END_HOST=${FRONT_END_HOST}
     depends_on: 
       - db
   db:
     container_name: db
     build: 
-      context: .
+      context: ..
       dockerfile: mysql.Dockerfile
     restart: always
     environment:
@@ -35,7 +38,7 @@ services:
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
       - MYSQL_DATABASE=${MYSQL_DATABASE}
     env_file:
-      - .env 
+      - ../.env   
     networks:
       - backend
     # volumes:
@@ -51,9 +54,25 @@ services:
       - 6379:6379
     volumes:
       - /data/redis-data:/data  
-      - ./redis.conf:/etc/redis/redis.conf 
+      - ./other:/etc/redis
     networks:
       - backend         
+  nginx: 
+    build: 
+      context: ..
+      dockerfile: docker_product/nginx.Dockerfile
+    container_name: nginx
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./templates:/etc/nginx/templates
+      - ./src/certreq:/etc/nginx/ssl
+      - ../build/web:/usr/share/nginx/html
+    networks:
+      - backend     
+    # volumes:
+    #   - ./app/build/web:/usr/share/nginx/html
   adminer:
     image: adminer
     restart: always
@@ -61,6 +80,7 @@ services:
       - 8080:8080
     networks:
       - backend
+
 
 networks:
   backend:
