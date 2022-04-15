@@ -19,6 +19,7 @@ export class AuthService {
     // custom begin createOneAuth
 
     // custom end createOneAuth
+    
     const res = await this.authModel.createOneAuth(
         param,
     ).catch((e) =>{
@@ -33,6 +34,7 @@ export class AuthService {
     // custom begin deleteOneAuth
 
     // custom end deleteOneAuth
+    
     const res = await this.authModel.deleteOneAuth(
         param,
     ).catch((e) =>{
@@ -47,6 +49,7 @@ export class AuthService {
     // custom begin updateOneAuth
 
     // custom end updateOneAuth
+    
     const res = await this.authModel.updateOneAuth(
         param,
     ).catch((e) =>{
@@ -61,6 +64,7 @@ export class AuthService {
     // custom begin readManyAuth
 
     // custom end readManyAuth
+    
     const res = await this.authModel.readManyAuth(
         param,
     ).catch((e) =>{

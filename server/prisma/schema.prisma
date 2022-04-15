@@ -32,6 +32,8 @@ model Photo {
   process  Int  @default(1)  @map("process")                 
   status  Int  @default(1)  @map("status")                 
   photoComment PhotoComment[]
+  user User? @relation(fields: [ownerId], references: [id])
+  ownerId String @map("owner_id") 
   
     // custom begin Photo
 
@@ -59,6 +61,7 @@ model User {
   username  String  @map("username")                 
   auth Auth? @relation(fields: [authLevel], references: [level])
   authLevel Int @map("auth_level") @default(100)
+  photo Photo[]
   
     // custom begin User
 

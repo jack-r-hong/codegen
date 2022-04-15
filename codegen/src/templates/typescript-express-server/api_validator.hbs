@@ -9,9 +9,13 @@ import * as sessions from '../../sessions';
   {{p.name}}: {
     in: '
         {{~#if (equal p.in "path")~}}
-    params
+            params
         {{~else~}}
-    {{p.in}}
+          {{~#if (equal p.in "cookie")~}}
+            cookies
+          {{~else~}}
+            {{p.in}}
+          {{/if~}}
         {{/if~}}
         ',
         {{#if p.schema.nullable }}
@@ -133,7 +137,10 @@ import * as sessions from '../../sessions';
       {{#if (equal ../../tag d.tags.0) }}
 export const {{d.operationId}}Validator: Schema = {
         {{#each d.parameters as |p|}}
-          {{~ > schema}}
+          {{#if (equal p.name ../../../data.components.securitySchemes.cookieAuth.name)}}
+          {{else}}
+            {{~ > schema}}
+          {{/if}}
         {{/each}}  
         {{#if d.requestBody.content.[application/json].schema.type}}
           {{#if (equal d.requestBody.content.[application/json].schema.type "object") }}
@@ -144,11 +151,11 @@ export const {{d.operationId}}Validator: Schema = {
         {{/if}} 
         {{#each d.security as |security|}}
           {{#each security as |s|}}
-  {{camel_case @key}}: {
+  {{../../../../data.components.securitySchemes.cookieAuth.name}}: {
     in: 'cookies',
     custom: {
       options: (value, {req, location, path}) => {
-        sessions.{{camel_case @key}}SessionVerify(req['session'].{{camel_case @key}});
+        sessions.{{camel_case @key}}SessionVerify(req['session'].userInfo);
         return true;
       },
     },

@@ -4,11 +4,13 @@ import {Query, ParamsDictionary} from 'express-serve-static-core';
 interface TypedRequest<
   T,
   U extends Query,
-  P extends ParamsDictionary
+  P extends ParamsDictionary,
+  C
 > extends Request {
   body: T,
   query: U,
   params: P,
+  cookies: C
 }
 
 
@@ -24,10 +26,14 @@ type GoogleLoginReqQuery = {
 type GoogleLoginReqParams = {
 }
 
+type GoogleLoginReqCookie = {
+}
+
 export interface GoogleLoginRequest extends TypedRequest<
   GoogleLoginReqBody,
   GoogleLoginReqQuery,
-  GoogleLoginReqParams
+  GoogleLoginReqParams,
+  GoogleLoginReqCookie
 >{
 }
 
@@ -41,6 +47,7 @@ export const GoogleLoginRequestConvert = (
     body: GoogleLoginReqBody,
     query: GoogleLoginReqQuery,
     path: GoogleLoginReqParams,
+    cookie: GoogleLoginReqCookie,
 ): GoogleLoginParams => {
   return {
     bodyEmail: body.email,
@@ -59,10 +66,14 @@ type LoginUserReqQuery = {
 type LoginUserReqParams = {
 }
 
+type LoginUserReqCookie = {
+}
+
 export interface LoginUserRequest extends TypedRequest<
   LoginUserReqBody,
   LoginUserReqQuery,
-  LoginUserReqParams
+  LoginUserReqParams,
+  LoginUserReqCookie
 >{
 }
 
@@ -75,6 +86,7 @@ export const LoginUserRequestConvert = (
     body: LoginUserReqBody,
     query: LoginUserReqQuery,
     path: LoginUserReqParams,
+    cookie: LoginUserReqCookie,
 ): LoginUserParams => {
   return {
     bodyEmail: body.email,
@@ -90,10 +102,14 @@ type LogoutUserReqQuery = {
 type LogoutUserReqParams = {
 }
 
+type LogoutUserReqCookie = {
+}
+
 export interface LogoutUserRequest extends TypedRequest<
   LogoutUserReqBody,
   LogoutUserReqQuery,
-  LogoutUserReqParams
+  LogoutUserReqParams,
+  LogoutUserReqCookie
 >{
 }
 
@@ -104,6 +120,7 @@ export const LogoutUserRequestConvert = (
     body: LogoutUserReqBody,
     query: LogoutUserReqQuery,
     path: LogoutUserReqParams,
+    cookie: LogoutUserReqCookie,
 ): LogoutUserParams => {
   return {
   };
@@ -124,10 +141,14 @@ type RegisterUserReqQuery = {
 type RegisterUserReqParams = {
 }
 
+type RegisterUserReqCookie = {
+}
+
 export interface RegisterUserRequest extends TypedRequest<
   RegisterUserReqBody,
   RegisterUserReqQuery,
-  RegisterUserReqParams
+  RegisterUserReqParams,
+  RegisterUserReqCookie
 >{
 }
 
@@ -145,6 +166,7 @@ export const RegisterUserRequestConvert = (
     body: RegisterUserReqBody,
     query: RegisterUserReqQuery,
     path: RegisterUserReqParams,
+    cookie: RegisterUserReqCookie,
 ): RegisterUserParams => {
   return {
     bodyAuthLevel: body.authLevel? parseInt(body.authLevel):undefined,
@@ -167,10 +189,14 @@ type DeleteOneUserReqParams = {
 ,
 }
 
+type DeleteOneUserReqCookie = {
+}
+
 export interface DeleteOneUserRequest extends TypedRequest<
   DeleteOneUserReqBody,
   DeleteOneUserReqQuery,
-  DeleteOneUserReqParams
+  DeleteOneUserReqParams,
+  DeleteOneUserReqCookie
 >{
 }
 
@@ -182,6 +208,7 @@ export const DeleteOneUserRequestConvert = (
     body: DeleteOneUserReqBody,
     query: DeleteOneUserReqQuery,
     path: DeleteOneUserReqParams,
+    cookie: DeleteOneUserReqCookie,
 ): DeleteOneUserParams => {
   return {
     pathId: path.id,
@@ -198,10 +225,14 @@ type ReadOneUserReqParams = {
 ,
 }
 
+type ReadOneUserReqCookie = {
+}
+
 export interface ReadOneUserRequest extends TypedRequest<
   ReadOneUserReqBody,
   ReadOneUserReqQuery,
-  ReadOneUserReqParams
+  ReadOneUserReqParams,
+  ReadOneUserReqCookie
 >{
 }
 
@@ -213,6 +244,7 @@ export const ReadOneUserRequestConvert = (
     body: ReadOneUserReqBody,
     query: ReadOneUserReqQuery,
     path: ReadOneUserReqParams,
+    cookie: ReadOneUserReqCookie,
 ): ReadOneUserParams => {
   return {
     pathId: path.id,
@@ -236,10 +268,14 @@ type UpdateOneUserReqParams = {
 ,
 }
 
+type UpdateOneUserReqCookie = {
+}
+
 export interface UpdateOneUserRequest extends TypedRequest<
   UpdateOneUserReqBody,
   UpdateOneUserReqQuery,
-  UpdateOneUserReqParams
+  UpdateOneUserReqParams,
+  UpdateOneUserReqCookie
 >{
 }
 
@@ -258,6 +294,7 @@ export const UpdateOneUserRequestConvert = (
     body: UpdateOneUserReqBody,
     query: UpdateOneUserReqQuery,
     path: UpdateOneUserReqParams,
+    cookie: UpdateOneUserReqCookie,
 ): UpdateOneUserParams => {
   return {
     pathId: path.id,
@@ -279,10 +316,14 @@ type ReadManyUserReqQuery = {
 type ReadManyUserReqParams = {
 }
 
+type ReadManyUserReqCookie = {
+}
+
 export interface ReadManyUserRequest extends TypedRequest<
   ReadManyUserReqBody,
   ReadManyUserReqQuery,
-  ReadManyUserReqParams
+  ReadManyUserReqParams,
+  ReadManyUserReqCookie
 >{
 }
 
@@ -293,6 +334,7 @@ export const ReadManyUserRequestConvert = (
     body: ReadManyUserReqBody,
     query: ReadManyUserReqQuery,
     path: ReadManyUserReqParams,
+    cookie: ReadManyUserReqCookie,
 ): ReadManyUserParams => {
   return {
   };

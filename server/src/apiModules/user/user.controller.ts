@@ -36,6 +36,7 @@ export class UserController implements Controller {
             req.body,
             req.query,
             req.params,
+            req.cookies,
         ),
         req.session,
     )
@@ -60,6 +61,7 @@ export class UserController implements Controller {
             req.body,
             req.query,
             req.params,
+            req.cookies,
         ),
         req.session,
     )
@@ -84,6 +86,7 @@ export class UserController implements Controller {
             req.body,
             req.query,
             req.params,
+            req.cookies,
         ),
         req.session,
     )
@@ -108,6 +111,7 @@ export class UserController implements Controller {
             req.body,
             req.query,
             req.params,
+            req.cookies,
         ),
         req.session,
     )
@@ -132,6 +136,7 @@ export class UserController implements Controller {
             req.body,
             req.query,
             req.params,
+            req.cookies,
         ),
         req.session,
     )
@@ -153,6 +158,7 @@ export class UserController implements Controller {
             req.body,
             req.query,
             req.params,
+            req.cookies,
         ),
         req.session,
     )
@@ -174,6 +180,7 @@ export class UserController implements Controller {
             req.body,
             req.query,
             req.params,
+            req.cookies,
         ),
         req.session,
     )
@@ -195,6 +202,7 @@ export class UserController implements Controller {
             req.body,
             req.query,
             req.params,
+            req.cookies,
         ),
         req.session,
     )

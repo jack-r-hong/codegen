@@ -18,11 +18,11 @@ export const createOneAuthValidator: Schema = {
     in: 'body',
     isInt: true,
   },
-  cookieAuth: {
+  JSESSIONID: {
     in: 'cookies',
     custom: {
       options: (value, {req, location, path}) => {
-        sessions.cookieAuthSessionVerify(req['session'].cookieAuth);
+        sessions.cookieAuthSessionVerify(req['session'].userInfo);
         return true;
       },
     },
@@ -54,22 +54,22 @@ export const updateOneAuthValidator: Schema = {
     in: 'body',
     isInt: true,
   },
-  cookieAuth: {
+  JSESSIONID: {
     in: 'cookies',
     custom: {
       options: (value, {req, location, path}) => {
-        sessions.cookieAuthSessionVerify(req['session'].cookieAuth);
+        sessions.cookieAuthSessionVerify(req['session'].userInfo);
         return true;
       },
     },
   },
 };
 export const readManyAuthValidator: Schema = {
-  cookieAuth: {
+  JSESSIONID: {
     in: 'cookies',
     custom: {
       options: (value, {req, location, path}) => {
-        sessions.cookieAuthSessionVerify(req['session'].cookieAuth);
+        sessions.cookieAuthSessionVerify(req['session'].userInfo);
         return true;
       },
     },

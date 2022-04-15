@@ -20,6 +20,7 @@ export class PhotoService {
     // custom begin readOnePhoto
 
     // custom end readOnePhoto
+    
     const res = await this.photoModel.readOnePhoto(
         param,
     ).catch((e) =>{
@@ -34,6 +35,7 @@ export class PhotoService {
     // custom begin updateOnePhoto
 
     // custom end updateOnePhoto
+    
     const res = await this.photoModel.updateOnePhoto(
         param,
     ).catch((e) =>{
@@ -46,10 +48,14 @@ export class PhotoService {
       session: Express.Request['session'],
   ) {
     // custom begin deleteManyPhoto
+    if (!session.userInfo){
+      throw new errors.AuthenticationFailedError;
+    }
     const data = await this.photoModel.readManyPhoto(
         {
           queryOrderBy: 'desc',
           queryOrderByField: 'id',
+          cookieJsessionid: session.userInfo?.id,
         },
     ).catch((e) =>{
       throw e;
@@ -67,6 +73,7 @@ export class PhotoService {
     });
 
     // custom end deleteManyPhoto
+    
     const res = await this.photoModel.deleteManyPhoto(
         param,
     ).catch((e) =>{
@@ -81,6 +88,10 @@ export class PhotoService {
     // custom begin readManyPhoto
 
     // custom end readManyPhoto
+    console.log(session.userInfo?.id);
+    if(!session.userInfo) throw new errors.AuthenticationFailedError;
+    param.cookieJsessionid = session.userInfo.id;
+
     const res = await this.photoModel.readManyPhoto(
         param,
     ).catch((e) =>{
@@ -96,9 +107,13 @@ export class PhotoService {
     // custom begin uploadManyPhoto
 
     // custom end uploadManyPhoto
+    if(!session.userInfo) throw new errors.AuthenticationFailedError;
+    param.cookieJsessionid = session.userInfo.id;
+    
     const res = await this.photoModel.uploadManyPhoto(
         param,
         files,
+        session.userInfo?.id!
     ).catch((e) =>{
       throw e;
     });
@@ -111,6 +126,7 @@ export class PhotoService {
     // custom begin updateManyPhoto
 
     // custom end updateManyPhoto
+    
     const res = await this.photoModel.updateManyPhoto(
         param,
     ).catch((e) =>{

@@ -71,6 +71,14 @@ const prisma = new PrismaClient();
     }
 {{/inline}}
 
+{{~#*inline "JSESSIONID"}}
+  {{#if (equal name "JSESSIONID")}}
+    ownerId: param.cookieJsessionid,
+  {{else}}
+    {{name}}: param.{{in}}{{fpc name}},
+  {{/if}}
+{{/inline}}
+
 {{~#*inline "readMany"}}
     const res: any[] | null = await prisma.{{../../tag}}.findMany({
       where: {
@@ -79,7 +87,7 @@ const prisma = new PrismaClient();
         {{else}}
           {{#if (equal name "orderByField")}}
           {{else}}
-          {{name}}: param.{{in}}{{fpc name}},
+            {{~> JSESSIONID}}
           {{/if}}
         {{/if}}
       {{/each}}
@@ -195,6 +203,7 @@ const prisma = new PrismaClient();
       return {
         name: e.originalname,
         filePath1: e.path.replace('\\', '/'),
+        ownerId,
       };
     });
 
@@ -226,6 +235,7 @@ export class {{fpc tag}}Model {
         {{/if}}
         {{#if (equal (model_type d.operationId) "uploadMany")  }}
       files: Express.Multer.File[],
+      ownerId: string,
         {{/if}}
   ) {
 {{ > (model_type d.operationId)}}

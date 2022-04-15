@@ -36,6 +36,7 @@ export class PhotoController implements Controller {
             req.body,
             req.query,
             req.params,
+            req.cookies,
         ),
         req.session,
     )
@@ -57,6 +58,7 @@ export class PhotoController implements Controller {
             req.body,
             req.query,
             req.params,
+            req.cookies,
         ),
         req.session,
     )
@@ -78,6 +80,7 @@ export class PhotoController implements Controller {
             req.body,
             req.query,
             req.params,
+            req.cookies,
         ),
         req.session,
     )
@@ -99,6 +102,7 @@ export class PhotoController implements Controller {
             req.body,
             req.query,
             req.params,
+            req.cookies,
         ),
         req.session,
     )
@@ -121,6 +125,7 @@ export class PhotoController implements Controller {
             req.body,
             req.query,
             req.params,
+            req.cookies,
         ),
         req.session,
         req.files as Express.Multer.File[],
@@ -143,6 +148,7 @@ export class PhotoController implements Controller {
             req.body,
             req.query,
             req.params,
+            req.cookies,
         ),
         req.session,
     )

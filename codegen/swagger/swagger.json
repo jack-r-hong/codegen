@@ -682,6 +682,15 @@
             "type" : "string",
             "default": "id"
           }
+        },
+        {
+          "name" : "JSESSIONID",
+          "in" : "cookie",
+          "description" : "The name that needs to be fetched. Use user1 for testing.",
+          "schema" : {
+            "type" : "string",
+            "format": "id"
+          }
         }
       ],
         "responses" : {
@@ -714,13 +723,27 @@
           "409" : {
             "$ref" : "#/components/responses/Conflict"
           }
-        }
+        },
+        "security" : [ {
+          "cookieAuth" : [ ]
+        } ]
       },
       "post" : {
         "tags" : [ "photo" ],
         "summary" : "upload photo list",
         "description" : "This can only be done by the logged in user.",
         "operationId" : "uploadManyPhoto",
+        "parameters" : [ 
+          {
+            "name" : "JSESSIONID",
+            "in" : "cookie",
+            "description" : "The name that needs to be fetched. Use user1 for testing.",
+            "schema" : {
+              "type" : "string",
+              "format": "id"
+            }
+          }
+        ],
         "requestBody" : {
           "$ref" : "#/components/requestBodies/UploadPhoto"
         },
@@ -938,6 +961,13 @@
           "id" : {
             "type" : "integer",
             "format" : "int64"
+          },
+          "user" : {
+            "$ref" : "#/components/schemas/User"
+          },
+          "ownerId" : {
+            "type" : "string",
+            "$ref" : "#/components/schemas/User/properties/id"
           },
           "name" : {
             "type" : "string",

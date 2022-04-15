@@ -36,10 +36,18 @@ export class {{fpc tag}}Service {
     // custom begin {{d.operationId}}
 {{{lookup ../../custom d.operationId }}}
     // custom end {{d.operationId}}
+    {{#each d.parameters}}
+      {{#if (equal name "JSESSIONID") }}
+    if(!session.userInfo) throw new errors.AuthenticationFailedError;
+    param.cookieJsessionid = session.userInfo.id;
+      {{/if}}      
+    {{/each}}
+    
     const res = await this.{{../../tag}}Model.{{d.operationId}}(
         param,
       {{#if (equal (model_type d.operationId) "uploadMany")  }}
         files,
+        session.userInfo?.id!
       {{/if}}
     ).catch((e) =>{
       throw e;

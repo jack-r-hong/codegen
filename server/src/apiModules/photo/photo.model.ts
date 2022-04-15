@@ -23,8 +23,10 @@ export class PhotoModel {
         filePath3: true,
         id: true,
         name: true,
+        ownerId: true,
         process: true,
         status: true,
+        user: true,
       },
     }).catch((e) => {
       throw e;
@@ -77,8 +79,12 @@ export class PhotoModel {
   async readManyPhoto(
       param: requestTypes.ReadManyPhotoParams,
   ) {
+    console.log(param.cookieJsessionid);
+
+    
     const res: any[] | null = await prisma.photo.findMany({
       where: {
+    ownerId: param.cookieJsessionid,
       },
       select: {
         afterLevel: true,
@@ -89,8 +95,10 @@ export class PhotoModel {
         filePath3: true,
         id: true,
         name: true,
+        ownerId: true,
         process: true,
         status: true,
+        user: true,
       },
       orderBy: {
         [param.queryOrderByField]: param.queryOrderBy,
@@ -105,11 +113,13 @@ export class PhotoModel {
   async uploadManyPhoto(
       param: requestTypes.UploadManyPhotoParams,
       files: Express.Multer.File[],
+      ownerId: string,
   ) {
     const data = files.map((e) => {
       return {
         name: e.originalname,
         filePath1: e.path.replace('\\', '/'),
+        ownerId,
       };
     });
 

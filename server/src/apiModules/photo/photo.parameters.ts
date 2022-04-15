@@ -4,11 +4,13 @@ import {Query, ParamsDictionary} from 'express-serve-static-core';
 interface TypedRequest<
   T,
   U extends Query,
-  P extends ParamsDictionary
+  P extends ParamsDictionary,
+  C
 > extends Request {
   body: T,
   query: U,
   params: P,
+  cookies: C
 }
 
 
@@ -23,10 +25,14 @@ type ReadOnePhotoReqParams = {
 ,
 }
 
+type ReadOnePhotoReqCookie = {
+}
+
 export interface ReadOnePhotoRequest extends TypedRequest<
   ReadOnePhotoReqBody,
   ReadOnePhotoReqQuery,
-  ReadOnePhotoReqParams
+  ReadOnePhotoReqParams,
+  ReadOnePhotoReqCookie
 >{
 }
 
@@ -38,6 +44,7 @@ export const ReadOnePhotoRequestConvert = (
     body: ReadOnePhotoReqBody,
     query: ReadOnePhotoReqQuery,
     path: ReadOnePhotoReqParams,
+    cookie: ReadOnePhotoReqCookie,
 ): ReadOnePhotoParams => {
   return {
     pathId: parseInt(path.id),
@@ -59,10 +66,14 @@ type UpdateOnePhotoReqParams = {
 ,
 }
 
+type UpdateOnePhotoReqCookie = {
+}
+
 export interface UpdateOnePhotoRequest extends TypedRequest<
   UpdateOnePhotoReqBody,
   UpdateOnePhotoReqQuery,
-  UpdateOnePhotoReqParams
+  UpdateOnePhotoReqParams,
+  UpdateOnePhotoReqCookie
 >{
 }
 
@@ -79,6 +90,7 @@ export const UpdateOnePhotoRequestConvert = (
     body: UpdateOnePhotoReqBody,
     query: UpdateOnePhotoReqQuery,
     path: UpdateOnePhotoReqParams,
+    cookie: UpdateOnePhotoReqCookie,
 ): UpdateOnePhotoParams => {
   return {
     pathId: parseInt(path.id),
@@ -99,10 +111,14 @@ type DeleteManyPhotoReqQuery = {
 type DeleteManyPhotoReqParams = {
 }
 
+type DeleteManyPhotoReqCookie = {
+}
+
 export interface DeleteManyPhotoRequest extends TypedRequest<
   DeleteManyPhotoReqBody,
   DeleteManyPhotoReqQuery,
-  DeleteManyPhotoReqParams
+  DeleteManyPhotoReqParams,
+  DeleteManyPhotoReqCookie
 >{
 }
 
@@ -114,6 +130,7 @@ export const DeleteManyPhotoRequestConvert = (
     body: DeleteManyPhotoReqBody,
     query: DeleteManyPhotoReqQuery,
     path: DeleteManyPhotoReqParams,
+    cookie: DeleteManyPhotoReqCookie,
 ): DeleteManyPhotoParams => {
   return {
     queryId: typeof query.id === 'string'?
@@ -132,26 +149,35 @@ type ReadManyPhotoReqQuery = {
 type ReadManyPhotoReqParams = {
 }
 
+type ReadManyPhotoReqCookie = {
+      JSESSIONID: string
+,
+}
+
 export interface ReadManyPhotoRequest extends TypedRequest<
   ReadManyPhotoReqBody,
   ReadManyPhotoReqQuery,
-  ReadManyPhotoReqParams
+  ReadManyPhotoReqParams,
+  ReadManyPhotoReqCookie
 >{
 }
 
 export type ReadManyPhotoParams = {
       queryOrderBy: string
       queryOrderByField: string
+      cookieJsessionid: string
 }
 
 export const ReadManyPhotoRequestConvert = (
     body: ReadManyPhotoReqBody,
     query: ReadManyPhotoReqQuery,
     path: ReadManyPhotoReqParams,
+    cookie: ReadManyPhotoReqCookie,
 ): ReadManyPhotoParams => {
   return {
     queryOrderBy: query.orderBy,
     queryOrderByField: query.orderByField,
+    cookieJsessionid: cookie.JSESSIONID,
   };
 };
 type UploadManyPhotoReqBody = {
@@ -163,22 +189,31 @@ type UploadManyPhotoReqQuery = {
 type UploadManyPhotoReqParams = {
 }
 
+type UploadManyPhotoReqCookie = {
+      JSESSIONID: string
+,
+}
+
 export interface UploadManyPhotoRequest extends TypedRequest<
   UploadManyPhotoReqBody,
   UploadManyPhotoReqQuery,
-  UploadManyPhotoReqParams
+  UploadManyPhotoReqParams,
+  UploadManyPhotoReqCookie
 >{
 }
 
 export type UploadManyPhotoParams = {
+      cookieJsessionid: string
 }
 
 export const UploadManyPhotoRequestConvert = (
     body: UploadManyPhotoReqBody,
     query: UploadManyPhotoReqQuery,
     path: UploadManyPhotoReqParams,
+    cookie: UploadManyPhotoReqCookie,
 ): UploadManyPhotoParams => {
   return {
+    cookieJsessionid: cookie.JSESSIONID,
   };
 };
 type UpdateManyPhotoReqBody = {
@@ -199,10 +234,14 @@ type UpdateManyPhotoReqQuery = {
 type UpdateManyPhotoReqParams = {
 }
 
+type UpdateManyPhotoReqCookie = {
+}
+
 export interface UpdateManyPhotoRequest extends TypedRequest<
   UpdateManyPhotoReqBody,
   UpdateManyPhotoReqQuery,
-  UpdateManyPhotoReqParams
+  UpdateManyPhotoReqParams,
+  UpdateManyPhotoReqCookie
 >{
 }
 
@@ -222,6 +261,7 @@ export const UpdateManyPhotoRequestConvert = (
     body: UpdateManyPhotoReqBody,
     query: UpdateManyPhotoReqQuery,
     path: UpdateManyPhotoReqParams,
+    cookie: UpdateManyPhotoReqCookie,
 ): UpdateManyPhotoParams => {
   return {
     bodyDataList: body.dataList.map((body :any) => {

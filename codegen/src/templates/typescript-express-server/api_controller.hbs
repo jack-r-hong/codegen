@@ -42,6 +42,7 @@ export class {{fpc tag}}Controller implements Controller {
             req.body,
             req.query,
             req.params,
+            req.cookies,
         ),
         req.session,
         {{#if (equal (model_type data.operationId) "uploadMany")  }}

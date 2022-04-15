@@ -36,6 +36,7 @@ export class AuthController implements Controller {
             req.body,
             req.query,
             req.params,
+            req.cookies,
         ),
         req.session,
     )
@@ -57,6 +58,7 @@ export class AuthController implements Controller {
             req.body,
             req.query,
             req.params,
+            req.cookies,
         ),
         req.session,
     )
@@ -78,6 +80,7 @@ export class AuthController implements Controller {
             req.body,
             req.query,
             req.params,
+            req.cookies,
         ),
         req.session,
     )
@@ -99,6 +102,7 @@ export class AuthController implements Controller {
             req.body,
             req.query,
             req.params,
+            req.cookies,
         ),
         req.session,
     )

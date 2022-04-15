@@ -4,11 +4,13 @@ import {Query, ParamsDictionary} from 'express-serve-static-core';
 interface TypedRequest<
   T,
   U extends Query,
-  P extends ParamsDictionary
+  P extends ParamsDictionary,
+  C
 > extends Request {
   body: T,
   query: U,
   params: P,
+  cookies: C
 }
 
 {{#*inline "nullable"}}
@@ -77,10 +79,25 @@ type {{fpc data.operationId}}ReqParams = {
 {{/each}}
 }
 
+type {{fpc data.operationId}}ReqCookie = {
+{{#each data.parameters as |p|}}
+  {{#if (equal p.in "cookie") }}
+    {{#if (equal p.schema.type "array") }}
+      {{ p.name}}: string[]
+    {{else}}
+      {{ p.name}}: string
+    {{/if}}
+    {{~ > nullable~}}  
+  {{else}}
+  {{/if}}
+{{/each}}
+}
+
 export interface {{fpc data.operationId}}Request extends TypedRequest<
   {{fpc data.operationId}}ReqBody,
   {{fpc data.operationId}}ReqQuery,
-  {{fpc data.operationId}}ReqParams
+  {{fpc data.operationId}}ReqParams,
+  {{fpc data.operationId}}ReqCookie
 >{
 }
 
@@ -201,6 +218,7 @@ export const {{fpc data.operationId}}RequestConvert = (
     body: {{fpc data.operationId}}ReqBody,
     query: {{fpc data.operationId}}ReqQuery,
     path: {{fpc data.operationId}}ReqParams,
+    cookie: {{fpc data.operationId}}ReqCookie,
 ): {{fpc data.operationId}}Params => {
   {{#if data.requestBody.content.[application/json].schema.type}}
     {{~> RequestConvertReturn1}}

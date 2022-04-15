@@ -87,6 +87,15 @@ export const readManyPhotoValidator: Schema = {
   orderByField: {
     in: 'query',
   },
+  JSESSIONID: {
+    in: 'cookies',
+    custom: {
+      options: (value, {req, location, path}) => {
+        // sessions.cookieAuthSessionVerify(req['session'].userInfo);
+        return true;
+      },
+    },
+  },
 };
 export const uploadManyPhotoValidator: Schema = {
 };

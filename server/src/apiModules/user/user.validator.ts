@@ -105,11 +105,11 @@ export const deleteOneUserValidator: Schema = {
     in: 'params',
     notEmpty: true,
   },
-  cookieAuth: {
+  JSESSIONID: {
     in: 'cookies',
     custom: {
       options: (value, {req, location, path}) => {
-        sessions.cookieAuthSessionVerify(req['session'].cookieAuth);
+        sessions.cookieAuthSessionVerify(req['session'].userInfo);
         return true;
       },
     },
@@ -120,11 +120,11 @@ export const readOneUserValidator: Schema = {
     in: 'params',
     notEmpty: true,
   },
-  cookieAuth: {
+  JSESSIONID: {
     in: 'cookies',
     custom: {
       options: (value, {req, location, path}) => {
-        sessions.cookieAuthSessionVerify(req['session'].cookieAuth);
+        sessions.cookieAuthSessionVerify(req['session'].userInfo);
         return true;
       },
     },
@@ -198,22 +198,22 @@ export const updateOneUserValidator: Schema = {
 
     },
   },
-  cookieAuth: {
+  JSESSIONID: {
     in: 'cookies',
     custom: {
       options: (value, {req, location, path}) => {
-        sessions.cookieAuthSessionVerify(req['session'].cookieAuth);
+        sessions.cookieAuthSessionVerify(req['session'].userInfo);
         return true;
       },
     },
   },
 };
 export const readManyUserValidator: Schema = {
-  cookieAuth: {
+  JSESSIONID: {
     in: 'cookies',
     custom: {
       options: (value, {req, location, path}) => {
-        sessions.cookieAuthSessionVerify(req['session'].cookieAuth);
+        sessions.cookieAuthSessionVerify(req['session'].userInfo);
         return true;
       },
     },
