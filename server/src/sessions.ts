@@ -30,7 +30,7 @@ export const cookieAuthSession = session({
     sameSite: 'none',
     httpOnly: true,
     secure: true,
-    maxAge: 100000,
+    maxAge: 60 * 60 * 1000,
   },
 });
 

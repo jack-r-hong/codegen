@@ -20,7 +20,17 @@ export class PhotoScheduleQueueModel extends
   constructor() {
     super();
   }
-  override key: string = super.setKey('PSM');
+  override key: string = super.setKey('psm');
+}
+
+@Service()
+export class PhotoSchedulePurifyStartQueueModel extends
+  Mixin(Queue, ApiModelsBase)
+  implements PhotoModel {
+  constructor() {
+    super();
+  }
+  override key: string = super.setKey('pspms');
 }
 
 

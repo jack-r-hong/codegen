@@ -4,6 +4,15 @@ import * as requestTypes from './photo.parameters';
 import {errors} from '../../errors';
 // custom begin import
 import fs from 'fs';
+import {Container} from 'typedi';
+import {
+  PhotoScheduleQueueModel,
+
+
+} from '../../redisClient/models/apiModels';
+
+const pSQModel = Container.get(PhotoScheduleQueueModel);
+
 
 // custom end import
 
@@ -20,7 +29,7 @@ export class PhotoService {
     // custom begin readOnePhoto
 
     // custom end readOnePhoto
-    
+
     const res = await this.photoModel.readOnePhoto(
         param,
     ).catch((e) =>{
@@ -35,7 +44,7 @@ export class PhotoService {
     // custom begin updateOnePhoto
 
     // custom end updateOnePhoto
-    
+
     const res = await this.photoModel.updateOnePhoto(
         param,
     ).catch((e) =>{
@@ -48,7 +57,7 @@ export class PhotoService {
       session: Express.Request['session'],
   ) {
     // custom begin deleteManyPhoto
-    if (!session.userInfo){
+    if (!session.userInfo) {
       throw new errors.AuthenticationFailedError;
     }
     const data = await this.photoModel.readManyPhoto(
@@ -73,7 +82,7 @@ export class PhotoService {
     });
 
     // custom end deleteManyPhoto
-    
+
     const res = await this.photoModel.deleteManyPhoto(
         param,
     ).catch((e) =>{
@@ -89,7 +98,7 @@ export class PhotoService {
 
     // custom end readManyPhoto
     console.log(session.userInfo?.id);
-    if(!session.userInfo) throw new errors.AuthenticationFailedError;
+    if (!session.userInfo) throw new errors.AuthenticationFailedError;
     param.cookieJsessionid = session.userInfo.id;
 
     const res = await this.photoModel.readManyPhoto(
@@ -106,14 +115,15 @@ export class PhotoService {
   ) {
     // custom begin uploadManyPhoto
 
+
     // custom end uploadManyPhoto
-    if(!session.userInfo) throw new errors.AuthenticationFailedError;
+    if (!session.userInfo) throw new errors.AuthenticationFailedError;
     param.cookieJsessionid = session.userInfo.id;
-    
+
     const res = await this.photoModel.uploadManyPhoto(
         param,
         files,
-        session.userInfo?.id!
+        session.userInfo?.id!,
     ).catch((e) =>{
       throw e;
     });
@@ -125,8 +135,14 @@ export class PhotoService {
   ) {
     // custom begin updateManyPhoto
 
+    for ( const ele of param.bodyDataList ) {
+      if (ele.bodyStatus == 2) {
+        await pSQModel.push(ele.bodyId.toString());
+      }
+    }
+
     // custom end updateManyPhoto
-    
+
     const res = await this.photoModel.updateManyPhoto(
         param,
     ).catch((e) =>{
