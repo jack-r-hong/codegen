@@ -4,6 +4,27 @@ import * as sessions from '../../sessions';
 // custom begin import
 
 // custom end import
+export const readManyAdminPhotoValidator: Schema = {
+  orderBy: {
+    in: 'query',
+  },
+  orderByField: {
+    in: 'query',
+  },
+  status: {
+    in: 'query',
+    isInt: true,
+  },
+  JSESSIONID: {
+    in: 'cookies',
+    custom: {
+      options: (value, {req, location, path}) => {
+        sessions.cookieAuthSessionVerify(req['session'].userInfo);
+        return true;
+      },
+    },
+  },
+};
 export const readOnePhotoValidator: Schema = {
   id: {
     in: 'params',
@@ -70,7 +91,7 @@ export const updateOnePhotoValidator: Schema = {
       },
     },
     matches: {
-      options: /^(1|2|3|4)/,
+      options: /^(1|2|3|4|5)/,
     },
   },
 };
@@ -91,7 +112,7 @@ export const readManyPhotoValidator: Schema = {
     in: 'cookies',
     custom: {
       options: (value, {req, location, path}) => {
-        // sessions.cookieAuthSessionVerify(req['session'].userInfo);
+        sessions.cookieAuthSessionVerify(req['session'].userInfo);
         return true;
       },
     },

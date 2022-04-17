@@ -7,12 +7,8 @@ import fs from 'fs';
 import {Container} from 'typedi';
 import {
   PhotoScheduleQueueModel,
-
-
 } from '../../redisClient/models/apiModels';
-
 const pSQModel = Container.get(PhotoScheduleQueueModel);
-
 
 // custom end import
 
@@ -22,6 +18,21 @@ export class PhotoService {
   @Inject()
   private photoModel!: PhotoModel;
 
+  async readManyAdminPhoto(
+      param :requestTypes.ReadManyAdminPhotoParams,
+      session: Express.Request['session'],
+  ) {
+    // custom begin readManyAdminPhoto
+
+    // custom end readManyAdminPhoto
+    
+    const res = await this.photoModel.readManyAdminPhoto(
+        param,
+    ).catch((e) =>{
+      throw e;
+    });
+    return res;
+  }
   async readOnePhoto(
       param :requestTypes.ReadOnePhotoParams,
       session: Express.Request['session'],
@@ -29,7 +40,7 @@ export class PhotoService {
     // custom begin readOnePhoto
 
     // custom end readOnePhoto
-
+    
     const res = await this.photoModel.readOnePhoto(
         param,
     ).catch((e) =>{
@@ -44,7 +55,7 @@ export class PhotoService {
     // custom begin updateOnePhoto
 
     // custom end updateOnePhoto
-
+    
     const res = await this.photoModel.updateOnePhoto(
         param,
     ).catch((e) =>{
@@ -82,7 +93,7 @@ export class PhotoService {
     });
 
     // custom end deleteManyPhoto
-
+    
     const res = await this.photoModel.deleteManyPhoto(
         param,
     ).catch((e) =>{
@@ -97,10 +108,9 @@ export class PhotoService {
     // custom begin readManyPhoto
 
     // custom end readManyPhoto
-    console.log(session.userInfo?.id);
-    if (!session.userInfo) throw new errors.AuthenticationFailedError;
+    if(!session.userInfo) throw new errors.AuthenticationFailedError;
     param.cookieJsessionid = session.userInfo.id;
-
+    
     const res = await this.photoModel.readManyPhoto(
         param,
     ).catch((e) =>{
@@ -115,15 +125,14 @@ export class PhotoService {
   ) {
     // custom begin uploadManyPhoto
 
-
     // custom end uploadManyPhoto
-    if (!session.userInfo) throw new errors.AuthenticationFailedError;
+    if(!session.userInfo) throw new errors.AuthenticationFailedError;
     param.cookieJsessionid = session.userInfo.id;
-
+    
     const res = await this.photoModel.uploadManyPhoto(
         param,
         files,
-        session.userInfo?.id!,
+        session.userInfo?.id!
     ).catch((e) =>{
       throw e;
     });
@@ -134,7 +143,6 @@ export class PhotoService {
       session: Express.Request['session'],
   ) {
     // custom begin updateManyPhoto
-
     for ( const ele of param.bodyDataList ) {
       if (ele.bodyStatus == 2) {
         await pSQModel.push(ele.bodyId.toString());
@@ -142,7 +150,7 @@ export class PhotoService {
     }
 
     // custom end updateManyPhoto
-
+    
     const res = await this.photoModel.updateManyPhoto(
         param,
     ).catch((e) =>{

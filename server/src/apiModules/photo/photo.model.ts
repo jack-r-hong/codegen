@@ -7,6 +7,37 @@ const prisma = new PrismaClient();
 
 @Service()
 export class PhotoModel {
+  async readManyAdminPhoto(
+      param: requestTypes.ReadManyAdminPhotoParams,
+  ) {
+    const res: any[] | null = await prisma.photo.findMany({
+      where: {
+    status: param.queryStatus,
+      },
+      select: {
+        afterLevel: true,
+        beforeLevel: true,
+        createdAt: true,
+        filePath1: true,
+        filePath2: true,
+        filePath3: true,
+        id: true,
+        name: true,
+        ownerId: true,
+        process: true,
+        status: true,
+        user: true,
+      },
+      orderBy: {
+        [param.queryOrderByField]: param.queryOrderBy,
+      },
+    }).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+    return res;
+  }
   async readOnePhoto(
       param: requestTypes.ReadOnePhotoParams,
   ) {
@@ -79,9 +110,6 @@ export class PhotoModel {
   async readManyPhoto(
       param: requestTypes.ReadManyPhotoParams,
   ) {
-    console.log(param.cookieJsessionid);
-
-    
     const res: any[] | null = await prisma.photo.findMany({
       where: {
     ownerId: param.cookieJsessionid,

@@ -24,6 +24,28 @@ export class PhotoController implements Controller {
   @Inject('app.use')
     appUse!: AppUse;
 
+  @Get('/admin/photos')
+  @Validator(validSchemas.readManyAdminPhotoValidator)
+  async readManyAdminPhoto(
+      req: photoParams.ReadManyAdminPhotoRequest,
+      res: Response,
+      next: NextFunction,
+  ) {
+    PhotoController.service.readManyAdminPhoto(
+        photoParams.ReadManyAdminPhotoRequestConvert(
+            req.body,
+            req.query,
+            req.params,
+            req.cookies,
+        ),
+        req.session,
+    )
+        .then((result) =>{
+          res.json(result);
+        }).catch((e) => {
+          next(e);
+        });
+  }
   @Get('/photo/:id')
   @Validator(validSchemas.readOnePhotoValidator)
   async readOnePhoto(

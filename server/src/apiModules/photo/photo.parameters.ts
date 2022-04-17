@@ -14,6 +14,47 @@ interface TypedRequest<
 }
 
 
+type ReadManyAdminPhotoReqBody = {
+  }
+
+type ReadManyAdminPhotoReqQuery = {
+      orderBy: string
+      orderByField: string
+      status: string
+}
+
+type ReadManyAdminPhotoReqParams = {
+}
+
+type ReadManyAdminPhotoReqCookie = {
+}
+
+export interface ReadManyAdminPhotoRequest extends TypedRequest<
+  ReadManyAdminPhotoReqBody,
+  ReadManyAdminPhotoReqQuery,
+  ReadManyAdminPhotoReqParams,
+  ReadManyAdminPhotoReqCookie
+>{
+}
+
+export type ReadManyAdminPhotoParams = {
+      queryOrderBy: string
+      queryOrderByField: string
+      queryStatus: number
+}
+
+export const ReadManyAdminPhotoRequestConvert = (
+    body: ReadManyAdminPhotoReqBody,
+    query: ReadManyAdminPhotoReqQuery,
+    path: ReadManyAdminPhotoReqParams,
+    cookie: ReadManyAdminPhotoReqCookie,
+): ReadManyAdminPhotoParams => {
+  return {
+    queryOrderBy: query.orderBy,
+    queryOrderByField: query.orderByField,
+    queryStatus: parseInt(query.status),
+  };
+};
 type ReadOnePhotoReqBody = {
   }
 

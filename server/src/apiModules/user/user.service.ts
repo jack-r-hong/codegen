@@ -77,6 +77,7 @@ export class UserService {
     session.destroy((err) => {
       if (err) throw errors.AuthenticationFailedError;
     });
+
     // custom end logoutUser
   }
   async registerUser(
@@ -115,7 +116,7 @@ export class UserService {
     // custom begin deleteOneUser
 
     // custom end deleteOneUser
-
+    
     const res = await this.userModel.deleteOneUser(
         param,
     ).catch((e) =>{
@@ -130,7 +131,7 @@ export class UserService {
     // custom begin readOneUser
 
     // custom end readOneUser
-
+    
     const res = await this.userModel.readOneUser(
         param,
     ).catch((e) =>{
@@ -145,7 +146,7 @@ export class UserService {
     // custom begin updateOneUser
 
     // custom end updateOneUser
-
+    
     const res = await this.userModel.updateOneUser(
         param,
     ).catch((e) =>{
@@ -160,7 +161,7 @@ export class UserService {
     // custom begin readManyUser
 
     // custom end readManyUser
-
+    
     const res = await this.userModel.readManyUser(
         param,
     ).catch((e) =>{
