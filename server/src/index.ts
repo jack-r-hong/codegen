@@ -25,3 +25,11 @@ httpsServer.listen(SSLPORT, function() {
 });
 
 
+// import {PhotoScheduleQueueModel} from './redisClient/models/apiModels';
+// import {Container} from 'typedi';
+// // new ApiModels();
+// const test = Container.get(PhotoScheduleQueueModel);
+// console.log(test.get());
+
+
+

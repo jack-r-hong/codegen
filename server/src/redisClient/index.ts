@@ -1,6 +1,6 @@
 import {createClient, RedisClientOptions} from 'redis';
 
-const options: RedisClientOptions = {
+const defaultOptions: RedisClientOptions = {
   socket: {
     port: 6379,
     host: process.env['REDIS_HOSTNAME'],
@@ -8,10 +8,10 @@ const options: RedisClientOptions = {
   password: 'root',
 };
 
-class RedisClient {
+export class RedisClient {
   client;
 
-  constructor(options: RedisClientOptions) {
+  constructor(options: RedisClientOptions = defaultOptions ) {
     const client = createClient(
         options,
     );
@@ -23,7 +23,7 @@ class RedisClient {
     this.connect().then(() => {});
   }
 
-  async connect(){
+  async connect() {
     await this.client.connect();
     await this.client.ping();
   }
@@ -31,11 +31,11 @@ class RedisClient {
 
 
 export const redisSessionClient = new RedisClient(
-    Object.assign(options, {'legacyMode': true}),
+    Object.assign(defaultOptions, {'legacyMode': true}),
 ).client;
 
 export const redisLimiterClient = new RedisClient(
-    Object.assign(options, {'legacyMode': false}),
+    Object.assign(defaultOptions, {'legacyMode': false}),
 ).client;
 
 
