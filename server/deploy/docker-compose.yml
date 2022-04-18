@@ -5,12 +5,13 @@ services:
   ts-node-server:
     build:
       context: ../
-      dockerfile: docker_product/product.Dockerfile
+      dockerfile: deploy/node-pod.Dockerfile
       # target: base
     volumes:
-      - ./src:/usr/src/app/src
-    #   - ./prisma:/usr/src/app/prisma
-    #   - ./other:/usr/src/app/other
+      - ../certreq:/usr/src/app/certreq
+      # - ./src:/usr/src/app/src
+      # - ./prisma:/usr/src/app/prisma
+      # - ./other:/usr/src/app/other
     container_name: ts-node-server
     working_dir: /usr/src/app/
     ports:
@@ -21,22 +22,16 @@ services:
     command: npm start
     env_file:
       - ../.env    
-    environment:
-      - HOSTNAME=${HOSTNAME}
-      - FRONT_END_HOST=${FRONT_END_HOST}
+
     depends_on: 
       - db
   db:
     container_name: db
     build: 
       context: ..
-      dockerfile: mysql.Dockerfile
+      dockerfile: doploy/mysql.Dockerfile
     restart: always
-    environment:
-      - MYSQL_USER=${MYSQL_USER}
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
-      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
-      - MYSQL_DATABASE=${MYSQL_DATABASE}
+
     env_file:
       - ../.env   
     networks:
@@ -54,20 +49,20 @@ services:
       - 6379:6379
     volumes:
       - /data/redis-data:/data  
-      - ./other:/etc/redis
+      - ../other/redis.conf:/etc/redis/redis.conf 
     networks:
       - backend         
   nginx: 
     build: 
       context: ..
-      dockerfile: docker_product/nginx.Dockerfile
+      dockerfile: doploy/nginx.Dockerfile
     container_name: nginx
     ports:
       - 80:80
       - 443:443
     volumes:
-      - ./templates:/etc/nginx/templates
-      - ./src/certreq:/etc/nginx/ssl
+      - ./nginx_templates:/etc/nginx/templates
+      - ../certreq:/etc/nginx/ssl
       - ../build/web:/usr/share/nginx/html
     networks:
       - backend     
