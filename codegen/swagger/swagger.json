@@ -32,8 +32,120 @@
   }, {
     "name" : "photo",
     "description" : "photo"
-  } ],
+  } , {
+    "name" : "notify",
+    "description" : "notify"
+  } 
+],
   "paths" : {
+    "/notify" : {
+      "get" : {
+        "tags" : [ "notify" ],
+        "summary" : "readManyNotify",
+        "description" : "This can only be done by the logged in user.",
+        "operationId" : "readManyNotify",
+        "responses" : {
+          "200" : {
+            "description" : "Ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Notify"
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/BadRequest"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/Unauthorized"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          },
+          "404" : {
+            "$ref" : "#/components/responses/NotFound"
+          },
+          "409" : {
+            "$ref" : "#/components/responses/Conflict"
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "notify" ],
+        "summary" : "Create user",
+        "description" : "This can only be done by the logged in user.",
+        "operationId" : "createOneNotify",
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/Notify"
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Notify"
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/BadRequest"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/Unauthorized"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          },
+          "404" : {
+            "$ref" : "#/components/responses/NotFound"
+          },
+          "409" : {
+            "$ref" : "#/components/responses/Conflict"
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "notify" ],
+        "summary" : "Create user",
+        "description" : "This can only be done by the logged in user.",
+        "operationId" : "updateManyNotify",
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/NotifyArray"
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Notify"
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/BadRequest"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/Unauthorized"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          },
+          "404" : {
+            "$ref" : "#/components/responses/NotFound"
+          },
+          "409" : {
+            "$ref" : "#/components/responses/Conflict"
+          }
+        }
+      }
+      
+    },
     "/user" : {
       "post" : {
         "tags" : [ "user" ],
@@ -870,6 +982,60 @@
         }
       }
     },
+    "/photos/inids" : {
+      "get" : {
+        "tags" : [ "photo" ],
+        "summary" : "get photo list",
+        "description" : "This can only be done by the logged in user.",
+        "operationId" : "findManyInIdsPhoto",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "query",
+          "description" : "The name that needs to be fetched. Use user1 for testing.",
+          "schema" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer"
+            }
+          }
+        }
+      ],
+        "responses" : {
+          "200" : {
+            "description" : "Ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Photo"
+                  }
+                  
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/BadRequest"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/Unauthorized"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          },
+          "404" : {
+            "$ref" : "#/components/responses/NotFound"
+          },
+          "409" : {
+            "$ref" : "#/components/responses/Conflict"
+          }
+        },
+        "security" : [ {
+          "cookieAuth" : [ ]
+        } ]
+      }
+    },
     "/admin/photos" : {
       "get" : {
         "tags" : [ "photo" ],
@@ -1024,6 +1190,36 @@
           }
         }
       },
+      "Notify" : {
+        "type" : "object",
+        "description" : "database",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "user" : {
+            "$ref" : "#/components/schemas/User"
+          },
+          "ownerId" : {
+            "type" : "string",
+            "$ref" : "#/components/schemas/User/properties/id"
+          },
+          "read" : {
+            "type" : "boolean"
+          },        
+          "msg" : {
+            "type" : "string"
+          },
+          "event" : {
+            "type" : "string"
+          },
+          "createdAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        }
+      },
       "Photo" : {
         "type" : "object",
         "description" : "database",
@@ -1108,7 +1304,8 @@
             "$ref" : "#/components/schemas/Photo"
           }
         }
-      }   
+      }
+
     },
     "requestBodies" : {
       "User" : {
@@ -1297,7 +1494,72 @@
         },
         "description" : "List of user object",
         "required" : true
+      },
+      "Notify" : {
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "ownerId" : {
+                  "type" : "string",
+                  "$ref" : "#/components/schemas/Notify/properties/ownerId"
+                },
+                "read" : {
+                  "$ref" : "#/components/schemas/Notify/properties/read"
+                },        
+                "msg" : {
+                  "$ref" : "#/components/schemas/Notify/properties/msg"
+                },
+                "event" : {
+                  "$ref" : "#/components/schemas/Notify/properties/event"
+                }
+              }
+            }
+          }
+        },
+        "description" : "List of user object",
+        "required" : true
+      },
+      "NotifyArray" : {
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "whereField": {
+                  "type" : "string",
+                  "example" : "id"
+                },
+                "dataList":  {
+                  "type" : "array",
+                  "items" : {
+                    "type" : "object",
+                    "properties" : {
+                      "ownerId" : {
+                        "type" : "string",
+                        "$ref" : "#/components/schemas/Notify/properties/ownerId"
+                      },
+                      "read" : {
+                        "$ref" : "#/components/schemas/Notify/properties/read"
+                      },        
+                      "msg" : {
+                        "$ref" : "#/components/schemas/Notify/properties/msg"
+                      },
+                      "event" : {
+                        "$ref" : "#/components/schemas/Notify/properties/event"
+                      }
+                    }
+                  }                
+                }
+              }
+            }
+          }
+        },
+        "description" : "List of user object",
+        "required" : true
       }
+
     },
     "parameters" : {
       "createdAt" : {

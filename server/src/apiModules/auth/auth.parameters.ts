@@ -41,6 +41,7 @@ bodyLevel: number|undefined,
 bodyRole: number,
 }
 
+
 export const CreateOneAuthRequestConvert = (
     body: CreateOneAuthReqBody,
     query: CreateOneAuthReqQuery,
@@ -78,6 +79,7 @@ export type DeleteOneAuthParams = {
       pathId: number
 }
 
+
 export const DeleteOneAuthRequestConvert = (
     body: DeleteOneAuthReqBody,
     query: DeleteOneAuthReqQuery,
@@ -85,7 +87,7 @@ export const DeleteOneAuthRequestConvert = (
     cookie: DeleteOneAuthReqCookie,
 ): DeleteOneAuthParams => {
   return {
-    pathId: parseInt(path.id),
+          pathId: parseInt(path.id),
   };
 };
 type UpdateOneAuthReqBody = {
@@ -117,6 +119,7 @@ export type UpdateOneAuthParams = {
 bodyLevel: number|undefined,
 bodyRole: number,
 }
+
 
 export const UpdateOneAuthRequestConvert = (
     body: UpdateOneAuthReqBody,
@@ -152,6 +155,7 @@ export interface ReadManyAuthRequest extends TypedRequest<
 
 export type ReadManyAuthParams = {
 }
+
 
 export const ReadManyAuthRequestConvert = (
     body: ReadManyAuthReqBody,

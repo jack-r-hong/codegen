@@ -180,4 +180,28 @@ export class PhotoController implements Controller {
           next(e);
         });
   }
+  @Get('/photos/inids')
+  @Validator(validSchemas.findManyInIdsPhotoValidator)
+  async findManyInIdsPhoto(
+      req: photoParams.FindManyInIdsPhotoRequest,
+      res: Response,
+      next: NextFunction,
+  ) {
+    PhotoController.service.findManyInIdsPhoto(
+        photoParams.FindManyInIdsPhotoRequestConvert(
+            req.body,
+            req.query,
+            req.params,
+            req.cookies,
+        ),
+        req.session,
+    )
+        .then((result) =>{
+          // custom begin findManyInIdsPhoto
+
+          // custom end findManyInIdsPhoto
+        }).catch((e) => {
+          next(e);
+        });
+  }
 }

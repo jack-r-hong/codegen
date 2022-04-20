@@ -36,9 +36,6 @@ export class OnPurifyWS extends MyWebSocketServer implements WSOnMessage {
       const data: WSEvent = event.parse(message);
       if (data.data == 'start') {
         ws.send(event.msg('start'));
-        console.log('purify');
-        
-
 
         await pSQModel.move(pSPSQModel.getKey(), 16);
 

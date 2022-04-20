@@ -196,4 +196,38 @@ export class PhotoModel {
     });
     return res.count;
   }
+  async findManyInIdsPhoto(
+      param: requestTypes.FindManyInIdsPhotoParams,
+      customParam: any,
+  ) {
+    // custom begin findManyInIdsPhoto
+    const res: any[] | null = await prisma.photo.findMany({
+      where: {
+        id: {
+          in: [...param.queryId],
+        },
+      },
+      select: {
+        afterLevel: true,
+        beforeLevel: true,
+        createdAt: true,
+        filePath1: true,
+        filePath2: true,
+        filePath3: true,
+        id: true,
+        name: true,
+        ownerId: true,
+        process: true,
+        status: true,
+        user: true,
+      },
+    }).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+    return res;
+
+    // custom end findManyInIdsPhoto
+  }
 }

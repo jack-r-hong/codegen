@@ -141,7 +141,11 @@ export type {{fpc data.operationId}}Params = {
     body{{fpc @key}}: parseInt(body.{{@key}}),
     {{/if}}
   {{else ~}}
-    body{{fpc @key}}: body.{{@key}},
+    {{#if (equal p.type "boolean") ~}}
+      body{{fpc @key}}: !!body.{{@key}},
+    {{else ~}}
+      body{{fpc @key}}: body.{{@key}},
+    {{/if}}
   {{/if}}
 {{~/inline}}
 
@@ -149,7 +153,11 @@ export type {{fpc data.operationId}}Params = {
   {{#if (equal p.schema.type "integer") }}
     {{> RequestConvertParametersIntegerType}}
   {{else}}
-    {{> RequestConvertParametersStringType}}
+    {{#if (equal p.schema.type "boolean") }}
+      {{> RequestConvertParametersBooleanType}}
+    {{else}}
+      {{> RequestConvertParametersStringType}}
+    {{/if}}
   {{/if}}
 {{/inline}}
 
@@ -188,6 +196,11 @@ export type {{fpc data.operationId}}Params = {
   {{~p.in}}{{fpc p.name}}: parseInt({{p.in}}.{{p.name}}),
 {{/inline}}
 
+{{~#*inline "RequestConvertParametersBooleanType"}}
+  {{~p.in}}{{fpc p.name}}: !!{{p.in}}.{{p.name}},
+{{/inline}}
+
+
 {{#*inline "RequestConvertReturn2typeof"}}
     {{p.in}}{{fpc p.name}}: typeof {{p.in}}.{{p.name}} === 'string'?
     [parseInt({{p.in}}.{{p.name}})] :
@@ -205,10 +218,14 @@ export type {{fpc data.operationId}}Params = {
     {{> RequestConvertParametersStringType}}
         {{/if}}        
       {{else}}
-        {{#if (equal p.schema.type "integer")}}
-    {{> RequestConvertParametersIntegerType}}
+        {{#if (equal p.schema.type "integer") }}
+          {{> RequestConvertParametersIntegerType}}
         {{else}}
-    {{> RequestConvertParametersStringType}}
+          {{#if (equal p.schema.type "boolean") }}
+            {{> RequestConvertParametersBooleanType}}
+          {{else}}
+            {{> RequestConvertParametersStringType}}
+          {{/if}}
         {{/if}}
       {{/if}}    
     {{/each}}

@@ -43,6 +43,7 @@ export type ReadManyAdminPhotoParams = {
       queryStatus: number
 }
 
+
 export const ReadManyAdminPhotoRequestConvert = (
     body: ReadManyAdminPhotoReqBody,
     query: ReadManyAdminPhotoReqQuery,
@@ -50,9 +51,9 @@ export const ReadManyAdminPhotoRequestConvert = (
     cookie: ReadManyAdminPhotoReqCookie,
 ): ReadManyAdminPhotoParams => {
   return {
-    queryOrderBy: query.orderBy,
-    queryOrderByField: query.orderByField,
-    queryStatus: parseInt(query.status),
+            queryOrderBy: query.orderBy,
+            queryOrderByField: query.orderByField,
+          queryStatus: parseInt(query.status),
   };
 };
 type ReadOnePhotoReqBody = {
@@ -81,6 +82,7 @@ export type ReadOnePhotoParams = {
       pathId: number
 }
 
+
 export const ReadOnePhotoRequestConvert = (
     body: ReadOnePhotoReqBody,
     query: ReadOnePhotoReqQuery,
@@ -88,7 +90,7 @@ export const ReadOnePhotoRequestConvert = (
     cookie: ReadOnePhotoReqCookie,
 ): ReadOnePhotoParams => {
   return {
-    pathId: parseInt(path.id),
+          pathId: parseInt(path.id),
   };
 };
 type UpdateOnePhotoReqBody = {
@@ -126,6 +128,7 @@ bodyFilePath2: string|null,
 bodyProcess: number|undefined,
 bodyStatus: number|undefined,
 }
+
 
 export const UpdateOnePhotoRequestConvert = (
     body: UpdateOnePhotoReqBody,
@@ -166,6 +169,7 @@ export interface DeleteManyPhotoRequest extends TypedRequest<
 export type DeleteManyPhotoParams = {
       queryId: number[]
 }
+
 
 export const DeleteManyPhotoRequestConvert = (
     body: DeleteManyPhotoReqBody,
@@ -209,6 +213,7 @@ export type ReadManyPhotoParams = {
       cookieJsessionid: string
 }
 
+
 export const ReadManyPhotoRequestConvert = (
     body: ReadManyPhotoReqBody,
     query: ReadManyPhotoReqQuery,
@@ -216,9 +221,9 @@ export const ReadManyPhotoRequestConvert = (
     cookie: ReadManyPhotoReqCookie,
 ): ReadManyPhotoParams => {
   return {
-    queryOrderBy: query.orderBy,
-    queryOrderByField: query.orderByField,
-    cookieJsessionid: cookie.JSESSIONID,
+            queryOrderBy: query.orderBy,
+            queryOrderByField: query.orderByField,
+            cookieJsessionid: cookie.JSESSIONID,
   };
 };
 type UploadManyPhotoReqBody = {
@@ -247,6 +252,7 @@ export type UploadManyPhotoParams = {
       cookieJsessionid: string
 }
 
+
 export const UploadManyPhotoRequestConvert = (
     body: UploadManyPhotoReqBody,
     query: UploadManyPhotoReqQuery,
@@ -254,7 +260,7 @@ export const UploadManyPhotoRequestConvert = (
     cookie: UploadManyPhotoReqCookie,
 ): UploadManyPhotoParams => {
   return {
-    cookieJsessionid: cookie.JSESSIONID,
+            cookieJsessionid: cookie.JSESSIONID,
   };
 };
 type UpdateManyPhotoReqBody = {
@@ -298,6 +304,7 @@ export type UpdateManyPhotoParams = {
 bodyWhereField: string,
 }
 
+
 export const UpdateManyPhotoRequestConvert = (
     body: UpdateManyPhotoReqBody,
     query: UpdateManyPhotoReqQuery,
@@ -316,6 +323,44 @@ export const UpdateManyPhotoRequestConvert = (
       };
     }),
     bodyWhereField: body.whereField,
+  };
+};
+type FindManyInIdsPhotoReqBody = {
+  }
+
+type FindManyInIdsPhotoReqQuery = {
+      id: string[]
+}
+
+type FindManyInIdsPhotoReqParams = {
+}
+
+type FindManyInIdsPhotoReqCookie = {
+}
+
+export interface FindManyInIdsPhotoRequest extends TypedRequest<
+  FindManyInIdsPhotoReqBody,
+  FindManyInIdsPhotoReqQuery,
+  FindManyInIdsPhotoReqParams,
+  FindManyInIdsPhotoReqCookie
+>{
+}
+
+export type FindManyInIdsPhotoParams = {
+      queryId: number[]
+}
+
+
+export const FindManyInIdsPhotoRequestConvert = (
+    body: FindManyInIdsPhotoReqBody,
+    query: FindManyInIdsPhotoReqQuery,
+    path: FindManyInIdsPhotoReqParams,
+    cookie: FindManyInIdsPhotoReqCookie,
+): FindManyInIdsPhotoParams => {
+  return {
+    queryId: typeof query.id === 'string'?
+    [parseInt(query.id)] :
+  query.id.map((e) => parseInt(e)),
   };
 };
 

@@ -20,6 +20,19 @@ model Auth {
 
     // custom end Auth
 }
+model Notify {
+  createdAt  DateTime  @default(now()) @map("created_at")                 
+  event  String  @map("event")                 
+  id  Int @id @default(autoincrement()) @map("id")                 
+  msg  String  @map("msg")                 
+  read  Boolean  @map("read")                 
+  user User? @relation(fields: [ownerId], references: [id])
+  ownerId String @map("owner_id") 
+  
+    // custom begin Notify
+
+    // custom end Notify
+}
 model Photo {
   afterLevel  Int  @default(1)  @map("after_level")                 
   beforeLevel  Int  @default(1)  @map("before_level")                 
@@ -61,6 +74,7 @@ model User {
   username  String  @map("username")                 
   auth Auth? @relation(fields: [authLevel], references: [level])
   authLevel Int @map("auth_level") @default(100)
+  notify Notify[]
   photo Photo[]
   
     // custom begin User

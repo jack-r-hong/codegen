@@ -90,6 +90,8 @@ fn type_convert<'a>(t:  &'a str, mode:  &'a str, format:  &'a str ) ->  &'a str{
         "integer" if mode == "schema" => "Int",
         "integer" => "number",
         "array" => "String",
+        "boolean" if mode == "schema" => "Boolean",
+        "boolean" => "boolean",
         // Some(x) => x,
         _ =>  ""
     };
@@ -274,9 +276,18 @@ pub fn foreign_key_helper(
                 if k3 == "$ref"{
                     // println!("v2 {:?}", v2["type"]);
                     // println!("v3: {:?}", v3.as_str().unwrap() );
-                    // println!("k2: {:?}", k2);
+
+                    // if schema == "Notify"{
+                    //     println!("schema: {:?}\r\n", schema);
+                    //     println!("k2: {:?}\r\n", k2);    
+                    //     println!("v2 {:?}", v2["type"]);
+                    //     println!("v3: {:?}", v3.as_str().unwrap() );           
+                    // }
+ 
                     let vec: Vec<&str> = v3.as_str().unwrap().split('/').collect();
                     // vec[3]: table name, k2: FOREIGN KEY,  vec[5]: REFERENCES FIELD
+
+                    
                     
                     if vec.len() > 5 {
 
@@ -290,7 +301,7 @@ pub fn foreign_key_helper(
                         };
 
                         map.insert(
-                            vec[3].to_string(),
+                            vec[3].to_string() + schema.as_str(),
                             to_json([
                                 vec[3], 
                                 k2, 
@@ -303,6 +314,8 @@ pub fn foreign_key_helper(
                     }
                 
                 }
+
+                
 
                 // if k3.as_str() == "items" {
                 //     for (k4, v4) in v3.as_object().unwrap(){
@@ -335,6 +348,8 @@ pub fn foreign_key_helper(
     
     // println!("{:?}", &map);
     for (table, arr) in map {
+        // print!("{}\r\n", table);
+        // print!("{}\r\n", arr);w
         if param.value().as_str().unwrap() == arr[4] {
             // println!("{} {} @relation(fields: [{}], references: [{}])", arr[0], arr[0], arr[1], arr[2]);
             // println!("{} {}", arr[1], arr[3]);

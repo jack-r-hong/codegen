@@ -9,8 +9,6 @@ import {WSToken, WSOnMessage, MyWebSocketServer, WSEvent} from './base';
 import {Service, Container} from 'typedi';
 import {WSClientIdModel} from '../redisClient/models/webSocketModels';
 import {IncomingMessage} from 'http';
-import {JSONCookie, signedCookies} from 'cookie-parser';
-
 
 const wSCIModel = Container.get(WSClientIdModel);
 // const pSPSQModel = Container.get(PhotoSchedulePurifyStartQueueModel);
@@ -30,8 +28,6 @@ export class OnNotifyWS extends MyWebSocketServer implements WSOnMessage {
   onStartMessage(ws: WebSocket, req: IncomingMessage) {
     ws.on('message', async function message(message: string) {
       const data: WSEvent = event.parse(message);
-      console.log('notify');
-      //   console.log(req.headers.cookie!);
 
       const cookie = req.headers.cookie;
 
@@ -43,9 +39,25 @@ export class OnNotifyWS extends MyWebSocketServer implements WSOnMessage {
       const cookieParse = parseCookies(cookie);
 
       if (data.data == 'start') {
-        const sessionId = await wSCIModel.get(
-            `sess:${getSessionId( cookieParse['JSESSIONID']!)}`);
-        console.log(sessionId);
+        const session = await wSCIModel.get(
+            `sess:${getSessionId( cookieParse['JSESSIONID']!)}`).catch((e) => {
+          console.log(e);
+        });
+        console.log('notify');
+
+
+        if (session) {
+          console.log(JSON.parse(session));
+          if (JSON.parse(session)['userInfo']) {
+            const userId = JSON.parse(session)['userInfo']['id'];
+            await wSCIModel.sub(userId, (message: any)=>{
+              console.log(message);
+              console.log('sub');
+            });
+          }
+        }
+
+
         // const {uid, result} = await wSCIModel.set('sessionId');
         // // console.log( await wSCIModel.get(req.headers.cookie!));
 

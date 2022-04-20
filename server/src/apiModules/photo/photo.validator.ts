@@ -128,3 +128,17 @@ export const updateManyPhotoValidator: Schema = {
     in: 'body',
   },
 };
+export const findManyInIdsPhotoValidator: Schema = {
+  id: {
+    in: 'query',
+  },
+  JSESSIONID: {
+    in: 'cookies',
+    custom: {
+      options: (value, {req, location, path}) => {
+        sessions.cookieAuthSessionVerify(req['session'].userInfo);
+        return true;
+      },
+    },
+  },
+};

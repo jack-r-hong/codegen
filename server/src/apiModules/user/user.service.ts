@@ -116,12 +116,16 @@ export class UserService {
     // custom begin deleteOneUser
 
     // custom end deleteOneUser
-    
+
     const res = await this.userModel.deleteOneUser(
         param,
     ).catch((e) =>{
       throw e;
     });
+
+    // custom begin deleteOneUser2
+
+    // custom end deleteOneUser2
     return res;
   }
   async readOneUser(
@@ -131,12 +135,16 @@ export class UserService {
     // custom begin readOneUser
 
     // custom end readOneUser
-    
+
     const res = await this.userModel.readOneUser(
         param,
     ).catch((e) =>{
       throw e;
     });
+
+    // custom begin readOneUser2
+
+    // custom end readOneUser2
     return res;
   }
   async updateOneUser(
@@ -146,12 +154,16 @@ export class UserService {
     // custom begin updateOneUser
 
     // custom end updateOneUser
-    
+
     const res = await this.userModel.updateOneUser(
         param,
     ).catch((e) =>{
       throw e;
     });
+
+    // custom begin updateOneUser2
+
+    // custom end updateOneUser2
     return res;
   }
   async readManyUser(
@@ -161,12 +173,16 @@ export class UserService {
     // custom begin readManyUser
 
     // custom end readManyUser
-    
+
     const res = await this.userModel.readManyUser(
         param,
     ).catch((e) =>{
       throw e;
     });
+
+    // custom begin readManyUser2
+
+    // custom end readManyUser2
     return res;
   }
 }

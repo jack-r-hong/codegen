@@ -1,7 +1,7 @@
 import {RedisClient} from '../index';
 import {ModelBase} from './index';
 import {Service} from 'typedi';
-import {UUId} from './uuid';
+import {UserId} from './userId';
 import {Mixin} from 'ts-mixer';
 
 class WebSocketBase extends RedisClient implements ModelBase {
@@ -10,7 +10,7 @@ class WebSocketBase extends RedisClient implements ModelBase {
 
 @Service()
 export class WSClientIdModel extends
-  Mixin(UUId, WebSocketBase) {
+  Mixin(UserId, WebSocketBase) {
   constructor() {
     super();
   }
