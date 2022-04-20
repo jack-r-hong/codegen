@@ -1,6 +1,5 @@
-
-
 import WebSocket from 'ws';
+import {WSToken, WSOnMessage, MyWebSocketServer, WSEvent} from './base';
 
 import {
   PhotoScheduleQueueModel,
@@ -9,7 +8,7 @@ import {
 } from '../redisClient/models/apiModels';
 import {Container, Service} from 'typedi';
 import {PhotoModel} from '../apiModules/photo/photo.model';
-import {WSToken, WSOnMessage, MyWebSocketServer, WSEvent} from './base';
+import {IncomingMessage} from 'http';
 
 
 const apiPModel = Container.get(PhotoModel);
@@ -17,22 +16,29 @@ const apiPModel = Container.get(PhotoModel);
 const pSQModel = Container.get(PhotoScheduleQueueModel);
 const pSPSQModel = Container.get(PhotoSchedulePurifyStartQueueModel);
 
+const event = new WSEvent('purify');
 
 @Service({id: WSToken, multiple: true})
 export class OnPurifyWS extends MyWebSocketServer implements WSOnMessage {
-  wsPath: string = '/purify';
+  wsPath: string = `/${event.eventName}`;
+
   constructor() {
     super();
-    this.events.push(this.onMessage);
-  };
+    this.events.push(this.onStartMessage);
+  }
 
-  onMessage(ws: WebSocket.WebSocket) {
-    const event = new WSEvent('purify');
+
+  onStartMessage(ws: WebSocket, req: IncomingMessage) {
+    // pSQModel.del().then();
+    // pSPSQModel.del().then();
 
     ws.on('message', async function message(message: string) {
       const data: WSEvent = event.parse(message);
       if (data.data == 'start') {
         ws.send(event.msg('start'));
+        console.log('purify');
+        
+
 
         await pSQModel.move(pSPSQModel.getKey(), 16);
 

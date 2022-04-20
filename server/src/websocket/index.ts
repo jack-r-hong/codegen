@@ -9,6 +9,7 @@ import parse from 'url-parse';
 import {WSOnMessage, WSToken} from './base';
 
 import './purify';
+import './notify';
 
 
 export class WebsocketApp {
@@ -27,13 +28,17 @@ export class WebsocketApp {
     this.server.on('upgrade', (request, socket, head) => {
       const pathname = parse(request.url!).pathname;
 
-      Container.getMany<WSOnMessage>(WSToken).forEach((e) =>{
-        if (pathname === `${this.path}${e.wsPath }`) {
+      const notMatch = Container.getMany<WSOnMessage>(WSToken).some((e) =>{
+        if (pathname === `${this.path}${e.wsPath}`) {
           e.onConnection(request, socket, head);
-        } else {
-          socket.destroy();
+          return true;
         }
+        return false;
       });
+
+      if (!notMatch) {
+        socket.destroy();
+      }
     });
   }
 }

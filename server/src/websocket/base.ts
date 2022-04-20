@@ -4,14 +4,14 @@ import WebSocket, {WebSocketServer} from 'ws';
 import {IncomingMessage} from 'http';
 
 
-import {Token} from 'typedi';
+import {Token, Service} from 'typedi';
 import {Duplex} from 'stream';
 
 
 export const WSToken = new Token('WSToken');
 
 export interface WSOnMessage{
-  onMessage: (ws: WebSocket) => void
+  onStartMessage: (ws: WebSocket, req: IncomingMessage) => void
   wsPath: string
   handleUpgrade: (
     request: IncomingMessage,
@@ -41,16 +41,26 @@ export class MyWebSocketServer extends WebSocketServer {
     this.handleUpgrade(request, socket, head, (ws) => {
       ws.send( JSON.stringify({
         event: 'connection',
-        msg: 'start',
+        data: 'start',
       }));
 
       for (const event of this.events) {
-        event(ws);
+        event(ws, request);
       }
     });
   }
+
+  // onStartMessage(ws: WebSocket.WebSocket) {
+  //   // ws.on('message', async function message(message: string) {
+  //   //   const data: WSEvent = event.parse(message);
+  //   //   if (data.data == 'start') {
+  //   //     ws.send(event.msg('start'));
+  //   //   }
+  //   // });
+  // }
 }
 
+@Service()
 export class WSEvent {
   eventName;
   data!: Object;
@@ -68,6 +78,7 @@ export class WSEvent {
   parse(message: string) {
     const self = new WSEvent(this.eventName);
     self.data = JSON.parse(message).data;
+
     return self;
   }
 }
