@@ -18,7 +18,7 @@ const httpsServer = https.createServer(credentials, app.app);
 const PORT = 4000;
 const SSLPORT = 4443;
 
-new WebsocketApp(httpServer);
+new WebsocketApp(httpsServer);
 
 httpServer.listen(PORT, function() {
   console.log('HTTP Server is running on: http://0.0.0.0:%s', PORT);

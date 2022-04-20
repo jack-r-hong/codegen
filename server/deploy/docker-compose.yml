@@ -29,7 +29,7 @@ services:
     container_name: db
     build: 
       context: ..
-      dockerfile: doploy/mysql.Dockerfile
+      dockerfile: deploy/mysql.Dockerfile
     restart: always
 
     env_file:
@@ -55,7 +55,7 @@ services:
   nginx: 
     build: 
       context: ..
-      dockerfile: doploy/nginx.Dockerfile
+      dockerfile: deploy/nginx.Dockerfile
     container_name: nginx
     ports:
       - 80:80
@@ -65,7 +65,9 @@ services:
       - ../certreq:/etc/nginx/ssl
       - ../build/web:/usr/share/nginx/html
     networks:
-      - backend     
+      - backend    
+    env_file:
+      - ../.env 
     # volumes:
     #   - ./app/build/web:/usr/share/nginx/html
   adminer:
