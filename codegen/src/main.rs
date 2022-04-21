@@ -152,6 +152,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     handlebars.register_helper("get_ref", Box::new(get_ref_helper));
     handlebars.register_helper("model_type", Box::new(model_type_helper));
     handlebars.register_helper("model_type_is_array", Box::new(model_type_is_array_helper));
+    handlebars.register_helper("add", Box::new(add_helper));
 
     for tag in swagger_data["tags"].as_array().unwrap(){
 

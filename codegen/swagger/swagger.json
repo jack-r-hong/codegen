@@ -44,13 +44,62 @@
         "summary" : "readManyNotify",
         "description" : "This can only be done by the logged in user.",
         "operationId" : "readManyNotify",
+        "parameters" : [ {
+          "name" : "orderBy",
+          "in" : "query",
+          "description" : "The name that needs to be fetched. Use user1 for testing.",
+          "schema" : {
+            "type" : "string",
+            "default": "desc"
+          }
+        },
+        {
+          "name" : "orderByField",
+          "in" : "query",
+          "description" : "The name that needs to be fetched. Use user1 for testing.",
+          "schema" : {
+            "type" : "string",
+            "default": "id"
+          }
+        },
+        {
+          "name" : "JSESSIONID",
+          "in" : "cookie",
+          "description" : "The name that needs to be fetched. Use user1 for testing.",
+          "schema" : {
+            "type" : "string",
+            "format": "id"
+          }
+        }
+      ],
         "responses" : {
           "200" : {
             "description" : "Ok",
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/Notify"
+                  "type" : "array",
+                  "items" : {
+                    "type" : "object",
+                    "properties" : {
+                      "id" : {
+                        "$ref" : "#/components/schemas/Notify/properties/id"
+                      },    
+                      "read" : {
+                        "$ref" : "#/components/schemas/Notify/properties/read"
+                      },        
+                      "msg" : {
+                        "$ref" : "#/components/schemas/Notify/properties/msg"
+                      },
+                      "event" : {
+                        "$ref" : "#/components/schemas/Notify/properties/event"
+                      },
+                      "createdAt" : {
+                        "$ref" : "#/components/schemas/Notify/properties/createdAt"
+                      }
+                    }
+                  }
+                  
                 }
               }
             }

@@ -19,6 +19,8 @@ export class NotifyService {
     // custom begin readManyNotify
 
     // custom end readManyNotify
+    if (!session.userInfo) throw new errors.AuthenticationFailedError;
+    param.cookieJsessionid = session.userInfo.id;
 
     const res = await this.notifyModel.readManyNotify(
         param,

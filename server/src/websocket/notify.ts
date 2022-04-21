@@ -1,17 +1,13 @@
 import WebSocket from 'ws';
 import {WSToken, WSOnMessage, MyWebSocketServer, WSEvent} from './base';
 
-// import {
-//   PhotoScheduleQueueModel,
-//   PhotoSchedulePurifyStartQueueModel,
-
-// } from '../redisClient/models/apiModels';
 import {Service, Container} from 'typedi';
 import {WSClientIdModel} from '../redisClient/models/webSocketModels';
 import {IncomingMessage} from 'http';
+import {NotifyModel} from '../apiModules/notify/notify.model';
 
 const wSCIModel = Container.get(WSClientIdModel);
-// const pSPSQModel = Container.get(PhotoSchedulePurifyStartQueueModel);
+const notifyModel = Container.get(NotifyModel);
 
 const event = new WSEvent('notify');
 
@@ -43,14 +39,26 @@ export class OnNotifyWS extends MyWebSocketServer implements WSOnMessage {
             `sess:${getSessionId( cookieParse['JSESSIONID']!)}`).catch((e) => {
           console.log(e);
         });
-        console.log('notify');
 
 
         if (session) {
           console.log(JSON.parse(session));
           if (JSON.parse(session)['userInfo']) {
             const userId = JSON.parse(session)['userInfo']['id'];
+            const notifyList = await notifyModel.readManyNotify({
+              queryOrderBy: 'desc',
+              queryOrderByField: 'id',
+              cookieJsessionid: userId,
+            });
+
+            console.log(notifyList);
+
+            event.eventName = 'init';
+            ws.send(event.msg(notifyList));
+
             await wSCIModel.sub(userId, (message: any)=>{
+              event.eventName = 'sub';
+              ws.send(event.msg(message));
               console.log(message);
               console.log('sub');
             });

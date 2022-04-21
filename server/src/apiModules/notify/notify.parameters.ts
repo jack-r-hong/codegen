@@ -18,12 +18,16 @@ type ReadManyNotifyReqBody = {
   }
 
 type ReadManyNotifyReqQuery = {
+      orderBy: string
+      orderByField: string
 }
 
 type ReadManyNotifyReqParams = {
 }
 
 type ReadManyNotifyReqCookie = {
+      JSESSIONID: string
+,
 }
 
 export interface ReadManyNotifyRequest extends TypedRequest<
@@ -35,6 +39,9 @@ export interface ReadManyNotifyRequest extends TypedRequest<
 }
 
 export type ReadManyNotifyParams = {
+      queryOrderBy: string
+      queryOrderByField: string
+      cookieJsessionid: string
 }
 
 
@@ -45,6 +52,9 @@ export const ReadManyNotifyRequestConvert = (
     cookie: ReadManyNotifyReqCookie,
 ): ReadManyNotifyParams => {
   return {
+            queryOrderBy: query.orderBy,
+            queryOrderByField: query.orderByField,
+            cookieJsessionid: cookie.JSESSIONID,
   };
 };
 type CreateOneNotifyReqBody = {

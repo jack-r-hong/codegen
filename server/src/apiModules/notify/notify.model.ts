@@ -12,8 +12,17 @@ export class NotifyModel {
   ) {
     const res: any[] | null = await prisma.notify.findMany({
       where: {
+    ownerId: param.cookieJsessionid,
       },
       select: {
+        createdAt: true,
+        event: true,
+        id: true,
+        msg: true,
+        read: true,
+      },
+      orderBy: {
+        [param.queryOrderByField]: param.queryOrderBy,
       },
     }).catch((e) => {
       throw e;

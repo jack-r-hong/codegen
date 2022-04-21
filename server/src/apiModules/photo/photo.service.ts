@@ -75,7 +75,6 @@ export class PhotoService {
     });
 
     // custom begin updateOnePhoto2
-
     if (res.status === 5) {
       const newNotify = await notifyModel.createOneNotify({
         bodyEvent: `consult:${res.id}`,
@@ -83,7 +82,6 @@ export class PhotoService {
         bodyOwnerId: res.ownerId,
         bodyRead: false,
       });
-
       await wSCIModel.pub(res.ownerId, JSON.stringify(newNotify));
     }
 

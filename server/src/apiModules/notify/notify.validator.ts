@@ -5,6 +5,12 @@ import * as sessions from '../../sessions';
 
 // custom end import
 export const readManyNotifyValidator: Schema = {
+  orderBy: {
+    in: 'query',
+  },
+  orderByField: {
+    in: 'query',
+  },
 };
 export const createOneNotifyValidator: Schema = {
   event: {

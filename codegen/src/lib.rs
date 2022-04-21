@@ -499,5 +499,32 @@ pub fn get_ref_helper(
     Ok(())
 }
 
+pub fn add_helper(
+    h: &Helper,
+    _: &Handlebars,
+    ctx: &Context,
+    _: &mut RenderContext,
+    out: &mut dyn Output,    
+)-> Result<(), RenderError> {
+    // get parameter from helper or throw an error
+    let param0 = h
+        .param(0)
+        .ok_or(RenderError::new("Param 0 is required for model_helperr."))?;
+    let param1 = h
+        .param(1)
+        .ok_or(RenderError::new("Param 1 is required for model_helperr."))?;
+
+    let res = 
+    param0.value().as_str().unwrap().to_owned() 
+    + param1.value().as_str().unwrap();
+
+    out.write(&res)?;
+
+
+
+
+    Ok(())
+}
+
 
 
