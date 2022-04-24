@@ -32,49 +32,51 @@ export class OnNotifyWS extends MyWebSocketServer implements WSOnMessage {
         return;
       }
 
-      const cookieParse = parseCookies(cookie);
+      try {
+        const cookieParse = parseCookies(cookie);
 
-      if (data.data == 'start') {
-        const session = await wSCIModel.get(
-            `sess:${getSessionId( cookieParse['JSESSIONID']!)}`).catch((e) => {
-          console.log(e);
-        });
+        if (data.data == 'start') {
+          const session = await wSCIModel.get(
+              `sess:${getSessionId( cookieParse['JSESSIONID']!)}`);
 
 
-        if (session) {
-          console.log(JSON.parse(session));
-          if (JSON.parse(session)['userInfo']) {
-            const userId = JSON.parse(session)['userInfo']['id'];
-            const notifyList = await notifyModel.readManyNotify({
-              queryOrderBy: 'desc',
-              queryOrderByField: 'id',
-              cookieJsessionid: userId,
-            });
+          if (session) {
+            console.log(JSON.parse(session));
+            if (JSON.parse(session)['userInfo']) {
+              const userId = JSON.parse(session)['userInfo']['id'];
+              const notifyList = await notifyModel.readManyNotify({
+                queryOrderBy: 'desc',
+                queryOrderByField: 'id',
+                cookieJsessionid: userId,
+              });
 
-            console.log(notifyList);
+              console.log(notifyList);
 
-            event.eventName = 'init';
-            ws.send(event.msg(notifyList));
+              event.eventName = 'init';
+              ws.send(event.msg(notifyList));
 
-            await wSCIModel.sub(userId, (message: any)=>{
-              event.eventName = 'sub';
-              ws.send(event.msg(message));
-              console.log(message);
-              console.log('sub');
-            });
+              await wSCIModel.sub(userId, (message: any)=>{
+                event.eventName = 'sub';
+                ws.send(event.msg(message));
+                console.log(message);
+                console.log('sub');
+              });
+            }
           }
-        }
 
 
-        // const {uid, result} = await wSCIModel.set('sessionId');
-        // // console.log( await wSCIModel.get(req.headers.cookie!));
+          // const {uid, result} = await wSCIModel.set('sessionId');
+          // // console.log( await wSCIModel.get(req.headers.cookie!));
 
 
-        // if (result === null) {
-        //   return;
-        // }
+          // if (result === null) {
+          //   return;
+          // }
 
         // ws.send(event.msg({uid}));
+        }
+      } catch (e) {
+        console.log(e);
       }
     });
   };

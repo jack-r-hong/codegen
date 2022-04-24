@@ -34,45 +34,50 @@ export class OnPurifyWS extends MyWebSocketServer implements WSOnMessage {
 
     ws.on('message', async function message(message: string) {
       const data: WSEvent = event.parse(message);
-      if (data.data == 'start') {
-        ws.send(event.msg('start'));
 
-        await pSQModel.move(pSPSQModel.getKey(), 16);
+      try {
+        if (data.data == 'start') {
+          ws.send(event.msg('start'));
 
-        const purifyList = await pSPSQModel.get();
+          await pSQModel.move(pSPSQModel.getKey(), 16);
 
-        const filePaths: string[] = [];
+          const purifyList = await pSPSQModel.get();
 
-        for (const id of purifyList) {
-          const result = await apiPModel.readOnePhoto({pathId: parseInt(id)});
-          filePaths.push(result.filePath1);
+          const filePaths: string[] = [];
+
+          for (const id of purifyList) {
+            const result = await apiPModel.readOnePhoto({pathId: parseInt(id)});
+            filePaths.push(result.filePath1);
+          }
+
+          ws.send(event.msg({filePaths}));
+
+          setTimeout(async () => {
+            const purifyList = (await pSPSQModel.get()).map((id) => {
+              return {
+                bodyFilePath2: null,
+                bodyId: parseInt(id),
+                bodyProcess: 3,
+                bodyStatus: 3,
+                bodyAfterLevel: undefined,
+                bodyBeforeLevel: undefined,
+              };
+            });
+
+            await apiPModel.updateManyPhoto(
+                {
+                  bodyDataList: purifyList,
+                  bodyWhereField: 'id',
+                },
+            );
+
+            await pSPSQModel.del();
+
+            ws.send(event.msg('end'));
+          }, 66000);
         }
-
-        ws.send(event.msg({filePaths}));
-
-        setTimeout(async () => {
-          const purifyList = (await pSPSQModel.get()).map((id) => {
-            return {
-              bodyFilePath2: null,
-              bodyId: parseInt(id),
-              bodyProcess: 3,
-              bodyStatus: 3,
-              bodyAfterLevel: undefined,
-              bodyBeforeLevel: undefined,
-            };
-          });
-
-          await apiPModel.updateManyPhoto(
-              {
-                bodyDataList: purifyList,
-                bodyWhereField: 'id',
-              },
-          );
-
-          await pSPSQModel.del();
-
-          ws.send(event.msg('end'));
-        }, 66000);
+      } catch (error) {
+        console.log(error);
       }
     });
   };
