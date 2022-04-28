@@ -34,6 +34,7 @@ export class UserService {
         isBind: googleId? true: false,
         username,
         email,
+        authRole: auth?.role!,
       };
     } else {
       throw new errors.LoginFailError;
