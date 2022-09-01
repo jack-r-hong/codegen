@@ -14,6 +14,39 @@ interface TypedRequest<
 }
 
 
+type CaptchaReqBody = {
+  }
+
+type CaptchaReqQuery = {
+}
+
+type CaptchaReqParams = {
+}
+
+type CaptchaReqCookie = {
+}
+
+export interface CaptchaRequest extends TypedRequest<
+  CaptchaReqBody,
+  CaptchaReqQuery,
+  CaptchaReqParams,
+  CaptchaReqCookie
+>{
+}
+
+export type CaptchaParams = {
+}
+
+
+export const CaptchaRequestConvert = (
+    body: CaptchaReqBody,
+    query: CaptchaReqQuery,
+    path: CaptchaReqParams,
+    cookie: CaptchaReqCookie,
+): CaptchaParams => {
+  return {
+  };
+};
 type LoginUserReqBody = {
   email: string|null,
 password: string,
@@ -87,11 +120,11 @@ export const LogoutUserRequestConvert = (
   };
 };
 type RegisterUserReqBody = {
-  email: string|null,
+  captcha: string,
 password: string,
+passwordCheck: string,
 phone: string,
-userStatus: string|undefined,
-username: string|null,
+phonePrefix: string,
 }
 
 type RegisterUserReqQuery = {
@@ -112,11 +145,11 @@ export interface RegisterUserRequest extends TypedRequest<
 }
 
 export type RegisterUserParams = {
-bodyEmail: string|null,
+bodyCaptcha: string,
 bodyPassword: string,
+bodyPasswordCheck: string,
 bodyPhone: string,
-bodyUserStatus: number|undefined,
-bodyUsername: string|null,
+bodyPhonePrefix: string,
 }
 
 
@@ -127,11 +160,80 @@ export const RegisterUserRequestConvert = (
     cookie: RegisterUserReqCookie,
 ): RegisterUserParams => {
   return {
-    bodyEmail: body.email,
+    bodyCaptcha: body.captcha,
     bodyPassword: body.password,
+    bodyPasswordCheck: body.passwordCheck,
     bodyPhone: body.phone,
-    bodyUserStatus: body.userStatus? parseInt(body.userStatus):undefined,
-    bodyUsername: body.username,
+    bodyPhonePrefix: body.phonePrefix,
+  };
+};
+type SendPhoneCheckReqBody = {
+  }
+
+type SendPhoneCheckReqQuery = {
+}
+
+type SendPhoneCheckReqParams = {
+}
+
+type SendPhoneCheckReqCookie = {
+}
+
+export interface SendPhoneCheckRequest extends TypedRequest<
+  SendPhoneCheckReqBody,
+  SendPhoneCheckReqQuery,
+  SendPhoneCheckReqParams,
+  SendPhoneCheckReqCookie
+>{
+}
+
+export type SendPhoneCheckParams = {
+}
+
+
+export const SendPhoneCheckRequestConvert = (
+    body: SendPhoneCheckReqBody,
+    query: SendPhoneCheckReqQuery,
+    path: SendPhoneCheckReqParams,
+    cookie: SendPhoneCheckReqCookie,
+): SendPhoneCheckParams => {
+  return {
+  };
+};
+type PhoneCheckReqBody = {
+  verify: string,
+}
+
+type PhoneCheckReqQuery = {
+}
+
+type PhoneCheckReqParams = {
+}
+
+type PhoneCheckReqCookie = {
+}
+
+export interface PhoneCheckRequest extends TypedRequest<
+  PhoneCheckReqBody,
+  PhoneCheckReqQuery,
+  PhoneCheckReqParams,
+  PhoneCheckReqCookie
+>{
+}
+
+export type PhoneCheckParams = {
+bodyVerify: string,
+}
+
+
+export const PhoneCheckRequestConvert = (
+    body: PhoneCheckReqBody,
+    query: PhoneCheckReqQuery,
+    path: PhoneCheckReqParams,
+    cookie: PhoneCheckReqCookie,
+): PhoneCheckParams => {
+  return {
+    bodyVerify: body.verify,
   };
 };
 type DeleteOneUserReqBody = {
@@ -210,10 +312,10 @@ export const ReadOneUserRequestConvert = (
 };
 type UpdateOneUserReqBody = {
   email: string|null,
+name: string|null,
 password: string,
 phone: string,
 userStatus: string|undefined,
-username: string|null,
 }
 
 type UpdateOneUserReqQuery = {
@@ -238,10 +340,10 @@ export interface UpdateOneUserRequest extends TypedRequest<
 export type UpdateOneUserParams = {
       pathId: string
 bodyEmail: string|null,
+bodyName: string|null,
 bodyPassword: string,
 bodyPhone: string,
 bodyUserStatus: number|undefined,
-bodyUsername: string|null,
 }
 
 
@@ -254,10 +356,10 @@ export const UpdateOneUserRequestConvert = (
   return {
       pathId: path.id,
     bodyEmail: body.email,
+    bodyName: body.name,
     bodyPassword: body.password,
     bodyPhone: body.phone,
     bodyUserStatus: body.userStatus? parseInt(body.userStatus):undefined,
-    bodyUsername: body.username,
   };
 };
 type ReadManyUserReqBody = {

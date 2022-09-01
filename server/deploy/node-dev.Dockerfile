@@ -9,5 +9,5 @@ COPY tsconfig.json ./
 
 COPY prisma ./prisma
 
-RUN npm i 
-RUN npm run gen
+# RUN npm i 
+# RUN npm run gen

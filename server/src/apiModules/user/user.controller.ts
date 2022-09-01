@@ -24,6 +24,32 @@ export class UserController implements Controller {
   @Inject('app.use')
     appUse!: AppUse;
 
+  @Get('/captcha')
+  @Validator(validSchemas.captchaValidator)
+  async captcha(
+      req: userParams.CaptchaRequest,
+      res: Response,
+      next: NextFunction,
+  ) {
+    UserController.service.captcha(
+        userParams.CaptchaRequestConvert(
+            req.body,
+            req.query,
+            req.params,
+            req.cookies,
+        ),
+        req.session,
+    )
+        .then((result) =>{
+          // custom begin captcha
+          res.type('svg');
+          res.status(200).send(result);
+
+          // custom end captcha
+        }).catch((e) => {
+          next(e);
+        });
+  }
   @Post('/login')
   @Validator(validSchemas.loginUserValidator)
   async loginUser(
@@ -74,7 +100,7 @@ export class UserController implements Controller {
           next(e);
         });
   }
-  @Post('/user')
+  @Post('/register')
   @Validator(validSchemas.registerUserValidator)
   async registerUser(
       req: userParams.RegisterUserRequest,
@@ -95,6 +121,54 @@ export class UserController implements Controller {
           res.json({result});
 
           // custom end registerUser
+        }).catch((e) => {
+          next(e);
+        });
+  }
+  @Get('/register/phone_check')
+  @Validator(validSchemas.sendPhoneCheckValidator)
+  async sendPhoneCheck(
+      req: userParams.SendPhoneCheckRequest,
+      res: Response,
+      next: NextFunction,
+  ) {
+    UserController.service.sendPhoneCheck(
+        userParams.SendPhoneCheckRequestConvert(
+            req.body,
+            req.query,
+            req.params,
+            req.cookies,
+        ),
+        req.session,
+    )
+        .then((result) =>{
+          // custom begin sendPhoneCheck
+
+          // custom end sendPhoneCheck
+        }).catch((e) => {
+          next(e);
+        });
+  }
+  @Post('/register/phone_check')
+  @Validator(validSchemas.phoneCheckValidator)
+  async phoneCheck(
+      req: userParams.PhoneCheckRequest,
+      res: Response,
+      next: NextFunction,
+  ) {
+    UserController.service.phoneCheck(
+        userParams.PhoneCheckRequestConvert(
+            req.body,
+            req.query,
+            req.params,
+            req.cookies,
+        ),
+        req.session,
+    )
+        .then((result) =>{
+          // custom begin phoneCheck
+
+          // custom end phoneCheck
         }).catch((e) => {
           next(e);
         });

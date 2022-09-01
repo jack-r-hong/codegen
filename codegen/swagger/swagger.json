@@ -34,9 +34,9 @@
   "paths" : {
     "/captcha" : {
       "get" : {
-        "tags" : [ "captcha" ],
+        "tags" : [ "user" ],
         "summary" : "Creates list of users with given input array",
-        "operationId" : "readManyUser",
+        "operationId" : "captcha",
         "responses" : {
           "200" : {
             "description" : "Ok",
@@ -69,24 +69,30 @@
           "409" : {
             "$ref" : "#/components/responses/Conflict"
           }
-        },
-        "security" : [ {
-          "cookieAuth" : [ ]
-        } ]
+        }
       }
     },  
-    "/user" : {
+    "/register" : {
       "post" : {
         "tags" : [ "user" ],
         "summary" : "Create user",
         "description" : "This can only be done by the logged in user.",
         "operationId" : "registerUser",
         "requestBody" : {
-          "$ref" : "#/components/requestBodies/User"
+          "$ref" : "#/components/requestBodies/UserRegister"
         },
         "responses" : {
           "200" : {
             "description" : "Ok",
+            "headers" : {
+              "Set-Cookie" : {
+                "description" : "jwt cookie",
+                "schema" : {
+                  "type" : "string",
+                  "format" : "jwt"
+                }
+              }
+            },            
             "content" : {
               "application/json" : {
                 "schema" : {
@@ -113,6 +119,101 @@
         }
       }
     },
+    "/register/phone_check" : {
+      "get" : {
+        "tags" : [ "user" ],
+        "summary" : "send verify code to phone",
+        "description" : "send verify code to phone.",
+        "operationId" : "sendPhoneCheck",
+        "responses" : {
+          "200" : {
+            "description" : "Ok",
+            "headers" : {
+              "Set-Cookie" : {
+                "description" : "jwt cookie",
+                "schema" : {
+                  "type" : "string",
+                  "format" : "jwt"
+                }
+              }
+            },            
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/BadRequest"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/Unauthorized"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          },
+          "404" : {
+            "$ref" : "#/components/responses/NotFound"
+          },
+          "409" : {
+            "$ref" : "#/components/responses/Conflict"
+          }
+        },
+        "security" : [ {
+          "cookieAuth" : [ ]
+        } ]
+      },      
+      "post" : {
+        "tags" : [ "user" ],
+        "summary" : "phone check",
+        "description" : "phone check.",
+        "operationId" : "phoneCheck",
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/UserRegisterPhoneCheck"
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Ok",
+            "headers" : {
+              "Set-Cookie" : {
+                "description" : "jwt cookie",
+                "schema" : {
+                  "type" : "string",
+                  "format" : "jwt"
+                }
+              }
+            },            
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/BadRequest"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/Unauthorized"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          },
+          "404" : {
+            "$ref" : "#/components/responses/NotFound"
+          },
+          "409" : {
+            "$ref" : "#/components/responses/Conflict"
+          }
+        },
+        "security" : [ {
+          "cookieAuth" : [ ]
+        } ]
+      }
+    },    
     "/users" : {
       "get" : {
         "tags" : [ "user" ],
@@ -480,13 +581,57 @@
       }
     },
     "requestBodies" : {
+      "UserRegister" : {
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "phone" : {
+                  "$ref" : "#/components/schemas/User/properties/phone"
+                },        
+                "phonePrefix" : {
+                  "$ref" : "#/components/schemas/User/properties/phonePrefix"
+                },                                  
+                "password" : {
+                  "$ref" : "#/components/schemas/User/properties/password"
+                },
+                "passwordCheck" : {
+                  "$ref" : "#/components/schemas/User/properties/password"
+                },                
+                "captcha" : {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "description" : "List of user object",
+        "required" : true
+      },     
+      "UserRegisterPhoneCheck" : {
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "verify" : {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "description" : "List of user object",
+        "required" : true
+      },          
       "User" : {
         "content" : {
           "application/json" : {
             "schema" : {
               "type" : "object",
               "properties" : {
-                "username" : {
+                "name" : {
                   "$ref" : "#/components/schemas/User/properties/name"
                 },
                 "email" : {
@@ -520,7 +665,7 @@
                 "items" : {
                   "type" : "object",
                   "properties" : {
-                    "username" : {
+                    "name" : {
                       "$ref" : "#/components/schemas/User/properties/name"
                     },
                     "email" : {
@@ -582,7 +727,7 @@
                   "type" : "string",
                   "format" : "uuid"
                 },
-                "username" : {
+                "name" : {
                   "type" : "string"
                 },
                 "email" : {

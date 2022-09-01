@@ -14,38 +14,5 @@ interface TypedRequest<
 }
 
 
-type ReadManyUserReqBody = {
-  }
-
-type ReadManyUserReqQuery = {
-}
-
-type ReadManyUserReqParams = {
-}
-
-type ReadManyUserReqCookie = {
-}
-
-export interface ReadManyUserRequest extends TypedRequest<
-  ReadManyUserReqBody,
-  ReadManyUserReqQuery,
-  ReadManyUserReqParams,
-  ReadManyUserReqCookie
->{
-}
-
-export type ReadManyUserParams = {
-}
-
-
-export const ReadManyUserRequestConvert = (
-    body: ReadManyUserReqBody,
-    query: ReadManyUserReqQuery,
-    path: ReadManyUserReqParams,
-    cookie: ReadManyUserReqCookie,
-): ReadManyUserParams => {
-  return {
-  };
-};
 
 

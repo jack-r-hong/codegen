@@ -3,7 +3,7 @@ import fs from 'fs';
 import http from 'http';
 import https from 'https';
 
-import {WebsocketApp} from './websocket';
+// import {WebsocketApp} from './websocket';
 import {ExpressApp} from './expressApp';
 
 const privateKey = fs.readFileSync('./certreq/localhost.key', 'utf8');
@@ -18,7 +18,7 @@ const httpsServer = https.createServer(credentials, app.app);
 const PORT = 4000;
 const SSLPORT = 4443;
 
-new WebsocketApp(httpsServer);
+// new WebsocketApp(httpsServer);
 
 httpServer.listen(PORT, function() {
   console.log('HTTP Server is running on: http://0.0.0.0:%s', PORT);

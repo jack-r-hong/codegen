@@ -7,36 +7,19 @@ const prisma = new PrismaClient();
 
 @Service()
 export class UserModel {
+  async captcha(
+      param: requestTypes.CaptchaParams,
+      customParam: any,
+  ) {
+    // custom begin captcha
+
+    // custom end captcha
+  }
   async loginUser(
       param: requestTypes.LoginUserParams,
       customParam: any,
   ) {
     // custom begin loginUser
-    const select = {
-      email: true,
-      password: true,
-      id: true,
-      updatedAt: true,
-      username: true,
-      auth: {
-        select: {
-          role: true,
-        },
-      },
-      googleId: true,
-      userStatus: true,
-    };
-    const res = await prisma.user.findUnique({
-      where: {
-        email: param.bodyEmail,
-      },
-      select,
-    }).catch((e) => {
-      throw e;
-    }).finally(() => {
-      prisma.$disconnect();
-    });
-    return res;
 
     // custom end loginUser
   }
@@ -53,24 +36,24 @@ export class UserModel {
       customParam: any,
   ) {
     // custom begin registerUser
-    const res: User | null = await prisma.user.create({
-      data: {
-        authLevel: param.bodyAuthLevel,
-        email: param.bodyEmail,
-        phone: param.bodyPhone,
-        userStatus: param.bodyUserStatus,
-        username: param.bodyUsername,
-        password: customParam.password,
-        googleId: param.bodyGoogleId,
-      },
-    }).catch((e) => {
-      throw e;
-    }).finally(() => {
-      prisma.$disconnect();
-    });
-    return res;
 
     // custom end registerUser
+  }
+  async sendPhoneCheck(
+      param: requestTypes.SendPhoneCheckParams,
+      customParam: any,
+  ) {
+    // custom begin sendPhoneCheck
+
+    // custom end sendPhoneCheck
+  }
+  async phoneCheck(
+      param: requestTypes.PhoneCheckParams,
+      customParam: any,
+  ) {
+    // custom begin phoneCheck
+
+    // custom end phoneCheck
   }
   async deleteOneUser(
       param: requestTypes.DeleteOneUserParams,
@@ -97,9 +80,9 @@ export class UserModel {
         createdAt: true,
         email: true,
         id: true,
+        name: true,
         phone: true,
         updatedAt: true,
-        username: true,
       },
     }).catch((e) => {
       throw e;
@@ -121,10 +104,10 @@ export class UserModel {
       },
       data: {
         email: param.bodyEmail,
+        name: param.bodyName,
         password: param.bodyPassword,
         phone: param.bodyPhone,
         userStatus: param.bodyUserStatus,
-        username: param.bodyUsername,
       },
     }).catch((e) => {
       throw e;

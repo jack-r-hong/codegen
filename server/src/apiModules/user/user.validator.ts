@@ -4,6 +4,8 @@ import * as sessions from '../../sessions';
 // custom begin import
 
 // custom end import
+export const captchaValidator: Schema = {
+};
 export const loginUserValidator: Schema = {
   email: {
     in: 'body',
@@ -29,16 +31,21 @@ export const loginUserValidator: Schema = {
 export const logoutUserValidator: Schema = {
 };
 export const registerUserValidator: Schema = {
-  email: {
+  captcha: {
     in: 'body',
-    optional: {
-      options: {
-        nullable: true,
-      },
-    },
-    isEmail: true,
   },
   password: {
+    in: 'body',
+    isStrongPassword: true,
+    isLength: {
+      options: {
+        max: 30,
+        min: 8,
+      },
+
+    },
+  },
+  passwordCheck: {
     in: 'body',
     isStrongPassword: true,
     isLength: {
@@ -53,31 +60,32 @@ export const registerUserValidator: Schema = {
     in: 'body',
     isMobilePhone: true,
   },
-  userStatus: {
+  phonePrefix: {
     in: 'body',
-    isInt: true,
-    optional: {
-      options: {
-        nullable: true,
+  },
+};
+export const sendPhoneCheckValidator: Schema = {
+  JSESSIONID: {
+    in: 'cookies',
+    custom: {
+      options: (value, {req, location, path}) => {
+        sessions.cookieAuthSessionVerify(req['session'].userInfo);
+        return true;
       },
-    },
-    matches: {
-      options: /^(1|2|3)/,
     },
   },
-  username: {
+};
+export const phoneCheckValidator: Schema = {
+  verify: {
     in: 'body',
-    optional: {
-      options: {
-        nullable: true,
+  },
+  JSESSIONID: {
+    in: 'cookies',
+    custom: {
+      options: (value, {req, location, path}) => {
+        sessions.cookieAuthSessionVerify(req['session'].userInfo);
+        return true;
       },
-    },
-    isLength: {
-      options: {
-        max: 30,
-        min: 3,
-      },
-
     },
   },
 };
@@ -125,6 +133,21 @@ export const updateOneUserValidator: Schema = {
     },
     isEmail: true,
   },
+  name: {
+    in: 'body',
+    optional: {
+      options: {
+        nullable: true,
+      },
+    },
+    isLength: {
+      options: {
+        max: 30,
+        min: 3,
+      },
+
+    },
+  },
   password: {
     in: 'body',
     isStrongPassword: true,
@@ -150,21 +173,6 @@ export const updateOneUserValidator: Schema = {
     },
     matches: {
       options: /^(1|2|3)/,
-    },
-  },
-  username: {
-    in: 'body',
-    optional: {
-      options: {
-        nullable: true,
-      },
-    },
-    isLength: {
-      options: {
-        max: 30,
-        min: 3,
-      },
-
     },
   },
   JSESSIONID: {

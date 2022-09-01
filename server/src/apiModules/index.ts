@@ -1,7 +1,5 @@
 import {Application} from 'express';
 import './user/user.controller';
-// import './auth/auth.controller';
-import './photo/photo.controller';
 import path from 'path';
 import fs from 'fs';
 

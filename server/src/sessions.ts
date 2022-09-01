@@ -8,13 +8,21 @@ import {errors} from './errors';
 export type UserInfo = {
     id: string;
     userStatus: number;
-    authRole: number;
+}
+
+type UserRegister = {
+  phonePrefix: string,
+  phone: string,
+  password: string,
+  verify?: string,
 }
 
 declare module 'express-session' {
  // eslint-disable-next-line no-unused-vars
   interface Session {
-    userInfo?: UserInfo
+    userInfo?: UserInfo,
+    captcha?: String,
+    userRegister?: UserRegister
   }
 }
 

@@ -79,6 +79,7 @@
     "redis": "^4.0.6",
     "reflect-metadata": "^0.1.13",
     "supertest": "^6.1.6",
+    "svg-captcha": "^1.4.0",
     "ts-mixer": "^6.0.1",
     "typedi": "^0.10.0",
     "url-parse": "^1.5.10",

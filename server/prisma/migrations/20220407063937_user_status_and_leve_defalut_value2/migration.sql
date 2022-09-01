@@ -1,5 +1,0 @@
--- AlterTable
-ALTER TABLE `Auth` MODIFY `level` INTEGER NOT NULL DEFAULT 100;
-
--- AlterTable
-ALTER TABLE `User` MODIFY `user_status` INTEGER NOT NULL DEFAULT 2;

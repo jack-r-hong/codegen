@@ -24,26 +24,4 @@ export class CaptchaController implements Controller {
   @Inject('app.use')
     appUse!: AppUse;
 
-  @Get('/captcha')
-  @Validator(validSchemas.readManyUserValidator)
-  async readManyUser(
-      req: captchaParams.ReadManyUserRequest,
-      res: Response,
-      next: NextFunction,
-  ) {
-    CaptchaController.service.readManyUser(
-        captchaParams.ReadManyUserRequestConvert(
-            req.body,
-            req.query,
-            req.params,
-            req.cookies,
-        ),
-        req.session,
-    )
-        .then((result) =>{
-          res.json(result);
-        }).catch((e) => {
-          next(e);
-        });
-  }
 }

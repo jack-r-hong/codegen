@@ -1,7 +1,0 @@
--- AlterTable
-ALTER TABLE `Photo` ADD COLUMN `file_path_3` VARCHAR(191) NULL,
-    MODIFY `after_level` INTEGER NOT NULL DEFAULT 1,
-    MODIFY `before_level` INTEGER NOT NULL DEFAULT 1,
-    MODIFY `file_path_2` VARCHAR(191) NULL,
-    MODIFY `process` INTEGER NOT NULL DEFAULT 1,
-    MODIFY `status` INTEGER NOT NULL DEFAULT 1;

@@ -7,19 +7,4 @@ const prisma = new PrismaClient();
 
 @Service()
 export class CaptchaModel {
-  async readManyUser(
-      param: requestTypes.ReadManyUserParams,
-  ) {
-    const res: any[] | null = await prisma.captcha.findMany({
-      where: {
-      },
-      select: {
-      },
-    }).catch((e) => {
-      throw e;
-    }).finally(() => {
-      prisma.$disconnect();
-    });
-    return res;
-  }
 }
