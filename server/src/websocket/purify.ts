@@ -29,9 +29,6 @@ export class OnPurifyWS extends MyWebSocketServer implements WSOnMessage {
 
 
   onStartMessage(ws: WebSocket, req: IncomingMessage) {
-    // pSQModel.del().then();
-    // pSPSQModel.del().then();
-
     ws.on('message', async function message(message: string) {
       const data: WSEvent = event.parse(message);
 
@@ -46,8 +43,13 @@ export class OnPurifyWS extends MyWebSocketServer implements WSOnMessage {
           const filePaths: string[] = [];
 
           for (const id of purifyList) {
-            const result = await apiPModel.readOnePhoto({pathId: parseInt(id)});
-            filePaths.push(result.filePath1);
+            const result = await apiPModel.readOnePhoto({pathId: parseInt(id)})
+                .catch((e) => {
+                  console.log(e);
+                });
+            if (result) {
+              filePaths.push(result.filePath1);
+            }
           }
 
           ws.send(event.msg({filePaths}));
@@ -69,7 +71,9 @@ export class OnPurifyWS extends MyWebSocketServer implements WSOnMessage {
                   bodyDataList: purifyList,
                   bodyWhereField: 'id',
                 },
-            );
+            ).catch((e) => {
+              console.log(e);
+            });
 
             await pSPSQModel.del();
 

@@ -7,50 +7,6 @@ const prisma = new PrismaClient();
 
 @Service()
 export class UserModel {
-  async googleLogin(
-      param: requestTypes.GoogleLoginParams,
-      customParam: any,
-  ) {
-    // custom begin googleLogin
-    const select = {
-      email: true,
-      id: true,
-      updatedAt: true,
-      username: true,
-      auth: {
-        select: {
-          role: true,
-        },
-      },
-      userStatus: true,
-      googleId: true,
-    };
-    const googleIdExists = await prisma.user.findUnique({
-      where: {
-        googleId: param.bodyId,
-      },
-      select,
-    }).catch((e) => {
-      throw e;
-    }).finally(() => {
-      prisma.$disconnect();
-    });
-    if (googleIdExists) return googleIdExists;
-    else {
-      return await prisma.user.findUnique({
-        where: {
-          email: param.bodyEmail,
-        },
-        select,
-      }).catch((e) => {
-        throw e;
-      }).finally(() => {
-        prisma.$disconnect();
-      });
-    }
-
-    // custom end googleLogin
-  }
   async loginUser(
       param: requestTypes.LoginUserParams,
       customParam: any,
@@ -164,9 +120,7 @@ export class UserModel {
         id: param.pathId,
       },
       data: {
-        authLevel: param.bodyAuthLevel,
         email: param.bodyEmail,
-        googleId: param.bodyGoogleId,
         password: param.bodyPassword,
         phone: param.bodyPhone,
         userStatus: param.bodyUserStatus,
@@ -186,7 +140,7 @@ export class UserModel {
       where: {
       },
       select: {
-        username: true,
+        name: true,
       },
     }).catch((e) => {
       throw e;

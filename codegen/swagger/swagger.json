@@ -20,8 +20,8 @@
     "url" : "https://petstore.swagger.io/v2"
   } ],
   "tags" : [ {
-    "name" : "auth",
-    "description" : "User auth"
+    "name" : "captcha",
+    "description" : "captcha"
   }, {
     "name" : "user",
     "description" : "Operations about user",
@@ -29,49 +29,14 @@
       "description" : "Find out more about our store",
       "url" : "http://swagger.io"
     }
-  }, {
-    "name" : "photo",
-    "description" : "photo"
-  } , {
-    "name" : "notify",
-    "description" : "notify"
-  } 
+  }
 ],
   "paths" : {
-    "/notify" : {
+    "/captcha" : {
       "get" : {
-        "tags" : [ "notify" ],
-        "summary" : "readManyNotify",
-        "description" : "This can only be done by the logged in user.",
-        "operationId" : "readManyNotify",
-        "parameters" : [ {
-          "name" : "orderBy",
-          "in" : "query",
-          "description" : "The name that needs to be fetched. Use user1 for testing.",
-          "schema" : {
-            "type" : "string",
-            "default": "desc"
-          }
-        },
-        {
-          "name" : "orderByField",
-          "in" : "query",
-          "description" : "The name that needs to be fetched. Use user1 for testing.",
-          "schema" : {
-            "type" : "string",
-            "default": "id"
-          }
-        },
-        {
-          "name" : "JSESSIONID",
-          "in" : "cookie",
-          "description" : "The name that needs to be fetched. Use user1 for testing.",
-          "schema" : {
-            "type" : "string",
-            "format": "id"
-          }
-        }
-      ],
+        "tags" : [ "captcha" ],
+        "summary" : "Creates list of users with given input array",
+        "operationId" : "readManyUser",
         "responses" : {
           "200" : {
             "description" : "Ok",
@@ -82,24 +47,9 @@
                   "items" : {
                     "type" : "object",
                     "properties" : {
-                      "id" : {
-                        "$ref" : "#/components/schemas/Notify/properties/id"
-                      },    
-                      "read" : {
-                        "$ref" : "#/components/schemas/Notify/properties/read"
-                      },        
-                      "msg" : {
-                        "$ref" : "#/components/schemas/Notify/properties/msg"
-                      },
-                      "event" : {
-                        "$ref" : "#/components/schemas/Notify/properties/event"
-                      },
-                      "createdAt" : {
-                        "$ref" : "#/components/schemas/Notify/properties/createdAt"
-                      }
-                    }
+
+                    }                    
                   }
-                  
                 }
               }
             }
@@ -119,82 +69,12 @@
           "409" : {
             "$ref" : "#/components/responses/Conflict"
           }
-        }
-      },
-      "post" : {
-        "tags" : [ "notify" ],
-        "summary" : "Create user",
-        "description" : "This can only be done by the logged in user.",
-        "operationId" : "createOneNotify",
-        "requestBody" : {
-          "$ref" : "#/components/requestBodies/Notify"
         },
-        "responses" : {
-          "200" : {
-            "description" : "Ok",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/Notify"
-                }
-              }
-            }
-          },
-          "400" : {
-            "$ref" : "#/components/responses/BadRequest"
-          },
-          "401" : {
-            "$ref" : "#/components/responses/Unauthorized"
-          },
-          "403" : {
-            "$ref" : "#/components/responses/Forbidden"
-          },
-          "404" : {
-            "$ref" : "#/components/responses/NotFound"
-          },
-          "409" : {
-            "$ref" : "#/components/responses/Conflict"
-          }
-        }
-      },
-      "put" : {
-        "tags" : [ "notify" ],
-        "summary" : "Create user",
-        "description" : "This can only be done by the logged in user.",
-        "operationId" : "updateManyNotify",
-        "requestBody" : {
-          "$ref" : "#/components/requestBodies/NotifyArray"
-        },
-        "responses" : {
-          "200" : {
-            "description" : "Ok",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/Notify"
-                }
-              }
-            }
-          },
-          "400" : {
-            "$ref" : "#/components/responses/BadRequest"
-          },
-          "401" : {
-            "$ref" : "#/components/responses/Unauthorized"
-          },
-          "403" : {
-            "$ref" : "#/components/responses/Forbidden"
-          },
-          "404" : {
-            "$ref" : "#/components/responses/NotFound"
-          },
-          "409" : {
-            "$ref" : "#/components/responses/Conflict"
-          }
-        }
+        "security" : [ {
+          "cookieAuth" : [ ]
+        } ]
       }
-      
-    },
+    },  
     "/user" : {
       "post" : {
         "tags" : [ "user" ],
@@ -248,8 +128,8 @@
                   "items" : {
                     "type" : "object",
                     "properties" : {
-                      "username" : {
-                        "$ref" : "#/components/schemas/User/properties/username"
+                      "name" : {
+                        "$ref" : "#/components/schemas/User/properties/name"
                       }
                     
                     }                    
@@ -277,87 +157,6 @@
         "security" : [ {
           "cookieAuth" : [ ]
         } ]
-      }
-    },
-    "/google/login" : {
-      "post" : {
-        "tags" : [ "user" ],
-        "summary" : "Logs user into the system",
-        "operationId" : "googleLogin",
-        "requestBody" : {
-          "content" : {
-            "application/json" : {
-              "schema" : {
-                "type" : "object",
-                "properties": {
-                  "id": {
-                    "type" : "string"
-                  },
-                  "username" : {
-                    "type": "string"
-                  },
-                  "email" :{
-                    "type": "string",
-                    "format": "email"
-                  },
-                  "authRole" :{
-                    "type": "integer"
-                  }
-                }
-              }
-            }
-          }  
-        },
-        "responses" : {
-          "200" : {
-            "description" : "successful operation",
-            "headers" : {
-              "Set-Cookie" : {
-                "description" : "date in UTC when token expires",
-                "schema" : {
-                  "type" : "string",
-                  "format" : "jwt"
-                }
-              }
-            },
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "type" : "object",
-                  "properties" : {
-                    "email" : {
-                      "type" : "string"
-                    },
-                    "username" : {
-                      "type" : "string"
-                    },
-                    "isBind" : {
-                      "type" : "boolean"
-                    }
-                    
-                  }
-                }
-              }
-            }
-          },
-          "400" : {
-            "$ref" : "#/components/responses/BadRequest"
-          },
-          "401" : {
-            "$ref" : "#/components/responses/Unauthorized",
-            "remark": "to register page"
-          },
-          "403" : {
-            "$ref" : "#/components/responses/Forbidden"
-            
-          },
-          "404" : {
-            "$ref" : "#/components/responses/NotFound"
-          },
-          "409" : {
-            "$ref" : "#/components/responses/Conflict"
-          }
-        }
       }
     },
     "/login" : {
@@ -576,586 +375,6 @@
           "cookieAuth" : [ ]
         } ]
       }
-    },
-    "/auths" : {
-      "get" : {
-        "tags" : [ "auth" ],
-        "summary" : "Get auth",
-        "operationId" : "readManyAuth",
-        "responses" : {
-          "200" : {
-            "description" : "Ok",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "type" : "array",
-                  "items" : {
-                    "$ref" : "#/components/schemas/Auth"
-                  }
-                }
-              }
-            }
-          },
-          "400" : {
-            "$ref" : "#/components/responses/BadRequest"
-          },
-          "401" : {
-            "$ref" : "#/components/responses/Unauthorized"
-          },
-          "403" : {
-            "$ref" : "#/components/responses/Forbidden"
-          },
-          "404" : {
-            "$ref" : "#/components/responses/NotFound"
-          }
-        },
-        "security" : [ {
-          "cookieAuth" : [ ]
-        } ]
-      }
-    },
-    "/auth" : {
-      "post" : {
-        "tags" : [ "auth" ],
-        "summary" : "Create auth",
-        "operationId" : "createOneAuth",
-        "requestBody" : {
-          "$ref" : "#/components/requestBodies/Auth"
-        },
-        "responses" : {
-          "200" : {
-            "description" : "Ok",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/Auth"
-                }
-              }
-            }
-          },
-          "400" : {
-            "$ref" : "#/components/responses/BadRequest"
-          },
-          "401" : {
-            "$ref" : "#/components/responses/Unauthorized"
-          },
-          "403" : {
-            "$ref" : "#/components/responses/Forbidden"
-          },
-          "404" : {
-            "$ref" : "#/components/responses/NotFound"
-          },
-          "409" : {
-            "$ref" : "#/components/responses/Conflict"
-          }
-        },
-        "security" : [ {
-          "cookieAuth" : [ ]
-        } ]
-      }
-    },
-    "/auth/{id}" : {
-      "put" : {
-        "tags" : [ "auth" ],
-        "summary" : "Update auth",
-        "operationId" : "updateOneAuth",
-        "parameters" : [ {
-          "name" : "id",
-          "in" : "path",
-          "description" : "name that need to be updated",
-          "required" : true,
-          "schema" : {
-            "type" : "integer"
-          }
-        } ],
-        "requestBody" : {
-          "$ref" : "#/components/requestBodies/Auth"
-        },
-        "responses" : {
-          "200" : {
-            "description" : "Ok",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/Auth"
-                }
-              }
-            }
-          },
-          "400" : {
-            "$ref" : "#/components/responses/BadRequest"
-          },
-          "401" : {
-            "$ref" : "#/components/responses/Unauthorized"
-          },
-          "403" : {
-            "$ref" : "#/components/responses/Forbidden"
-          },
-          "404" : {
-            "$ref" : "#/components/responses/NotFound"
-          },
-          "409" : {
-            "$ref" : "#/components/responses/Conflict"
-          }
-        },
-        "security" : [ {
-          "cookieAuth" : [ ]
-        } ]
-      },
-      "delete" : {
-        "tags" : [ "auth" ],
-        "summary" : "Get user by user name",
-        "operationId" : "deleteOneAuth",
-        "parameters" : [ {
-          "name" : "id",
-          "in" : "path",
-          "description" : "name that need to be updated",
-          "required" : true,
-          "schema" : {
-            "type" : "integer"
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "Ok"
-          },
-          "400" : {
-            "$ref" : "#/components/responses/BadRequest"
-          },
-          "401" : {
-            "$ref" : "#/components/responses/Unauthorized"
-          },
-          "403" : {
-            "$ref" : "#/components/responses/Forbidden"
-          },
-          "404" : {
-            "$ref" : "#/components/responses/NotFound"
-          }
-        }
-      }
-    },
-    "/photo/{id}" : {
-      "get" : {
-        "tags" : [ "photo" ],
-        "summary" : "Create user",
-        "description" : "This can only be done by the logged in user.",
-        "operationId" : "readOnePhoto",
-        "parameters" : [ {
-          "name" : "id",
-          "in" : "path",
-          "description" : "The name that needs to be fetched. Use user1 for testing.",
-          "required" : true,
-          "schema" : {
-            "type" : "integer"
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "Ok",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/Photo"
-                }
-              }
-            }
-          },
-          "400" : {
-            "$ref" : "#/components/responses/BadRequest"
-          },
-          "401" : {
-            "$ref" : "#/components/responses/Unauthorized"
-          },
-          "403" : {
-            "$ref" : "#/components/responses/Forbidden"
-          },
-          "404" : {
-            "$ref" : "#/components/responses/NotFound"
-          },
-          "409" : {
-            "$ref" : "#/components/responses/Conflict"
-          }
-        }
-      },
-      "put" : {
-        "tags" : [ "photo" ],
-        "summary" : "Create user",
-        "description" : "This can only be done by the logged in user.",
-        "operationId" : "updateOnePhoto",
-        "parameters" : [ {
-          "name" : "id",
-          "in" : "path",
-          "description" : "The name that needs to be fetched. Use user1 for testing.",
-          "required" : true,
-          "schema" : {
-            "type" : "integer"
-          }
-        } ],
-        "requestBody" : {
-          "$ref" : "#/components/requestBodies/Photo"
-        },
-        "responses" : {
-          "200" : {
-            "description" : "Ok",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/Photo"
-                }
-              }
-            }
-          },
-          "400" : {
-            "$ref" : "#/components/responses/BadRequest"
-          },
-          "401" : {
-            "$ref" : "#/components/responses/Unauthorized"
-          },
-          "403" : {
-            "$ref" : "#/components/responses/Forbidden"
-          },
-          "404" : {
-            "$ref" : "#/components/responses/NotFound"
-          },
-          "409" : {
-            "$ref" : "#/components/responses/Conflict"
-          }
-        }
-      }
-    },
-  
-    "/photos" : {
-      "get" : {
-        "tags" : [ "photo" ],
-        "summary" : "get photo list",
-        "description" : "This can only be done by the logged in user.",
-        "operationId" : "readManyPhoto",
-        "parameters" : [ {
-          "name" : "orderBy",
-          "in" : "query",
-          "description" : "The name that needs to be fetched. Use user1 for testing.",
-          "schema" : {
-            "type" : "string",
-            "default": "desc"
-          }
-        },
-        {
-          "name" : "orderByField",
-          "in" : "query",
-          "description" : "The name that needs to be fetched. Use user1 for testing.",
-          "schema" : {
-            "type" : "string",
-            "default": "id"
-          }
-        },
-        {
-          "name" : "JSESSIONID",
-          "in" : "cookie",
-          "description" : "The name that needs to be fetched. Use user1 for testing.",
-          "schema" : {
-            "type" : "string",
-            "format": "id"
-          }
-        }
-      ],
-        "responses" : {
-          "200" : {
-            "description" : "Ok",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "type" : "array",
-                  "items" : {
-                    "$ref" : "#/components/schemas/Photo"
-                  }
-                  
-                }
-              }
-            }
-          },
-          "400" : {
-            "$ref" : "#/components/responses/BadRequest"
-          },
-          "401" : {
-            "$ref" : "#/components/responses/Unauthorized"
-          },
-          "403" : {
-            "$ref" : "#/components/responses/Forbidden"
-          },
-          "404" : {
-            "$ref" : "#/components/responses/NotFound"
-          },
-          "409" : {
-            "$ref" : "#/components/responses/Conflict"
-          }
-        },
-        "security" : [ {
-          "cookieAuth" : [ ]
-        } ]
-      },
-      "post" : {
-        "tags" : [ "photo" ],
-        "summary" : "upload photo list",
-        "description" : "This can only be done by the logged in user.",
-        "operationId" : "uploadManyPhoto",
-        "parameters" : [ 
-          {
-            "name" : "JSESSIONID",
-            "in" : "cookie",
-            "description" : "The name that needs to be fetched. Use user1 for testing.",
-            "schema" : {
-              "type" : "string",
-              "format": "id"
-            }
-          }
-        ],
-        "requestBody" : {
-          "$ref" : "#/components/requestBodies/UploadPhoto"
-        },
-        "responses" : {
-          "200" : {
-            "description" : "Ok",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "type" : "array",
-                  "items" : {
-                    "$ref" : "#/components/schemas/Photo"
-                  }
-                  
-                }
-              }
-            }
-          },
-          "400" : {
-            "$ref" : "#/components/responses/BadRequest"
-          },
-          "401" : {
-            "$ref" : "#/components/responses/Unauthorized"
-          },
-          "403" : {
-            "$ref" : "#/components/responses/Forbidden"
-          },
-          "404" : {
-            "$ref" : "#/components/responses/NotFound"
-          },
-          "409" : {
-            "$ref" : "#/components/responses/Conflict"
-          }
-        }
-      },
-      "put" : {
-        "tags" : [ "photo" ],
-        "summary" : "get photo list",
-        "description" : "This can only be done by the logged in user.",
-        "operationId" : "updateManyPhoto",
-        "requestBody" : {
-          "$ref" : "#/components/requestBodies/PhotoArray"
-        },
-        "responses" : {
-          "200" : {
-            "description" : "Ok",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "type" : "array",
-                  "items" : {
-                    "$ref" : "#/components/schemas/Photo"
-                  }
-                  
-                }
-              }
-            }
-          },
-          "400" : {
-            "$ref" : "#/components/responses/BadRequest"
-          },
-          "401" : {
-            "$ref" : "#/components/responses/Unauthorized"
-          },
-          "403" : {
-            "$ref" : "#/components/responses/Forbidden"
-          },
-          "404" : {
-            "$ref" : "#/components/responses/NotFound"
-          },
-          "409" : {
-            "$ref" : "#/components/responses/Conflict"
-          }
-        }
-      },
-      "delete" : {
-        "tags" : [ "photo" ],
-        "summary" : "get photo list",
-        "description" : "This can only be done by the logged in user.",
-        "operationId" : "deleteManyPhoto",
-        "parameters" : [ {
-          "name" : "id",
-          "in" : "query",
-          "description" : "name that need to be updated",
-          "required" : true,
-          "schema" : {
-            "type" : "array",
-            "items" : {
-              "type" : "integer"
-            }
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "Ok",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "type" : "array",
-                  "items" : {
-                    "$ref" : "#/components/schemas/Photo"
-                  }
-                  
-                }
-              }
-            }
-          },
-          "400" : {
-            "$ref" : "#/components/responses/BadRequest"
-          },
-          "401" : {
-            "$ref" : "#/components/responses/Unauthorized"
-          },
-          "403" : {
-            "$ref" : "#/components/responses/Forbidden"
-          },
-          "404" : {
-            "$ref" : "#/components/responses/NotFound"
-          },
-          "409" : {
-            "$ref" : "#/components/responses/Conflict"
-          }
-        }
-      }
-    },
-    "/photos/inids" : {
-      "get" : {
-        "tags" : [ "photo" ],
-        "summary" : "get photo list",
-        "description" : "This can only be done by the logged in user.",
-        "operationId" : "findManyInIdsPhoto",
-        "parameters" : [ {
-          "name" : "id",
-          "in" : "query",
-          "description" : "The name that needs to be fetched. Use user1 for testing.",
-          "schema" : {
-            "type" : "array",
-            "items" : {
-              "type" : "integer"
-            }
-          }
-        }
-      ],
-        "responses" : {
-          "200" : {
-            "description" : "Ok",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "type" : "array",
-                  "items" : {
-                    "$ref" : "#/components/schemas/Photo"
-                  }
-                  
-                }
-              }
-            }
-          },
-          "400" : {
-            "$ref" : "#/components/responses/BadRequest"
-          },
-          "401" : {
-            "$ref" : "#/components/responses/Unauthorized"
-          },
-          "403" : {
-            "$ref" : "#/components/responses/Forbidden"
-          },
-          "404" : {
-            "$ref" : "#/components/responses/NotFound"
-          },
-          "409" : {
-            "$ref" : "#/components/responses/Conflict"
-          }
-        },
-        "security" : [ {
-          "cookieAuth" : [ ]
-        } ]
-      }
-    },
-    "/admin/photos" : {
-      "get" : {
-        "tags" : [ "photo" ],
-        "summary" : "get photo list",
-        "description" : "This can only be done by the logged in user.",
-        "operationId" : "readManyAdminPhoto",
-        "parameters" : [ {
-          "name" : "orderBy",
-          "in" : "query",
-          "description" : "The name that needs to be fetched. Use user1 for testing.",
-          "schema" : {
-            "type" : "string",
-            "default": "desc"
-          }
-        },
-        {
-          "name" : "orderByField",
-          "in" : "query",
-          "description" : "The name that needs to be fetched. Use user1 for testing.",
-          "schema" : {
-            "type" : "string",
-            "default": "id"
-          }
-        },
-        {
-          "name" : "status",
-          "in" : "query",
-          "description" : "The name that needs to be fetched. Use user1 for testing.",
-          "schema" : {
-            "type" : "integer"
-          }
-        }
-      ],
-        "responses" : {
-          "200" : {
-            "description" : "Ok",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "type" : "array",
-                  "items" : {
-                    "$ref" : "#/components/schemas/Photo"
-                  }
-                  
-                }
-              }
-            }
-          },
-          "400" : {
-            "$ref" : "#/components/responses/BadRequest"
-          },
-          "401" : {
-            "$ref" : "#/components/responses/Unauthorized"
-          },
-          "403" : {
-            "$ref" : "#/components/responses/Forbidden"
-          },
-          "404" : {
-            "$ref" : "#/components/responses/NotFound"
-          },
-          "409" : {
-            "$ref" : "#/components/responses/Conflict"
-          }
-        },
-        "security" : [ {
-          "cookieAuth" : [ ]
-        } ]
-      }
     }
   },
   "externalDocs" : {
@@ -1172,39 +391,30 @@
             "type" : "string",
             "format" : "uuid"
           },
-          "googleId" : {
-            "type" : "string",
-            "uniqueItems": true,
-            "nullable" : true
-          },
-          "username" : {
+          "name" : {
             "type" : "string",
             "minLength" : 3,
-            "maxLength" : 30
+            "maxLength" : 30,
+            "nullable" : true
           },
           "email" : {
             "type" : "string",
             "format" : "email",
-            "uniqueItems" : true
+            "nullable" : true
           },
+          "phonePrefix" : {
+            "description": "國碼",
+            "type" : "string"
+          },
+          "phone" : {
+            "type" : "string",
+            "format" : "phone"
+          },               
           "password" : {
             "type" : "string",
             "format" : "password",
             "minLength" : 8,
             "maxLength" : 30
-          },
-          "phone" : {
-            "type" : "string",
-            "format" : "phone",
-            "nullable" : true
-          },
-          "createdAt" : {
-            "type" : "string",
-            "format" : "date-time"
-          },
-          "updatedAt" : {
-            "type" : "string",
-            "format" : "date-time"
           },
           "userStatus" : {
             "type" : "integer",
@@ -1212,152 +422,62 @@
             "description" : "status map:\n * `1` - Normal\n * `2` - Unverified\n * `3` - Locking\n",
             "enum" : [ 1, 2, 3 ],
             "default" : 2
-          },
-          "authLevel" : {
-            "$ref" : "#/components/schemas/Auth/properties/level",
-            "default" : 2
-          },
-          "auth" : {
-            "$ref" : "#/components/schemas/Auth"
-          }
-        }
-      },
-      "Auth" : {
-        "type" : "object",
-        "description" : "database",
-        "properties" : {
-          "id" : {
-            "type" : "integer",
-            "format" : "int64"
-          },
-          "role" : {
-            "type" : "integer",
-            "format" : "int64"
-          },
-          "level" : {
-            "type" : "integer",
-            "format" : "int64",
-            "uniqueItems" : true,
-            "default" : 100
-          }
-        }
-      },
-      "Notify" : {
-        "type" : "object",
-        "description" : "database",
-        "properties" : {
-          "id" : {
-            "type" : "integer",
-            "format" : "int64"
-          },
-          "user" : {
-            "$ref" : "#/components/schemas/User"
-          },
-          "ownerId" : {
+          },    
+          "birthdate" : {
             "type" : "string",
-            "$ref" : "#/components/schemas/User/properties/id"
-          },
-          "read" : {
-            "type" : "boolean"
-          },        
-          "msg" : {
-            "type" : "string"
-          },
-          "event" : {
-            "type" : "string"
-          },
+            "format" : "date",
+            "nullable" : true
+          },   
+          "city" : {
+            "description": "residence city",
+            "type" : "string",
+            "nullable" : true
+          },    
+          "area" : {
+            "description": "residence area",
+            "type" : "string",
+            "nullable" : true
+          },     
+          "address" : {
+            "description": "residence address",
+            "type" : "string",
+            "nullable" : true
+          },                                                   
           "createdAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "updatedAt" : {
             "type" : "string",
             "format" : "date-time"
           }
         }
       },
-      "Photo" : {
+      "BankAccount" : {
         "type" : "object",
         "description" : "database",
         "properties" : {
           "id" : {
             "type" : "integer",
             "format" : "int64"
-          },
-          "user" : {
-            "$ref" : "#/components/schemas/User"
-          },
-          "ownerId" : {
-            "type" : "string",
-            "$ref" : "#/components/schemas/User/properties/id"
           },
           "name" : {
-            "type" : "string",
-            "minLength" : 3,
-            "maxLength" : 30
-          },
-          "filePath1" : {
             "type" : "string"
           },
-          "filePath2" : {
-            "type" : "string",
-            "nullable": true
+          "code" : {
+            "type" : "integer"
+          },         
+          "account" : {
+            "type" : "integer"
+          }, 
+          "userId" : {
+            "$ref" : "#/components/schemas/User/properties/id"
           },
-          "filePath3" : {
-            "type" : "string",
-            "nullable": true
-          },
-          "process" : {
-            "type" : "integer",
-            "format" : "int32",
-            "description" : "status map:\n * `1` - yet\n * `2` - schedule\n * `3` - complete\n",
-            "enum" : [ 1, 2, 3 ],
-            "default": 1
-          },        
-          "status" : {
-            "type" : "integer",
-            "format" : "int32",
-            "description" : "status map:\n * `1` - yetPurify\n * `2` - purify\n * `3` - purifying\n * `4` - consult\n",
-            "enum" : [ 1, 2, 3, 4, 5 ],
-            "default": 1
-          },
-          "beforeLevel" : {
-            "type" : "integer",
-            "format" : "int32",
-            "description" : "status map:\n * `1` - A\n * `2` - B\n * `3` - C\n",
-            "enum" : [ 1, 2, 3 ],
-            "default": 1
-          },
-          "afterLevel" : {
-            "type" : "integer",
-            "format" : "int32",
-            "description" : "status map:\n * `1` - A\n * `2` - B\n * `3` - C\n",
-            "enum" : [ 1, 2, 3 ],
-            "default": 1
-          },
-          "createdAt" : {
-            "type" : "string",
-            "format" : "date-time"
-          }
-        }
-      },
-      "PhotoComment" : {
-        "type" : "object",
-        "description" : "database",
-        "properties" : {
-          "id" : {
-            "type" : "integer",
-            "format" : "int64"
-          },
-          "createdAt" : {
-            "type" : "string",
-            "format" : "date-time"
-          },
-          "photoId" : {
-            "$ref" : "#/components/schemas/Photo/properties/id"
-          },
-          "photo" : {
-            "$ref" : "#/components/schemas/Photo"
-          }
+          "user" : {
+            "$ref" : "#/components/schemas/User"
+          }                        
         }
       }
-
     },
     "requestBodies" : {
       "User" : {
@@ -1367,7 +487,7 @@
               "type" : "object",
               "properties" : {
                 "username" : {
-                  "$ref" : "#/components/schemas/User/properties/username"
+                  "$ref" : "#/components/schemas/User/properties/name"
                 },
                 "email" : {
                   "$ref" : "#/components/schemas/User/properties/email"
@@ -1380,13 +500,6 @@
                 },
                 "userStatus" : {
                   "$ref" : "#/components/schemas/User/properties/userStatus",
-                  "nullable" : true
-                },
-                "authLevel" : {
-                  "$ref" : "#/components/schemas/Auth/properties/level"
-                },
-                "googleId" : {
-                  "$ref" : "#/components/schemas/User/properties/googleId",
                   "nullable" : true
                 }
               }
@@ -1408,7 +521,7 @@
                   "type" : "object",
                   "properties" : {
                     "username" : {
-                      "$ref" : "#/components/schemas/User/properties/username"
+                      "$ref" : "#/components/schemas/User/properties/name"
                     },
                     "email" : {
                       "$ref" : "#/components/schemas/User/properties/email"
@@ -1421,9 +534,6 @@
                     },
                     "userStatus" : {
                       "$ref" : "#/components/schemas/User/properties/userStatus"
-                    },
-                    "authLevel" : {
-                      "$ref" : "#/components/schemas/Auth/properties/level"
                     }
                   }
                 }                  
@@ -1436,182 +546,7 @@
         },
         "description" : "List of user object",
         "required" : true
-      },
-      "Auth" : {
-        "content" : {
-          "application/json" : {
-            "schema" : {
-              "type" : "object",
-              "properties" : {
-                "role" : {
-                  "$ref" : "#/components/schemas/Auth/properties/role"
-                },
-                "level" : {
-                  "$ref" : "#/components/schemas/Auth/properties/level"
-                }
-              }
-            }
-          }
-        },
-        "description" : "List of user object",
-        "required" : true
-      },
-      "Photo" : {
-        "content" : {
-          "application/json" : {
-            "schema" : {
-              "type" : "object",
-              "properties" : {
-                "status" : {
-                  "$ref" : "#/components/schemas/Photo/properties/status"
-                },
-                "process" : {
-                  "$ref" : "#/components/schemas/Photo/properties/process"
-                },
-                "beforeLevel" : {
-                  "$ref" : "#/components/schemas/Photo/properties/beforeLevel"
-                },
-                "afterLevel" : {
-                  "$ref" : "#/components/schemas/Photo/properties/afterLevel"
-                },
-                "filePath2" : {
-                  "$ref" : "#/components/schemas/Photo/properties/filePath2"
-                }
-              }
-            }
-          }
-        },
-        "description" : "List of user object",
-        "required" : true
-      },
-      "PhotoArray" : {
-        "content" : {
-          "application/json" : {
-            "schema" : {
-              "type" : "object",
-              "properties" : {
-                "whereField": {
-                  "type" : "string",
-                  "example" : "id"
-                },
-                "dataList":  {
-                  "type" : "array",
-                  "items" : {
-                    "type" : "object",
-                    "properties" : {
-                      "id" : {
-                        "$ref" : "#/components/schemas/Photo/properties/id"
-                      },                      
-                      "status" : {
-                        "$ref" : "#/components/schemas/Photo/properties/status"
-                      },
-                      "process" : {
-                        "$ref" : "#/components/schemas/Photo/properties/process"
-                      },
-                      "beforeLevel" : {
-                        "$ref" : "#/components/schemas/Photo/properties/beforeLevel"
-                      },
-                      "afterLevel" : {
-                        "$ref" : "#/components/schemas/Photo/properties/afterLevel"
-                      },
-                      "filePath2" : {
-                        "$ref" : "#/components/schemas/Photo/properties/filePath2"
-                      }
-                    }
-                  }                
-                }
-              }
-            }
-          }
-        },
-        "description" : "List of user object",
-        "required" : true
-      },
-      "UploadPhoto" : {
-        "content" : {
-          "multipart/form-data" : {
-            "schema" : {
-                "type" : "object",
-                "properties" : {
-                  "files" : {
-                    "type": "array",
-                    "items": {
-                      "type": "string",
-                      "format": "binary"
-                    }
-                  }
-              }
-            }
-          }
-        },
-        "description" : "List of user object",
-        "required" : true
-      },
-      "Notify" : {
-        "content" : {
-          "application/json" : {
-            "schema" : {
-              "type" : "object",
-              "properties" : {
-                "ownerId" : {
-                  "type" : "string",
-                  "$ref" : "#/components/schemas/Notify/properties/ownerId"
-                },
-                "read" : {
-                  "$ref" : "#/components/schemas/Notify/properties/read"
-                },        
-                "msg" : {
-                  "$ref" : "#/components/schemas/Notify/properties/msg"
-                },
-                "event" : {
-                  "$ref" : "#/components/schemas/Notify/properties/event"
-                }
-              }
-            }
-          }
-        },
-        "description" : "List of user object",
-        "required" : true
-      },
-      "NotifyArray" : {
-        "content" : {
-          "application/json" : {
-            "schema" : {
-              "type" : "object",
-              "properties" : {
-                "whereField": {
-                  "type" : "string",
-                  "example" : "id"
-                },
-                "dataList":  {
-                  "type" : "array",
-                  "items" : {
-                    "type" : "object",
-                    "properties" : {
-                      "ownerId" : {
-                        "type" : "string",
-                        "$ref" : "#/components/schemas/Notify/properties/ownerId"
-                      },
-                      "read" : {
-                        "$ref" : "#/components/schemas/Notify/properties/read"
-                      },        
-                      "msg" : {
-                        "$ref" : "#/components/schemas/Notify/properties/msg"
-                      },
-                      "event" : {
-                        "$ref" : "#/components/schemas/Notify/properties/event"
-                      }
-                    }
-                  }                
-                }
-              }
-            }
-          }
-        },
-        "description" : "List of user object",
-        "required" : true
       }
-
     },
     "parameters" : {
       "createdAt" : {

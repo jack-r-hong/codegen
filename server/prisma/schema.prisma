@@ -10,72 +10,33 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Auth {
-  id  Int @id @default(autoincrement()) @map("id")                 
-  level  Int  @unique  @default(100)  @map("level")                 
-  role  Int  @map("role")                 
-  user User[]
-  
-    // custom begin Auth
-
-    // custom end Auth
-}
-model Notify {
-  createdAt  DateTime  @default(now()) @map("created_at")                 
-  event  String  @map("event")                 
-  id  Int @id @default(autoincrement()) @map("id")                 
-  msg  String  @map("msg")                 
-  read  Boolean  @map("read")                 
-  user User? @relation(fields: [ownerId], references: [id])
-  ownerId String @map("owner_id") 
-  
-    // custom begin Notify
-
-    // custom end Notify
-}
-model Photo {
-  afterLevel  Int  @default(1)  @map("after_level")                 
-  beforeLevel  Int  @default(1)  @map("before_level")                 
-  createdAt  DateTime  @default(now()) @map("created_at")                 
-  filePath1  String  @map("file_path_1")                 
-  filePath2  String?   @map("file_path_2")                 
-  filePath3  String?   @map("file_path_3")                 
+model BankAccount {
+  account  Int  @map("account")                 
+  code  Int  @map("code")                 
   id  Int @id @default(autoincrement()) @map("id")                 
   name  String  @map("name")                 
-  process  Int  @default(1)  @map("process")                 
-  status  Int  @default(1)  @map("status")                 
-  photoComment PhotoComment[]
-  user User? @relation(fields: [ownerId], references: [id])
-  ownerId String @map("owner_id") 
+  user User? @relation(fields: [userId], references: [id])
+  userId String @map("user_id") 
   
-    // custom begin Photo
+    // custom begin BankAccount
 
-    // custom end Photo
-}
-model PhotoComment {
-  createdAt  DateTime  @default(now()) @map("created_at")                 
-  id  Int @id @default(autoincrement()) @map("id")                 
-  photo Photo? @relation(fields: [photoId], references: [id])
-  photoId Int @map("photo_id") 
-  
-    // custom begin PhotoComment
-
-    // custom end PhotoComment
+    // custom end BankAccount
 }
 model User {
+  address  String?   @map("address")                 
+  area  String?   @map("area")                 
+  birthdate  String?   @map("birthdate")                 
+  city  String?   @map("city")                 
   createdAt  DateTime  @default(now()) @map("created_at")                 
-  email  String  @unique  @map("email")                 
-  googleId  String?   @unique  @map("google_id")                 
+  email  String?   @map("email")                 
   id  String @id @default(uuid()) @map("id")                 
+  name  String?   @map("name")                 
   password  String  @map("password")                 
-  phone  String?   @map("phone")                 
+  phone  String  @map("phone")                 
+  phonePrefix  String  @map("phone_prefix")                 
   updatedAt  DateTime   @default(now()) @updatedAt @map("updated_at")                 
   userStatus  Int  @default(2)  @map("user_status")                 
-  username  String  @map("username")                 
-  auth Auth? @relation(fields: [authLevel], references: [level])
-  authLevel Int @map("auth_level") @default(100)
-  notify Notify[]
-  photo Photo[]
+  bankAccount BankAccount[]
   
     // custom begin User
 

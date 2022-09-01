@@ -13,35 +13,6 @@ export class UserService {
   @Inject()
   private userModel!: UserModel;
 
-  async googleLogin(
-      param :requestTypes.GoogleLoginParams,
-      session: Express.Request['session'],
-  ) {
-    // custom begin googleLogin
-    const user = await this.userModel.googleLogin(param, '').catch((e) =>{
-      throw e;
-    });
-    if (user) {
-      const {id, userStatus, auth, username, googleId, email} = user;
-      if (googleId) {
-        session.userInfo = {
-          id,
-          authRole: auth?.role!,
-          userStatus,
-        };
-      }
-      return {
-        isBind: googleId? true: false,
-        username,
-        email,
-        authRole: auth?.role!,
-      };
-    } else {
-      throw new errors.LoginFailError;
-    }
-
-    // custom end googleLogin
-  }
   async loginUser(
       param :requestTypes.LoginUserParams,
       session: Express.Request['session'],

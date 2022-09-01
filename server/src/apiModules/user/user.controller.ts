@@ -24,31 +24,6 @@ export class UserController implements Controller {
   @Inject('app.use')
     appUse!: AppUse;
 
-  @Post('/google/login')
-  @Validator(validSchemas.googleLoginValidator)
-  async googleLogin(
-      req: userParams.GoogleLoginRequest,
-      res: Response,
-      next: NextFunction,
-  ) {
-    UserController.service.googleLogin(
-        userParams.GoogleLoginRequestConvert(
-            req.body,
-            req.query,
-            req.params,
-            req.cookies,
-        ),
-        req.session,
-    )
-        .then((result) =>{
-          // custom begin googleLogin
-          res.json({result});
-
-          // custom end googleLogin
-        }).catch((e) => {
-          next(e);
-        });
-  }
   @Post('/login')
   @Validator(validSchemas.loginUserValidator)
   async loginUser(

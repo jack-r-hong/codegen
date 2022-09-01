@@ -4,21 +4,14 @@ import * as sessions from '../../sessions';
 // custom begin import
 
 // custom end import
-export const googleLoginValidator: Schema = {
-  email: {
-    in: 'body',
-    isEmail: true,
-  },
-  id: {
-    in: 'body',
-  },
-  name: {
-    in: 'body',
-  },
-};
 export const loginUserValidator: Schema = {
   email: {
     in: 'body',
+    optional: {
+      options: {
+        nullable: true,
+      },
+    },
     isEmail: true,
   },
   password: {
@@ -36,26 +29,14 @@ export const loginUserValidator: Schema = {
 export const logoutUserValidator: Schema = {
 };
 export const registerUserValidator: Schema = {
-  authLevel: {
-    in: 'body',
-    isInt: true,
-    optional: {
-      options: {
-        nullable: true,
-      },
-    },
-  },
   email: {
     in: 'body',
-    isEmail: true,
-  },
-  googleId: {
-    in: 'body',
     optional: {
       options: {
         nullable: true,
       },
     },
+    isEmail: true,
   },
   password: {
     in: 'body',
@@ -70,11 +51,6 @@ export const registerUserValidator: Schema = {
   },
   phone: {
     in: 'body',
-    optional: {
-      options: {
-        nullable: true,
-      },
-    },
     isMobilePhone: true,
   },
   userStatus: {
@@ -91,6 +67,11 @@ export const registerUserValidator: Schema = {
   },
   username: {
     in: 'body',
+    optional: {
+      options: {
+        nullable: true,
+      },
+    },
     isLength: {
       options: {
         max: 30,
@@ -135,26 +116,14 @@ export const updateOneUserValidator: Schema = {
     in: 'params',
     notEmpty: true,
   },
-  authLevel: {
-    in: 'body',
-    isInt: true,
-    optional: {
-      options: {
-        nullable: true,
-      },
-    },
-  },
   email: {
     in: 'body',
-    isEmail: true,
-  },
-  googleId: {
-    in: 'body',
     optional: {
       options: {
         nullable: true,
       },
     },
+    isEmail: true,
   },
   password: {
     in: 'body',
@@ -169,11 +138,6 @@ export const updateOneUserValidator: Schema = {
   },
   phone: {
     in: 'body',
-    optional: {
-      options: {
-        nullable: true,
-      },
-    },
     isMobilePhone: true,
   },
   userStatus: {
@@ -190,6 +154,11 @@ export const updateOneUserValidator: Schema = {
   },
   username: {
     in: 'body',
+    optional: {
+      options: {
+        nullable: true,
+      },
+    },
     isLength: {
       options: {
         max: 30,

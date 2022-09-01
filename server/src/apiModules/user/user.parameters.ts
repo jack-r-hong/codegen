@@ -14,50 +14,8 @@ interface TypedRequest<
 }
 
 
-type GoogleLoginReqBody = {
-  email: string,
-id: string,
-name: string,
-}
-
-type GoogleLoginReqQuery = {
-}
-
-type GoogleLoginReqParams = {
-}
-
-type GoogleLoginReqCookie = {
-}
-
-export interface GoogleLoginRequest extends TypedRequest<
-  GoogleLoginReqBody,
-  GoogleLoginReqQuery,
-  GoogleLoginReqParams,
-  GoogleLoginReqCookie
->{
-}
-
-export type GoogleLoginParams = {
-bodyEmail: string,
-bodyId: string,
-bodyName: string,
-}
-
-
-export const GoogleLoginRequestConvert = (
-    body: GoogleLoginReqBody,
-    query: GoogleLoginReqQuery,
-    path: GoogleLoginReqParams,
-    cookie: GoogleLoginReqCookie,
-): GoogleLoginParams => {
-  return {
-    bodyEmail: body.email,
-    bodyId: body.id,
-    bodyName: body.name,
-  };
-};
 type LoginUserReqBody = {
-  email: string,
+  email: string|null,
 password: string,
 }
 
@@ -79,7 +37,7 @@ export interface LoginUserRequest extends TypedRequest<
 }
 
 export type LoginUserParams = {
-bodyEmail: string,
+bodyEmail: string|null,
 bodyPassword: string,
 }
 
@@ -129,13 +87,11 @@ export const LogoutUserRequestConvert = (
   };
 };
 type RegisterUserReqBody = {
-  authLevel: string|undefined,
-email: string,
-googleId: string|null,
+  email: string|null,
 password: string,
-phone: string|null,
+phone: string,
 userStatus: string|undefined,
-username: string,
+username: string|null,
 }
 
 type RegisterUserReqQuery = {
@@ -156,13 +112,11 @@ export interface RegisterUserRequest extends TypedRequest<
 }
 
 export type RegisterUserParams = {
-bodyAuthLevel: number|undefined,
-bodyEmail: string,
-bodyGoogleId: string|null,
+bodyEmail: string|null,
 bodyPassword: string,
-bodyPhone: string|null,
+bodyPhone: string,
 bodyUserStatus: number|undefined,
-bodyUsername: string,
+bodyUsername: string|null,
 }
 
 
@@ -173,9 +127,7 @@ export const RegisterUserRequestConvert = (
     cookie: RegisterUserReqCookie,
 ): RegisterUserParams => {
   return {
-    bodyAuthLevel: body.authLevel? parseInt(body.authLevel):undefined,
     bodyEmail: body.email,
-    bodyGoogleId: body.googleId,
     bodyPassword: body.password,
     bodyPhone: body.phone,
     bodyUserStatus: body.userStatus? parseInt(body.userStatus):undefined,
@@ -257,13 +209,11 @@ export const ReadOneUserRequestConvert = (
   };
 };
 type UpdateOneUserReqBody = {
-  authLevel: string|undefined,
-email: string,
-googleId: string|null,
+  email: string|null,
 password: string,
-phone: string|null,
+phone: string,
 userStatus: string|undefined,
-username: string,
+username: string|null,
 }
 
 type UpdateOneUserReqQuery = {
@@ -287,13 +237,11 @@ export interface UpdateOneUserRequest extends TypedRequest<
 
 export type UpdateOneUserParams = {
       pathId: string
-bodyAuthLevel: number|undefined,
-bodyEmail: string,
-bodyGoogleId: string|null,
+bodyEmail: string|null,
 bodyPassword: string,
-bodyPhone: string|null,
+bodyPhone: string,
 bodyUserStatus: number|undefined,
-bodyUsername: string,
+bodyUsername: string|null,
 }
 
 
@@ -305,9 +253,7 @@ export const UpdateOneUserRequestConvert = (
 ): UpdateOneUserParams => {
   return {
       pathId: path.id,
-    bodyAuthLevel: body.authLevel? parseInt(body.authLevel):undefined,
     bodyEmail: body.email,
-    bodyGoogleId: body.googleId,
     bodyPassword: body.password,
     bodyPhone: body.phone,
     bodyUserStatus: body.userStatus? parseInt(body.userStatus):undefined,
