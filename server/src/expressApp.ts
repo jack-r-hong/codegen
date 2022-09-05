@@ -13,6 +13,8 @@ import rateLimit from 'express-rate-limit';
 import RedisStore from 'rate-limit-redis';
 import {redisLimiterClient as redisClient} from './redisClient';
 import {errorHandle} from './errors';
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('../other/swagger.json');
 
 export class ExpressApp {
   public app: Application = express();
@@ -54,7 +56,7 @@ export class ExpressApp {
       ],
       credentials: true,
       methods: 'GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE',
-      origin: ['http://localhost:8000', 'http://127.0.0.1:8000', `https://${process.env['HOSTNAME']}`, `https://${process.env['FRONT_END_HOST']}`],
+      origin: ['https://192.168.10.119', 'http://localhost:8000', 'http://127.0.0.1:3000', `https://${process.env['HOSTNAME']}`, `https://${process.env['FRONT_END_HOST']}`],
       // origin: '*',
       preflightContinue: true,
       // preflightContinue: false,
@@ -71,6 +73,8 @@ export class ExpressApp {
     this.app.use(cookieParser());
     this.app.use(bodyParser.urlencoded({extended: true}));
     this.app.use(bodyParser.json());
+    this.app.use('/api/api-docs'
+        , swaggerUi.serve, swaggerUi.setup(swaggerDocument));
   }
 
   private sessionRegister() {

@@ -34,7 +34,7 @@ model {{fpc @key}} {
     {{/if}}
   {{foreign_key @key }}
     // custom begin {{@key}}
-{{lookup ../custom @key}}
+{{{lookup ../custom @key}}}
     // custom end {{@key}}
 }
 {{/each}}

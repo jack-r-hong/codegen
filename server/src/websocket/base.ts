@@ -77,7 +77,11 @@ export class WSEvent {
 
   parse(message: string) {
     const self = new WSEvent(this.eventName);
-    self.data = JSON.parse(message).data;
+    try {
+      self.data = JSON.parse(message).data;
+    } catch {
+      self.data = 'parseError';
+    }
 
     return self;
   }

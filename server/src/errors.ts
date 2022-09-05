@@ -38,12 +38,20 @@ class LoginFailError extends Error {
   }
 }
 
+class CaptchaError extends Error {
+  constructor(message?: string) {
+    super(message);
+    this.name = 'CaptchaError';
+  }
+}
+
 export const errors = {
   WrongPasswordError,
   NotFindError,
   DuplicateUniqueField,
   AuthenticationFailedError,
   LoginFailError,
+  CaptchaError,
 };
 
 export const errorHandle = (
@@ -73,6 +81,8 @@ export const errorHandle = (
         }
 
         return httpErrors(400);
+      case err instanceof CaptchaError:
+        return httpErrors(401);
       case err instanceof WrongPasswordError:
         return httpErrors(401);
       case err instanceof LoginFailError:
@@ -92,25 +102,6 @@ export const errorHandle = (
 
   res.status(error.statusCode);
   res.send(`${error.statusCode} ${error.message}`);
-};
-
-
-export const errorHender = (err: Error |
-  Prisma.PrismaClientKnownRequestError) => {
-  switch (true) {
-    case err instanceof WrongPasswordError:
-      return httpErrors(401);
-    case err instanceof AuthenticationFailedError:
-      return httpErrors(403);
-    case err instanceof NotFindError:
-      return httpErrors(404);
-    case err instanceof DuplicateUniqueField:
-      return httpErrors(409);
-    case err instanceof Prisma.PrismaClientKnownRequestError:
-      return prismaDBErrorHender(<Prisma.PrismaClientKnownRequestError> err);
-    default:
-      return (err);
-  }
 };
 
 const prismaDBErrorHender = (err: Prisma.PrismaClientKnownRequestError) => {

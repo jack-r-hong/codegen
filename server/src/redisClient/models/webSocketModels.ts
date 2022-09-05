@@ -4,7 +4,7 @@ import {Service} from 'typedi';
 import {UserId} from './userId';
 import {Mixin} from 'ts-mixer';
 
-class WebSocketBase extends RedisClient implements ModelBase {
+class WebSocketBase extends RedisClient {
 
 }
 

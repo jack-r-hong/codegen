@@ -17,12 +17,20 @@ type UserRegister = {
   verify?: string,
 }
 
+type Transaction = {
+  id: string,
+  process: number,
+  requestUserId: string,
+  receiveUserId: string,
+}
+
 declare module 'express-session' {
  // eslint-disable-next-line no-unused-vars
   interface Session {
     userInfo?: UserInfo,
     captcha?: String,
     userRegister?: UserRegister
+    transaction?: Transaction
   }
 }
 
@@ -43,9 +51,9 @@ export const cookieAuthSession = session({
 });
 
 export const cookieAuthSessionVerify = (
-    userInfo: UserInfo,
+    session: Session,
 ) => {
-  if (!userInfo) {
+  if (!session.userInfo) {
     throw new errors.AuthenticationFailedError('AuthenticationFailed');
   }
   return true;

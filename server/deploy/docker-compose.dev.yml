@@ -13,6 +13,7 @@ services:
       - ../src:/usr/src/app/src
       - ../prisma:/usr/src/app/prisma
       - ../other:/usr/src/app/other
+      - ../certreq:/usr/src/app/certreq
     container_name: ts-node-server
     working_dir: /usr/src/app/
     ports:
@@ -20,7 +21,7 @@ services:
       - '4443:4443'
     networks:
       - backend
-    # command: npm run dev
+    command: npm run dev
     env_file:
       - ../.env    
     depends_on: 
@@ -37,8 +38,8 @@ services:
       - backend
     # volumes:
     #   - ./mysql:/var/lib/mysql
-    ports:
-      - 3306:3306
+    # ports:
+    #   - 3306:3306
   redis:
     restart: always
     container_name: redis

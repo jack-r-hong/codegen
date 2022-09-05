@@ -20,16 +20,30 @@ export class UserModel {
       customParam: any,
   ) {
     // custom begin loginUser
+    const res: any | null = await prisma.user.findUnique({
+      where: {
+        phone_all: {
+          phone: param.bodyPhone,
+          phonePrefix: param.bodyPhonePrefix,
+        },
+      },
+      select: {
+        email: true,
+        id: true,
+        name: true,
+        password: true,
+      },
+    }).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+    if (res === null) {
+      throw new errors.NotFindError;
+    }
+    return res;
 
     // custom end loginUser
-  }
-  async logoutUser(
-      param: requestTypes.LogoutUserParams,
-      customParam: any,
-  ) {
-    // custom begin logoutUser
-
-    // custom end logoutUser
   }
   async registerUser(
       param: requestTypes.RegisterUserParams,
@@ -52,84 +66,19 @@ export class UserModel {
       customParam: any,
   ) {
     // custom begin phoneCheck
+    const res: User | null = await prisma.user.create({
+      data: {
+        phone: customParam.phone,
+        phonePrefix: customParam.phonePrefix,
+        password: customParam.password,
+      },
+    }).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+    return res;
 
     // custom end phoneCheck
-  }
-  async deleteOneUser(
-      param: requestTypes.DeleteOneUserParams,
-  ) {
-    const res: User | null = await prisma.user.delete({
-      where: {
-        id: param.pathId,
-      },
-    }).catch((e) => {
-      throw e;
-    }).finally(() => {
-      prisma.$disconnect();
-    });
-    return res;
-  }
-  async readOneUser(
-      param: requestTypes.ReadOneUserParams,
-  ) {
-    const res: any | null = await prisma.user.findUnique({
-      where: {
-        id: param.pathId,
-      },
-      select: {
-        createdAt: true,
-        email: true,
-        id: true,
-        name: true,
-        phone: true,
-        updatedAt: true,
-      },
-    }).catch((e) => {
-      throw e;
-    }).finally(() => {
-      prisma.$disconnect();
-    });
-
-    if (res === null) {
-      throw new errors.NotFindError;
-    }
-    return res;
-  }
-  async updateOneUser(
-      param: requestTypes.UpdateOneUserParams,
-  ) {
-    const res: User | null = await prisma.user.update({
-      where: {
-        id: param.pathId,
-      },
-      data: {
-        email: param.bodyEmail,
-        name: param.bodyName,
-        password: param.bodyPassword,
-        phone: param.bodyPhone,
-        userStatus: param.bodyUserStatus,
-      },
-    }).catch((e) => {
-      throw e;
-    }).finally(() => {
-      prisma.$disconnect();
-    });
-    return res;
-  }
-  async readManyUser(
-      param: requestTypes.ReadManyUserParams,
-  ) {
-    const res: any[] | null = await prisma.user.findMany({
-      where: {
-      },
-      select: {
-        name: true,
-      },
-    }).catch((e) => {
-      throw e;
-    }).finally(() => {
-      prisma.$disconnect();
-    });
-    return res;
   }
 }

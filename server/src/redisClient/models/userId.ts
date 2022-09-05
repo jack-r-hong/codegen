@@ -13,7 +13,7 @@ export class UserId implements ModelBase {
 
     await subscriber.subscribe(userId, cb);
 
-    // return {};
+    return subscriber;
   }
 
   async pub(userId: string, data: string) {
@@ -28,5 +28,14 @@ export class UserId implements ModelBase {
 
   async del(key: string) {
     return await this.client.del(key);
+  }
+
+  async close() {
+    return await this.client;
+  }
+
+  async subscriberQuit(subscriber: RedisClientType) {
+    await subscriber.unsubscribe();
+    await subscriber.quit();
   }
 }

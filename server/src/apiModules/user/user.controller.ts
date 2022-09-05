@@ -75,31 +75,6 @@ export class UserController implements Controller {
           next(e);
         });
   }
-  @Post('/logout')
-  @Validator(validSchemas.logoutUserValidator)
-  async logoutUser(
-      req: userParams.LogoutUserRequest,
-      res: Response,
-      next: NextFunction,
-  ) {
-    UserController.service.logoutUser(
-        userParams.LogoutUserRequestConvert(
-            req.body,
-            req.query,
-            req.params,
-            req.cookies,
-        ),
-        req.session,
-    )
-        .then((result) =>{
-          // custom begin logoutUser
-          res.json(result);
-
-          // custom end logoutUser
-        }).catch((e) => {
-          next(e);
-        });
-  }
   @Post('/register')
   @Validator(validSchemas.registerUserValidator)
   async registerUser(
@@ -143,6 +118,7 @@ export class UserController implements Controller {
     )
         .then((result) =>{
           // custom begin sendPhoneCheck
+          res.json({result});
 
           // custom end sendPhoneCheck
         }).catch((e) => {
@@ -167,96 +143,9 @@ export class UserController implements Controller {
     )
         .then((result) =>{
           // custom begin phoneCheck
+          res.json({result});
 
           // custom end phoneCheck
-        }).catch((e) => {
-          next(e);
-        });
-  }
-  @Delete('/user/:id')
-  @Validator(validSchemas.deleteOneUserValidator)
-  async deleteOneUser(
-      req: userParams.DeleteOneUserRequest,
-      res: Response,
-      next: NextFunction,
-  ) {
-    UserController.service.deleteOneUser(
-        userParams.DeleteOneUserRequestConvert(
-            req.body,
-            req.query,
-            req.params,
-            req.cookies,
-        ),
-        req.session,
-    )
-        .then((result) =>{
-          res.json(result);
-        }).catch((e) => {
-          next(e);
-        });
-  }
-  @Get('/user/:id')
-  @Validator(validSchemas.readOneUserValidator)
-  async readOneUser(
-      req: userParams.ReadOneUserRequest,
-      res: Response,
-      next: NextFunction,
-  ) {
-    UserController.service.readOneUser(
-        userParams.ReadOneUserRequestConvert(
-            req.body,
-            req.query,
-            req.params,
-            req.cookies,
-        ),
-        req.session,
-    )
-        .then((result) =>{
-          res.json(result);
-        }).catch((e) => {
-          next(e);
-        });
-  }
-  @Put('/user/:id')
-  @Validator(validSchemas.updateOneUserValidator)
-  async updateOneUser(
-      req: userParams.UpdateOneUserRequest,
-      res: Response,
-      next: NextFunction,
-  ) {
-    UserController.service.updateOneUser(
-        userParams.UpdateOneUserRequestConvert(
-            req.body,
-            req.query,
-            req.params,
-            req.cookies,
-        ),
-        req.session,
-    )
-        .then((result) =>{
-          res.json(result);
-        }).catch((e) => {
-          next(e);
-        });
-  }
-  @Get('/users')
-  @Validator(validSchemas.readManyUserValidator)
-  async readManyUser(
-      req: userParams.ReadManyUserRequest,
-      res: Response,
-      next: NextFunction,
-  ) {
-    UserController.service.readManyUser(
-        userParams.ReadManyUserRequestConvert(
-            req.body,
-            req.query,
-            req.params,
-            req.cookies,
-        ),
-        req.session,
-    )
-        .then((result) =>{
-          res.json(result);
         }).catch((e) => {
           next(e);
         });

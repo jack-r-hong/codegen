@@ -8,8 +8,7 @@ import {Container} from 'typedi';
 import parse from 'url-parse';
 import {WSOnMessage, WSToken} from './base';
 
-import './purify';
-import './notify';
+import './transaction';
 
 
 export class WebsocketApp {

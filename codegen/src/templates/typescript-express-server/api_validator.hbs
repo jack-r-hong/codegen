@@ -155,7 +155,7 @@ export const {{d.operationId}}Validator: Schema = {
     in: 'cookies',
     custom: {
       options: (value, {req, location, path}) => {
-        sessions.{{camel_case @key}}SessionVerify(req['session'].userInfo);
+        sessions.{{camel_case @key}}SessionVerify(req['session']);
         return true;
       },
     },

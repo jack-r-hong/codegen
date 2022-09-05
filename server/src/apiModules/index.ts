@@ -1,5 +1,6 @@
 import {Application} from 'express';
 import './user/user.controller';
+import './transaction/transaction.controller';
 import path from 'path';
 import fs from 'fs';
 
