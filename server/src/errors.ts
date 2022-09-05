@@ -72,7 +72,7 @@ export const errorHandle = (
           })[0];
 
           if (
-            param === 'userInfo' &&
+            param === 'JSESSIONID' &&
             msg === 'AuthenticationFailed' &&
             location === 'cookies'
           ) {

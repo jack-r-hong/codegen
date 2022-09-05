@@ -22,6 +22,7 @@ type Transaction = {
   process: number,
   requestUserId: string,
   receiveUserId: string,
+  bos: number,
 }
 
 declare module 'express-session' {

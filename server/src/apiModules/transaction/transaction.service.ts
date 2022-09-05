@@ -15,25 +15,6 @@ export class TransactionService {
   @Inject()
   private transactionModel!: TransactionModel;
 
-  async readManyTransaction(
-      param :requestTypes.ReadManyTransactionParams,
-      session: Express.Request['session'],
-  ) {
-    // custom begin readManyTransaction
-
-    // custom end readManyTransaction
-
-    const res = await this.transactionModel.readManyTransaction(
-        param,
-    ).catch((e) =>{
-      throw e;
-    });
-
-    // custom begin readManyTransaction2
-
-    // custom end readManyTransaction2
-    return res;
-  }
   async createTransaction(
       param :requestTypes.CreateTransactionParams,
       session: Express.Request['session'],
@@ -50,6 +31,7 @@ export class TransactionService {
       process: 1,
       requestUserId: res.userId,
       receiveUserId: '',
+      bos: res.bos,
     };
     return res;
 
@@ -60,7 +42,6 @@ export class TransactionService {
       session: Express.Request['session'],
   ) {
     // custom begin updateTransactionState
-
     if (!session.transaction) {
       return;
     }
@@ -73,7 +54,6 @@ export class TransactionService {
     ).catch((e) =>{
       throw e;
     });
-
     if (param.bodyState === 2) {
       session.transaction.receiveUserId = session.userInfo!.id;
     }
@@ -85,9 +65,20 @@ export class TransactionService {
       );
       session.transaction.process = param.bodyState;
     }
+    if (param.bodyState === 4) {
+      session.transaction = undefined;
+    }
     return res;
 
     // custom end updateTransactionState
+  }
+  async getExchangeRate(
+      param :requestTypes.GetExchangeRateParams,
+      session: Express.Request['session'],
+  ) {
+    // custom begin getExchangeRate
+
+    // custom end getExchangeRate
   }
   async readMyTransaction(
       param :requestTypes.ReadMyTransactionParams,

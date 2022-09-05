@@ -21,7 +21,7 @@ export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
     const cookie = req.headers.cookie;
 
     if (!cookie) {
-      ws.send(event.msg('notAuth'));
+      ws.send(event.msg({error: true, message: 'notAuth'}));
       return;
     }
 
@@ -30,25 +30,39 @@ export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
     const session = await wSCIModel.get(
         `sess:${getSessionId( cookieParse['JSESSIONID']!)}`);
 
-    if (!session) {
-      ws.send(event.msg('notAuth'));
-      return;
-    }
-
-    if (!JSON.parse(session)['userInfo']) {
-      ws.send(event.msg('notAuth'));
+    const sessionJson = JSON.parse(session!);
+    if (!session || !sessionJson || !sessionJson['userInfo']) {
+      ws.send(event.msg({error: true, message: 'notAuth'}));
       return;
     }
 
     const userId = JSON.parse(session)['userInfo']['id'];
+    let isProxy = false;
+
+    if (sessionJson['transaction']) {
+      if (sessionJson['transaction'].receiveUserId === userId) {
+        isProxy = true;
+      }
+    }
 
     const subscriber = await wSCIModel.sub(userId, (message: any)=>{
       event.eventName = 'process';
-      ws.send(event.msg(JSON.parse(message)));
+      const d = JSON.parse(message);
+      d.isProxy = isProxy;
+      ws.send(event.msg(d));
+      if (d.process === 4) {
+        wSCIModel.subscriberQuit(subscriber).then(()=> {});
+        ws.close();
+      }
     });
-    event.eventName = 'ready';
 
-    ws.send(event.msg({ready: true}));
+    event.eventName = 'ready';
+    ws.send(event.msg({
+      isProxy,
+      process: sessionJson['transaction'].process,
+      bos: sessionJson['transaction'].bos,
+      ready: true,
+    }));
 
     ws.on('close', () => {
       wSCIModel.subscriberQuit(subscriber).then(()=> {});

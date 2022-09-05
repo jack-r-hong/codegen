@@ -24,28 +24,6 @@ export class TransactionController implements Controller {
   @Inject('app.use')
     appUse!: AppUse;
 
-  @Get('/transaction')
-  @Validator(validSchemas.readManyTransactionValidator)
-  async readManyTransaction(
-      req: transactionParams.ReadManyTransactionRequest,
-      res: Response,
-      next: NextFunction,
-  ) {
-    TransactionController.service.readManyTransaction(
-        transactionParams.ReadManyTransactionRequestConvert(
-            req.body,
-            req.query,
-            req.params,
-            req.cookies,
-        ),
-        req.session,
-    )
-        .then((result) =>{
-          res.json(result);
-        }).catch((e) => {
-          next(e);
-        });
-  }
   @Post('/transaction')
   @Validator(validSchemas.createTransactionValidator)
   async createTransaction(
@@ -92,6 +70,45 @@ export class TransactionController implements Controller {
           res.json({result});
 
           // custom end updateTransactionState
+        }).catch((e) => {
+          next(e);
+        });
+  }
+  @Get('/transaction/exchange_rate')
+  @Validator(validSchemas.getExchangeRateValidator)
+  async getExchangeRate(
+      req: transactionParams.GetExchangeRateRequest,
+      res: Response,
+      next: NextFunction,
+  ) {
+    TransactionController.service.getExchangeRate(
+        transactionParams.GetExchangeRateRequestConvert(
+            req.body,
+            req.query,
+            req.params,
+            req.cookies,
+        ),
+        req.session,
+    )
+        .then((result) =>{
+          // custom begin getExchangeRate
+          res.json({
+            result: {
+              0: {
+                range: 0,
+                rate: 120,
+              },
+              1: {
+                range: 150000,
+                rate: 130,
+              },
+              2: {
+                range: 500000,
+                rate: 140,
+              },
+            },
+          });
+          // custom end getExchangeRate
         }).catch((e) => {
           next(e);
         });

@@ -4,21 +4,6 @@ import * as sessions from '../../sessions';
 // custom begin import
 
 // custom end import
-export const readManyTransactionValidator: Schema = {
-  userId: {
-    in: 'query',
-    notEmpty: true,
-  },
-  JSESSIONID: {
-    in: 'cookies',
-    custom: {
-      options: (value, {req, location, path}) => {
-        sessions.cookieAuthSessionVerify(req['session']);
-        return true;
-      },
-    },
-  },
-};
 export const createTransactionValidator: Schema = {
   account: {
     in: 'body',
@@ -61,6 +46,17 @@ export const updateTransactionStateValidator: Schema = {
       options: /^(0|1|2|3|4)/,
     },
   },
+  JSESSIONID: {
+    in: 'cookies',
+    custom: {
+      options: (value, {req, location, path}) => {
+        sessions.cookieAuthSessionVerify(req['session']);
+        return true;
+      },
+    },
+  },
+};
+export const getExchangeRateValidator: Schema = {
   JSESSIONID: {
     in: 'cookies',
     custom: {

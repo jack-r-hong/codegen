@@ -14,42 +14,6 @@ interface TypedRequest<
 }
 
 
-type ReadManyTransactionReqBody = {
-  }
-
-type ReadManyTransactionReqQuery = {
-      userId: string
-}
-
-type ReadManyTransactionReqParams = {
-}
-
-type ReadManyTransactionReqCookie = {
-}
-
-export interface ReadManyTransactionRequest extends TypedRequest<
-  ReadManyTransactionReqBody,
-  ReadManyTransactionReqQuery,
-  ReadManyTransactionReqParams,
-  ReadManyTransactionReqCookie
->{
-}
-
-export type ReadManyTransactionParams = {
-      queryUserId: string
-}
-
-
-export const ReadManyTransactionRequestConvert = (
-    body: ReadManyTransactionReqBody,
-    query: ReadManyTransactionReqQuery,
-    path: ReadManyTransactionReqParams,
-    cookie: ReadManyTransactionReqCookie,
-): ReadManyTransactionParams => {
-  return {
-            queryUserId: query.userId,
-  };
-};
 type CreateTransactionReqBody = {
   account: string,
 bos: string,
@@ -129,6 +93,39 @@ export const UpdateTransactionStateRequestConvert = (
 ): UpdateTransactionStateParams => {
   return {
     bodyState: body.state? parseInt(body.state):undefined,
+  };
+};
+type GetExchangeRateReqBody = {
+  }
+
+type GetExchangeRateReqQuery = {
+}
+
+type GetExchangeRateReqParams = {
+}
+
+type GetExchangeRateReqCookie = {
+}
+
+export interface GetExchangeRateRequest extends TypedRequest<
+  GetExchangeRateReqBody,
+  GetExchangeRateReqQuery,
+  GetExchangeRateReqParams,
+  GetExchangeRateReqCookie
+>{
+}
+
+export type GetExchangeRateParams = {
+}
+
+
+export const GetExchangeRateRequestConvert = (
+    body: GetExchangeRateReqBody,
+    query: GetExchangeRateReqQuery,
+    path: GetExchangeRateReqParams,
+    cookie: GetExchangeRateReqCookie,
+): GetExchangeRateParams => {
+  return {
   };
 };
 type ReadMyTransactionReqBody = {

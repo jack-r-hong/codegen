@@ -7,22 +7,6 @@ const prisma = new PrismaClient();
 
 @Service()
 export class TransactionModel {
-  async readManyTransaction(
-      param: requestTypes.ReadManyTransactionParams,
-  ) {
-    const res: any[] | null = await prisma.transaction.findMany({
-      where: {
-    userId: param.queryUserId,
-      },
-      select: {
-      },
-    }).catch((e) => {
-      throw e;
-    }).finally(() => {
-      prisma.$disconnect();
-    });
-    return res;
-  }
   async createTransaction(
       param: requestTypes.CreateTransactionParams,
       customParam: any,
@@ -78,6 +62,14 @@ export class TransactionModel {
     return res;
 
     // custom end updateTransactionState
+  }
+  async getExchangeRate(
+      param: requestTypes.GetExchangeRateParams,
+      customParam: any,
+  ) {
+    // custom begin getExchangeRate
+
+    // custom end getExchangeRate
   }
   async readMyTransaction(
       param: requestTypes.ReadMyTransactionParams,

@@ -512,19 +512,40 @@
         "operationId" : "getExchangeRate",            
         "responses" : {
           "200" : {
-            "$ref" : "#/components/responses/Transaction"
-          },
-          "400" : {
-            "$ref" : "#/components/responses/BadRequest"
-          },
-          "401" : {
-            "$ref" : "#/components/responses/Unauthorized"
+            "description" : "Ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "result":{
+                      "type": "object"
+                    }
+                  }
+                },
+                "example": {
+                  "result": {
+                      "0": {
+                          "range": 0,
+                          "rate": 120
+                      },
+                      "1": {
+                          "range": 150000,
+                          "rate": 130
+                      },
+                      "2": {
+                          "range": 500000,
+                          "rate": 140
+                      }
+                  }
+                }          
+              }
+
+            }
+            
           },
           "403" : {
             "$ref" : "#/components/responses/Forbidden"
-          },
-          "404" : {
-            "$ref" : "#/components/responses/NotFound"
           }
         },
         "security" : [ {
