@@ -5,6 +5,7 @@ import {Service, Container, Inject, Token} from 'typedi';
 import {checkSchema, Schema, validationResult} from 'express-validator';
 import multer from 'multer';
 import {v1 as uuidv1} from 'uuid';
+import fs from 'fs';
 
 import rateLimit from 'express-rate-limit';
 import RedisStore from 'rate-limit-redis';
@@ -142,9 +143,16 @@ class MiddlewareDecorator {
   FormData = () => {
     const storage = multer.diskStorage({
       destination: function(req, file, cb) {
-        cb(null, './uploads/');
-      },
+        let path;
+        if (req.session.userInfo && req.session.userInfo.id) {
+          path = `./uploads/${req.session.userInfo.id}`;
+        } else {
+          path = `./uploads`;
+        }
 
+        fs.mkdirSync(path, {recursive: true});
+        cb(null, path);
+      },
       filename: function(req: any, file: any, cb: any) {
         cb(null, `${uuidv1()}-${file.originalname}`);
       },

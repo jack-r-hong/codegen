@@ -1,6 +1,8 @@
 import {Application} from 'express';
 import './user/user.controller';
 import './transaction/transaction.controller';
+import './bankAccount/bankAccount.controller';
+import './userVerifyPhoto/userVerifyPhoto.controller';
 import path from 'path';
 import fs from 'fs';
 

@@ -75,6 +75,56 @@ export class UserController implements Controller {
           next(e);
         });
   }
+  @Post('/real_verify')
+  @Validator(validSchemas.postRealVerifyValidator)
+  async postRealVerify(
+      req: userParams.PostRealVerifyRequest,
+      res: Response,
+      next: NextFunction,
+  ) {
+    UserController.service.postRealVerify(
+        userParams.PostRealVerifyRequestConvert(
+            req.body,
+            req.query,
+            req.params,
+            req.cookies,
+        ),
+        req.session,
+    )
+        .then((result) =>{
+          // custom begin postRealVerify
+          res.json({result});
+
+          // custom end postRealVerify
+        }).catch((e) => {
+          next(e);
+        });
+  }
+  @Put('/real_verify')
+  @Validator(validSchemas.putRealVerifyValidator)
+  async putRealVerify(
+      req: userParams.PutRealVerifyRequest,
+      res: Response,
+      next: NextFunction,
+  ) {
+    UserController.service.putRealVerify(
+        userParams.PutRealVerifyRequestConvert(
+            req.body,
+            req.query,
+            req.params,
+            req.cookies,
+        ),
+        req.session,
+    )
+        .then((result) =>{
+          // custom begin putRealVerify
+          res.json({result});
+
+          // custom end putRealVerify
+        }).catch((e) => {
+          next(e);
+        });
+  }
   @Post('/register')
   @Validator(validSchemas.registerUserValidator)
   async registerUser(

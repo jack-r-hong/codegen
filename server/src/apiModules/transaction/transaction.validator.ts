@@ -4,26 +4,30 @@ import * as sessions from '../../sessions';
 // custom begin import
 
 // custom end import
+
+
+
 export const createTransactionValidator: Schema = {
-  account: {
+  'account': {
     in: 'body',
+    isString: true,
   },
-  bos: {
+  'bos': {
     in: 'body',
     isInt: true,
     matches: {
       options: /^(1|2)/,
     },
   },
-  point: {
+  'point': {
     in: 'body',
     isInt: true,
   },
-  twd: {
+  'twd': {
     in: 'body',
     isInt: true,
   },
-  JSESSIONID: {
+  'JSESSIONID': {
     in: 'cookies',
     custom: {
       options: (value, {req, location, path}) => {
@@ -34,19 +38,19 @@ export const createTransactionValidator: Schema = {
   },
 };
 export const updateTransactionStateValidator: Schema = {
-  state: {
+  'state': {
     in: 'body',
     isInt: true,
-    optional: {
-      options: {
-        nullable: true,
-      },
-    },
+optional: {
+  options: {
+    nullable: true,
+  },
+},
     matches: {
       options: /^(0|1|2|3|4)/,
     },
   },
-  JSESSIONID: {
+  'JSESSIONID': {
     in: 'cookies',
     custom: {
       options: (value, {req, location, path}) => {
@@ -57,7 +61,7 @@ export const updateTransactionStateValidator: Schema = {
   },
 };
 export const getExchangeRateValidator: Schema = {
-  JSESSIONID: {
+  'JSESSIONID': {
     in: 'cookies',
     custom: {
       options: (value, {req, location, path}) => {
@@ -70,9 +74,11 @@ export const getExchangeRateValidator: Schema = {
 export const readMyTransactionValidator: Schema = {
   orderBy: {
     in: 'query',
+    isString: true,
   },
   orderByField: {
     in: 'query',
+    isString: true,
   },
   page: {
     in: 'query',
@@ -82,7 +88,7 @@ export const readMyTransactionValidator: Schema = {
     in: 'query',
     isInt: true,
   },
-  JSESSIONID: {
+  'JSESSIONID': {
     in: 'cookies',
     custom: {
       options: (value, {req, location, path}) => {
@@ -95,9 +101,11 @@ export const readMyTransactionValidator: Schema = {
 export const readPendingTransactionValidator: Schema = {
   orderBy: {
     in: 'query',
+    isString: true,
   },
   orderByField: {
     in: 'query',
+    isString: true,
   },
   page: {
     in: 'query',
@@ -107,7 +115,7 @@ export const readPendingTransactionValidator: Schema = {
     in: 'query',
     isInt: true,
   },
-  JSESSIONID: {
+  'JSESSIONID': {
     in: 'cookies',
     custom: {
       options: (value, {req, location, path}) => {
@@ -120,9 +128,10 @@ export const readPendingTransactionValidator: Schema = {
 export const readOneTransactionValidator: Schema = {
   id: {
     in: 'params',
+    isString: true,
     notEmpty: true,
   },
-  JSESSIONID: {
+  'JSESSIONID': {
     in: 'cookies',
     custom: {
       options: (value, {req, location, path}) => {

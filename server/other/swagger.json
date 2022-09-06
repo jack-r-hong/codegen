@@ -34,7 +34,11 @@
     {
       "name" : "transaction",
       "description" : "Operations about transaction"
-    }    
+    },
+    {
+      "name" : "bankAccount",
+      "description" : "Operations about user"
+    }     
   ],
   "paths" : {
     "/captcha" : {
@@ -201,52 +205,6 @@
         }
       }
     },    
-    "/users" : {
-      "get" : {
-        "tags" : [ "user" ],
-        "summary" : "Creates list of users with given input array",
-        "operationId" : "readManyUser",
-        "responses" : {
-          "200" : {
-            "description" : "Ok",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "type" : "array",
-                  "items" : {
-                    "type" : "object",
-                    "properties" : {
-                      "name" : {
-                        "$ref" : "#/components/schemas/User/properties/name"
-                      }
-                    
-                    }                    
-                  }
-                }
-              }
-            }
-          },
-          "400" : {
-            "$ref" : "#/components/responses/BadRequest"
-          },
-          "401" : {
-            "$ref" : "#/components/responses/Unauthorized"
-          },
-          "403" : {
-            "$ref" : "#/components/responses/Forbidden"
-          },
-          "404" : {
-            "$ref" : "#/components/responses/NotFound"
-          },
-          "409" : {
-            "$ref" : "#/components/responses/Conflict"
-          }
-        },
-        "security" : [ {
-          "cookieAuth" : [ ]
-        } ]
-      }
-    },
     "/login" : {
       "post" : {
         "tags" : [ "user" ],
@@ -325,48 +283,139 @@
         }
       }
     },
-    "/logout" : {
+    "/real_verify": {
       "post" : {
         "tags" : [ "user" ],
-        "summary" : "Logs out current logged in user session",
-        "operationId" : "logoutUser",
+        "summary" : "Logs user into the system",
+        "operationId" : "realVerify",
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/UserVerifyUploadPhoto"
+        },
         "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "headers" : {
+              "X-Rate-Limit" : {
+                "description" : "calls per hour allowed by the user",
+                "schema" : {
+                  "type" : "integer",
+                  "format" : "int32"
+                }
+              },
+              "X-Expires-After" : {
+                "description" : "date in UTC when token expires",
+                "schema" : {
+                  "type" : "string",
+                  "format" : "date-time"
+                }
+              },
+              "Set-Cookie" : {
+                "description" : "date in UTC when token expires",
+                "schema" : {
+                  "type" : "string",
+                  "format" : "jwt"
+                }
+              }
+            },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "result": {
+                      "type" : "object",
+                      "properties" : {
+                        "id" : {
+                          "type" : "integer"
+                        }                        
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
           "400" : {
             "$ref" : "#/components/responses/BadRequest"
           },
           "401" : {
             "$ref" : "#/components/responses/Unauthorized"
-          },
-          "403" : {
-            "$ref" : "#/components/responses/Forbidden"
-          },
-          "404" : {
-            "$ref" : "#/components/responses/NotFound"
-          },
-          "409" : {
-            "$ref" : "#/components/responses/Conflict"
           }
         }
       }
-    },
-    "/user/{id}" : {
-      "get" : {
+    },        
+    "/real_verify/photo": {
+      "post" : {
         "tags" : [ "user" ],
-        "summary" : "Get user by user id",
-        "operationId" : "readOneUser",
-        "parameters" : [ {
-          "name" : "id",
-          "in" : "path",
-          "description" : "The name that needs to be fetched. Use user1 for testing.",
-          "required" : true,
-          "schema" : {
-            "type" : "string",
-            "format": "uuid"
-          }
-        } ],
+        "summary" : "Logs user into the system",
+        "operationId" : "realVerifyPhoto",
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/UserVerifyUploadPhoto"
+        },
         "responses" : {
           "200" : {
-            "$ref" : "#/components/responses/User"
+            "description" : "successful operation",
+            "headers" : {
+              "X-Rate-Limit" : {
+                "description" : "calls per hour allowed by the user",
+                "schema" : {
+                  "type" : "integer",
+                  "format" : "int32"
+                }
+              },
+              "X-Expires-After" : {
+                "description" : "date in UTC when token expires",
+                "schema" : {
+                  "type" : "string",
+                  "format" : "date-time"
+                }
+              },
+              "Set-Cookie" : {
+                "description" : "date in UTC when token expires",
+                "schema" : {
+                  "type" : "string",
+                  "format" : "jwt"
+                }
+              }
+            },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "result": {
+                      "type" : "object",
+                      "properties" : {
+                        "id" : {
+                          "type" : "integer"
+                        }                        
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/BadRequest"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },    
+    "/transaction" : {     
+      "post" : {
+        "tags" : [ "transaction" ],
+        "summary" : "post transaction by id",
+        "operationId" : "createTransaction",    
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/CreateTransaction"
+        },           
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/Transaction"
           },
           "400" : {
             "$ref" : "#/components/responses/BadRequest"
@@ -381,28 +430,19 @@
             "$ref" : "#/components/responses/NotFound"
           }
         },
+
         "security" : [ {
           "cookieAuth" : [ ]
         } ]
       },
       "put" : {
-        "tags" : [ "user" ],
-        "summary" : "Updated user",
+        "tags" : [ "transaction" ],
+        "summary" : "Updated transaction",
         "description" : "This can only be done by the logged in user.",
-        "operationId" : "updateOneUser",
-        "parameters" : [ {
-          "name" : "id",
-          "in" : "path",
-          "description" : "name that need to be updated",
-          "required" : true,
-          "schema" : {
-            "type" : "string",
-            "format": "uuid"
-          }
-        } ],
+        "operationId" : "updateTransactionState",
         "responses" : {
           "200" : {
-            "$ref" : "#/components/responses/User"
+            "$ref" : "#/components/responses/Transaction"
           },
           "400" : {
             "$ref" : "#/components/responses/BadRequest"
@@ -421,66 +461,57 @@
           }
         },
         "requestBody" : {
-          "$ref" : "#/components/requestBodies/User"
-        },
-        "security" : [ {
-          "cookieAuth" : [ ]
-        } ]
-      },
-      "delete" : {
-        "tags" : [ "user" ],
-        "summary" : "Delete user",
-        "description" : "This can only be done by the logged in user.",
-        "operationId" : "deleteOneUser",
-        "parameters" : [ {
-          "name" : "id",
-          "in" : "path",
-          "description" : "The name that needs to be deleted",
-          "required" : true,
-          "schema" : {
-            "type" : "string"
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "Ok"
-          },
-          "400" : {
-            "$ref" : "#/components/responses/BadRequest"
-          },
-          "401" : {
-            "$ref" : "#/components/responses/Unauthorized"
-          },
-          "403" : {
-            "$ref" : "#/components/responses/Forbidden"
-          },
-          "404" : {
-            "$ref" : "#/components/responses/NotFound"
-          }
+          "$ref" : "#/components/requestBodies/UpdateTransaction"
         },
         "security" : [ {
           "cookieAuth" : [ ]
         } ]
       }
     },
-    "/transaction" : {
+    "/transaction/my" : {
       "get" : {
         "tags" : [ "transaction" ],
         "summary" : "Get transaction by id",
-        "operationId" : "readManyTransaction",
-        "parameters" : [ {
-          "name" : "userId",
-          "in" : "query",
-          "description" : "The name that needs to be fetched. Use user1 for testing.",
-          "required" : true,
-          "schema" : {
-            "type" : "string",
-            "format": "uuid"
-          }
-        } ],        
+        "operationId" : "readMyTransaction",
+        "parameters" : [ 
+          {
+            "name" : "orderBy",
+            "in" : "query",
+            "description" : "The name that needs to be fetched. Use user1 for testing.",
+            "schema" : {
+              "type" : "string",
+              "default": "desc"
+            }
+          },
+          {
+            "name" : "orderByField",
+            "in" : "query",
+            "description" : "The name that needs to be fetched. Use user1 for testing.",
+            "schema" : {
+              "type" : "string",
+              "default": "createdAt"
+            }
+          },
+          {
+            "name" : "page",
+            "in" : "query",
+            "schema" : {
+              "type" : "integer",
+              "default": 0
+            }            
+          },
+          {
+            "name" : "take",
+            "in" : "query",
+            "schema" : {
+              "type" : "integer",
+              "default": 10
+            }    
+          }                   
+        ],        
         "responses" : {
           "200" : {
-            "$ref" : "#/components/responses/User"
+            "$ref" : "#/components/responses/Transaction"
           },
           "400" : {
             "$ref" : "#/components/responses/BadRequest"
@@ -494,40 +525,75 @@
           "404" : {
             "$ref" : "#/components/responses/NotFound"
           }
-        },
-        "security" : [ {
-          "cookieAuth" : [ ]
-        } ]
-      },      
-      "post" : {
-        "tags" : [ "transaction" ],
-        "summary" : "post transaction by id",
-        "operationId" : "createOneTransaction",
-        "responses" : {
-          "200" : {
-            "$ref" : "#/components/responses/User"
-          },
-          "400" : {
-            "$ref" : "#/components/responses/BadRequest"
-          },
-          "401" : {
-            "$ref" : "#/components/responses/Unauthorized"
-          },
-          "403" : {
-            "$ref" : "#/components/responses/Forbidden"
-          },
-          "404" : {
-            "$ref" : "#/components/responses/NotFound"
-          }
-        },
-        "requestBody" : {
-          "$ref" : "#/components/requestBodies/CreateTransaction"
         },
         "security" : [ {
           "cookieAuth" : [ ]
         } ]
       }
-    },
+    },    
+    "/transaction/pending" : {
+      "get" : {
+        "tags" : [ "transaction" ],
+        "summary" : "Get transaction by id",
+        "operationId" : "readPendingTransaction",
+        "parameters" : [ 
+          {
+            "name" : "orderBy",
+            "in" : "query",
+            "description" : "The name that needs to be fetched. Use user1 for testing.",
+            "schema" : {
+              "type" : "string",
+              "default": "desc"
+            }
+          },
+          {
+            "name" : "orderByField",
+            "in" : "query",
+            "description" : "The name that needs to be fetched. Use user1 for testing.",
+            "schema" : {
+              "type" : "string",
+              "default": "createdAt"
+            }
+          },
+          {
+            "name" : "page",
+            "in" : "query",
+            "schema" : {
+              "type" : "integer",
+              "default": 0
+            }            
+          },
+          {
+            "name" : "take",
+            "in" : "query",
+            "schema" : {
+              "type" : "integer",
+              "default": 10
+            }    
+          }                   
+        ],        
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/Transaction"
+          },
+          "400" : {
+            "$ref" : "#/components/responses/BadRequest"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/Unauthorized"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          },
+          "404" : {
+            "$ref" : "#/components/responses/NotFound"
+          }
+        },
+        "security" : [ {
+          "cookieAuth" : [ ]
+        } ]
+      }
+    },        
     "/transaction/{id}" : {
       "get" : {
         "tags" : [ "transaction" ],
@@ -545,7 +611,7 @@
         } ],
         "responses" : {
           "200" : {
-            "$ref" : "#/components/responses/User"
+            "$ref" : "#/components/responses/Transaction"
           },
           "400" : {
             "$ref" : "#/components/responses/BadRequest"
@@ -559,54 +625,94 @@
           "404" : {
             "$ref" : "#/components/responses/NotFound"
           }
-        },
-        "security" : [ {
-          "cookieAuth" : [ ]
-        } ]
-      },
-      "put" : {
-        "tags" : [ "transaction" ],
-        "summary" : "Updated transaction",
-        "description" : "This can only be done by the logged in user.",
-        "operationId" : "updateOneTransaction",
-        "parameters" : [ {
-          "name" : "id",
-          "in" : "path",
-          "description" : "name that need to be updated",
-          "required" : true,
-          "schema" : {
-            "type" : "string",
-            "format": "uuid"
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "$ref" : "#/components/responses/User"
-          },
-          "400" : {
-            "$ref" : "#/components/responses/BadRequest"
-          },
-          "401" : {
-            "$ref" : "#/components/responses/Unauthorized"
-          },
-          "403" : {
-            "$ref" : "#/components/responses/Forbidden"
-          },
-          "404" : {
-            "$ref" : "#/components/responses/NotFound"
-          },
-          "409" : {
-            "$ref" : "#/components/responses/Conflict"
-          }
-        },
-        "requestBody" : {
-          "$ref" : "#/components/requestBodies/User"
         },
         "security" : [ {
           "cookieAuth" : [ ]
         } ]
       }
-    }    
+    },
+    "/transaction/exchange_rate" : {     
+      "get" : {
+        "tags" : [ "transaction" ],
+        "summary" : "get exchang rate",
+        "operationId" : "getExchangeRate",            
+        "responses" : {
+          "200" : {
+            "description" : "Ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "result":{
+                      "type": "object"
+                    }
+                  }
+                },
+                "example": {
+                  "result": {
+                      "0": {
+                          "range": 0,
+                          "rate": 120
+                      },
+                      "1": {
+                          "range": 150000,
+                          "rate": 130
+                      },
+                      "2": {
+                          "range": 500000,
+                          "rate": 140
+                      }
+                  }
+                }          
+              }
+
+            }
+            
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          }
+        },
+        "security" : [ {
+          "cookieAuth" : [ ]
+        } ]
+      }
+
+    },
+    "/bank/my/account" : {     
+      "get" : {
+        "tags" : [ "bankAccount" ],
+        "summary" : "get account",
+        "operationId" : "getBankAccount",      
+        "parameters" : [ 
+          {   
+            "name" : "status",
+            "in" : "query",
+            "schema" : {
+              "type" : "integer",
+              "enum": [1,2],
+              "default": 1,
+              "description" : "status map:\n * `1` - 未驗證\n * `2` - 已驗證\n"
+            }
+          }
+        ],               
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/BankAccount"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          }
+        },
+        "security" : [ {
+          "cookieAuth" : [ ]
+        } ]
+      }
+
+    }         
+
+    
   },
   "externalDocs" : {
     "description" : "Find out more about Swagger",
@@ -628,11 +734,6 @@
             "maxLength" : 30,
             "nullable" : true
           },
-          "email" : {
-            "type" : "string",
-            "format" : "email",
-            "nullable" : true
-          },
           "phonePrefix" : {
             "description": "國碼",
             "type" : "string",
@@ -640,12 +741,10 @@
           },
           "phone" : {
             "type" : "string",
-            "format" : "phone",
             "example": "945372644"
           },               
           "password" : {
             "type" : "string",
-            "format" : "password",
             "minLength" : 8,
             "maxLength" : 30,
             "example": "ffE22sq^wjb&w"
@@ -657,11 +756,39 @@
             "enum" : [ 1, 2, 3 ],
             "default" : 2
           },    
+          "email" : {
+            "type" : "string",
+            "format" : "email",
+            "nullable" : true
+          },          
           "birthdate" : {
             "type" : "string",
             "format" : "date",
             "nullable" : true
           },   
+          "country" : {
+            "description": "residence country",
+            "type" : "string",
+            "nullable" : true
+          },  
+          "idCard" : {
+            "type" : "string",
+            "nullable" : true
+          },       
+          "idCardDate" : {
+            "type" : "string",
+            "nullable" : true
+          },       
+          "idCardPosiition" : {
+            "type" : "string",
+            "nullable" : true
+          },   
+          "idCardType" : {
+            "type" : "integer",
+            "nullable" : true,
+            "enum": [1,2,3],
+            "description" : "status map:\n * `1` - 初\n * `2` - 補\n * `3` - 換\n"
+          },                                 
           "city" : {
             "description": "residence city",
             "type" : "string",
@@ -676,7 +803,10 @@
             "description": "residence address",
             "type" : "string",
             "nullable" : true
-          },                                                   
+          },                            
+          "verifyPhotoPath" : {
+            "type" : "string"
+          },                    
           "createdAt" : {
             "type" : "string",
             "format" : "date-time"
@@ -687,6 +817,7 @@
           }
         }
       },
+      
       "BankAccount" : {
         "type" : "object",
         "description" : "database",
@@ -703,6 +834,12 @@
           },         
           "account" : {
             "type" : "integer"
+          }, 
+          "status" : {
+            "type" : "integer",
+            "enum": [1,2],
+            "default": 1,
+            "description" : "status map:\n * `1` - 未驗證\n * `2` - 已驗證\n"
           }, 
           "userId" : {
             "$ref" : "#/components/schemas/User/properties/id"
@@ -738,8 +875,8 @@
           "state" : {
             "type" : "integer",
             "format" : "int32",
-            "description" : "status map:\n * `1` - Pendding\n * `2` - Completed\n * `3` - Failed\n",
-            "enum" : [ 1, 2, 3 ],
+            "description" : "status map:\n  * `0` - Failed\n * `1` - Pending\n * `2` - Pair Completed\n * `3` - Pay or recive Completed\n * `4` - Completed\n",
+            "enum" : [0, 1, 2, 3, 4],
             "default": 1
           },                        
           "createdAt" : {
@@ -828,7 +965,73 @@
         },
         "description" : "List of user object",
         "required" : true
-      },          
+      },    
+      "UserRealVerify" : {
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "name" : {
+                  "$ref" : "#/components/schemas/User/properties/name"
+                },        
+                "email" : {
+                  "$ref" : "#/components/schemas/User/properties/email"
+                },                                  
+                "birthdate" : {
+                  "$ref" : "#/components/schemas/User/properties/birthdate"
+                },
+                "country" : {
+                  "$ref" : "#/components/schemas/User/properties/country"
+                },                
+                "idCard" : {
+                  "$ref" : "#/components/schemas/User/properties/idCard"
+                },             
+                "idCardDate" : {
+                  "$ref" : "#/components/schemas/User/properties/idCardDate"
+                },           
+                "idCardPosiition" : {
+                  "$ref" : "#/components/schemas/User/properties/idCardPosiition"
+                },           
+                "idCardType" : {
+                  "$ref" : "#/components/schemas/User/properties/idCardType"
+                },           
+                "city" : {
+                  "$ref" : "#/components/schemas/User/properties/city"
+                },       
+                "area" : {
+                  "$ref" : "#/components/schemas/User/properties/area"
+                },         
+                "address" : {
+                  "$ref" : "#/components/schemas/User/properties/address"
+                }                                                                                       
+              }
+            }
+          }
+        },
+        "description" : "List of user object",
+        "required" : true
+      },   
+      "UserVerifyUploadPhoto" : {
+        "content" : {
+          "multipart/form-data" : {
+            "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "files" : {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "binary"
+                    }
+                  }
+              }
+            }
+          }
+        },
+        "description" : "List of user object",
+        "required" : true
+      },            
       "User" : {
         "content" : {
           "application/json" : {
@@ -857,6 +1060,37 @@
         },
         "description" : "List of user object",
         "required" : true
+      },
+      "BankAccountCreate": {
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "dataList": {
+                "type" : "array",
+                "items" : {
+                  "type" : "object",
+                  "properties" : {
+                    "name" : {
+                      "$ref" : "#/components/schemas/BankAccount/properties/name"
+                    },
+                    "code" : {
+                      "$ref" : "#/components/schemas/BankAccount/properties/code"
+                    },
+                    "account" : {
+                      "$ref" : "#/components/schemas/BankAccount/properties/account"
+                    }
+                  }
+                }                  
+                }
+
+              }
+
+            }
+          }
+        },
+        "description" : "List of user object"
       },
       "UserArray" : {
         "content" : {
@@ -907,7 +1141,7 @@
                 },      
                 "point" : {
                   "$ref" : "#/components/schemas/Transaction/properties/point"
-                },         
+                },  
                 "twd" : {
                   "$ref" : "#/components/schemas/Transaction/properties/twd"
                 },  
@@ -919,7 +1153,22 @@
           }
         },
         "required" : true
-      }  
+      },
+      "UpdateTransaction" : {
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "state" : {
+                  "$ref" : "#/components/schemas/Transaction/properties/state"
+                }
+              }
+            }
+          }
+        },
+        "required" : true
+      }         
     },
     "parameters" : {
       "createdAt" : {
@@ -980,6 +1229,108 @@
           }
         }
       },
+      "Transaction" : {
+        "description" : "Ok",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "id" : {
+                  "type" : "string",
+                  "format" : "uuid"
+                },
+                "bos" : {
+                  "type" : "integer",
+                  "format" : "int32",
+                  "description" : "status map:\n * `1` - Buy\n * `2` - Sell\n",
+                  "enum" : [ 1, 2 ]            
+                },
+                "bonusPoint" : {
+                  "type" : "integer"
+                },  
+                "point" : {
+                  "type" : "integer"
+                },                
+                "twd" : {
+                  "type" : "integer"
+                },   
+                "state" : {
+                  "type" : "integer",
+                  "format" : "int32",
+                  "description" : "status map:\n * `1` - Pendding\n * `2` - Completed\n * `3` - Failed\n",
+                  "enum" : [ 1, 2, 3 ],
+                  "default": 1
+                },                        
+                "createdAt" : {
+                  "type" : "string",
+                  "format" : "date-time"
+                }, 
+                "account" : {
+                  "type" : "string"
+                },      
+                "userId" : {
+                  "$ref" : "#/components/schemas/User/properties/id"
+                }   
+              }
+            }
+          }
+        }
+      },      
+      "BankAccount" : {
+        "description" : "Ok",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "result" : {
+                  "type" : "object",
+                  "properties" : {
+                    "id" : {
+                      "type" : "integer",
+                      "format" : "int64"
+                    },
+                    "name" : {
+                      "type" : "string"
+                    },
+                    "code" : {
+                      "type" : "integer"
+                    },         
+                    "account" : {
+                      "type" : "integer"
+                    }, 
+                    "status" : {
+                      "type" : "integer",
+                      "enum": [1,2],
+                      "default": 1,
+                      "description" : "status map:\n * `1` - 未驗證\n * `2` - 已驗證\n"
+                    }
+                  }                  
+                }
+              },
+              "example":{
+                "result" : {
+                  "2": {
+                    "id": 2,
+                    "name": "name",
+                    "code": 123456,
+                    "account": 1245,
+                    "status": 2
+                  },
+                  "3": {
+                    "id": 3,
+                    "name": "name2",
+                    "code": 123456,
+                    "account": 1245,
+                    "status": 2
+                  }                 
+                }
+              }
+            }
+          }
+        }
+      },        
       "BadRequest" : {
         "description" : "Bad request"
       },

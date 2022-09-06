@@ -89,6 +89,155 @@ export const LoginUserRequestConvert = (
     bodyPhonePrefix: body.phonePrefix,
   };
 };
+type PostRealVerifyReqBody = {
+  address: string,
+area: string,
+        bankAccounts: {
+                account: string,
+                code: string,
+                name: string,
+        }[],
+birthdate: string,
+city: string,
+country: string,
+email: string,
+idCard: string,
+idCardDate: string,
+idCardPosiition: string,
+idCardType: string,
+name: string,
+}
+
+type PostRealVerifyReqQuery = {
+}
+
+type PostRealVerifyReqParams = {
+}
+
+type PostRealVerifyReqCookie = {
+}
+
+export interface PostRealVerifyRequest extends TypedRequest<
+  PostRealVerifyReqBody,
+  PostRealVerifyReqQuery,
+  PostRealVerifyReqParams,
+  PostRealVerifyReqCookie
+>{
+}
+
+export type PostRealVerifyParams = {
+bodyAddress: string,
+bodyArea: string,
+        bodyBankAccounts: {
+            bodyAccount: number,
+            bodyCode: number,
+            bodyName: string,
+        }[],
+bodyBirthdate: string,
+bodyCity: string,
+bodyCountry: string,
+bodyEmail: string,
+bodyIdCard: string,
+bodyIdCardDate: string,
+bodyIdCardPosiition: string,
+bodyIdCardType: number,
+bodyName: string,
+}
+
+
+export const PostRealVerifyRequestConvert = (
+    body: PostRealVerifyReqBody,
+    query: PostRealVerifyReqQuery,
+    path: PostRealVerifyReqParams,
+    cookie: PostRealVerifyReqCookie,
+): PostRealVerifyParams => {
+  return {
+    bodyAddress: body.address,
+    bodyArea: body.area,
+    bodyBankAccounts: body.bankAccounts.map((body :any) => {
+      return {
+        bodyAccount: parseInt(body.account),
+        bodyCode: parseInt(body.code),
+        bodyName: body.name,
+      };
+    }),
+    bodyBirthdate: body.birthdate,
+    bodyCity: body.city,
+    bodyCountry: body.country,
+    bodyEmail: body.email,
+    bodyIdCard: body.idCard,
+    bodyIdCardDate: body.idCardDate,
+    bodyIdCardPosiition: body.idCardPosiition,
+    bodyIdCardType: parseInt(body.idCardType),
+    bodyName: body.name,
+  };
+};
+type PutRealVerifyReqBody = {
+  address: string,
+area: string,
+birthdate: string,
+city: string,
+country: string,
+email: string,
+idCard: string,
+idCardDate: string,
+idCardPosiition: string,
+idCardType: string,
+name: string,
+}
+
+type PutRealVerifyReqQuery = {
+}
+
+type PutRealVerifyReqParams = {
+}
+
+type PutRealVerifyReqCookie = {
+}
+
+export interface PutRealVerifyRequest extends TypedRequest<
+  PutRealVerifyReqBody,
+  PutRealVerifyReqQuery,
+  PutRealVerifyReqParams,
+  PutRealVerifyReqCookie
+>{
+}
+
+export type PutRealVerifyParams = {
+bodyAddress: string,
+bodyArea: string,
+bodyBirthdate: string,
+bodyCity: string,
+bodyCountry: string,
+bodyEmail: string,
+bodyIdCard: string,
+bodyIdCardDate: string,
+bodyIdCardPosiition: string,
+bodyIdCardType: number,
+bodyName: string,
+}
+
+
+export const PutRealVerifyRequestConvert = (
+    body: PutRealVerifyReqBody,
+    query: PutRealVerifyReqQuery,
+    path: PutRealVerifyReqParams,
+    cookie: PutRealVerifyReqCookie,
+): PutRealVerifyParams => {
+  return {
+    bodyAddress: body.address,
+    bodyArea: body.area,
+    bodyBirthdate: body.birthdate,
+    bodyCity: body.city,
+    bodyCountry: body.country,
+    bodyEmail: body.email,
+    bodyIdCard: body.idCard,
+    bodyIdCardDate: body.idCardDate,
+    bodyIdCardPosiition: body.idCardPosiition,
+    bodyIdCardType: parseInt(body.idCardType),
+    bodyName: body.name,
+  };
+};
 type RegisterUserReqBody = {
   captcha: string,
 password: string,

@@ -35,6 +35,9 @@ import * as sessions from '../../sessions';
         {{#if (equal p.schema.type "integer") }}
     isInt: true,
         {{/if}}
+        {{#if (equal p.schema.type "string") }}
+    isString: true,
+        {{/if}}
         {{#if p.required }}
     notEmpty: true,
         {{/if}}
@@ -67,44 +70,48 @@ import * as sessions from '../../sessions';
   },
 {{/inline}}
 
-{{~#*inline "body"}}
-  {{@key}}: {
-    in: 'body',
-        {{#if (equal p.type "integer") }}
-    isInt: true,
-        {{/if}}
-        {{#if p.nullable }}
-    optional: {
-      options: {
-        nullable: true,
-      },
-    },
-        {{/if}} 
-        {{#if p.default }}
-    optional: {
-      options: {
-        nullable: true,
-      },
-    },
-        {{/if}} 
-        {{#if p.required }}
-    notEmpty: true,
-        {{/if}}
-         {{#if (equal p.format "email") }}
+{{~#*inline "parm"}}
+    {{#if (equal p.type "integer") }}
+isInt: true,
+    {{/if}}
+    {{#if (equal p.type "string") }}
+isString: true,
+    {{/if}}       
+    {{#if (equal p.type "array") }}
+isArray: true,
+    {{/if}}             
+    {{#if p.nullable }}
+optional: {
+  options: {
+    nullable: true,
+  },
+},
+    {{/if}} 
+    {{#if p.default }}
+optional: {
+  options: {
+    nullable: true,
+  },
+},
+    {{/if}} 
+    {{#if p.required }}
+notEmpty: true,
+    {{/if}}
+    {{#if (equal p.format "email") }}
     isEmail: true,
-        {{/if}}    
-        {{#if (equal p.format "password") }}
-    isStrongPassword: true,
-        {{/if}}         
-        {{#if (equal p.format "phone") }}
-    isMobilePhone: true,
-        {{/if}} 
-        {{#if (equal p.format "date-time") }}
-    matches: {
-      options: /\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z)/,
-    }
-        {{/if}} 
-        {{#if p.enum }}
+    {{/if}}    
+    {{#if (equal p.format "password") }}
+isStrongPassword: true,
+    {{/if}}         
+    {{#if (equal p.format "phone") }}
+isMobilePhone: true,
+    {{/if}} 
+    {{#if (equal p.format "date-time") }}
+matches: {
+  options: /\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z)/,
+}
+    {{/if}} 
+    {{#if p.enum }}
     matches: {
       options: /^(
           {{~#each p.enum as |enum|~}}
@@ -115,8 +122,8 @@ import * as sessions from '../../sessions';
           {{~/each~}}
       )/,
     },
-        {{/if}} 
-        {{#if (or p.maxLength p.minLength)}}
+    {{/if}} 
+    {{#if (or p.maxLength p.minLength)}}
     isLength: {
       options: {
           {{#if p.maxLength }}
@@ -128,9 +135,24 @@ import * as sessions from '../../sessions';
       },
 
     },
-        {{/if}}                            
+    {{/if}}                            
+{{/inline}}
+
+{{~#*inline "body"}}
+  '{{@key}}': {
+    in: 'body',
+    {{> parm}}    
   },
 {{/inline}}
+
+{{~#*inline "bodyArray"}}
+  '{{@../key}}.*.{{@key}}': {
+    {{> parm}} 
+  },
+{{/inline}}
+
+
+
 
 {{#each data.paths as |path|}}
     {{#each path as |d|}}
@@ -146,12 +168,17 @@ export const {{d.operationId}}Validator: Schema = {
           {{#if (equal d.requestBody.content.[application/json].schema.type "object") }}
             {{#each d.requestBody.content.[application/json].schema.properties as |p|}}
               {{~ > body}}
+                {{#if (equal p.type "array") }}
+                  {{#each p.items.properties as |p|}}
+                      {{~> bodyArray}} 
+                  {{/each}}
+                {{/if}}                      
             {{/each}}
           {{/if}}
         {{/if}} 
         {{#each d.security as |security|}}
           {{#each security as |s|}}
-  {{../../../../data.components.securitySchemes.cookieAuth.name}}: {
+  '{{../../../../data.components.securitySchemes.cookieAuth.name}}': {
     in: 'cookies',
     custom: {
       options: (value, {req, location, path}) => {

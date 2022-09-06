@@ -14,6 +14,8 @@ services:
       - ../prisma:/usr/src/app/prisma
       - ../other:/usr/src/app/other
       - ../certreq:/usr/src/app/certreq
+      - ../uploads:/usr/src/app/uploads
+      # - ../node_modules:/usr/src/app/node_modules
     container_name: ts-node-server
     working_dir: /usr/src/app/
     ports:
@@ -38,8 +40,8 @@ services:
       - backend
     # volumes:
     #   - ./mysql:/var/lib/mysql
-    # ports:
-    #   - 3306:3306
+    ports:
+      - 3306:3306
   redis:
     restart: always
     container_name: redis

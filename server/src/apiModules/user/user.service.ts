@@ -69,6 +69,33 @@ export class UserService {
 
     // custom end loginUser
   }
+  async postRealVerify(
+      param :requestTypes.PostRealVerifyParams,
+      session: Express.Request['session'],
+  ) {
+    // custom begin postRealVerify
+    const res = await this.userModel.postRealVerify(param,
+        {userId: session.userInfo?.id!})
+        .catch((e) =>{
+          throw e;
+        });
+    return res;
+
+    // custom end postRealVerify
+  }
+  async putRealVerify(
+      param :requestTypes.PutRealVerifyParams,
+      session: Express.Request['session'],
+  ) {
+    // custom begin putRealVerify
+    const res = await this.userModel.putRealVerify(param,
+        {userId: session.userInfo?.id!})
+        .catch((e) =>{
+          throw e;
+        });
+    return res;
+    // custom end putRealVerify
+  }
   async registerUser(
       param :requestTypes.RegisterUserParams,
       session: Express.Request['session'],

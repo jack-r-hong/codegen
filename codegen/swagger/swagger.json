@@ -34,6 +34,14 @@
     {
       "name" : "transaction",
       "description" : "Operations about transaction"
+    },
+    {
+      "name" : "bankAccount",
+      "description" : "Operations about user"
+    },
+    {
+      "name" : "userVerifyPhoto",
+      "description" : "Operations about user"
     }    
   ],
   "paths" : {
@@ -279,6 +287,236 @@
         }
       }
     },
+    "/real_verify": {
+      "post" : {
+        "tags" : [ "user" ],
+        "summary" : "Logs user into the system",
+        "operationId" : "postRealVerify",
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/UserCreateRealVerify"
+        },
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "headers" : {
+              "X-Rate-Limit" : {
+                "description" : "calls per hour allowed by the user",
+                "schema" : {
+                  "type" : "integer",
+                  "format" : "int32"
+                }
+              },
+              "X-Expires-After" : {
+                "description" : "date in UTC when token expires",
+                "schema" : {
+                  "type" : "string",
+                  "format" : "date-time"
+                }
+              }
+            },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "result": {
+                      "type" : "object",
+                      "properties" : {
+                        "id" : {
+                          "type" : "integer"
+                        }                        
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/BadRequest"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/Unauthorized"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          },          
+          "409" : {
+            "description": "bank account duplicate"
+          }          
+        },
+        "security" : [ {
+          "cookieAuth" : [ ]
+        } ]
+      },
+      "put" : {
+        "tags" : [ "user" ],
+        "summary" : "Logs user into the system",
+        "operationId" : "putRealVerify",
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/UserUpdateRealVerify"
+        },
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "headers" : {
+              "X-Rate-Limit" : {
+                "description" : "calls per hour allowed by the user",
+                "schema" : {
+                  "type" : "integer",
+                  "format" : "int32"
+                }
+              },
+              "X-Expires-After" : {
+                "description" : "date in UTC when token expires",
+                "schema" : {
+                  "type" : "string",
+                  "format" : "date-time"
+                }
+              }
+            },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "result": {
+                      "type" : "object",
+                      "properties" : {
+                        "id" : {
+                          "type" : "integer"
+                        }                        
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/BadRequest"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/Unauthorized"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          },          
+          "409" : {
+            "description": "bank account duplicate"
+          }          
+        },
+        "security" : [ {
+          "cookieAuth" : [ ]
+        } ]
+      }      
+    },        
+    "/real_verify/photo": {
+      "get" : {
+        "tags" : [ "userVerifyPhoto" ],
+        "summary" : "Logs user into the system",
+        "operationId" : "getUserVerifyPhoto",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "result": {
+                      "type" : "object",
+                      "properties" : {
+                        "id" : {
+                          "type" : "integer"
+                        }                        
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/BadRequest"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/Unauthorized"
+          }
+        }
+      },      
+      "post" : {
+        "tags" : [ "userVerifyPhoto" ],
+        "summary" : "Logs user into the system",
+        "operationId" : "uploadManyVerifyPhoto",
+        "parameters" : [ {
+          "name" : "types",
+          "in" : "query",
+          "required" : true,
+          "schema" : {
+            "type" : "array",
+            "items":{
+              "type": "integer",
+              "enum": [1,2,3,4,5,6,7]
+            }
+          }
+        } ],        
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/UserVerifyUploadPhoto"
+        },
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "headers" : {
+              "X-Rate-Limit" : {
+                "description" : "calls per hour allowed by the user",
+                "schema" : {
+                  "type" : "integer",
+                  "format" : "int32"
+                }
+              },
+              "X-Expires-After" : {
+                "description" : "date in UTC when token expires",
+                "schema" : {
+                  "type" : "string",
+                  "format" : "date-time"
+                }
+              },
+              "Set-Cookie" : {
+                "description" : "date in UTC when token expires",
+                "schema" : {
+                  "type" : "string",
+                  "format" : "jwt"
+                }
+              }
+            },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "result": {
+                      "type" : "object",
+                      "properties" : {
+                        "id" : {
+                          "type" : "integer"
+                        }                        
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/BadRequest"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },    
     "/transaction" : {     
       "post" : {
         "tags" : [ "transaction" ],
@@ -553,7 +791,38 @@
         } ]
       }
 
-    }     
+    },
+    "/bank/my/account" : {     
+      "get" : {
+        "tags" : [ "bankAccount" ],
+        "summary" : "get account",
+        "operationId" : "getBankAccount",      
+        "parameters" : [ 
+          {   
+            "name" : "status",
+            "in" : "query",
+            "schema" : {
+              "type" : "integer",
+              "enum": [1,2],
+              "default": 1,
+              "description" : "status map:\n * `1` - 未驗證\n * `2` - 已驗證\n"
+            }
+          }
+        ],               
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/BankAccount"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          }
+        },
+        "security" : [ {
+          "cookieAuth" : [ ]
+        } ]
+      }
+
+    }         
   },
   "externalDocs" : {
     "description" : "Find out more about Swagger",
@@ -575,11 +844,6 @@
             "maxLength" : 30,
             "nullable" : true
           },
-          "email" : {
-            "type" : "string",
-            "format" : "email",
-            "nullable" : true
-          },
           "phonePrefix" : {
             "description": "國碼",
             "type" : "string",
@@ -598,15 +862,43 @@
           "userStatus" : {
             "type" : "integer",
             "format" : "int32",
-            "description" : "status map:\n * `1` - Normal\n * `2` - Unverified\n * `3` - Locking\n",
-            "enum" : [ 1, 2, 3 ],
+            "description" : "status map:\n * `1` - Verified\n * `2` - Unverified\n * `3` - WaitVerify\n * `4` - Locking\n * `10` - Proxy \n * `11` - ProxyLocking \n",
+            "enum" : [ 1, 2, 3, 4, 10, 11 ],
             "default" : 2
           },    
+          "email" : {
+            "type" : "string",
+            "format" : "email",
+            "nullable" : true
+          },          
           "birthdate" : {
             "type" : "string",
             "format" : "date",
             "nullable" : true
           },   
+          "country" : {
+            "description": "residence country",
+            "type" : "string",
+            "nullable" : true
+          },  
+          "idCard" : {
+            "type" : "string",
+            "nullable" : true
+          },       
+          "idCardDate" : {
+            "type" : "string",
+            "nullable" : true
+          },       
+          "idCardPosiition" : {
+            "type" : "string",
+            "nullable" : true
+          },   
+          "idCardType" : {
+            "type" : "integer",
+            "nullable" : true,
+            "enum": [1,2,3],
+            "description" : "status map:\n * `1` - 初\n * `2` - 補\n * `3` - 換\n"
+          },                                 
           "city" : {
             "description": "residence city",
             "type" : "string",
@@ -621,7 +913,7 @@
             "description": "residence address",
             "type" : "string",
             "nullable" : true
-          },                                                   
+          },           
           "createdAt" : {
             "type" : "string",
             "format" : "date-time"
@@ -632,6 +924,31 @@
           }
         }
       },
+      "UserVerifyPhoto" : {
+        "type" : "object",
+        "description" : "database",
+        "properties" : {
+          "id" : {
+            "type" : "integer"
+          },    
+          "type": {
+            "type" : "integer"
+          },            
+          "path": {
+            "type" : "string"
+          },      
+          "createdAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          }, 
+          "userId" : {
+            "$ref" : "#/components/schemas/User/properties/id"
+          },
+          "user" : {
+            "$ref" : "#/components/schemas/User"
+          }   
+        }
+      },      
       "BankAccount" : {
         "type" : "object",
         "description" : "database",
@@ -649,6 +966,17 @@
           "account" : {
             "type" : "integer"
           }, 
+          "status" : {
+            "type" : "integer",
+            "enum": [1,2],
+            "default": 1,
+            "description" : "status map:\n * `1` - 未驗證\n * `2` - 已驗證\n"
+          }, 
+          "order" : {
+            "type" : "integer",
+            "enum": [1,2,3],
+            "description" : "最多三組"
+          },           
           "userId" : {
             "$ref" : "#/components/schemas/User/properties/id"
           },
@@ -773,7 +1101,156 @@
         },
         "description" : "List of user object",
         "required" : true
-      },          
+      },    
+      "UserCreateRealVerify" : {
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "name" : {
+                  "type" : "string",
+                  "minLength" : 3,
+                  "maxLength" : 30
+                },
+                "email" : {
+                  "type" : "string",
+                  "format" : "email"
+                },                                       
+                "birthdate" : {
+                  "type" : "string",
+                  "format" : "date"
+                },  
+                "country" : {
+                  "description": "residence country",
+                  "type" : "string"
+                },  
+                "idCard" : {
+                  "type" : "string"
+                },       
+                "idCardDate" : {
+                  "type" : "string"
+                },       
+                "idCardPosiition" : {
+                  "type" : "string"
+                },   
+                "idCardType" : {
+                  "type" : "integer",
+                  "enum": [1,2,3],
+                  "description" : "status map:\n * `1` - 初\n * `2` - 補\n * `3` - 換\n"
+                },      
+                "city" : {
+                  "description": "residence city",
+                  "type" : "string"
+                },    
+                "area" : {
+                  "description": "residence area",
+                  "type" : "string"
+                },     
+                "address" : {
+                  "description": "residence address",
+                  "type" : "string"
+                },
+                "bankAccounts": {
+                  "type": "array",
+                  "items":{
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "integer"
+                      },
+                      "account": {
+                        "type": "integer"
+                      },
+                      "name": {
+                        "type": "string"
+                      }                                            
+                    }
+                  }
+                } 
+              }
+            }
+          }
+        },
+        "description" : "List of user object",
+        "required" : true
+      },   
+      "UserUpdateRealVerify" : {
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "name" : {
+                  "type" : "string",
+                  "minLength" : 3,
+                  "maxLength" : 30
+                },
+                "email" : {
+                  "type" : "string",
+                  "format" : "email"
+                },                                       
+                "birthdate" : {
+                  "type" : "string",
+                  "format" : "date"
+                },  
+                "country" : {
+                  "description": "residence country",
+                  "type" : "string"
+                },  
+                "idCard" : {
+                  "type" : "string"
+                },       
+                "idCardDate" : {
+                  "type" : "string"
+                },       
+                "idCardPosiition" : {
+                  "type" : "string"
+                },   
+                "idCardType" : {
+                  "type" : "integer",
+                  "enum": [1,2,3],
+                  "description" : "status map:\n * `1` - 初\n * `2` - 補\n * `3` - 換\n"
+                },      
+                "city" : {
+                  "description": "residence city",
+                  "type" : "string"
+                },    
+                "area" : {
+                  "description": "residence area",
+                  "type" : "string"
+                },     
+                "address" : {
+                  "description": "residence address",
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "description" : "List of user object",
+        "required" : true
+      },         
+      "UserVerifyUploadPhoto" : {
+        "content" : {
+          "multipart/form-data" : {
+            "schema" : {
+                "type" : "object",
+                "properties" : {              
+                  "files" : {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "binary"
+                    }
+                  }              
+              }
+            }
+          }
+        },
+        "description" : "List of user object",
+        "required" : true
+      },            
       "User" : {
         "content" : {
           "application/json" : {
@@ -802,6 +1279,37 @@
         },
         "description" : "List of user object",
         "required" : true
+      },
+      "BankAccountCreate": {
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "dataList": {
+                "type" : "array",
+                "items" : {
+                  "type" : "object",
+                  "properties" : {
+                    "name" : {
+                      "$ref" : "#/components/schemas/BankAccount/properties/name"
+                    },
+                    "code" : {
+                      "$ref" : "#/components/schemas/BankAccount/properties/code"
+                    },
+                    "account" : {
+                      "$ref" : "#/components/schemas/BankAccount/properties/account"
+                    }
+                  }
+                }                  
+                }
+
+              }
+
+            }
+          }
+        },
+        "description" : "List of user object"
       },
       "UserArray" : {
         "content" : {
@@ -988,6 +1496,62 @@
           }
         }
       },      
+      "BankAccount" : {
+        "description" : "Ok",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "result" : {
+                  "type" : "object",
+                  "properties" : {
+                    "id" : {
+                      "type" : "integer",
+                      "format" : "int64"
+                    },
+                    "name" : {
+                      "type" : "string"
+                    },
+                    "code" : {
+                      "type" : "integer"
+                    },         
+                    "account" : {
+                      "type" : "integer"
+                    }, 
+                    "status" : {
+                      "type" : "integer",
+                      "enum": [1,2],
+                      "default": 1,
+                      "description" : "status map:\n * `1` - 未驗證\n * `2` - 已驗證\n"
+                    }
+                  }                  
+                }
+              },
+              "example":{
+                "result" : {
+                  "2": {
+                    "id": 2,
+                    "name": "name",
+                    "code": 123456,
+                    "account": 1245,
+                    "status": 2,
+                    "order": 1
+                  },
+                  "3": {
+                    "id": 3,
+                    "name": "name2",
+                    "code": 123456,
+                    "account": 1245,
+                    "status": 2,
+                    "order": 2
+                  }                 
+                }
+              }
+            }
+          }
+        }
+      },        
       "BadRequest" : {
         "description" : "Bad request"
       },

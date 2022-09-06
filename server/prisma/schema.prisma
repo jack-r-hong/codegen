@@ -15,10 +15,13 @@ model BankAccount {
   code  Int  @map("code")                 
   id  Int @id @default(autoincrement()) @map("id")                 
   name  String  @map("name")                 
+  order  Int  @map("order")                 
+  status  Int  @default(1)  @map("status")                 
   user User? @relation(fields: [userId], references: [id])
   userId String @map("user_id") 
   
     // custom begin BankAccount
+  @@unique([userId, order], name: "uniqueOrder")
 
     // custom end BankAccount
 }
@@ -57,9 +60,14 @@ model User {
   area  String?   @map("area")                 
   birthdate  String?   @map("birthdate")                 
   city  String?   @map("city")                 
+  country  String?   @map("country")                 
   createdAt  DateTime  @default(now()) @map("created_at")                 
   email  String?   @map("email")                 
   id  String @id @default(uuid()) @map("id")                 
+  idCard  String?   @map("id_card")                 
+  idCardDate  String?   @map("id_card_date")                 
+  idCardPosiition  String?   @map("id_card_posiition")                 
+  idCardType  Int?   @map("id_card_type")                 
   name  String?   @map("name")                 
   password  String  @map("password")                 
   phone  String  @map("phone")                 
@@ -69,11 +77,25 @@ model User {
   bankAccount BankAccount[]
   transaction Transaction[]
   transactionRecive TransactionRecive[]
+  userVerifyPhoto UserVerifyPhoto[]
   
     // custom begin User
   @@unique([phone, phonePrefix], name: "phone_all")
 
     // custom end User
+}
+model UserVerifyPhoto {
+  createdAt  DateTime  @default(now()) @map("created_at")                 
+  id  Int @id @default(autoincrement()) @map("id")                 
+  path  String  @map("path")                 
+  type  Int  @map("type")                 
+  user User? @relation(fields: [userId], references: [id])
+  userId String @map("user_id") 
+  
+    // custom begin UserVerifyPhoto
+    @@unique([userId, type], name: "uniqueType")
+
+    // custom end UserVerifyPhoto
 }
 
 

@@ -199,22 +199,17 @@ const prisma = new PrismaClient();
 {{/inline}}
 
 {{~#*inline "uploadMany"}}
-    const data = files.map((e) => {
-      return {
-        name: e.originalname,
-        filePath1: e.path.replace('\\', '/'),
-        ownerId,
-      };
-    });
-
-    const res: any = await prisma.{{../../tag}}.createMany({
+    // custom begin {{d.operationId}}
+{{{lookup ../../custom d.operationId }}}
+    // custom end {{d.operationId}}
+    {{!-- const res: any = await prisma.{{../../tag}}.createMany({
       data,
       skipDuplicates: true,
     }).catch((e) => {
       throw e;
     }).finally(() => {
       prisma.$disconnect();
-    });
+    }); --}}
 {{/inline}}
 
 {{#*inline "custom"}}

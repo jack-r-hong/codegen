@@ -108,6 +108,7 @@ export class TransactionController implements Controller {
               },
             },
           });
+
           // custom end getExchangeRate
         }).catch((e) => {
           next(e);
