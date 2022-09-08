@@ -12,7 +12,26 @@ export class BankAccountModel {
       customParam: any,
   ) {
     // custom begin getMyBankAccounts
+    const res: any | null = await prisma.bankAccount.findMany({
+      where: {
+        status: customParam.status,
+        userId: customParam.userId,
+      },
+      select: {
+        account: true,
+        code: true,
+        id: true,
+        name: true,
+        status: true,
+        userId: true,
 
+      },
+    }).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+    return res;
     // custom end getMyBankAccounts
   }
   async readOneBankAccount(

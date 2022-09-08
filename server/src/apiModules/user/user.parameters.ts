@@ -474,6 +474,39 @@ export const PhoneCheckRequestConvert = (
     bodyVerify: body.verify,
   };
 };
+type GetUserMyStatusReqBody = {
+  }
+
+type GetUserMyStatusReqQuery = {
+}
+
+type GetUserMyStatusReqParams = {
+}
+
+type GetUserMyStatusReqCookie = {
+}
+
+export interface GetUserMyStatusRequest extends TypedRequest<
+  GetUserMyStatusReqBody,
+  GetUserMyStatusReqQuery,
+  GetUserMyStatusReqParams,
+  GetUserMyStatusReqCookie
+>{
+}
+
+export type GetUserMyStatusParams = {
+}
+
+
+export const GetUserMyStatusRequestConvert = (
+    body: GetUserMyStatusReqBody,
+    query: GetUserMyStatusReqQuery,
+    path: GetUserMyStatusReqParams,
+    cookie: GetUserMyStatusReqCookie,
+): GetUserMyStatusParams => {
+  return {
+  };
+};
 type UpdateOneyUserReqBody = {
   }
 

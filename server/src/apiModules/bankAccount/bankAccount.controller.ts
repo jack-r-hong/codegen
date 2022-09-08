@@ -42,7 +42,7 @@ export class BankAccountController implements Controller {
     )
         .then((result) =>{
           // custom begin getMyBankAccounts
-
+          res.json({result});
           // custom end getMyBankAccounts
         }).catch((e) => {
           next(e);

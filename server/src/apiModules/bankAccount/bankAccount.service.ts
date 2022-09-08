@@ -17,7 +17,16 @@ export class BankAccountService {
       session: Express.Request['session'],
   ) {
     // custom begin getMyBankAccounts
-
+    const res = await this.bankAccountModel.getMyBankAccounts(
+        param,
+        {
+          userId: session.userInfo?.id!,
+          status: param.queryStatus,
+        },
+    ).catch((e) =>{
+      throw e;
+    });
+    return res;
     // custom end getMyBankAccounts
   }
   async readOneBankAccount(

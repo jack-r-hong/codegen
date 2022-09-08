@@ -266,6 +266,30 @@ export class UserController implements Controller {
           next(e);
         });
   }
+  @Get('/user/my/status')
+  @Validator(validSchemas.getUserMyStatusValidator)
+  async getUserMyStatus(
+      req: userParams.GetUserMyStatusRequest,
+      res: Response,
+      next: NextFunction,
+  ) {
+    UserController.service.getUserMyStatus(
+        userParams.GetUserMyStatusRequestConvert(
+            req.body,
+            req.query,
+            req.params,
+            req.cookies,
+        ),
+        req.session,
+    )
+        .then((result) =>{
+          // custom begin getUserMyStatus
+          res.json({result});
+          // custom end getUserMyStatus
+        }).catch((e) => {
+          next(e);
+        });
+  }
   @Put('/user/:id')
   @Validator(validSchemas.updateOneyUserValidator)
   async updateOneyUser(

@@ -207,6 +207,30 @@ export class UserService {
 
     // custom end phoneCheck
   }
+  async getUserMyStatus(
+      param :requestTypes.GetUserMyStatusParams,
+      session: Express.Request['session'],
+  ) {
+    // custom begin getUserMyStatus
+    const res = await this.userModel.getUserMyStatus(
+        param,
+        {userId: session.userInfo!.id},
+    ).catch((e) =>{
+      throw e;
+    });
+
+    if (!res) {
+      throw new errors.LoginFailError;
+    }
+
+    session.userInfo = {
+      id: session.userInfo!.id,
+      userStatus: res.userStatus,
+    };
+
+    return res;
+    // custom end getUserMyStatus
+  }
   async updateOneyUser(
       param :requestTypes.UpdateOneyUserParams,
       session: Express.Request['session'],

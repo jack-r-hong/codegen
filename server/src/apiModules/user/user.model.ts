@@ -92,6 +92,7 @@ export class UserModel {
       where: {
       },
       select: {
+        id: true,
         level: true,
         phone: true,
         phonePrefix: true,
@@ -269,6 +270,30 @@ export class UserModel {
         phone: customParam.phone,
         phonePrefix: customParam.phonePrefix,
         password: customParam.password,
+        userVerify: {
+          create: {
+            name: 1,
+            email: 1,
+            birthdate: 1,
+            country: 1,
+            idCardDate: 1,
+            idCardPosiition: 1,
+            idCardType: 1,
+            idCardPhoto: 1,
+            certificate: 1,
+            selfie: 1,
+            sign: 1,
+            address: 1,
+          },
+        },
+        userTransaction: {
+          create: {
+            atcbw: 1000,
+            cta: 7000,
+            cnot: 4000,
+            limit: 2000,
+          },
+        },
       },
     }).catch((e) => {
       throw e;
@@ -278,6 +303,26 @@ export class UserModel {
     return res;
 
     // custom end phoneCheck
+  }
+  async getUserMyStatus(
+      param: requestTypes.GetUserMyStatusParams,
+      customParam: any,
+  ) {
+    // custom begin getUserMyStatus
+    const res: {userStatus: number} | null = await prisma.user.findUnique({
+      where: {
+        id: customParam.userId,
+      },
+      select: {
+        userStatus: true,
+      },
+    }).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+    return res;
+    // custom end getUserMyStatus
   }
   async updateOneyUser(
       param: requestTypes.UpdateOneyUserParams,

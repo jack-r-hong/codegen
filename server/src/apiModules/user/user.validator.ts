@@ -260,6 +260,17 @@ export const phoneCheckValidator: Schema = {
     isString: true,
   },
 };
+export const getUserMyStatusValidator: Schema = {
+  'JSESSIONID': {
+    in: 'cookies',
+    custom: {
+      options: (value, {req, location, path}) => {
+        sessions.cookieAuthSessionVerify(req['session']);
+        return true;
+      },
+    },
+  },
+};
 export const updateOneyUserValidator: Schema = {
   id: {
     in: 'params',

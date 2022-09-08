@@ -651,6 +651,56 @@
         }]
       }     
     }, 
+    "/user/my/status": {
+      "get" : {
+        "tags" : [ "user" ],
+        "summary" : "getUserMyStatus",
+        "operationId" : "getUserMyStatus",                  
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "headers" : {
+              "Set-Cookie" : {
+                "description" : "date in UTC when token expires",
+                "schema" : {
+                  "type" : "string",
+                  "format" : "jwt"
+                }
+              }
+            },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "result": {
+                      "type" : "object",
+                      "properties" : {
+                        "id" : {
+                          "$ref": "#/components/schemas/User/properties/id"
+                        },
+                        "userStatus" : {
+                          "$ref": "#/components/schemas/User/properties/userStatus"
+                        }                        
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401" : {
+            "$ref" : "#/components/responses/Unauthorized"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          }        
+        },
+        "security" : [{
+          "cookieAuth" : []
+        }]
+      }     
+    },     
     "/real_verify/photo": {
       "get" : {
         "tags" : [ "userVerifyPhoto" ],
@@ -1282,62 +1332,74 @@
           "name" : {
             "type" : "integer",
             "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
-            "enum": [1,2,3]
+            "enum": [1,2,3],
+            "default": 1
           },
           "email" : {
             "type" : "integer",
             "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
-            "enum": [1,2,3]
+            "enum": [1,2,3],
+            "default": 1
           },          
           "birthdate" : {
             "type" : "integer",
             "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
-            "enum": [1,2,3]
+            "enum": [1,2,3],
+            "default": 1
           },   
           "country" : {
             "type" : "integer",
             "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
-            "enum": [1,2,3]
+            "enum": [1,2,3],
+            "default": 1
           },     
           "idCardDate" : {
             "type" : "integer",
             "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
-            "enum": [1,2,3]
+            "enum": [1,2,3],
+            "default": 1
           },       
           "idCardPosiition" : {
             "type" : "integer",
             "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
-            "enum": [1,2,3]
+            "enum": [1,2,3],
+            "default": 1
           },   
           "idCardType" : {
             "type" : "integer",
             "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
-            "enum": [1,2,3]
+            "enum": [1,2,3],
+            "default": 1
           },   
           "idCardPhoto" : {
             "type" : "integer",
             "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
-            "enum": [1,2,3]
+            "enum": [1,2,3],
+            "default": 1
           },           
           "certificate" : {
             "type" : "integer",
             "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
-            "enum": [1,2,3]
+            "enum": [1,2,3],
+            "default": 1
           },      
           "selfie" : {
             "type" : "integer",
             "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
-            "enum": [1,2,3]
+            "enum": [1,2,3],
+            "default": 1
           },  
           "sign" : {
             "type" : "integer",
             "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
-            "enum": [1,2,3]
+            "enum": [1,2,3],
+            "default": 1
           },                                                                  
           "address" : {
             "type" : "integer",
             "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
-            "enum": [1,2,3]
+            "enum": [1,2,3],
+            "default": 1
           },
           "updatedAt" : {
             "type" : "string",
@@ -1995,6 +2057,9 @@
               "items" : {
                 "type" : "object",
                 "properties" : {
+                  "id" : {
+                    "$ref" : "#/components/schemas/User/properties/id"
+                  },                   
                   "phone" : {
                     "$ref" : "#/components/schemas/User/properties/phone"
                   },                  
