@@ -272,9 +272,16 @@ pub fn foreign_key_helper(
 
     for (schema, v) in ctx.data()["schemas"].as_object().unwrap() {
         for (k2, v2) in v["properties"].as_object().unwrap(){
+            let mut refkeys: Vec<&str> = vec!();
             for (k3, v3) in v2.as_object().unwrap(){
                 if k3 == "$ref"{
-                    // println!("v2 {:?}", v2["type"]);
+                    refkeys.push(v3.as_str().unwrap());
+                }
+            }
+            
+            for v3 in refkeys{
+                // print!("{:?}, {}\r\n", refkeys_c, 1);
+                                    // println!("v2 {:?}", v2["type"]);
                     // println!("v3: {:?}", v3.as_str().unwrap() );
 
                     // if schema == "Notify"{
@@ -284,14 +291,10 @@ pub fn foreign_key_helper(
                     //     println!("v3: {:?}", v3.as_str().unwrap() );           
                     // }
  
-                    let vec: Vec<&str> = v3.as_str().unwrap().split('/').collect();
+                    let vec: Vec<&str> = v3.split('/').collect();
                     // vec[3]: table name, k2: FOREIGN KEY,  vec[5]: REFERENCES FIELD
 
-                    
-                    
                     if vec.len() > 5 {
-
-                        
                         // print!("{}:default {}\r\n", k2, "");
 
                         let exrends = match (v2["default"].as_i64(), v2["default"].as_str()) {
@@ -300,6 +303,14 @@ pub fn foreign_key_helper(
                             _ =>  String::from("")
                         };
 
+                        // let mut is_unique = "true";
+
+
+                        let is_unique = match v2["unique"].as_bool() {
+                            Some(x) => if x {"true"} else {"false"},
+                            _ =>  "false"
+                        };            
+                        
                         map.insert(
                             vec[3].to_string() + schema.as_str(),
                             to_json([
@@ -308,38 +319,12 @@ pub fn foreign_key_helper(
                                 vec[5],
                                 v2["type"].as_str().unwrap(),
                                 schema.as_str(),
-                                exrends.as_str()
+                                exrends.as_str(),
+                                is_unique
                             ])
                         );        
                     }
-                
-                }
-
-                
-
-                // if k3.as_str() == "items" {
-                //     for (k4, v4) in v3.as_object().unwrap(){
-                //         if k4.as_str() == "$ref"{
-                //             let row = to_camel_case(schema).to_owned() + " " 
-                //             + &to_pascal_case( &(k2.to_owned() + "On" + schema) ) + "[]";
-                //             if  v4.as_str()
-                //                 .unwrap()
-                //                 .contains(param.value().as_str().unwrap())
-                //             {
-                //                 data.push(row.to_string());
-                //             }
-
-                //             if  param.value().as_str()
-                //                 .unwrap()
-                //                 .contains(schema)
-                //             {
-                //                 data.push(row.to_string());
-                //             }
-                //         }
-                //     }
-
-                // }                
-            }
+            }            
 
             
         }
@@ -350,6 +335,8 @@ pub fn foreign_key_helper(
     for (table, arr) in map {
         // print!("{}\r\n", table);
         // print!("{}\r\n", arr);w
+        let is_unique = if arr[6].as_str().unwrap() == "true" {true} else {false};
+        // let isUnique = false;
         if param.value().as_str().unwrap() == arr[4] {
             // println!("{} {} @relation(fields: [{}], references: [{}])", arr[0], arr[0], arr[1], arr[2]);
             // println!("{} {}", arr[1], arr[3]);
@@ -364,17 +351,23 @@ pub fn foreign_key_helper(
             );
             data.push(
                 format!(
-                    "{} {} @map(\"{}\") {}", 
+                    "{} {} @map(\"{}\") {} {}", 
                     arr[1].as_str().unwrap(), 
                     type_convert(arr[3].as_str().unwrap(), "schema", ""),
                     to_snake_case(arr[1].as_str().unwrap()), 
                     arr[5].as_str().unwrap(), 
+                    if is_unique {"@unique"} else {""}
                 )
             );
         } 
         if param.value().as_str().unwrap() == arr[0]{
             // println!("{} {}[]", to_camel_case(arr[4].as_str().unwrap() ), arr[4].as_str().unwrap() );
-            data.push(format!("{} {}[]", to_camel_case(arr[4].as_str().unwrap() ), arr[4].as_str().unwrap() ));
+            data.push(format!(
+                "{} {}{}", 
+                to_camel_case(arr[4].as_str().unwrap() ), 
+                arr[4].as_str().unwrap(),
+                if is_unique {"?"} else {"[]"}
+            ));
         }
     }
 

@@ -14,6 +14,125 @@ interface TypedRequest<
 }
 
 
+type ReadOneBackstageUserReqBody = {
+  }
+
+type ReadOneBackstageUserReqQuery = {
+}
+
+type ReadOneBackstageUserReqParams = {
+      id: string
+,
+}
+
+type ReadOneBackstageUserReqCookie = {
+}
+
+export interface ReadOneBackstageUserRequest extends TypedRequest<
+  ReadOneBackstageUserReqBody,
+  ReadOneBackstageUserReqQuery,
+  ReadOneBackstageUserReqParams,
+  ReadOneBackstageUserReqCookie
+>{
+}
+
+export type ReadOneBackstageUserParams = {
+      pathId: string
+}
+
+
+export const ReadOneBackstageUserRequestConvert = (
+    body: ReadOneBackstageUserReqBody,
+    query: ReadOneBackstageUserReqQuery,
+    path: ReadOneBackstageUserReqParams,
+    cookie: ReadOneBackstageUserReqCookie,
+): ReadOneBackstageUserParams => {
+  return {
+            pathId: path.id,
+  };
+};
+type UpdateOneBackstageUserReqBody = {
+  }
+
+type UpdateOneBackstageUserReqQuery = {
+}
+
+type UpdateOneBackstageUserReqParams = {
+      id: string
+,
+}
+
+type UpdateOneBackstageUserReqCookie = {
+}
+
+export interface UpdateOneBackstageUserRequest extends TypedRequest<
+  UpdateOneBackstageUserReqBody,
+  UpdateOneBackstageUserReqQuery,
+  UpdateOneBackstageUserReqParams,
+  UpdateOneBackstageUserReqCookie
+>{
+}
+
+export type UpdateOneBackstageUserParams = {
+      pathId: string
+}
+
+
+export const UpdateOneBackstageUserRequestConvert = (
+    body: UpdateOneBackstageUserReqBody,
+    query: UpdateOneBackstageUserReqQuery,
+    path: UpdateOneBackstageUserReqParams,
+    cookie: UpdateOneBackstageUserReqCookie,
+): UpdateOneBackstageUserParams => {
+  return {
+            pathId: path.id,
+  };
+};
+type ReadManyUserBackstageReqBody = {
+  }
+
+type ReadManyUserBackstageReqQuery = {
+      orderBy: string
+      orderByField: string
+      page: string
+      take: string
+}
+
+type ReadManyUserBackstageReqParams = {
+}
+
+type ReadManyUserBackstageReqCookie = {
+}
+
+export interface ReadManyUserBackstageRequest extends TypedRequest<
+  ReadManyUserBackstageReqBody,
+  ReadManyUserBackstageReqQuery,
+  ReadManyUserBackstageReqParams,
+  ReadManyUserBackstageReqCookie
+>{
+}
+
+export type ReadManyUserBackstageParams = {
+      queryOrderBy: string
+      queryOrderByField: string
+      queryPage: number
+      queryTake: number
+}
+
+
+export const ReadManyUserBackstageRequestConvert = (
+    body: ReadManyUserBackstageReqBody,
+    query: ReadManyUserBackstageReqQuery,
+    path: ReadManyUserBackstageReqParams,
+    cookie: ReadManyUserBackstageReqCookie,
+): ReadManyUserBackstageParams => {
+  return {
+            queryOrderBy: query.orderBy,
+            queryOrderByField: query.orderByField,
+          queryPage: parseInt(query.page),
+          queryTake: parseInt(query.take),
+  };
+};
 type CaptchaReqBody = {
   }
 
@@ -353,6 +472,43 @@ export const PhoneCheckRequestConvert = (
 ): PhoneCheckParams => {
   return {
     bodyVerify: body.verify,
+  };
+};
+type UpdateOneyUserReqBody = {
+  }
+
+type UpdateOneyUserReqQuery = {
+}
+
+type UpdateOneyUserReqParams = {
+      id: string
+,
+}
+
+type UpdateOneyUserReqCookie = {
+}
+
+export interface UpdateOneyUserRequest extends TypedRequest<
+  UpdateOneyUserReqBody,
+  UpdateOneyUserReqQuery,
+  UpdateOneyUserReqParams,
+  UpdateOneyUserReqCookie
+>{
+}
+
+export type UpdateOneyUserParams = {
+      pathId: string
+}
+
+
+export const UpdateOneyUserRequestConvert = (
+    body: UpdateOneyUserReqBody,
+    query: UpdateOneyUserReqQuery,
+    path: UpdateOneyUserReqParams,
+    cookie: UpdateOneyUserReqCookie,
+): UpdateOneyUserParams => {
+  return {
+            pathId: path.id,
   };
 };
 

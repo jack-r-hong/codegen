@@ -56,11 +56,13 @@ export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
       }
     });
 
+    console.log(sessionJson);
+
     event.eventName = 'ready';
     ws.send(event.msg({
       isProxy,
-      process: sessionJson['transaction'].process,
-      bos: sessionJson['transaction'].bos,
+      // process: sessionJson['transaction'].process,
+      // bos: sessionJson['transaction'].bos,
       ready: true,
     }));
 

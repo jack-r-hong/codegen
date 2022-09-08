@@ -55,7 +55,13 @@ fn find_ref<'a>( full_profile:  &mut Json ,val: Option<&'a mut Map<String, Json>
                         let mut  ref_target_mut = ref_target.clone();
                         ref_target_mut.as_object_mut().unwrap().insert("$ref".to_string(), to_json(y));
                         // println!("{:?}", ref_target_mut.as_object_mut());
-                        *v = to_json(ref_target_mut);                
+                        
+                        
+                        if let Some(a) =  v.get("unique"){
+                            ref_target_mut.as_object_mut().unwrap().insert("unique".to_string(), to_json(a));
+                        }
+
+                        *v = to_json(ref_target_mut);       
                     },
                     None => ()
                 }

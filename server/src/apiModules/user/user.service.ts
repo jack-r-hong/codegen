@@ -14,6 +14,63 @@ export class UserService {
   @Inject()
   private userModel!: UserModel;
 
+  async readOneBackstageUser(
+      param :requestTypes.ReadOneBackstageUserParams,
+      session: Express.Request['session'],
+  ) {
+    // custom begin readOneBackstageUser
+
+    // custom end readOneBackstageUser
+
+    const res = await this.userModel.readOneBackstageUser(
+        param,
+    ).catch((e) =>{
+      throw e;
+    });
+
+    // custom begin readOneBackstageUser2
+
+    // custom end readOneBackstageUser2
+    return res;
+  }
+  async updateOneBackstageUser(
+      param :requestTypes.UpdateOneBackstageUserParams,
+      session: Express.Request['session'],
+  ) {
+    // custom begin updateOneBackstageUser
+
+    // custom end updateOneBackstageUser
+
+    const res = await this.userModel.updateOneBackstageUser(
+        param,
+    ).catch((e) =>{
+      throw e;
+    });
+
+    // custom begin updateOneBackstageUser2
+
+    // custom end updateOneBackstageUser2
+    return res;
+  }
+  async readManyUserBackstage(
+      param :requestTypes.ReadManyUserBackstageParams,
+      session: Express.Request['session'],
+  ) {
+    // custom begin readManyUserBackstage
+
+    // custom end readManyUserBackstage
+
+    const res = await this.userModel.readManyUserBackstage(
+        param,
+    ).catch((e) =>{
+      throw e;
+    });
+
+    // custom begin readManyUserBackstage2
+
+    // custom end readManyUserBackstage2
+    return res;
+  }
   async captcha(
       param :requestTypes.CaptchaParams,
       session: Express.Request['session'],
@@ -30,25 +87,6 @@ export class UserService {
       session: Express.Request['session'],
   ) {
     // custom begin loginUser
-    /**
-     const res = await this.userModel.loginUser(param, null).catch((e) =>{
-      throw e;
-    });
-    if (res !== null) {
-      const {id, userStatus, password, email, name} = res;
-      const match = await bcrypt.compare(param.bodyPassword, password);
-      if (match) {
-        session.userInfo = {
-          id,
-          userStatus,
-        };
-        return {
-          name,
-          email,
-        };
-      }
-    }
-    throw new errors.LoginFailError;*/
     const res = await this.userModel.loginUser(param, null).catch((e) =>{
       throw e;
     });
@@ -62,6 +100,7 @@ export class UserService {
         };
         return {
           id,
+          userStatus,
         };
       }
     }
@@ -94,6 +133,7 @@ export class UserService {
           throw e;
         });
     return res;
+
     // custom end putRealVerify
   }
   async registerUser(
@@ -166,6 +206,25 @@ export class UserService {
     return {success: true};
 
     // custom end phoneCheck
+  }
+  async updateOneyUser(
+      param :requestTypes.UpdateOneyUserParams,
+      session: Express.Request['session'],
+  ) {
+    // custom begin updateOneyUser
+
+    // custom end updateOneyUser
+
+    const res = await this.userModel.updateOneyUser(
+        param,
+    ).catch((e) =>{
+      throw e;
+    });
+
+    // custom begin updateOneyUser2
+
+    // custom end updateOneyUser2
+    return res;
   }
 }
 

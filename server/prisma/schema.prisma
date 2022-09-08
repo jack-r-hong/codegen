@@ -17,8 +17,9 @@ model BankAccount {
   name  String  @map("name")                 
   order  Int  @map("order")                 
   status  Int  @default(1)  @map("status")                 
+  transaction Transaction?
   user User? @relation(fields: [userId], references: [id])
-  userId String @map("user_id") 
+  userId String @map("user_id")  
   
     // custom begin BankAccount
   @@unique([userId, order], name: "uniqueOrder")
@@ -34,9 +35,11 @@ model Transaction {
   point  Int  @map("point")                 
   state  Int  @default(1)  @map("state")                 
   twd  Int  @map("twd")                 
+  bankAccount BankAccount? @relation(fields: [bankId], references: [id])
+  bankId Int @map("bank_id")  @unique
   transactionRecive TransactionRecive[]
   user User? @relation(fields: [userId], references: [id])
-  userId String @map("user_id") 
+  userId String @map("user_id")  
   
     // custom begin Transaction
 
@@ -46,12 +49,11 @@ model TransactionRecive {
   createdAt  DateTime  @default(now()) @map("created_at")                 
   id  String @id @default(uuid()) @map("id")                 
   transaction Transaction? @relation(fields: [transactionId], references: [id])
-  transactionId String @map("transaction_id") 
+  transactionId String @map("transaction_id")  
   user User? @relation(fields: [userId], references: [id])
-  userId String @map("user_id") 
+  userId String @map("user_id")  
   
     // custom begin TransactionRecive
-  @@unique([userId, transactionId], name: "pair_id")
 
     // custom end TransactionRecive
 }
@@ -75,8 +77,12 @@ model User {
   updatedAt  DateTime   @default(now()) @updatedAt @map("updated_at")                 
   userStatus  Int  @default(2)  @map("user_status")                 
   bankAccount BankAccount[]
+  userLevel UserLevel? @relation(fields: [level], references: [level])
+  level Int @map("level") @default(1) 
   transaction Transaction[]
   transactionRecive TransactionRecive[]
+  userTransaction UserTransaction?
+  userVerify UserVerify?
   userVerifyPhoto UserVerifyPhoto[]
   
     // custom begin User
@@ -84,18 +90,86 @@ model User {
 
     // custom end User
 }
+model UserLevel {
+  id  Int @id @default(autoincrement()) @map("id")                 
+  level  Int  @unique  @default(1)  @map("level")                 
+  user User[]
+  
+    // custom begin UserLevel
+
+    // custom end UserLevel
+}
+model UserTransaction {
+  atcbw  Int  @map("atcbw")                 
+  cnot  Int  @map("cnot")                 
+  cta  Int  @map("cta")                 
+  id  Int @id @default(autoincrement()) @map("id")                 
+  limit  Int  @map("limit")                 
+  updatedAt  DateTime   @default(now()) @updatedAt @map("updated_at")                 
+  user User? @relation(fields: [userId], references: [id])
+  userId String @map("user_id")  @unique
+  
+    // custom begin UserTransaction
+
+    // custom end UserTransaction
+}
+model UserVerify {
+  address  Int  @map("address")                 
+  birthdate  Int  @map("birthdate")                 
+  certificate  Int  @map("certificate")                 
+  country  Int  @map("country")                 
+  email  Int  @map("email")                 
+  id  Int @id @default(autoincrement()) @map("id")                 
+  idCardDate  Int  @map("id_card_date")                 
+  idCardPhoto  Int  @map("id_card_photo")                 
+  idCardPosiition  Int  @map("id_card_posiition")                 
+  idCardType  Int  @map("id_card_type")                 
+  name  Int  @map("name")                 
+  selfie  Int  @map("selfie")                 
+  sign  Int  @map("sign")                 
+  updatedAt  DateTime   @default(now()) @updatedAt @map("updated_at")                 
+  userVerifyResonDes  String  @map("user_verify_reson_des")                 
+  user User? @relation(fields: [userId], references: [id])
+  userId String @map("user_id")  @unique
+  userVerifyResonDes UserVerifyResonDes[]
+  
+    // custom begin UserVerify
+
+    // custom end UserVerify
+}
 model UserVerifyPhoto {
   createdAt  DateTime  @default(now()) @map("created_at")                 
   id  Int @id @default(autoincrement()) @map("id")                 
   path  String  @map("path")                 
   type  Int  @map("type")                 
   user User? @relation(fields: [userId], references: [id])
-  userId String @map("user_id") 
+  userId String @map("user_id")  
   
     // custom begin UserVerifyPhoto
-    @@unique([userId, type], name: "uniqueType")
+  @@unique([userId, type], name: "uniqueType")
 
     // custom end UserVerifyPhoto
+}
+model UserVerifyReson {
+  des  String  @map("des")                 
+  id  Int @id @default(autoincrement()) @map("id")                 
+  userVerifyResonDes UserVerifyResonDes[]
+  
+    // custom begin UserVerifyReson
+
+    // custom end UserVerifyReson
+}
+model UserVerifyResonDes {
+  field  String  @map("field")                 
+  id  Int @id @default(autoincrement()) @map("id")                 
+  userVerifyReson UserVerifyReson? @relation(fields: [UserVerifyResonId], references: [id])
+  UserVerifyResonId Int @map("user_verify_reson_id")  
+  userVerify UserVerify? @relation(fields: [userVerifyId], references: [id])
+  userVerifyId Int @map("user_verify_id")  
+  
+    // custom begin UserVerifyResonDes
+
+    // custom end UserVerifyResonDes
 }
 
 

@@ -16,6 +16,7 @@ interface TypedRequest<
 
 type CreateTransactionReqBody = {
   account: string,
+bankId: string,
 bos: string,
 point: string,
 twd: string,
@@ -40,6 +41,7 @@ export interface CreateTransactionRequest extends TypedRequest<
 
 export type CreateTransactionParams = {
 bodyAccount: string,
+bodyBankId: number,
 bodyBos: number,
 bodyPoint: number,
 bodyTwd: number,
@@ -54,6 +56,7 @@ export const CreateTransactionRequestConvert = (
 ): CreateTransactionParams => {
   return {
     bodyAccount: body.account,
+    bodyBankId: parseInt(body.bankId),
     bodyBos: parseInt(body.bos),
     bodyPoint: parseInt(body.point),
     bodyTwd: parseInt(body.twd),

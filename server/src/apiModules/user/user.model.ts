@@ -7,6 +7,112 @@ const prisma = new PrismaClient();
 
 @Service()
 export class UserModel {
+  async readOneBackstageUser(
+      param: requestTypes.ReadOneBackstageUserParams,
+  ) {
+    const res: any | null = await prisma.user.findUnique({
+      where: {
+        id: param.pathId,
+      },
+      select: {
+        address: true,
+        area: true,
+        birthdate: true,
+        city: true,
+        country: true,
+        email: true,
+        id: true,
+        idCard: true,
+        idCardDate: true,
+        idCardPosiition: true,
+        idCardType: true,
+        name: true,
+        userVerifyPhoto: true,
+        // custom begin readOneBackstageUser
+        userVerify: {
+          select: {
+            address: true,
+            birthdate: true,
+            country: true,
+            email: true,
+            idCardDate: true,
+            idCardPosiition: true,
+            idCardType: true,
+            idCardPhoto: true,
+            name: true,
+            selfie: true,
+            certificate: true,
+            sign: true,
+            userVerifyResonDes: {
+              select: {
+                field: true,
+                userVerifyReson: {
+                  select: {
+                    des: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+
+        // custom end readOneBackstageUser
+      },
+    }).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+
+    if (res === null) {
+      throw new errors.NotFindError;
+    }
+    return res;
+  }
+  async updateOneBackstageUser(
+      param: requestTypes.UpdateOneBackstageUserParams,
+  ) {
+    const res: User | null = await prisma.user.update({
+      where: {
+        id: param.pathId,
+      },
+      data: {
+      },
+    }).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+    return res;
+  }
+  async readManyUserBackstage(
+      param: requestTypes.ReadManyUserBackstageParams,
+  ) {
+    const res: any[] | null = await prisma.user.findMany({
+      where: {
+      },
+      select: {
+        level: true,
+        phone: true,
+        phonePrefix: true,
+        userStatus: true,
+        userTransaction: true,
+        // custom begin readManyUserBackstage
+
+        // custom end readManyUserBackstage
+      },
+      orderBy: {
+        [param.queryOrderByField]: param.queryOrderBy,
+      },
+      skip: param.queryPage * param.queryTake,
+      take: param.queryTake,
+    }).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+    return res;
+  }
   async captcha(
       param: requestTypes.CaptchaParams,
       customParam: any,
@@ -32,6 +138,7 @@ export class UserModel {
         id: true,
         name: true,
         password: true,
+        userStatus: true,
       },
     }).catch((e) => {
       throw e;
@@ -171,5 +278,21 @@ export class UserModel {
     return res;
 
     // custom end phoneCheck
+  }
+  async updateOneyUser(
+      param: requestTypes.UpdateOneyUserParams,
+  ) {
+    const res: User | null = await prisma.user.update({
+      where: {
+        id: param.pathId,
+      },
+      data: {
+      },
+    }).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+    return res;
   }
 }

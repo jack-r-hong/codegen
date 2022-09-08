@@ -24,6 +24,72 @@ export class UserController implements Controller {
   @Inject('app.use')
     appUse!: AppUse;
 
+  @Get('/backstage/user/:id')
+  @Validator(validSchemas.readOneBackstageUserValidator)
+  async readOneBackstageUser(
+      req: userParams.ReadOneBackstageUserRequest,
+      res: Response,
+      next: NextFunction,
+  ) {
+    UserController.service.readOneBackstageUser(
+        userParams.ReadOneBackstageUserRequestConvert(
+            req.body,
+            req.query,
+            req.params,
+            req.cookies,
+        ),
+        req.session,
+    )
+        .then((result) =>{
+          res.json(result);
+        }).catch((e) => {
+          next(e);
+        });
+  }
+  @Put('/backstage/user/:id')
+  @Validator(validSchemas.updateOneBackstageUserValidator)
+  async updateOneBackstageUser(
+      req: userParams.UpdateOneBackstageUserRequest,
+      res: Response,
+      next: NextFunction,
+  ) {
+    UserController.service.updateOneBackstageUser(
+        userParams.UpdateOneBackstageUserRequestConvert(
+            req.body,
+            req.query,
+            req.params,
+            req.cookies,
+        ),
+        req.session,
+    )
+        .then((result) =>{
+          res.json(result);
+        }).catch((e) => {
+          next(e);
+        });
+  }
+  @Get('/backstage/users')
+  @Validator(validSchemas.readManyUserBackstageValidator)
+  async readManyUserBackstage(
+      req: userParams.ReadManyUserBackstageRequest,
+      res: Response,
+      next: NextFunction,
+  ) {
+    UserController.service.readManyUserBackstage(
+        userParams.ReadManyUserBackstageRequestConvert(
+            req.body,
+            req.query,
+            req.params,
+            req.cookies,
+        ),
+        req.session,
+    )
+        .then((result) =>{
+          res.json(result);
+        }).catch((e) => {
+          next(e);
+        });
+  }
   @Get('/captcha')
   @Validator(validSchemas.captchaValidator)
   async captcha(
@@ -196,6 +262,28 @@ export class UserController implements Controller {
           res.json({result});
 
           // custom end phoneCheck
+        }).catch((e) => {
+          next(e);
+        });
+  }
+  @Put('/user/:id')
+  @Validator(validSchemas.updateOneyUserValidator)
+  async updateOneyUser(
+      req: userParams.UpdateOneyUserRequest,
+      res: Response,
+      next: NextFunction,
+  ) {
+    UserController.service.updateOneyUser(
+        userParams.UpdateOneyUserRequestConvert(
+            req.body,
+            req.query,
+            req.params,
+            req.cookies,
+        ),
+        req.session,
+    )
+        .then((result) =>{
+          res.json(result);
         }).catch((e) => {
           next(e);
         });

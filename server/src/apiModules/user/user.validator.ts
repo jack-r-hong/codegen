@@ -7,6 +7,47 @@ import * as sessions from '../../sessions';
 
 
 
+export const readOneBackstageUserValidator: Schema = {
+  id: {
+    in: 'params',
+    isString: true,
+    notEmpty: true,
+  },
+};
+export const updateOneBackstageUserValidator: Schema = {
+  id: {
+    in: 'params',
+    isString: true,
+    notEmpty: true,
+  },
+  'JSESSIONID': {
+    in: 'cookies',
+    custom: {
+      options: (value, {req, location, path}) => {
+        sessions.cookieAuthSessionVerify(req['session']);
+        return true;
+      },
+    },
+  },
+};
+export const readManyUserBackstageValidator: Schema = {
+  orderBy: {
+    in: 'query',
+    isString: true,
+  },
+  orderByField: {
+    in: 'query',
+    isString: true,
+  },
+  page: {
+    in: 'query',
+    isInt: true,
+  },
+  take: {
+    in: 'query',
+    isInt: true,
+  },
+};
 export const captchaValidator: Schema = {
 };
 export const loginUserValidator: Schema = {
@@ -217,5 +258,21 @@ export const phoneCheckValidator: Schema = {
   'verify': {
     in: 'body',
     isString: true,
+  },
+};
+export const updateOneyUserValidator: Schema = {
+  id: {
+    in: 'params',
+    isString: true,
+    notEmpty: true,
+  },
+  'JSESSIONID': {
+    in: 'cookies',
+    custom: {
+      options: (value, {req, location, path}) => {
+        sessions.cookieAuthSessionVerify(req['session']);
+        return true;
+      },
+    },
   },
 };

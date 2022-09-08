@@ -151,7 +151,9 @@ export class TransactionModel {
         point: true,
         state: true,
         twd: true,
-        userId: true,
+        // custom begin readOneTransaction
+
+        // custom end readOneTransaction
       },
     }).catch((e) => {
       throw e;

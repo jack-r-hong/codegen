@@ -12,6 +12,10 @@ export const createTransactionValidator: Schema = {
     in: 'body',
     isString: true,
   },
+  'bankId': {
+    in: 'body',
+    isInt: true,
+  },
   'bos': {
     in: 'body',
     isInt: true,

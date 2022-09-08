@@ -16,7 +16,7 @@
   "servers" : [ 
     {
       "description" : "test server",
-      "url" : "http://192.168.10.119:81/api"
+      "url" : "https://192.168.10.119/api"
     },
     {
       "description" : "api",
@@ -270,7 +270,10 @@
                       "properties" : {
                         "id" : {
                           "type" : "integer"
-                        }                        
+                        },
+                        "userStatus": {
+                          "$ref" : "#/components/schemas/User/properties/userStatus"
+                        }
                       }
                     }
                   }
@@ -410,7 +413,242 @@
           "cookieAuth" : [ ]
         } ]
       }      
-    },        
+    },      
+    "/backstage/users": {
+      "get" : {
+        "tags" : [ "user" ],
+        "summary" : "backstage",
+        "operationId" : "readManyUserBackstage",
+        "parameters" : [ 
+          {
+            "name" : "orderBy",
+            "in" : "query",
+            "description" : "The name that needs to be fetched. Use user1 for testing.",
+            "schema" : {
+              "type" : "string",
+              "default": "desc"
+            }
+          },
+          {
+            "name" : "orderByField",
+            "in" : "query",
+            "description" : "The name that needs to be fetched. Use user1 for testing.",
+            "schema" : {
+              "type" : "string",
+              "default": "createdAt"
+            }
+          },
+          {
+            "name" : "page",
+            "in" : "query",
+            "schema" : {
+              "type" : "integer",
+              "default": 0
+            }            
+          },
+          {
+            "name" : "take",
+            "in" : "query",
+            "schema" : {
+              "type" : "integer",
+              "default": 10
+            }    
+          }                   
+        ],            
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/BackstageUserArray"
+          },
+          "400" : {
+            "$ref" : "#/components/responses/BadRequest"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/Unauthorized"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          },          
+          "409" : {
+            "description": "bank account duplicate"
+          }          
+        }
+      } 
+    },   
+    "/backstage/user/{id}": {
+      "get" : {
+        "tags" : [ "user" ],
+        "summary" : "Logs user into the system",
+        "operationId" : "readOneBackstageUser", 
+        "parameters" : [ 
+          {
+            "name" : "id",
+            "in" : "path",
+            "schema" : {
+              "type" : "string",
+              "format": "uuid"
+            },
+            "required": true
+          }                   
+        ],                     
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/BackstageUser"
+          },          
+          "400" : {
+            "$ref" : "#/components/responses/BadRequest"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/Unauthorized"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          },          
+          "409" : {
+            "description": "bank account duplicate"
+          }          
+        }
+      },      
+      "put" : {
+        "tags" : [ "user" ],
+        "summary" : "Logs user into the system",
+        "operationId" : "updateOneBackstageUser", 
+        "parameters" : [ 
+          {
+            "name" : "id",
+            "in" : "path",
+            "schema" : {
+              "type" : "string",
+              "format": "uuid"
+            },
+            "required": true
+          }                   
+        ],                     
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "headers" : {
+              "X-Rate-Limit" : {
+                "description" : "calls per hour allowed by the user",
+                "schema" : {
+                  "type" : "integer",
+                  "format" : "int32"
+                }
+              },
+              "X-Expires-After" : {
+                "description" : "date in UTC when token expires",
+                "schema" : {
+                  "type" : "string",
+                  "format" : "date-time"
+                }
+              }
+            },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "result": {
+                      "type" : "object",
+                      "properties" : {
+                        "id" : {
+                          "type" : "integer"
+                        }                        
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/BadRequest"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/Unauthorized"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          },          
+          "409" : {
+            "description": "bank account duplicate"
+          }          
+        },
+        "security" : [{
+          "cookieAuth" : []
+        }]
+      }     
+    },     
+    "/user/{id}": {
+      "put" : {
+        "tags" : [ "user" ],
+        "summary" : "Logs user into the system",
+        "operationId" : "updateOneyUser", 
+        "parameters" : [ 
+          {
+            "name" : "id",
+            "in" : "path",
+            "schema" : {
+              "type" : "string",
+              "format": "uuid"
+            },
+            "required": true
+          }                   
+        ],                     
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "headers" : {
+              "X-Rate-Limit" : {
+                "description" : "calls per hour allowed by the user",
+                "schema" : {
+                  "type" : "integer",
+                  "format" : "int32"
+                }
+              },
+              "X-Expires-After" : {
+                "description" : "date in UTC when token expires",
+                "schema" : {
+                  "type" : "string",
+                  "format" : "date-time"
+                }
+              }
+            },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "result": {
+                      "type" : "object",
+                      "properties" : {
+                        "id" : {
+                          "type" : "integer"
+                        }                        
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/BadRequest"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/Unauthorized"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          },          
+          "409" : {
+            "description": "bank account duplicate"
+          }          
+        },
+        "security" : [{
+          "cookieAuth" : []
+        }]
+      }     
+    }, 
     "/real_verify/photo": {
       "get" : {
         "tags" : [ "userVerifyPhoto" ],
@@ -862,7 +1100,7 @@
           "userStatus" : {
             "type" : "integer",
             "format" : "int32",
-            "description" : "status map:\n * `1` - Verified\n * `2` - Unverified\n * `3` - WaitVerify\n * `4` - Locking\n * `10` - Proxy \n * `11` - ProxyLocking \n",
+            "description" : "status map:\n * `1` - Verified\n * `2` - Unverified\n * `3` - WaitVerify\n * `4` - Locking\n * `9` - Test account \n * `10` - Agent \n * `11` - AgentLocking \n",
             "enum" : [ 1, 2, 3, 4, 10, 11 ],
             "default" : 2
           },    
@@ -921,9 +1159,65 @@
           "updatedAt" : {
             "type" : "string",
             "format" : "date-time"
+          },           
+          "level" : {
+            "$ref" : "#/components/schemas/UserLevel/properties/level"
+          },
+          "userLevel" : {
+            "$ref" : "#/components/schemas/UserLevel",
+            "default": 2
+          }  
+        }
+      },
+      "UserLevel" : {
+        "type" : "object",
+        "description" : "database",
+        "properties" : {
+          "id" : {
+            "type" : "integer"
+          },
+          "level" : {
+            "type" : "integer",
+            "description": "* `1` - 一般\n * `2` - 白金\n * `3` - 金金\n",
+            "enum": [1,2,3],
+            "uniqueItems": true,
+            "default": 1
           }
         }
       },
+      "UserTransaction" : {
+        "type" : "object",
+        "description" : "database",
+        "properties" : {
+          "id" : {
+            "type" : "integer"
+          },
+          "atcbw" : {
+            "type" : "integer",
+            "description": "可提領金額"
+          },          
+          "cta" : {
+            "type" : "integer",
+            "description": "累計交易金額"
+          },
+          "cnot" : {
+            "type" : "integer",
+            "description": "累積交易筆數"
+          },          
+          "limit" : {
+            "type" : "integer",
+            "description": "交易額度"
+          },          
+          "updatedAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          },           
+          "userId" : {
+            "$ref" : "#/components/schemas/User/properties/id",
+            "unique": true
+          }
+        }
+      },              
       "UserVerifyPhoto" : {
         "type" : "object",
         "description" : "database",
@@ -943,12 +1237,141 @@
           }, 
           "userId" : {
             "$ref" : "#/components/schemas/User/properties/id"
-          },
-          "user" : {
-            "$ref" : "#/components/schemas/User"
-          }   
+          }
         }
-      },      
+      },
+      "UserVerify" : {
+        "type" : "object",
+        "description" : "database",
+        "properties" : {
+          "id" : {
+            "type" : "integer"
+          },
+          "name" : {
+            "type" : "integer",
+            "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
+            "enum": [1,2,3]
+          },
+          "email" : {
+            "type" : "integer",
+            "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
+            "enum": [1,2,3]
+          },          
+          "birthdate" : {
+            "type" : "integer",
+            "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
+            "enum": [1,2,3]
+          },   
+          "country" : {
+            "type" : "integer",
+            "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
+            "enum": [1,2,3]
+          },     
+          "idCardDate" : {
+            "type" : "integer",
+            "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
+            "enum": [1,2,3]
+          },       
+          "idCardPosiition" : {
+            "type" : "integer",
+            "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
+            "enum": [1,2,3]
+          },   
+          "idCardType" : {
+            "type" : "integer",
+            "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
+            "enum": [1,2,3]
+          },   
+          "idCardPhoto" : {
+            "type" : "integer",
+            "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
+            "enum": [1,2,3]
+          },           
+          "certificate" : {
+            "type" : "integer",
+            "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
+            "enum": [1,2,3]
+          },      
+          "selfie" : {
+            "type" : "integer",
+            "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
+            "enum": [1,2,3]
+          },  
+          "sign" : {
+            "type" : "integer",
+            "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
+            "enum": [1,2,3]
+          },                                                                  
+          "address" : {
+            "type" : "integer",
+            "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
+            "enum": [1,2,3]
+          },
+          "updatedAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          },           
+          "userId" : {
+            "$ref" : "#/components/schemas/User/properties/id",
+            "unique": true
+          },
+          "userVerifyResonDes": {
+            "type":"array",
+            "items": {
+              "$ref" : "#/components/schemas/UserVerifyResonDes"
+            }
+          }
+        }
+      },   
+      "UserVerifyResonDes" : {
+        "type" : "object",
+        "description" : "database",
+        "properties" : {
+          "id" : {
+            "type" : "integer"
+          },  
+          "userVerifyId" : {
+            "$ref" : "#/components/schemas/UserVerify/properties/id"
+          },    
+          "field":{
+            "type": "string",
+            "enum": [
+              "name", 
+              "phonePrefix", 
+              "phone", 
+              "email", 
+              "birthdate",
+              "country", 
+              "idCardDate", 
+              "idCardPosiition", 
+              "idCardType", 
+              "idCardPhoto", 
+              "certificate",
+              "selfie",
+              "sign",
+              "address"
+            ]
+          },     
+          "UserVerifyResonId" : {
+            "$ref" : "#/components/schemas/UserVerifyReson/properties/id"
+          },
+          "userVerifyReson" : {
+            "$ref" : "#/components/schemas/UserVerifyReson"
+          }        
+        }
+      },          
+      "UserVerifyReson" : {
+        "type" : "object",
+        "description" : "database",
+        "properties" : {
+          "id" : {
+            "type" : "integer"
+          },
+          "des" : {
+            "type" : "string"
+          }          
+        }
+      },           
       "BankAccount" : {
         "type" : "object",
         "description" : "database",
@@ -1027,7 +1450,11 @@
           },
           "user" : {
             "$ref" : "#/components/schemas/User"
-          }         
+          },
+          "bankId" : {
+            "$ref" : "#/components/schemas/BankAccount/properties/id",
+            "unique": true
+          }        
         }
       },
       "TransactionRecive" : {
@@ -1366,6 +1793,9 @@
                 },  
                 "account" : {
                   "$ref" : "#/components/schemas/Transaction/properties/account"
+                },  
+                "bankId" : {
+                  "$ref" : "#/components/schemas/BankAccount/properties/id"
                 }
               }
             }
@@ -1448,6 +1878,111 @@
           }
         }
       },
+      "BackstageUser" : {
+        "description" : "Ok",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "id" : {
+                  "type" : "string",
+                  "format" : "uuid"
+                },
+                "name" : {
+                  "type" : "string"
+                },
+                "email" : {
+                  "type" : "string",
+                  "format" : "email"
+                },
+                "birthdate" : {
+                  "type" : "string",
+                  "format" : "date",
+                  "nullable" : true
+                },   
+                "country" : {
+                  "description": "residence country",
+                  "type" : "string",
+                  "nullable" : true
+                },  
+                "idCard" : {
+                  "type" : "string",
+                  "nullable" : true
+                },       
+                "idCardDate" : {
+                  "type" : "string",
+                  "nullable" : true
+                },       
+                "idCardPosiition" : {
+                  "type" : "string",
+                  "nullable" : true
+                },   
+                "idCardType" : {
+                  "type" : "integer",
+                  "nullable" : true,
+                  "enum": [1,2,3],
+                  "description" : "status map:\n * `1` - 初\n * `2` - 補\n * `3` - 換\n"
+                },
+                "city" : {
+                  "description": "residence city",
+                  "type" : "string",
+                  "nullable" : true
+                },    
+                "area" : {
+                  "description": "residence area",
+                  "type" : "string",
+                  "nullable" : true
+                },     
+                "address" : {
+                  "description": "residence address",
+                  "type" : "string",
+                  "nullable" : true
+                },
+                "userVerifyPhoto": {
+                  "type" : "array",
+                  "items":{ 
+                    "$ref": "#/components/schemas/UserVerifyPhoto"
+                  }
+                }, 
+                "userVerify": {
+                  "$ref": "#/components/schemas/UserVerify"
+                }  
+              }
+            }
+          }
+        }
+      },      
+      "BackstageUserArray" : {
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "type" : "object",
+                "properties" : {
+                  "phone" : {
+                    "$ref" : "#/components/schemas/User/properties/phone"
+                  },                  
+                  "phonePrefix" : {
+                    "$ref" : "#/components/schemas/User/properties/phonePrefix"
+                  },
+                  "userStatus" : {
+                    "$ref" : "#/components/schemas/User/properties/userStatus"
+                  },
+                  "userTransaction" : {
+                    "$ref" : "#/components/schemas/UserTransaction"
+                  },
+                  "level" : {
+                    "$ref" : "#/components/schemas/User/properties/level"
+                  }                                                  
+                }
+              }          
+            }
+          }
+        },
+        "description" : "List of user object"
+      },      
       "Transaction" : {
         "description" : "Ok",
         "content" : {
@@ -1490,7 +2025,10 @@
                 },      
                 "userId" : {
                   "$ref" : "#/components/schemas/User/properties/id"
-                }   
+                },
+                "bankId" : {
+                  "$ref" : "#/components/schemas/BankAccount/properties/id"
+                }                  
               }
             }
           }
