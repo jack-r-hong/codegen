@@ -20,6 +20,9 @@ export class TransactionModel {
         point: param.bodyPoint,
         twd: param.bodyTwd,
         userId: customParam.userId,
+        bankAccount: customParam.bankAccount,
+        bankCode: customParam.bankCode,
+        bankName: customParam.bankName,
       },
     }).catch((e) => {
       throw e;

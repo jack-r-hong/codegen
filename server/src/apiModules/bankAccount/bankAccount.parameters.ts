@@ -14,40 +14,77 @@ interface TypedRequest<
 }
 
 
-type GetBankAccountReqBody = {
+type GetMyBankAccountsReqBody = {
   }
 
-type GetBankAccountReqQuery = {
+type GetMyBankAccountsReqQuery = {
       status: string
 }
 
-type GetBankAccountReqParams = {
+type GetMyBankAccountsReqParams = {
 }
 
-type GetBankAccountReqCookie = {
+type GetMyBankAccountsReqCookie = {
 }
 
-export interface GetBankAccountRequest extends TypedRequest<
-  GetBankAccountReqBody,
-  GetBankAccountReqQuery,
-  GetBankAccountReqParams,
-  GetBankAccountReqCookie
+export interface GetMyBankAccountsRequest extends TypedRequest<
+  GetMyBankAccountsReqBody,
+  GetMyBankAccountsReqQuery,
+  GetMyBankAccountsReqParams,
+  GetMyBankAccountsReqCookie
 >{
 }
 
-export type GetBankAccountParams = {
+export type GetMyBankAccountsParams = {
       queryStatus: number
 }
 
 
-export const GetBankAccountRequestConvert = (
-    body: GetBankAccountReqBody,
-    query: GetBankAccountReqQuery,
-    path: GetBankAccountReqParams,
-    cookie: GetBankAccountReqCookie,
-): GetBankAccountParams => {
+export const GetMyBankAccountsRequestConvert = (
+    body: GetMyBankAccountsReqBody,
+    query: GetMyBankAccountsReqQuery,
+    path: GetMyBankAccountsReqParams,
+    cookie: GetMyBankAccountsReqCookie,
+): GetMyBankAccountsParams => {
   return {
           queryStatus: parseInt(query.status),
+  };
+};
+type ReadOneBankAccountReqBody = {
+  }
+
+type ReadOneBankAccountReqQuery = {
+}
+
+type ReadOneBankAccountReqParams = {
+      id: string
+,
+}
+
+type ReadOneBankAccountReqCookie = {
+}
+
+export interface ReadOneBankAccountRequest extends TypedRequest<
+  ReadOneBankAccountReqBody,
+  ReadOneBankAccountReqQuery,
+  ReadOneBankAccountReqParams,
+  ReadOneBankAccountReqCookie
+>{
+}
+
+export type ReadOneBankAccountParams = {
+      pathId: number
+}
+
+
+export const ReadOneBankAccountRequestConvert = (
+    body: ReadOneBankAccountReqBody,
+    query: ReadOneBankAccountReqQuery,
+    path: ReadOneBankAccountReqParams,
+    cookie: ReadOneBankAccountReqCookie,
+): ReadOneBankAccountParams => {
+  return {
+          pathId: parseInt(path.id),
   };
 };
 

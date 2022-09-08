@@ -7,13 +7,29 @@ import * as sessions from '../../sessions';
 
 
 
-export const getBankAccountValidator: Schema = {
+export const getMyBankAccountsValidator: Schema = {
   status: {
     in: 'query',
     isInt: true,
     matches: {
       options: /^(1|2)/,
     },
+  },
+  'JSESSIONID': {
+    in: 'cookies',
+    custom: {
+      options: (value, {req, location, path}) => {
+        sessions.cookieAuthSessionVerify(req['session']);
+        return true;
+      },
+    },
+  },
+};
+export const readOneBankAccountValidator: Schema = {
+  id: {
+    in: 'params',
+    isInt: true,
+    notEmpty: true,
   },
   'JSESSIONID': {
     in: 'cookies',

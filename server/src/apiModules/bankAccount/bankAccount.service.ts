@@ -12,13 +12,32 @@ export class BankAccountService {
   @Inject()
   private bankAccountModel!: BankAccountModel;
 
-  async getBankAccount(
-      param :requestTypes.GetBankAccountParams,
+  async getMyBankAccounts(
+      param :requestTypes.GetMyBankAccountsParams,
       session: Express.Request['session'],
   ) {
-    // custom begin getBankAccount
+    // custom begin getMyBankAccounts
 
-    // custom end getBankAccount
+    // custom end getMyBankAccounts
+  }
+  async readOneBankAccount(
+      param :requestTypes.ReadOneBankAccountParams,
+      session: Express.Request['session'],
+  ) {
+    // custom begin readOneBankAccount
+
+    // custom end readOneBankAccount
+
+    const res = await this.bankAccountModel.readOneBankAccount(
+        param,
+    ).catch((e) =>{
+      throw e;
+    });
+
+    // custom begin readOneBankAccount2
+
+    // custom end readOneBankAccount2
+    return res;
   }
 }
 

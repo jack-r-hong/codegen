@@ -7,12 +7,41 @@ const prisma = new PrismaClient();
 
 @Service()
 export class BankAccountModel {
-  async getBankAccount(
-      param: requestTypes.GetBankAccountParams,
+  async getMyBankAccounts(
+      param: requestTypes.GetMyBankAccountsParams,
       customParam: any,
   ) {
-    // custom begin getBankAccount
+    // custom begin getMyBankAccounts
 
-    // custom end getBankAccount
+    // custom end getMyBankAccounts
+  }
+  async readOneBankAccount(
+      param: requestTypes.ReadOneBankAccountParams,
+  ) {
+    const res: any | null = await prisma.bankAccount.findUnique({
+      where: {
+        id: param.pathId,
+      },
+      select: {
+        account: true,
+        code: true,
+        id: true,
+        name: true,
+        status: true,
+        userId: true,
+        // custom begin readOneBankAccount
+
+        // custom end readOneBankAccount
+      },
+    }).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+
+    if (res === null) {
+      throw new errors.NotFindError;
+    }
+    return res;
   }
 }

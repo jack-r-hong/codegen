@@ -6,6 +6,8 @@ import {errors} from '../../errors';
 import {Container} from 'typedi';
 import {WSClientIdModel} from '../../redisClient/models/webSocketModels';
 const wSCIModel = Container.get(WSClientIdModel);
+import {BankAccountModel} from '../bankAccount/bankAccount.model';
+const bankAccountModel = new BankAccountModel();
 
 // custom end import
 
@@ -20,9 +22,20 @@ export class TransactionService {
       session: Express.Request['session'],
   ) {
     // custom begin createTransaction
+    const dbBankData = await bankAccountModel.readOneBankAccount(
+        {pathId: param.bodyBankId},
+    );
+    if (!dbBankData) {
+      /* todo throw error */
+    }
     const res = await this.transactionModel.createTransaction(
         param,
-        {userId: session.userInfo?.id},
+        {
+          userId: session.userInfo?.id,
+          bankName: dbBankData.name,
+          bankAccount: dbBankData.account,
+          bankCode: dbBankData.code,
+        },
     ).catch((e) =>{
       throw e;
     });

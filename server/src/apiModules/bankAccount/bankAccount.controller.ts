@@ -24,15 +24,15 @@ export class BankAccountController implements Controller {
   @Inject('app.use')
     appUse!: AppUse;
 
-  @Get('/bank/my/account')
-  @Validator(validSchemas.getBankAccountValidator)
-  async getBankAccount(
-      req: bankAccountParams.GetBankAccountRequest,
+  @Get('/bank/my/accounts')
+  @Validator(validSchemas.getMyBankAccountsValidator)
+  async getMyBankAccounts(
+      req: bankAccountParams.GetMyBankAccountsRequest,
       res: Response,
       next: NextFunction,
   ) {
-    BankAccountController.service.getBankAccount(
-        bankAccountParams.GetBankAccountRequestConvert(
+    BankAccountController.service.getMyBankAccounts(
+        bankAccountParams.GetMyBankAccountsRequestConvert(
             req.body,
             req.query,
             req.params,
@@ -41,27 +41,31 @@ export class BankAccountController implements Controller {
         req.session,
     )
         .then((result) =>{
-          // custom begin getBankAccount
-          res.json({
-            result: {
-              '2': {
-                'id': 2,
-                'name': 'name',
-                'code': 123456,
-                'account': 1245,
-                'status': 2,
-              },
-              '3': {
-                'id': 3,
-                'name': 'name2',
-                'code': 123456,
-                'account': 1245,
-                'status': 2,
-              },
-            },
-          });
+          // custom begin getMyBankAccounts
 
-          // custom end getBankAccount
+          // custom end getMyBankAccounts
+        }).catch((e) => {
+          next(e);
+        });
+  }
+  @Get('/bank/:id')
+  @Validator(validSchemas.readOneBankAccountValidator)
+  async readOneBankAccount(
+      req: bankAccountParams.ReadOneBankAccountRequest,
+      res: Response,
+      next: NextFunction,
+  ) {
+    BankAccountController.service.readOneBankAccount(
+        bankAccountParams.ReadOneBankAccountRequestConvert(
+            req.body,
+            req.query,
+            req.params,
+            req.cookies,
+        ),
+        req.session,
+    )
+        .then((result) =>{
+          res.json(result);
         }).catch((e) => {
           next(e);
         });
