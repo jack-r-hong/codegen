@@ -169,4 +169,21 @@ export class TransactionModel {
     }
     return res;
   }
+  async updateOneTransactionState(
+      param: requestTypes.UpdateOneTransactionStateParams,
+  ) {
+    const res: Transaction | null = await prisma.transaction.update({
+      where: {
+        id: param.pathId,
+      },
+      data: {
+        state: param.bodyState,
+      },
+    }).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+    return res;
+  }
 }

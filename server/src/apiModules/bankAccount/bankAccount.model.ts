@@ -24,7 +24,6 @@ export class BankAccountModel {
         name: true,
         status: true,
         userId: true,
-
       },
     }).catch((e) => {
       throw e;
@@ -32,6 +31,7 @@ export class BankAccountModel {
       prisma.$disconnect();
     });
     return res;
+
     // custom end getMyBankAccounts
   }
   async readOneBankAccount(

@@ -47,7 +47,7 @@ export const cookieAuthSession = session({
     sameSite: 'none',
     httpOnly: true,
     secure: true,
-    maxAge: 60 * 60 * 1000,
+    maxAge: 60 * 60 * 60 * 1000,
   },
 });
 

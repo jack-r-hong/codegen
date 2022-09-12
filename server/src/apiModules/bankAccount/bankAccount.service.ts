@@ -27,6 +27,7 @@ export class BankAccountService {
       throw e;
     });
     return res;
+
     // custom end getMyBankAccounts
   }
   async readOneBankAccount(

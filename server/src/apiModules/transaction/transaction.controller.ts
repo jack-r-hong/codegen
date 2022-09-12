@@ -186,4 +186,26 @@ export class TransactionController implements Controller {
           next(e);
         });
   }
+  @Put('/transaction/:id')
+  @Validator(validSchemas.updateOneTransactionStateValidator)
+  async updateOneTransactionState(
+      req: transactionParams.UpdateOneTransactionStateRequest,
+      res: Response,
+      next: NextFunction,
+  ) {
+    TransactionController.service.updateOneTransactionState(
+        transactionParams.UpdateOneTransactionStateRequestConvert(
+            req.body,
+            req.query,
+            req.params,
+            req.cookies,
+        ),
+        req.session,
+    )
+        .then((result) =>{
+          res.json(result);
+        }).catch((e) => {
+          next(e);
+        });
+  }
 }

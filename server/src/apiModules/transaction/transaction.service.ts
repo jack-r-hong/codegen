@@ -67,13 +67,10 @@ export class TransactionService {
     ).catch((e) =>{
       throw e;
     });
-    if (param.bodyState === 2) {
-      session.transaction.receiveUserId = session.userInfo!.id;
-    }
     if (param.bodyState) {
-      await wSCIModel.pub(session.transaction.requestUserId,
+      await wSCIModel.pub(session.transaction.id,
           JSON.stringify({
-            process: res.state,
+            state: res.state,
           }),
       );
       session.transaction.process = param.bodyState;
@@ -140,6 +137,47 @@ export class TransactionService {
     // custom begin readOneTransaction2
 
     // custom end readOneTransaction2
+    return res;
+  }
+  async updateOneTransactionState(
+      param :requestTypes.UpdateOneTransactionStateParams,
+      session: Express.Request['session'],
+  ) {
+    // custom begin updateOneTransactionState
+
+    // custom end updateOneTransactionState
+
+    const res = await this.transactionModel.updateOneTransactionState(
+        param,
+    ).catch((e) =>{
+      throw e;
+    });
+
+    // custom begin updateOneTransactionState2
+    if (!session.transaction) {
+      session.transaction = {
+        id: param.pathId,
+        requestUserId: res.userId,
+        receiveUserId: session.userInfo!.id,
+        process: res.state,
+        bos: res.bos,
+      };
+    }
+
+    if (param.bodyState) {
+      await wSCIModel.pub(
+          param.pathId,
+          JSON.stringify({
+            state: res.state,
+          }),
+      );
+      session.transaction.process = param.bodyState;
+    }
+
+    if (param.bodyState === 4) {
+      session.transaction = undefined;
+    }
+    // custom end updateOneTransactionState2
     return res;
   }
 }

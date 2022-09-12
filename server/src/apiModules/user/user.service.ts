@@ -218,17 +218,15 @@ export class UserService {
     ).catch((e) =>{
       throw e;
     });
-
     if (!res) {
       throw new errors.LoginFailError;
     }
-
     session.userInfo = {
       id: session.userInfo!.id,
       userStatus: res.userStatus,
     };
-
     return res;
+
     // custom end getUserMyStatus
   }
   async updateOneyUser(

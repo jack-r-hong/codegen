@@ -322,6 +322,7 @@ export class UserModel {
       prisma.$disconnect();
     });
     return res;
+
     // custom end getUserMyStatus
   }
   async updateOneyUser(

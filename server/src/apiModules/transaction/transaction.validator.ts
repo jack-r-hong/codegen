@@ -145,3 +145,31 @@ export const readOneTransactionValidator: Schema = {
     },
   },
 };
+export const updateOneTransactionStateValidator: Schema = {
+  id: {
+    in: 'params',
+    isString: true,
+    notEmpty: true,
+  },
+  'state': {
+    in: 'body',
+    isInt: true,
+optional: {
+  options: {
+    nullable: true,
+  },
+},
+    matches: {
+      options: /^(0|1|2|3|4)/,
+    },
+  },
+  'JSESSIONID': {
+    in: 'cookies',
+    custom: {
+      options: (value, {req, location, path}) => {
+        sessions.cookieAuthSessionVerify(req['session']);
+        return true;
+      },
+    },
+  },
+};

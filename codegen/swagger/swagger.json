@@ -509,7 +509,9 @@
             "description": "bank account duplicate"
           }          
         }
-      },      
+      }
+    },    
+    "/backstage/user/verify/{id}": {   
       "put" : {
         "tags" : [ "user" ],
         "summary" : "Logs user into the system",
@@ -524,7 +526,10 @@
             },
             "required": true
           }                   
-        ],                     
+        ],        
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/BackstageUserVerifyUpdate"
+        },                     
         "responses" : {
           "200" : {
             "description" : "successful operation",
@@ -579,7 +584,7 @@
           "cookieAuth" : []
         }]
       }     
-    },     
+    },        
     "/user/{id}": {
       "put" : {
         "tags" : [ "user" ],
@@ -1031,7 +1036,46 @@
         "security" : [ {
           "cookieAuth" : [ ]
         } ]
-      }
+      },
+      "put" : {
+        "tags" : [ "transaction" ],
+        "summary" : "Update transaction by id",
+        "operationId" : "updateOneTransactionState",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "The name that needs to be fetched. Use user1 for testing.",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "format": "uuid"
+          }
+          
+        } ],
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/UpdateTransaction"
+        },        
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/Transaction"
+          },
+          "400" : {
+            "$ref" : "#/components/responses/BadRequest"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/Unauthorized"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          },
+          "404" : {
+            "$ref" : "#/components/responses/NotFound"
+          }
+        },
+        "security" : [ {
+          "cookieAuth" : [ ]
+        } ]
+      }      
     },
     "/transaction/exchange_rate" : {     
       "get" : {
@@ -1081,7 +1125,7 @@
         } ]
       }
 
-    },
+    },    
     "/bank/{id}" : {     
       "get" : {
         "tags" : [ "bankAccount" ],
@@ -1773,7 +1817,69 @@
         },
         "description" : "List of user object",
         "required" : true
-      },            
+      },   
+      "BackstageUserVerifyUpdate" : {
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "name" : {
+                  "$ref" : "#/components/schemas/UserVerify/properties/name"
+                },        
+                "email" : {
+                  "$ref" : "#/components/schemas/UserVerify/properties/email"
+                },                                  
+                "birthdate" : {
+                  "$ref" : "#/components/schemas/UserVerify/properties/birthdate"
+                },
+                "country" : {
+                  "$ref" : "#/components/schemas/UserVerify/properties/country"
+                },                
+                "idCardDate" : {
+                  "$ref" : "#/components/schemas/UserVerify/properties/idCardDate"
+                },  
+                "idCardPosiition" : {
+                  "$ref" : "#/components/schemas/UserVerify/properties/idCardPosiition"
+                },  
+                "idCardType" : {
+                  "$ref" : "#/components/schemas/UserVerify/properties/idCardType"
+                },  
+                "idCardPhoto" : {
+                  "$ref" : "#/components/schemas/UserVerify/properties/idCardPhoto"
+                },  
+                "certificate" : {
+                  "$ref" : "#/components/schemas/UserVerify/properties/certificate"
+                },  
+                "selfie" : {
+                  "$ref" : "#/components/schemas/UserVerify/properties/selfie"
+                },  
+                "sign" : {
+                  "$ref" : "#/components/schemas/UserVerify/properties/sign"
+                },  
+                "address" : {
+                  "$ref" : "#/components/schemas/UserVerify/properties/address"
+                },
+                "userVerifyResonDes": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "field": {
+                        "type": "string"
+                      },
+                      "userVerifyResonId": {
+                        "type": "integer"
+                      }
+                    } 
+                  }
+                }                                                           
+              }
+            }
+          }
+        },
+        "required" : true
+      },                    
       "User" : {
         "content" : {
           "application/json" : {

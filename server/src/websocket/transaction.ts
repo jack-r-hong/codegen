@@ -1,12 +1,18 @@
 import WebSocket from 'ws';
 import {WSToken, WSOnMessage, MyWebSocketServer, WSEvent} from './base';
 import {WSClientIdModel} from '../redisClient/models/webSocketModels';
+import {UserModel} from '../apiModules/user/user.model';
+import {TransactionModel} from '../apiModules/transaction/transaction.model';
 
 import {Service, Container} from 'typedi';
 import {IncomingMessage} from 'http';
+import qs from 'qs';
 
 const event = new WSEvent('transaction');
 const wSCIModel = Container.get(WSClientIdModel);
+const userModel = Container.get(UserModel);
+const transactionModel = Container.get(TransactionModel);
+
 
 @Service({id: WSToken, multiple: true})
 export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
@@ -18,51 +24,60 @@ export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
   }
 
   async onStartMessage(ws: WebSocket, req: IncomingMessage) {
-    const cookie = req.headers.cookie;
+    const url = req.url;
+    console.log(url);
 
-    if (!cookie) {
+    if (!url) {
       ws.send(event.msg({error: true, message: 'notAuth'}));
       return;
     }
 
-    const cookieParse = parseCookies(cookie);
-
-    const session = await wSCIModel.get(
-        `sess:${getSessionId( cookieParse['JSESSIONID']!)}`);
-
-    const sessionJson = JSON.parse(session!);
-    if (!session || !sessionJson || !sessionJson['userInfo']) {
+    const queryString = url.split('?')[1];
+    if (!queryString) {
       ws.send(event.msg({error: true, message: 'notAuth'}));
       return;
     }
 
-    const userId = JSON.parse(session)['userInfo']['id'];
-    let isProxy = false;
+    const query = qs.parse(queryString);
+    const {login_session: userId, transaction_id: transactionId} = query;
+    console.log(userId, transactionId);
 
-    if (sessionJson['transaction']) {
-      if (sessionJson['transaction'].receiveUserId === userId) {
-        isProxy = true;
-      }
+    // 判斷 is agent
+
+    let isAgent = false;
+    const resUser = await userModel.getUserMyStatus({}, {userId})
+        .catch((e) => false);
+    const resTran = await transactionModel
+        .readOneTransaction({pathId: transactionId as string})
+        .catch((e) => false);
+
+    if (!resTran || !resUser) {
+      ws.send(event.msg({error: true, message: 'notAuth'}));
+      return;
+    }
+    if (resUser && (resUser as {userStatus: number;}).userStatus > 9) {
+      isAgent = true;
     }
 
-    const subscriber = await wSCIModel.sub(userId, (message: any)=>{
-      event.eventName = 'process';
-      const d = JSON.parse(message);
-      d.isProxy = isProxy;
-      ws.send(event.msg(d));
-      if (d.process === 4) {
-        wSCIModel.subscriberQuit(subscriber).then(()=> {});
-        ws.close();
-      }
-    });
-
-    console.log(sessionJson);
+    const subscriber = await wSCIModel.sub(transactionId as string,
+        (message: any)=>{
+          event.eventName = 'process';
+          const d = JSON.parse(message);
+          d.isAgent = isAgent;
+          ws.send(event.msg(d));
+          if (d.state === 4) {
+            wSCIModel.subscriberQuit(subscriber).then(()=> {});
+            setTimeout(() => {
+              ws.close();
+            }, 5000);
+          }
+        });
 
     event.eventName = 'ready';
     ws.send(event.msg({
-      isProxy,
-      // process: sessionJson['transaction'].process,
-      // bos: sessionJson['transaction'].bos,
+      isAgent,
+      state: resTran.state,
+      bos: resTran.bos,
       ready: true,
     }));
 
@@ -71,26 +86,3 @@ export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
     });
   };
 }
-
-function parseCookies(cookie: string) : {[key: string]: string} {
-  const list: any = {};
-  const cookieHeader = cookie;
-  if (!cookieHeader) return list;
-
-  cookieHeader.split(`;`).forEach(function(cookie: string) {
-    let [name, ...rest] = cookie.split(`=`);
-    name = name?.trim();
-    if (!name) return;
-    const value = rest.join(`=`).trim();
-    if (!value) return;
-    list[name] = decodeURIComponent(value);
-  });
-
-  return list;
-}
-
-
-function getSessionId(val: string) {
-  return val.substring(2, val.indexOf('.'));
-}
-

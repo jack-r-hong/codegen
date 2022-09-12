@@ -285,6 +285,7 @@ export class UserController implements Controller {
         .then((result) =>{
           // custom begin getUserMyStatus
           res.json({result});
+
           // custom end getUserMyStatus
         }).catch((e) => {
           next(e);

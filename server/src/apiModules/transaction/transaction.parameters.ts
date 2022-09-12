@@ -258,5 +258,45 @@ export const ReadOneTransactionRequestConvert = (
             pathId: path.id,
   };
 };
+type UpdateOneTransactionStateReqBody = {
+  state: string|undefined,
+}
+
+type UpdateOneTransactionStateReqQuery = {
+}
+
+type UpdateOneTransactionStateReqParams = {
+      id: string
+,
+}
+
+type UpdateOneTransactionStateReqCookie = {
+}
+
+export interface UpdateOneTransactionStateRequest extends TypedRequest<
+  UpdateOneTransactionStateReqBody,
+  UpdateOneTransactionStateReqQuery,
+  UpdateOneTransactionStateReqParams,
+  UpdateOneTransactionStateReqCookie
+>{
+}
+
+export type UpdateOneTransactionStateParams = {
+      pathId: string
+bodyState: number|undefined,
+}
+
+
+export const UpdateOneTransactionStateRequestConvert = (
+    body: UpdateOneTransactionStateReqBody,
+    query: UpdateOneTransactionStateReqQuery,
+    path: UpdateOneTransactionStateReqParams,
+    cookie: UpdateOneTransactionStateReqCookie,
+): UpdateOneTransactionStateParams => {
+  return {
+      pathId: path.id,
+    bodyState: body.state? parseInt(body.state):undefined,
+  };
+};
 
 
