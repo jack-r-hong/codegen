@@ -163,7 +163,6 @@ export class TransactionService {
         bos: res.bos,
       };
     }
-
     if (param.bodyState) {
       await wSCIModel.pub(
           param.pathId,
@@ -173,10 +172,10 @@ export class TransactionService {
       );
       session.transaction.process = param.bodyState;
     }
-
     if (param.bodyState === 4) {
       session.transaction = undefined;
     }
+
     // custom end updateOneTransactionState2
     return res;
   }

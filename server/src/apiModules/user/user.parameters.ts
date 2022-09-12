@@ -14,6 +14,93 @@ interface TypedRequest<
 }
 
 
+type UpdateBackstageUserReqBody = {
+  address: string,
+birthdate: string,
+certificate: string,
+country: string,
+email: string,
+idCardDate: string,
+idCardPhoto: string,
+idCardPosiition: string,
+idCardType: string,
+name: string,
+selfie: string,
+sign: string,
+        userVerifyResonDes: {
+                field: string,
+                userVerifyResonId: string,
+        }[],
+}
+
+type UpdateBackstageUserReqQuery = {
+}
+
+type UpdateBackstageUserReqParams = {
+      id: string
+,
+}
+
+type UpdateBackstageUserReqCookie = {
+}
+
+export interface UpdateBackstageUserRequest extends TypedRequest<
+  UpdateBackstageUserReqBody,
+  UpdateBackstageUserReqQuery,
+  UpdateBackstageUserReqParams,
+  UpdateBackstageUserReqCookie
+>{
+}
+
+export type UpdateBackstageUserParams = {
+      pathId: string
+bodyAddress: number,
+bodyBirthdate: number,
+bodyCertificate: number,
+bodyCountry: number,
+bodyEmail: number,
+bodyIdCardDate: number,
+bodyIdCardPhoto: number,
+bodyIdCardPosiition: number,
+bodyIdCardType: number,
+bodyName: number,
+bodySelfie: number,
+bodySign: number,
+        bodyUserVerifyResonDes: {
+            bodyField: string,
+            bodyUserVerifyResonId: number,
+        }[],
+}
+
+
+export const UpdateBackstageUserRequestConvert = (
+    body: UpdateBackstageUserReqBody,
+    query: UpdateBackstageUserReqQuery,
+    path: UpdateBackstageUserReqParams,
+    cookie: UpdateBackstageUserReqCookie,
+): UpdateBackstageUserParams => {
+  return {
+      pathId: path.id,
+    bodyAddress: parseInt(body.address),
+    bodyBirthdate: parseInt(body.birthdate),
+    bodyCertificate: parseInt(body.certificate),
+    bodyCountry: parseInt(body.country),
+    bodyEmail: parseInt(body.email),
+    bodyIdCardDate: parseInt(body.idCardDate),
+    bodyIdCardPhoto: parseInt(body.idCardPhoto),
+    bodyIdCardPosiition: parseInt(body.idCardPosiition),
+    bodyIdCardType: parseInt(body.idCardType),
+    bodyName: parseInt(body.name),
+    bodySelfie: parseInt(body.selfie),
+    bodySign: parseInt(body.sign),
+    bodyUserVerifyResonDes: body.userVerifyResonDes.map((body :any) => {
+      return {
+        bodyField: body.field,
+        bodyUserVerifyResonId: parseInt(body.userVerifyResonId),
+      };
+    }),
+  };
+};
 type ReadOneBackstageUserReqBody = {
   }
 
@@ -47,43 +134,6 @@ export const ReadOneBackstageUserRequestConvert = (
     path: ReadOneBackstageUserReqParams,
     cookie: ReadOneBackstageUserReqCookie,
 ): ReadOneBackstageUserParams => {
-  return {
-            pathId: path.id,
-  };
-};
-type UpdateOneBackstageUserReqBody = {
-  }
-
-type UpdateOneBackstageUserReqQuery = {
-}
-
-type UpdateOneBackstageUserReqParams = {
-      id: string
-,
-}
-
-type UpdateOneBackstageUserReqCookie = {
-}
-
-export interface UpdateOneBackstageUserRequest extends TypedRequest<
-  UpdateOneBackstageUserReqBody,
-  UpdateOneBackstageUserReqQuery,
-  UpdateOneBackstageUserReqParams,
-  UpdateOneBackstageUserReqCookie
->{
-}
-
-export type UpdateOneBackstageUserParams = {
-      pathId: string
-}
-
-
-export const UpdateOneBackstageUserRequestConvert = (
-    body: UpdateOneBackstageUserReqBody,
-    query: UpdateOneBackstageUserReqQuery,
-    path: UpdateOneBackstageUserReqParams,
-    cookie: UpdateOneBackstageUserReqCookie,
-): UpdateOneBackstageUserParams => {
   return {
             pathId: path.id,
   };

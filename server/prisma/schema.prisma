@@ -167,7 +167,7 @@ model UserVerifyResonDes {
   userVerifyId Int @map("user_verify_id")  
   
     // custom begin UserVerifyResonDes
-
+  @@unique([userVerifyId, field], name: "uniqueUserField")
     // custom end UserVerifyResonDes
 }
 

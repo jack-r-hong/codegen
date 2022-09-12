@@ -7,6 +7,62 @@ const prisma = new PrismaClient();
 
 @Service()
 export class UserModel {
+  async updateBackstageUser(
+      param: requestTypes.UpdateBackstageUserParams,
+      customParam: any,
+  ) {
+    // custom begin updateBackstageUser
+
+    const userVerifyRes = await prisma.userVerify.update({
+      where: {
+        userId: param.pathId,
+      },
+      data: {
+        address: param.bodyAddress,
+        birthdate: param.bodyBirthdate,
+        certificate: param.bodyCertificate,
+        country: param.bodyCountry,
+        email: param.bodyEmail,
+        idCardDate: param.bodyIdCardDate,
+        idCardPhoto: param.bodyIdCardPhoto,
+        idCardPosiition: param.bodyIdCardPosiition,
+        idCardType: param.bodyIdCardType,
+        name: param.bodyName,
+        selfie: param.bodySelfie,
+        sign: param.bodySign,
+      },
+    });
+
+    await prisma.$transaction(
+        param.bodyUserVerifyResonDes.map((e) =>
+          prisma.userVerifyResonDes.upsert({
+            where: {
+              uniqueUserField: {
+                userVerifyId: userVerifyRes.id,
+                field: e.bodyField,
+              },
+            },
+            update: {
+              field: e.bodyField,
+              UserVerifyResonId: e.bodyUserVerifyResonId,
+            },
+            create: {
+              UserVerifyResonId: e.bodyUserVerifyResonId,
+              field: e.bodyField,
+              userVerifyId: userVerifyRes.id,
+            },
+          }),
+        ),
+    ).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+
+    return userVerifyRes;
+
+    // custom end updateBackstageUser
+  }
   async readOneBackstageUser(
       param: requestTypes.ReadOneBackstageUserParams,
   ) {
@@ -67,22 +123,6 @@ export class UserModel {
     if (res === null) {
       throw new errors.NotFindError;
     }
-    return res;
-  }
-  async updateOneBackstageUser(
-      param: requestTypes.UpdateOneBackstageUserParams,
-  ) {
-    const res: User | null = await prisma.user.update({
-      where: {
-        id: param.pathId,
-      },
-      data: {
-      },
-    }).catch((e) => {
-      throw e;
-    }).finally(() => {
-      prisma.$disconnect();
-    });
     return res;
   }
   async readManyUserBackstage(

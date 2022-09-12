@@ -515,7 +515,7 @@
       "put" : {
         "tags" : [ "user" ],
         "summary" : "Logs user into the system",
-        "operationId" : "updateOneBackstageUser", 
+        "operationId" : "updateBackstageUser", 
         "parameters" : [ 
           {
             "name" : "id",
@@ -563,6 +563,25 @@
                       }
                     }
                   }
+                },
+                "example": {
+                  "result": {
+                        "address": 1,
+                        "birthdate": 1,
+                        "certificate": 1,
+                        "country": 1,
+                        "email": 1,
+                        "id": 9,
+                        "idCardDate": 1,
+                        "idCardPhoto": 1,
+                        "idCardPosiition": 1,
+                        "idCardType": 1,
+                        "name": 2,
+                        "selfie": 1,
+                        "sign": 1,
+                        "updatedAt": "2022-09-12T11:23:15.496Z",
+                        "userId": "040c02b9-dd39-4662-97ec-477f8965c059"
+                    }
                 }
               }
             }
@@ -1543,6 +1562,77 @@
           }                        
         }
       },
+      "BankAccountVerify" : {
+        "type" : "object",
+        "description" : "database",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "code" : {
+            "type" : "integer"
+          },         
+          "account" : {
+            "type" : "integer"
+          },           
+          "bankId" : {
+            "$ref" : "#/components/schemas/BankAccount/properties/id"
+          }
+        }
+      },    
+      "BankAccountVerifyResonDes" : {
+        "type" : "object",
+        "description" : "database",
+        "properties" : {
+          "id" : {
+            "type" : "integer"
+          },  
+          "userVerifyId" : {
+            "$ref" : "#/components/schemas/UserVerify/properties/id"
+          },    
+          "field":{
+            "type": "string",
+            "enum": [
+              "name", 
+              "phonePrefix", 
+              "phone", 
+              "email", 
+              "birthdate",
+              "country", 
+              "idCardDate", 
+              "idCardPosiition", 
+              "idCardType", 
+              "idCardPhoto", 
+              "certificate",
+              "selfie",
+              "sign",
+              "address"
+            ]
+          },     
+          "UserVerifyResonId" : {
+            "$ref" : "#/components/schemas/UserVerifyReson/properties/id"
+          },
+          "userVerifyReson" : {
+            "$ref" : "#/components/schemas/UserVerifyReson"
+          }        
+        }
+      },          
+      "BankAccountVerifyReson" : {
+        "type" : "object",
+        "description" : "database",
+        "properties" : {
+          "id" : {
+            "type" : "integer"
+          },
+          "des" : {
+            "type" : "string"
+          }          
+        }
+      },        
       "Transaction" : {
         "type" : "object",
         "description" : "database",
@@ -1825,40 +1915,64 @@
               "type" : "object",
               "properties" : {
                 "name" : {
-                  "$ref" : "#/components/schemas/UserVerify/properties/name"
+                  "type" : "integer",
+                  "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
+                  "enum": [1,2,3]
                 },        
                 "email" : {
-                  "$ref" : "#/components/schemas/UserVerify/properties/email"
+                  "type" : "integer",
+                  "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
+                  "enum": [1,2,3]
                 },                                  
                 "birthdate" : {
-                  "$ref" : "#/components/schemas/UserVerify/properties/birthdate"
+                  "type" : "integer",
+                  "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
+                  "enum": [1,2,3]
                 },
                 "country" : {
-                  "$ref" : "#/components/schemas/UserVerify/properties/country"
+                  "type" : "integer",
+                  "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
+                  "enum": [1,2,3]
                 },                
                 "idCardDate" : {
-                  "$ref" : "#/components/schemas/UserVerify/properties/idCardDate"
+                  "type" : "integer",
+                  "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
+                  "enum": [1,2,3]
                 },  
                 "idCardPosiition" : {
-                  "$ref" : "#/components/schemas/UserVerify/properties/idCardPosiition"
+                  "type" : "integer",
+                  "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
+                  "enum": [1,2,3]
                 },  
                 "idCardType" : {
-                  "$ref" : "#/components/schemas/UserVerify/properties/idCardType"
+                  "type" : "integer",
+                  "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
+                  "enum": [1,2,3]
                 },  
                 "idCardPhoto" : {
-                  "$ref" : "#/components/schemas/UserVerify/properties/idCardPhoto"
+                  "type" : "integer",
+                  "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
+                  "enum": [1,2,3]
                 },  
                 "certificate" : {
-                  "$ref" : "#/components/schemas/UserVerify/properties/certificate"
+                  "type" : "integer",
+                  "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
+                  "enum": [1,2,3]
                 },  
                 "selfie" : {
-                  "$ref" : "#/components/schemas/UserVerify/properties/selfie"
+                  "type" : "integer",
+                  "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
+                  "enum": [1,2,3]
                 },  
                 "sign" : {
-                  "$ref" : "#/components/schemas/UserVerify/properties/sign"
+                  "type" : "integer",
+                  "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
+                  "enum": [1,2,3]
                 },  
                 "address" : {
-                  "$ref" : "#/components/schemas/UserVerify/properties/address"
+                  "type" : "integer",
+                  "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
+                  "enum": [1,2,3]
                 },
                 "userVerifyResonDes": {
                   "type": "array",

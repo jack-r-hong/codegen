@@ -7,18 +7,105 @@ import * as sessions from '../../sessions';
 
 
 
-export const readOneBackstageUserValidator: Schema = {
+export const updateBackstageUserValidator: Schema = {
   id: {
     in: 'params',
     isString: true,
     notEmpty: true,
   },
-};
-export const updateOneBackstageUserValidator: Schema = {
-  id: {
-    in: 'params',
+  'address': {
+    in: 'body',
+    isInt: true,
+    matches: {
+      options: /^(1|2|3)/,
+    },
+  },
+  'birthdate': {
+    in: 'body',
+    isInt: true,
+    matches: {
+      options: /^(1|2|3)/,
+    },
+  },
+  'certificate': {
+    in: 'body',
+    isInt: true,
+    matches: {
+      options: /^(1|2|3)/,
+    },
+  },
+  'country': {
+    in: 'body',
+    isInt: true,
+    matches: {
+      options: /^(1|2|3)/,
+    },
+  },
+  'email': {
+    in: 'body',
+    isInt: true,
+    matches: {
+      options: /^(1|2|3)/,
+    },
+  },
+  'idCardDate': {
+    in: 'body',
+    isInt: true,
+    matches: {
+      options: /^(1|2|3)/,
+    },
+  },
+  'idCardPhoto': {
+    in: 'body',
+    isInt: true,
+    matches: {
+      options: /^(1|2|3)/,
+    },
+  },
+  'idCardPosiition': {
+    in: 'body',
+    isInt: true,
+    matches: {
+      options: /^(1|2|3)/,
+    },
+  },
+  'idCardType': {
+    in: 'body',
+    isInt: true,
+    matches: {
+      options: /^(1|2|3)/,
+    },
+  },
+  'name': {
+    in: 'body',
+    isInt: true,
+    matches: {
+      options: /^(1|2|3)/,
+    },
+  },
+  'selfie': {
+    in: 'body',
+    isInt: true,
+    matches: {
+      options: /^(1|2|3)/,
+    },
+  },
+  'sign': {
+    in: 'body',
+    isInt: true,
+    matches: {
+      options: /^(1|2|3)/,
+    },
+  },
+  'userVerifyResonDes': {
+    in: 'body',
+    isArray: true,
+  },
+  'userVerifyResonDes.*.field': {
     isString: true,
-    notEmpty: true,
+  },
+  'userVerifyResonDes.*.userVerifyResonId': {
+    isInt: true,
   },
   'JSESSIONID': {
     in: 'cookies',
@@ -28,6 +115,13 @@ export const updateOneBackstageUserValidator: Schema = {
         return true;
       },
     },
+  },
+};
+export const readOneBackstageUserValidator: Schema = {
+  id: {
+    in: 'params',
+    isString: true,
+    notEmpty: true,
   },
 };
 export const readManyUserBackstageValidator: Schema = {

@@ -14,6 +14,22 @@ export class UserService {
   @Inject()
   private userModel!: UserModel;
 
+  async updateBackstageUser(
+      param :requestTypes.UpdateBackstageUserParams,
+      session: Express.Request['session'],
+  ) {
+    // custom begin updateBackstageUser
+    const res = await this.userModel.updateBackstageUser(
+        param,
+        {},
+    ).catch((e) =>{
+      throw e;
+    });
+
+    return res;
+
+    // custom end updateBackstageUser
+  }
   async readOneBackstageUser(
       param :requestTypes.ReadOneBackstageUserParams,
       session: Express.Request['session'],
@@ -31,25 +47,6 @@ export class UserService {
     // custom begin readOneBackstageUser2
 
     // custom end readOneBackstageUser2
-    return res;
-  }
-  async updateOneBackstageUser(
-      param :requestTypes.UpdateOneBackstageUserParams,
-      session: Express.Request['session'],
-  ) {
-    // custom begin updateOneBackstageUser
-
-    // custom end updateOneBackstageUser
-
-    const res = await this.userModel.updateOneBackstageUser(
-        param,
-    ).catch((e) =>{
-      throw e;
-    });
-
-    // custom begin updateOneBackstageUser2
-
-    // custom end updateOneBackstageUser2
     return res;
   }
   async readManyUserBackstage(

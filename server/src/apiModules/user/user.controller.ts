@@ -1,4 +1,4 @@
-import {Response, NextFunction} from 'express';
+import {Response, NextFunction, response} from 'express';
 import {Inject, Service, Container} from 'typedi';
 import {
   Controller,
@@ -24,6 +24,30 @@ export class UserController implements Controller {
   @Inject('app.use')
     appUse!: AppUse;
 
+  @Put('/backstage/user/verify/:id')
+  @Validator(validSchemas.updateBackstageUserValidator)
+  async updateBackstageUser(
+      req: userParams.UpdateBackstageUserRequest,
+      res: Response,
+      next: NextFunction,
+  ) {
+    UserController.service.updateBackstageUser(
+        userParams.UpdateBackstageUserRequestConvert(
+            req.body,
+            req.query,
+            req.params,
+            req.cookies,
+        ),
+        req.session,
+    )
+        .then((result) =>{
+          // custom begin updateBackstageUser
+          res.json({result});
+          // custom end updateBackstageUser
+        }).catch((e) => {
+          next(e);
+        });
+  }
   @Get('/backstage/user/:id')
   @Validator(validSchemas.readOneBackstageUserValidator)
   async readOneBackstageUser(
@@ -33,28 +57,6 @@ export class UserController implements Controller {
   ) {
     UserController.service.readOneBackstageUser(
         userParams.ReadOneBackstageUserRequestConvert(
-            req.body,
-            req.query,
-            req.params,
-            req.cookies,
-        ),
-        req.session,
-    )
-        .then((result) =>{
-          res.json(result);
-        }).catch((e) => {
-          next(e);
-        });
-  }
-  @Put('/backstage/user/:id')
-  @Validator(validSchemas.updateOneBackstageUserValidator)
-  async updateOneBackstageUser(
-      req: userParams.UpdateOneBackstageUserRequest,
-      res: Response,
-      next: NextFunction,
-  ) {
-    UserController.service.updateOneBackstageUser(
-        userParams.UpdateOneBackstageUserRequestConvert(
             req.body,
             req.query,
             req.params,

@@ -45,7 +45,7 @@ import * as sessions from '../../sessions';
     isEmail: true,
         {{/if}}
         {{#if (equal p.schema.format "password") }}
-    isStrongPassword: true,
+    {{!-- isStrongPassword: true, --}}
         {{/if}} 
         {{#if (equal p.schema.format "phone") }}
     isMobilePhone: true,
