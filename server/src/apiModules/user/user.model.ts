@@ -195,13 +195,28 @@ export class UserModel {
       customParam: any,
   ) {
     // custom begin postRealVerify
-    const bankDatas = param.bodyBankAccounts.map((e, i) => {
-      return {
-        account: e.bodyAccount,
-        code: e.bodyCode,
-        name: e.bodyName,
-        order: i + 1,
-      };
+    await prisma.$transaction(
+        param.bodyBankAccounts.map((e, i) => {
+          return prisma.bankAccount.create({
+            data: {
+              userId: customParam.userId,
+              account: e.bodyAccount,
+              code: e.bodyAccount,
+              name: e.bodyName,
+              order: i + 1,
+              bankAccountVerify: {
+                create: {
+                  account: 1,
+                  code: 1,
+                  name: 1,
+                  photo: 1,
+                },
+              },
+            },
+          });
+        }),
+    ).catch((e) => {
+      throw e;
     });
     const res: any | null = await prisma.user.update({
       data: {
@@ -217,11 +232,6 @@ export class UserModel {
         area: param.bodyArea,
         address: param.bodyArea,
         userStatus: 3,
-        bankAccount: {
-          createMany: {
-            data: bankDatas,
-          },
-        },
       },
       where: {
         id: customParam.userId,

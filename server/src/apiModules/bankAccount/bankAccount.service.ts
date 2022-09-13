@@ -24,9 +24,81 @@ export class BankAccountService {
     ).catch((e) =>{
       throw e;
     });
-    return res;
+    return res.map((e: any) => {
+      const {
+        account,
+        code,
+        id,
+        name,
+        status,
+        bankAccountVerify,
+      } = e;
+      const verify = {
+        id: bankAccountVerify.id,
+        account: bankAccountVerify.account,
+        code: bankAccountVerify.code,
+        name: bankAccountVerify.name,
+        photo: bankAccountVerify.photo,
+      };
+      const verifyDes = {
+        account: '',
+        code: '',
+        name: '',
+        photo: '',
+      };
+      bankAccountVerify.bankAccountVerifyResonDes.forEach((element: {
+        field: 'name' | 'code' | 'account' | 'photo',
+        bankAccountVerifyReson: {
+          des: string
+        }
+      }) => {
+        verifyDes[element.field] = element.bankAccountVerifyReson.des;
+      });
+      return {
+        account,
+        code,
+        id,
+        name,
+        status,
+        verify,
+        verifyDes,
+      };
+    });
 
     // custom end getBackstageBankAccounts
+  }
+  async putBackstageBankAccounts(
+      param :requestTypes.PutBackstageBankAccountsParams,
+      session: Express.Request['session'],
+  ) {
+    // custom begin putBackstageBankAccounts
+    const res = await this.bankAccountModel.putBackstageBankAccounts(
+        param,
+        {
+        },
+    ).catch((e) =>{
+      throw e;
+    });
+    return res;
+
+    // custom end putBackstageBankAccounts
+  }
+  async createBankAccounts(
+      param :requestTypes.CreateBankAccountsParams,
+      session: Express.Request['session'],
+  ) {
+    // custom begin createBankAccounts
+    const res = await this.bankAccountModel.createBankAccounts(
+        param,
+        {
+          userId: session.userInfo?.id,
+        },
+    ).catch((e) =>{
+      throw e;
+    });
+    return res;
+
+    // custom end createBankAccounts
   }
   async getMyBankAccounts(
       param :requestTypes.GetMyBankAccountsParams,

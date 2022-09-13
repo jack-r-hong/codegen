@@ -24,7 +24,7 @@ export class BankAccountController implements Controller {
   @Inject('app.use')
     appUse!: AppUse;
 
-  @Get('/backstage/banks/:userId')
+  @Get('/backstage/banks/verify/:userId')
   @Validator(validSchemas.getBackstageBankAccountsValidator)
   async getBackstageBankAccounts(
       req: bankAccountParams.GetBackstageBankAccountsRequest,
@@ -45,6 +45,56 @@ export class BankAccountController implements Controller {
           res.json({result});
 
           // custom end getBackstageBankAccounts
+        }).catch((e) => {
+          next(e);
+        });
+  }
+  @Put('/backstage/banks/verify/:userId')
+  @Validator(validSchemas.putBackstageBankAccountsValidator)
+  async putBackstageBankAccounts(
+      req: bankAccountParams.PutBackstageBankAccountsRequest,
+      res: Response,
+      next: NextFunction,
+  ) {
+    BankAccountController.service.putBackstageBankAccounts(
+        bankAccountParams.PutBackstageBankAccountsRequestConvert(
+            req.body,
+            req.query,
+            req.params,
+            req.cookies,
+        ),
+        req.session,
+    )
+        .then((result) =>{
+          // custom begin putBackstageBankAccounts
+          res.json({result});
+
+          // custom end putBackstageBankAccounts
+        }).catch((e) => {
+          next(e);
+        });
+  }
+  @Post('/bank')
+  @Validator(validSchemas.createBankAccountsValidator)
+  async createBankAccounts(
+      req: bankAccountParams.CreateBankAccountsRequest,
+      res: Response,
+      next: NextFunction,
+  ) {
+    BankAccountController.service.createBankAccounts(
+        bankAccountParams.CreateBankAccountsRequestConvert(
+            req.body,
+            req.query,
+            req.params,
+            req.cookies,
+        ),
+        req.session,
+    )
+        .then((result) =>{
+          // custom begin createBankAccounts
+          res.json({result});
+
+          // custom end createBankAccounts
         }).catch((e) => {
           next(e);
         });

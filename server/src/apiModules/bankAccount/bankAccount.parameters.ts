@@ -51,6 +51,131 @@ export const GetBackstageBankAccountsRequestConvert = (
             pathUserId: path.userId,
   };
 };
+type PutBackstageBankAccountsReqBody = {
+          dataList: {
+                account: string,
+                accountResonId: string,
+                code: string,
+                codeResonId: string,
+                name: string,
+                nameResonId: string,
+                photo: string,
+                photoResonId: string,
+                verifyId: string,
+        }[],
+}
+
+type PutBackstageBankAccountsReqQuery = {
+}
+
+type PutBackstageBankAccountsReqParams = {
+      userId: string
+,
+}
+
+type PutBackstageBankAccountsReqCookie = {
+}
+
+export interface PutBackstageBankAccountsRequest extends TypedRequest<
+  PutBackstageBankAccountsReqBody,
+  PutBackstageBankAccountsReqQuery,
+  PutBackstageBankAccountsReqParams,
+  PutBackstageBankAccountsReqCookie
+>{
+}
+
+export type PutBackstageBankAccountsParams = {
+      pathUserId: string
+        bodyDataList: {
+            bodyAccount: number,
+            bodyAccountResonId: number,
+            bodyCode: number,
+            bodyCodeResonId: number,
+            bodyName: number,
+            bodyNameResonId: number,
+            bodyPhoto: number,
+            bodyPhotoResonId: number,
+            bodyVerifyId: number,
+        }[],
+}
+
+
+export const PutBackstageBankAccountsRequestConvert = (
+    body: PutBackstageBankAccountsReqBody,
+    query: PutBackstageBankAccountsReqQuery,
+    path: PutBackstageBankAccountsReqParams,
+    cookie: PutBackstageBankAccountsReqCookie,
+): PutBackstageBankAccountsParams => {
+  return {
+      pathUserId: path.userId,
+    bodyDataList: body.dataList.map((body :any) => {
+      return {
+        bodyAccount: parseInt(body.account),
+        bodyAccountResonId: parseInt(body.accountResonId),
+        bodyCode: parseInt(body.code),
+        bodyCodeResonId: parseInt(body.codeResonId),
+        bodyName: parseInt(body.name),
+        bodyNameResonId: parseInt(body.nameResonId),
+        bodyPhoto: parseInt(body.photo),
+        bodyPhotoResonId: parseInt(body.photoResonId),
+        bodyVerifyId: parseInt(body.verifyId),
+      };
+    }),
+  };
+};
+type CreateBankAccountsReqBody = {
+          data: {
+                account: string,
+                code: string,
+                name: string,
+                order: string,
+        }[],
+}
+
+type CreateBankAccountsReqQuery = {
+}
+
+type CreateBankAccountsReqParams = {
+}
+
+type CreateBankAccountsReqCookie = {
+}
+
+export interface CreateBankAccountsRequest extends TypedRequest<
+  CreateBankAccountsReqBody,
+  CreateBankAccountsReqQuery,
+  CreateBankAccountsReqParams,
+  CreateBankAccountsReqCookie
+>{
+}
+
+export type CreateBankAccountsParams = {
+        bodyData: {
+            bodyAccount: number,
+            bodyCode: number,
+            bodyName: string,
+            bodyOrder: number,
+        }[],
+}
+
+
+export const CreateBankAccountsRequestConvert = (
+    body: CreateBankAccountsReqBody,
+    query: CreateBankAccountsReqQuery,
+    path: CreateBankAccountsReqParams,
+    cookie: CreateBankAccountsReqCookie,
+): CreateBankAccountsParams => {
+  return {
+    bodyData: body.data.map((body :any) => {
+      return {
+        bodyAccount: parseInt(body.account),
+        bodyCode: parseInt(body.code),
+        bodyName: body.name,
+        bodyOrder: parseInt(body.order),
+      };
+    }),
+  };
+};
 type GetMyBankAccountsReqBody = {
   }
 

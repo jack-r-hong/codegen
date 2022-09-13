@@ -31,6 +31,7 @@ model BankAccountVerify {
   code  Int  @map("code")                 
   id  Int @id @default(autoincrement()) @map("id")                 
   name  Int  @map("name")                 
+  photo  Int  @map("photo")                 
   bankAccount BankAccount? @relation(fields: [bankId], references: [id])
   bankId Int @map("bank_id")  @unique
   bankAccountVerifyResonDes BankAccountVerifyResonDes[]
@@ -57,7 +58,7 @@ model BankAccountVerifyResonDes {
   bankAccountVerifyResonId Int @map("bank_account_verify_reson_id")  
   
     // custom begin BankAccountVerifyResonDes
-  @@unique([bankAccountVerifyResonId, field], name: "uniqueField")
+  @@unique([bankAccountVerifyId, field], name: "uniqueBankAccountField")
 
     // custom end BankAccountVerifyResonDes
 }

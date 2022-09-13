@@ -345,10 +345,7 @@
           },
           "403" : {
             "$ref" : "#/components/responses/Forbidden"
-          },          
-          "409" : {
-            "description": "bank account duplicate"
-          }          
+          }        
         },
         "security" : [ {
           "cookieAuth" : [ ]
@@ -416,6 +413,112 @@
         } ]
       }      
     },      
+    "/real_verify/photo": {
+      "get" : {
+        "tags" : [ "userVerifyPhoto" ],
+        "summary" : "Logs user into the system",
+        "operationId" : "getUserVerifyPhoto",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "result": {
+                      "type" : "object",
+                      "properties" : {
+                        "id" : {
+                          "type" : "integer"
+                        }                        
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/BadRequest"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/Unauthorized"
+          }
+        }
+      },      
+      "post" : {
+        "tags" : [ "userVerifyPhoto" ],
+        "summary" : "Logs user into the system",
+        "operationId" : "uploadManyVerifyPhoto",
+        "parameters" : [ {
+          "name" : "types",
+          "in" : "query",
+          "required" : true,
+          "schema" : {
+            "type" : "array",
+            "items":{
+              "type": "integer",
+              "enum": [1,2,3,4,5,6,7,8,9]
+            }
+          }
+        } ],        
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/UserVerifyUploadPhoto"
+        },
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "headers" : {
+              "X-Rate-Limit" : {
+                "description" : "calls per hour allowed by the user",
+                "schema" : {
+                  "type" : "integer",
+                  "format" : "int32"
+                }
+              },
+              "X-Expires-After" : {
+                "description" : "date in UTC when token expires",
+                "schema" : {
+                  "type" : "string",
+                  "format" : "date-time"
+                }
+              },
+              "Set-Cookie" : {
+                "description" : "date in UTC when token expires",
+                "schema" : {
+                  "type" : "string",
+                  "format" : "jwt"
+                }
+              }
+            },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "result": {
+                      "type" : "object",
+                      "properties" : {
+                        "id" : {
+                          "type" : "integer"
+                        }                        
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/BadRequest"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },   
     "/backstage/users": {
       "get" : {
         "tags" : [ "user" ],
@@ -725,112 +828,6 @@
         }]
       }     
     },     
-    "/real_verify/photo": {
-      "get" : {
-        "tags" : [ "userVerifyPhoto" ],
-        "summary" : "Logs user into the system",
-        "operationId" : "getUserVerifyPhoto",
-        "responses" : {
-          "200" : {
-            "description" : "successful operation",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "type" : "object",
-                  "properties" : {
-                    "result": {
-                      "type" : "object",
-                      "properties" : {
-                        "id" : {
-                          "type" : "integer"
-                        }                        
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "400" : {
-            "$ref" : "#/components/responses/BadRequest"
-          },
-          "401" : {
-            "$ref" : "#/components/responses/Unauthorized"
-          }
-        }
-      },      
-      "post" : {
-        "tags" : [ "userVerifyPhoto" ],
-        "summary" : "Logs user into the system",
-        "operationId" : "uploadManyVerifyPhoto",
-        "parameters" : [ {
-          "name" : "types",
-          "in" : "query",
-          "required" : true,
-          "schema" : {
-            "type" : "array",
-            "items":{
-              "type": "integer",
-              "enum": [1,2,3,4,5,6,7]
-            }
-          }
-        } ],        
-        "requestBody" : {
-          "$ref" : "#/components/requestBodies/UserVerifyUploadPhoto"
-        },
-        "responses" : {
-          "200" : {
-            "description" : "successful operation",
-            "headers" : {
-              "X-Rate-Limit" : {
-                "description" : "calls per hour allowed by the user",
-                "schema" : {
-                  "type" : "integer",
-                  "format" : "int32"
-                }
-              },
-              "X-Expires-After" : {
-                "description" : "date in UTC when token expires",
-                "schema" : {
-                  "type" : "string",
-                  "format" : "date-time"
-                }
-              },
-              "Set-Cookie" : {
-                "description" : "date in UTC when token expires",
-                "schema" : {
-                  "type" : "string",
-                  "format" : "jwt"
-                }
-              }
-            },
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "type" : "object",
-                  "properties" : {
-                    "result": {
-                      "type" : "object",
-                      "properties" : {
-                        "id" : {
-                          "type" : "integer"
-                        }                        
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "400" : {
-            "$ref" : "#/components/responses/BadRequest"
-          },
-          "401" : {
-            "$ref" : "#/components/responses/Unauthorized"
-          }
-        }
-      }
-    },    
     "/transaction" : {     
       "post" : {
         "tags" : [ "transaction" ],
@@ -1162,7 +1159,29 @@
         } ]
       }
 
-    },    
+    },   
+    "/bank" : {     
+      "post" : {
+        "tags" : [ "bankAccount" ],
+        "summary" : "get account",
+        "operationId" : "createBankAccounts",   
+        "requestBody": {
+          "$ref": "#/components/requestBodies/BankAccountCreate"
+        },
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/BankAccountFromId"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          }
+        },
+        "security" : [ {
+          "cookieAuth" : [ ]
+        } ]
+      }
+
+    },        
     "/bank/{id}" : {     
       "get" : {
         "tags" : [ "bankAccount" ],
@@ -1224,7 +1243,7 @@
       }
 
     },
-    "/backstage/banks/{userId}" : {     
+    "/backstage/banks/verify/{userId}" : {     
       "get" : {
         "tags" : [ "bankAccount" ],
         "summary" : "get account",
@@ -1252,7 +1271,38 @@
         "security" : [ {
           "cookieAuth" : [ ]
         } ]
-      }
+      },
+      "put" : {
+        "tags" : [ "bankAccount" ],
+        "summary" : "get account",
+        "operationId" : "putBackstageBankAccounts",                       
+        "parameters" : [ 
+          {
+            "name" : "userId",
+            "in" : "path",
+            "description" : "User id",
+            "required" : true,
+            "schema" : {
+              "type" : "string",
+              "format": "uuid"
+            }
+          }
+        ],          
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/BackstageBankAccountVerifyUpdate"
+        },              
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/BackstageBankAccountArray"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          }
+        },
+        "security" : [ {
+          "cookieAuth" : [ ]
+        } ]
+      }      
 
     }
   },
@@ -1627,7 +1677,10 @@
           },         
           "account" : {
             "type" : "integer"
-          },           
+          }, 
+          "photo" : {
+            "type" : "integer"
+          },                       
           "bankId" : {
             "$ref" : "#/components/schemas/BankAccount/properties/id",
             "unique": true
@@ -2032,7 +2085,62 @@
           }
         },
         "required" : true
-      },                    
+      },    
+      "BackstageBankAccountVerifyUpdate" : {
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type": "object",
+              "properties": {
+                "dataList": {
+                  "type": "array",
+                  "items":{
+                    "type" : "object",
+                    "properties" : {
+                      "verifyId" : {
+                        "type" : "integer"
+                      },                           
+                      "name" : {
+                        "type" : "integer",
+                        "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
+                        "enum": [1,2,3]
+                      },        
+                      "code" : {
+                        "type" : "integer",
+                        "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
+                        "enum": [1,2,3]
+                      },                                  
+                      "account" : {
+                        "type" : "integer",
+                        "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
+                        "enum": [1,2,3]
+                      },
+                      "photo" : {
+                        "type" : "integer",
+                        "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
+                        "enum": [1,2,3]
+                      },   
+                      "nameResonId" : {
+                        "type" : "integer"
+                      },
+                      "codeResonId" : {
+                        "type" : "integer"
+                      },
+                      "accountResonId" : {
+                        "type" : "integer"
+                      },   
+                      "photoResonId" : {
+                        "type" : "integer"
+                      }                                                                                                             
+                    }                
+                  }                  
+                }
+              }
+            }
+          }
+        },
+        "required" : true
+      },    
       "User" : {
         "content" : {
           "application/json" : {
@@ -2066,28 +2174,29 @@
         "content" : {
           "application/json" : {
             "schema" : {
-              "type" : "object",
+              "type": "object",
               "properties" : {
-                "dataList": {
-                "type" : "array",
-                "items" : {
-                  "type" : "object",
-                  "properties" : {
-                    "name" : {
-                      "$ref" : "#/components/schemas/BankAccount/properties/name"
-                    },
-                    "code" : {
-                      "$ref" : "#/components/schemas/BankAccount/properties/code"
-                    },
-                    "account" : {
-                      "$ref" : "#/components/schemas/BankAccount/properties/account"
+                "data" : {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties" : {
+                      "name" : {
+                        "$ref" : "#/components/schemas/BankAccount/properties/name"
+                      },
+                      "code" : {
+                        "$ref" : "#/components/schemas/BankAccount/properties/code"
+                      },
+                      "account" : {
+                        "$ref" : "#/components/schemas/BankAccount/properties/account"
+                      },
+                      "order" : {
+                        "$ref" : "#/components/schemas/BankAccount/properties/order"
+                      }                    
                     }
                   }
-                }                  
-                }
-
-              }
-
+                }                
+              }              
             }
           }
         },
@@ -2488,8 +2597,8 @@
                     "type" : "object",
                     "properties" : {
                       "id" : {
-                        "type" : "string",
-                        "format" : "uuid"
+                        "type" : "integer",
+                        "description": "bankId"
                       },
                       "name" : {
                         "type" : "string"
@@ -2499,8 +2608,25 @@
                       },         
                       "account" : {
                         "type" : "integer"
-                      },             
-                      "bankAccountVerify": {
+                      },   
+                      "verifyDes" : {
+                        "type": "object",
+                        "properties": {
+                          "account": {
+                            "type": "string"
+                          },
+                          "code": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "photo": {
+                            "type": "string"
+                          }                   
+                        }
+                      },                                   
+                      "verify": {
                         "type": "object",
                         "properties": {
                           "account": {
@@ -2512,24 +2638,8 @@
                           "name": {
                             "type": "integer"
                           },
-                          "bankAccountVerifyResonDes": {
-                            "type": "array",
-                            "items": {
-                              "type": "object",
-                              "properties": {
-                                "field": {
-                                  "type": "string"
-                                },
-                                "bankAccountVerifyReson": {
-                                  "type": "object",
-                                  "properties": {
-                                    "des": {
-                                      "type": "string"
-                                    }
-                                  }
-                                }
-                              }
-                            }
+                          "photo": {
+                            "type": "integer"
                           }
                         }
 
