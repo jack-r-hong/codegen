@@ -25,7 +25,6 @@ export class UserService {
     ).catch((e) =>{
       throw e;
     });
-
     return res;
 
     // custom end updateBackstageUser

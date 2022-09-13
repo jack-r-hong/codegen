@@ -12,6 +12,22 @@ export class BankAccountService {
   @Inject()
   private bankAccountModel!: BankAccountModel;
 
+  async getBackstageBankAccounts(
+      param :requestTypes.GetBackstageBankAccountsParams,
+      session: Express.Request['session'],
+  ) {
+    // custom begin getBackstageBankAccounts
+    const res = await this.bankAccountModel.getBackstageBankAccounts(
+        param,
+        {
+        },
+    ).catch((e) =>{
+      throw e;
+    });
+    return res;
+
+    // custom end getBackstageBankAccounts
+  }
   async getMyBankAccounts(
       param :requestTypes.GetMyBankAccountsParams,
       session: Express.Request['session'],

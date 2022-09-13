@@ -12,7 +12,6 @@ export class UserModel {
       customParam: any,
   ) {
     // custom begin updateBackstageUser
-
     const userVerifyRes = await prisma.userVerify.update({
       where: {
         userId: param.pathId,
@@ -32,7 +31,6 @@ export class UserModel {
         sign: param.bodySign,
       },
     });
-
     await prisma.$transaction(
         param.bodyUserVerifyResonDes.map((e) =>
           prisma.userVerifyResonDes.upsert({
@@ -58,7 +56,6 @@ export class UserModel {
     }).finally(() => {
       prisma.$disconnect();
     });
-
     return userVerifyRes;
 
     // custom end updateBackstageUser

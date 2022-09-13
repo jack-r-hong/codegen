@@ -24,6 +24,31 @@ export class BankAccountController implements Controller {
   @Inject('app.use')
     appUse!: AppUse;
 
+  @Get('/backstage/banks/:userId')
+  @Validator(validSchemas.getBackstageBankAccountsValidator)
+  async getBackstageBankAccounts(
+      req: bankAccountParams.GetBackstageBankAccountsRequest,
+      res: Response,
+      next: NextFunction,
+  ) {
+    BankAccountController.service.getBackstageBankAccounts(
+        bankAccountParams.GetBackstageBankAccountsRequestConvert(
+            req.body,
+            req.query,
+            req.params,
+            req.cookies,
+        ),
+        req.session,
+    )
+        .then((result) =>{
+          // custom begin getBackstageBankAccounts
+          res.json({result});
+
+          // custom end getBackstageBankAccounts
+        }).catch((e) => {
+          next(e);
+        });
+  }
   @Get('/bank/my/accounts')
   @Validator(validSchemas.getMyBankAccountsValidator)
   async getMyBankAccounts(

@@ -7,6 +7,49 @@ const prisma = new PrismaClient();
 
 @Service()
 export class BankAccountModel {
+  async getBackstageBankAccounts(
+      param: requestTypes.GetBackstageBankAccountsParams,
+      customParam: any,
+  ) {
+    // custom begin getBackstageBankAccounts
+    const res: any | null = await prisma.bankAccount.findMany({
+      where: {
+        userId: param.pathUserId,
+      },
+      select: {
+        account: true,
+        code: true,
+        id: true,
+        name: true,
+        status: true,
+        userId: true,
+        bankAccountVerify: {
+          select: {
+            account: true,
+            code: true,
+            name: true,
+            bankAccountVerifyResonDes: {
+              select: {
+                field: true,
+                bankAccountVerifyReson: {
+                  select: {
+                    des: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    }).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+    return res;
+
+    // custom end getBackstageBankAccounts
+  }
   async getMyBankAccounts(
       param: requestTypes.GetMyBankAccountsParams,
       customParam: any,

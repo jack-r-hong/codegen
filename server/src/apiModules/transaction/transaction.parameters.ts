@@ -139,6 +139,8 @@ type ReadMyTransactionReqQuery = {
       orderByField: string
       page: string
       take: string
+      start_time: string
+      end_time: string
 }
 
 type ReadMyTransactionReqParams = {
@@ -160,6 +162,8 @@ export type ReadMyTransactionParams = {
       queryOrderByField: string
       queryPage: number
       queryTake: number
+      queryStartTime: string
+      queryEndTime: string
 }
 
 
@@ -174,6 +178,8 @@ export const ReadMyTransactionRequestConvert = (
             queryOrderByField: query.orderByField,
           queryPage: parseInt(query.page),
           queryTake: parseInt(query.take),
+            queryStartTime: query.start_time,
+            queryEndTime: query.end_time,
   };
 };
 type ReadPendingTransactionReqBody = {

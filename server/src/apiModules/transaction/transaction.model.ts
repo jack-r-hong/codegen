@@ -82,14 +82,22 @@ export class TransactionModel {
     const res: any[] | null = await prisma.transaction.findMany({
       where: {
         userId: customParam.userId,
+        createdAt: {
+          gte: param.queryStartTime,
+          lte: param.queryEndTime,
+        },
       },
       select: {
+        id: true,
         point: true,
         state: true,
         twd: true,
         bos: true,
         bonusPoint: true,
         createdAt: true,
+        bankAccount: true,
+        bankCode: true,
+        bankName: true,
       },
       orderBy: {
         [param.queryOrderByField]: param.queryOrderBy,
@@ -152,7 +160,6 @@ export class TransactionModel {
         createdAt: true,
         id: true,
         point: true,
-        state: true,
         twd: true,
         // custom begin readOneTransaction
 

@@ -1,4 +1,4 @@
-import {Response, NextFunction, response} from 'express';
+import {Response, NextFunction} from 'express';
 import {Inject, Service, Container} from 'typedi';
 import {
   Controller,
@@ -43,6 +43,7 @@ export class UserController implements Controller {
         .then((result) =>{
           // custom begin updateBackstageUser
           res.json({result});
+
           // custom end updateBackstageUser
         }).catch((e) => {
           next(e);

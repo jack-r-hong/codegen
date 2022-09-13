@@ -14,6 +14,43 @@ interface TypedRequest<
 }
 
 
+type GetBackstageBankAccountsReqBody = {
+  }
+
+type GetBackstageBankAccountsReqQuery = {
+}
+
+type GetBackstageBankAccountsReqParams = {
+      userId: string
+,
+}
+
+type GetBackstageBankAccountsReqCookie = {
+}
+
+export interface GetBackstageBankAccountsRequest extends TypedRequest<
+  GetBackstageBankAccountsReqBody,
+  GetBackstageBankAccountsReqQuery,
+  GetBackstageBankAccountsReqParams,
+  GetBackstageBankAccountsReqCookie
+>{
+}
+
+export type GetBackstageBankAccountsParams = {
+      pathUserId: string
+}
+
+
+export const GetBackstageBankAccountsRequestConvert = (
+    body: GetBackstageBankAccountsReqBody,
+    query: GetBackstageBankAccountsReqQuery,
+    path: GetBackstageBankAccountsReqParams,
+    cookie: GetBackstageBankAccountsReqCookie,
+): GetBackstageBankAccountsParams => {
+  return {
+            pathUserId: path.userId,
+  };
+};
 type GetMyBankAccountsReqBody = {
   }
 

@@ -7,6 +7,22 @@ import * as sessions from '../../sessions';
 
 
 
+export const getBackstageBankAccountsValidator: Schema = {
+  userId: {
+    in: 'params',
+    isString: true,
+    notEmpty: true,
+  },
+  'JSESSIONID': {
+    in: 'cookies',
+    custom: {
+      options: (value, {req, location, path}) => {
+        sessions.cookieAuthSessionVerify(req['session']);
+        return true;
+      },
+    },
+  },
+};
 export const getMyBankAccountsValidator: Schema = {
   status: {
     in: 'query',

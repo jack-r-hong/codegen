@@ -17,6 +17,7 @@ model BankAccount {
   name  String  @map("name")                 
   order  Int  @map("order")                 
   status  Int  @default(1)  @map("status")                 
+  bankAccountVerify BankAccountVerify?
   user User? @relation(fields: [userId], references: [id])
   userId String @map("user_id")  
   
@@ -24,6 +25,41 @@ model BankAccount {
   @@unique([userId, order], name: "uniqueOrder")
 
     // custom end BankAccount
+}
+model BankAccountVerify {
+  account  Int  @map("account")                 
+  code  Int  @map("code")                 
+  id  Int @id @default(autoincrement()) @map("id")                 
+  name  Int  @map("name")                 
+  bankAccount BankAccount? @relation(fields: [bankId], references: [id])
+  bankId Int @map("bank_id")  @unique
+  bankAccountVerifyResonDes BankAccountVerifyResonDes[]
+  
+    // custom begin BankAccountVerify
+
+    // custom end BankAccountVerify
+}
+model BankAccountVerifyReson {
+  des  String  @map("des")                 
+  id  Int @id @default(autoincrement()) @map("id")                 
+  bankAccountVerifyResonDes BankAccountVerifyResonDes[]
+  
+    // custom begin BankAccountVerifyReson
+
+    // custom end BankAccountVerifyReson
+}
+model BankAccountVerifyResonDes {
+  field  String  @map("field")                 
+  id  Int @id @default(autoincrement()) @map("id")                 
+  bankAccountVerify BankAccountVerify? @relation(fields: [bankAccountVerifyId], references: [id])
+  bankAccountVerifyId Int @map("bank_account_verify_id")  
+  bankAccountVerifyReson BankAccountVerifyReson? @relation(fields: [bankAccountVerifyResonId], references: [id])
+  bankAccountVerifyResonId Int @map("bank_account_verify_reson_id")  
+  
+    // custom begin BankAccountVerifyResonDes
+  @@unique([bankAccountVerifyResonId, field], name: "uniqueField")
+
+    // custom end BankAccountVerifyResonDes
 }
 model Transaction {
   account  String  @map("account")                 
@@ -168,6 +204,7 @@ model UserVerifyResonDes {
   
     // custom begin UserVerifyResonDes
   @@unique([userVerifyId, field], name: "uniqueUserField")
+
     // custom end UserVerifyResonDes
 }
 
