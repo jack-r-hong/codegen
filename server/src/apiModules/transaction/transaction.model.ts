@@ -71,7 +71,15 @@ export class TransactionModel {
       customParam: any,
   ) {
     // custom begin getExchangeRate
+    const res = await prisma.exchangeRate.findMany(
 
+    ).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+
+    return res;
     // custom end getExchangeRate
   }
   async readMyTransaction(

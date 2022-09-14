@@ -62,6 +62,21 @@ model BankAccountVerifyResonDes {
 
     // custom end BankAccountVerifyResonDes
 }
+model ExchangeRate {
+  bos  Int  @map("bos")                 
+  bouns  Int  @map("bouns")                 
+  createdAt  DateTime  @default(now()) @map("created_at")                 
+  des  String  @map("des")                 
+  id  Int @id @default(autoincrement()) @map("id")                 
+  rangeLower  Int  @map("range_lower")                 
+  rangeUpper  Int  @map("range_upper")                 
+  rate  Int  @map("rate")                 
+  type  Int  @map("type")                 
+  
+    // custom begin ExchangeRate
+
+    // custom end ExchangeRate
+}
 model Transaction {
   account  String  @map("account")                 
   bankAccount  Int  @map("bank_account")                 

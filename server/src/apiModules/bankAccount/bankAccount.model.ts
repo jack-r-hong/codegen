@@ -57,9 +57,7 @@ export class BankAccountModel {
       customParam: any,
   ) {
     // custom begin putBackstageBankAccounts
-
     const transactionArray :any[] = [];
-
     const upsertQuery = (verifyId: number, resonId: number, field: string ) => {
       return prisma.bankAccountVerifyResonDes.upsert({
         where: {
@@ -79,7 +77,6 @@ export class BankAccountModel {
         },
       });
     };
-
     for (const e of param.bodyDataList) {
       transactionArray.push(
           prisma.bankAccountVerify.update({
@@ -94,7 +91,6 @@ export class BankAccountModel {
             },
           }),
       );
-
       if (e.bodyAccountResonId) {
         transactionArray.push(
             upsertQuery(e.bodyVerifyId, e.bodyAccountResonId, 'account'),
@@ -116,36 +112,6 @@ export class BankAccountModel {
         );
       }
     }
-
-    // const aaa = param.bodyDataList.map((e) => {
-    //   return;
-    //   prisma.bankAccountVerifyResonDes.upsert({
-    //     where: {
-    //       uniqueBankAccountField: {
-    //         field: '',
-    //         bankAccountVerifyId: 1,
-    //       },
-    //     },
-    //     update: {
-    //       field: '',
-    //       bankAccountVerifyResonId: e.bodyAccountResonId,
-    //     },
-    //     create: {
-    //       bankAccountVerifyResonId: e.bodyAccountResonId,
-    //       field: '',
-    //       bankAccountVerifyId: 1,
-    //     },
-    //   });
-    // });
-
-    const resVerify = await prisma.$transaction(
-        transactionArray,
-    ).catch((e) => {
-      throw e;
-    }).finally(() => {
-      prisma.$disconnect();
-    });
-    return resVerify;
 
     // custom end putBackstageBankAccounts
   }

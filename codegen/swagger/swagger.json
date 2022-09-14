@@ -42,6 +42,14 @@
     {
       "name" : "userVerifyPhoto",
       "description" : "Operations about user"
+    },
+    {
+      "name" : "exchangeRate",
+      "description" : "Operations about user"
+    },
+    {
+      "name" : "payManage",
+      "description" : "Operations about user"
     }    
   ],
   "paths" : {
@@ -1115,7 +1123,98 @@
       "get" : {
         "tags" : [ "transaction" ],
         "summary" : "get exchang rate",
-        "operationId" : "getExchangeRate",            
+        "operationId" : "getExchangeRate",      
+        "parameters": [
+          {
+            "name" : "bos",
+            "in" : "query",
+            "description" : "status map:\n * `1` - Buy\n * `2` - Sell\n",
+            "schema" : {
+              "type" : "integer",
+              "format" : "int32",
+              "description" : "status map:\n * `1` - Buy\n * `2` - Sell\n",
+              "enum" : [ 1, 2 ]
+            }
+          }
+        ],      
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/ExchangeRateArray"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          }
+        },
+        "security" : [ {
+          "cookieAuth" : [ ]
+        } ]
+      }
+
+    },   
+    "/backstage/exchange_rate" : {     
+      "get" : {
+        "tags" : [ "exchangeRate" ],
+        "summary" : "get exchang rate",
+        "operationId" : "readManyBackstageExchangeRate",       
+        "parameters" : [ 
+          {
+            "name" : "orderBy",
+            "in" : "query",
+            "description" : "The name that needs to be fetched. Use user1 for testing.",
+            "schema" : {
+              "type" : "string",
+              "default": "desc"
+            }
+          },
+          {
+            "name" : "orderByField",
+            "in" : "query",
+            "description" : "The name that needs to be fetched. Use user1 for testing.",
+            "schema" : {
+              "type" : "string",
+              "default": "createdAt"
+            }
+          },
+          {
+            "name" : "page",
+            "in" : "query",
+            "schema" : {
+              "type" : "integer",
+              "default": 0
+            }            
+          },
+          {
+            "name" : "take",
+            "in" : "query",
+            "schema" : {
+              "type" : "integer",
+              "default": 10
+            }    
+          },
+          {
+            "name" : "bos",
+            "in" : "query",
+            "schema" : {
+              "type" : "integer"
+            }    
+          }          
+        ],                   
+        "responses" : {
+          "200" : {
+            "$ref":  "#/components/responses/BackstageExchangeRateArray"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "exchangeRate" ],
+        "summary" : "cteate exchang rate",
+        "operationId" : "createOneBackstageExchangeRate",   
+        "requestBody": {
+          "$ref": "#/components/requestBodies/CreateExchangeRate"
+        },                 
         "responses" : {
           "200" : {
             "description" : "Ok",
@@ -1153,13 +1252,116 @@
           "403" : {
             "$ref" : "#/components/responses/Forbidden"
           }
+        }
+      }      
+    }, 
+    "/backstage/exchange_rate/{id}" : {     
+      "put" : {
+        "tags" : [ "exchangeRate" ],
+        "summary" : "get exchang rate",
+        "operationId" : "updateOneBackstageExchangeRate",            
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],       
+        "requestBody": {
+          "$ref": "#/components/requestBodies/UpdateExchangeRate"
         },
-        "security" : [ {
-          "cookieAuth" : [ ]
-        } ]
-      }
+        "responses" : {
+          "200" : {
+            "description" : "Ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "result":{
+                      "type": "object"
+                    }
+                  }
+                },
+                "example": {
+                  "result": {
+                      "0": {
+                          "range": 0,
+                          "rate": 120
+                      },
+                      "1": {
+                          "range": 150000,
+                          "rate": 130
+                      },
+                      "2": {
+                          "range": 500000,
+                          "rate": 140
+                      }
+                  }
+                }          
+              }
 
-    },   
+            }
+            
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "exchangeRate" ],
+        "summary" : "get exchang rate",
+        "operationId" : "deleteOneBackstageExchangeRate",            
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],        
+        "responses" : {
+          "200" : {
+            "description" : "Ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "result":{
+                      "type": "object"
+                    }
+                  }
+                },
+                "example": {
+                  "result": {
+                      "0": {
+                          "range": 0,
+                          "rate": 120
+                      },
+                      "1": {
+                          "range": 150000,
+                          "rate": 130
+                      },
+                      "2": {
+                          "range": 500000,
+                          "rate": 140
+                      }
+                  }
+                }          
+              }
+
+            }
+            
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          }
+        }
+      }      
+    },           
     "/bank" : {     
       "post" : {
         "tags" : [ "bankAccount" ],
@@ -1304,7 +1506,101 @@
         } ]
       }      
 
-    }
+    },
+    "/backstage/pay_manage" : {     
+      "get" : {
+        "tags" : [ "payManage" ],
+        "summary" : "get account",
+        "operationId" : "getBackstageBankAccounts",             
+        "parameters" : [ 
+          {
+            "name" : "userId",
+            "in" : "path",
+            "description" : "User id",
+            "required" : true,
+            "schema" : {
+              "type" : "string",
+              "format": "uuid"
+            }
+          }
+        ],           
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/BackstageBankAccountArray"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          }
+        },
+        "security" : [ {
+          "cookieAuth" : [ ]
+        } ]
+      },
+      "put" : {
+        "tags" : [ "bankAccount" ],
+        "summary" : "get account",
+        "operationId" : "putBackstageBankAccounts",                       
+        "parameters" : [ 
+          {
+            "name" : "userId",
+            "in" : "path",
+            "description" : "User id",
+            "required" : true,
+            "schema" : {
+              "type" : "string",
+              "format": "uuid"
+            }
+          }
+        ],          
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/BackstageBankAccountVerifyUpdate"
+        },              
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/BackstageBankAccountArray"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          }
+        },
+        "security" : [ {
+          "cookieAuth" : [ ]
+        } ]
+      }      
+    },
+    "/backstage/pay_manage/{id}" : {     
+      "put" : {
+        "tags" : [ "bankAccount" ],
+        "summary" : "get account",
+        "operationId" : "putBackstageBankAccounts",                       
+        "parameters" : [ 
+          {
+            "name" : "id",
+            "in" : "path",
+            "description" : "User id",
+            "required" : true,
+            "schema" : {
+              "type" : "string",
+              "format": "uuid"
+            }
+          }
+        ],          
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/BackstageBankAccountVerifyUpdate"
+        },              
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/BackstageBankAccountArray"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          }
+        },
+        "security" : [ {
+          "cookieAuth" : [ ]
+        } ]
+      }      
+    }        
   },
   "externalDocs" : {
     "description" : "Find out more about Swagger",
@@ -1804,7 +2100,109 @@
             "$ref" : "#/components/schemas/User"
           }         
         }
-      }      
+      },
+      "PayManage" : {
+        "type" : "object",
+        "description" : "database",
+        "properties" : {
+          "id" : {
+            "type" : "integer"
+          },  
+          "type" : {
+            "type" : "integer",
+            "description": "status map:\n * `1` - line pay\n * `2` - 街口支付\n",
+            "enum": [1, 2]
+          },            
+          "url" : {
+            "type" : "string"
+          },  
+          "remark" : {
+            "type" : "string"
+          },     
+          "status" : {
+            "type" : "integer",
+            "default": 1,
+            "description" : "status map:\n * `1` - 未設定\n * `2` - 目前使用\n * `3` - 停用\n"
+          },                         
+          "createdAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          }       
+        }
+      },
+      "BackstageUser" : {
+        "type" : "object",
+        "description" : "database",
+        "properties" : {
+          "id" : {
+            "type" : "integer"
+          },  
+          "type" : {
+            "type" : "integer",
+            "description": "status map:\n * `1` - line pay\n * `2` - 街口支付\n",
+            "enum": [1, 2]
+          },            
+          "url" : {
+            "type" : "string"
+          },  
+          "remark" : {
+            "type" : "string"
+          },     
+          "status" : {
+            "type" : "integer",
+            "default": 1,
+            "description" : "status map:\n * `1` - 未設定\n * `2` - 目前使用\n * `3` - 停用\n"
+          },                         
+          "createdAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          }       
+        }
+      },      
+      "ExchangeRate" : {
+        "type" : "object",
+        "description" : "database",
+        "properties" : {
+          "id" : {
+            "type" : "integer"
+          },     
+          "bos" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "status map:\n * `1` - Buy\n * `2` - Sell\n",
+            "enum" : [ 1, 2 ]            
+          },         
+          "type" : {
+            "type" : "integer",
+            "description" : "type map:\n * `1` - 大頭家幣:台幣\n * `2` - 大頭家幣:美金\n",
+            "enum" : [ 1, 2 ]               
+          },     
+          "des" : {
+            "type" : "string",
+            "description": "描述"
+          },  
+          "rate" : {
+            "type" : "integer",
+            "description": "匯率"
+          },    
+          "bouns" : {
+            "type" : "integer",
+            "description": "贈送點數"
+          },                   
+          "rangeUpper" : {
+            "type" : "integer",
+            "description": "上限"
+          },  
+          "rangeLower" : {
+            "type" : "integer",
+            "description": "下限"
+          },                                                                   
+          "createdAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          }   
+        }
+      }
     },
     "requestBodies" : {
       "UserRegister" : {
@@ -2241,6 +2639,68 @@
         "description" : "List of user object",
         "required" : true
       },
+      "CreateExchangeRate" : {
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "bos" : {
+                  "$ref" : "#/components/schemas/ExchangeRate/properties/bos"
+                },  
+                "type" : {
+                  "$ref" : "#/components/schemas/ExchangeRate/properties/type"
+                },  
+                "des" : {
+                  "$ref" : "#/components/schemas/ExchangeRate/properties/des"
+                },                                       
+                "rate" : {
+                  "$ref" : "#/components/schemas/ExchangeRate/properties/rate"
+                },  
+                "bouns" : {
+                  "$ref" : "#/components/schemas/ExchangeRate/properties/bouns"
+                },  
+                "rangeUpper" : {
+                  "$ref" : "#/components/schemas/ExchangeRate/properties/rangeUpper"
+                },       
+                "rangeLower" : {
+                  "$ref" : "#/components/schemas/ExchangeRate/properties/rangeLower"
+                }
+              }
+            }
+          }
+        },
+        "description" : "List of user object",
+        "required" : true
+      },          
+      "UpdateExchangeRate" : {
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "des" : {
+                  "$ref" : "#/components/schemas/ExchangeRate/properties/des"
+                },                                       
+                "rate" : {
+                  "$ref" : "#/components/schemas/ExchangeRate/properties/rate"
+                },  
+                "bouns" : {
+                  "$ref" : "#/components/schemas/ExchangeRate/properties/bouns"
+                },  
+                "rangeUpper" : {
+                  "$ref" : "#/components/schemas/ExchangeRate/properties/rangeUpper"
+                },       
+                "rangeLower" : {
+                  "$ref" : "#/components/schemas/ExchangeRate/properties/rangeLower"
+                }
+              }
+            }
+          }
+        },
+        "description" : "List of user object",
+        "required" : true
+      },         
       "CreateTransaction" : {
         "content" : {
           "application/json" : {
@@ -2644,6 +3104,85 @@
                         }
 
                       }  
+                    }                
+                  }                  
+                }
+              }
+            }
+          }
+        }
+      },      
+      "BackstageExchangeRateArray" : {
+        "description" : "Ok",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type": "array",
+              "items": {
+                "type" : "object",
+                "properties" : {
+                  "bos" : {
+                    "$ref" : "#/components/schemas/ExchangeRate/properties/bos"
+                  },  
+                  "type" : {
+                    "$ref" : "#/components/schemas/ExchangeRate/properties/type"
+                  },  
+                  "des" : {
+                    "$ref" : "#/components/schemas/ExchangeRate/properties/des"
+                  },                                       
+                  "rate" : {
+                    "$ref" : "#/components/schemas/ExchangeRate/properties/rate"
+                  },  
+                  "bouns" : {
+                    "$ref" : "#/components/schemas/ExchangeRate/properties/bouns"
+                  },  
+                  "rangeUpper" : {
+                    "$ref" : "#/components/schemas/ExchangeRate/properties/rangeUpper"
+                  },       
+                  "rangeLower" : {
+                    "$ref" : "#/components/schemas/ExchangeRate/properties/rangeLower"
+                  }                                      
+                }                
+              }
+
+
+            }
+          }
+        }
+      },
+      "ExchangeRateArray" : {
+        "description" : "Ok",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "array",
+                  "items": {
+                    "type" : "object",
+                    "properties" : {
+                      "bos" : {
+                        "$ref" : "#/components/schemas/ExchangeRate/properties/bos"
+                      },  
+                      "type" : {
+                        "$ref" : "#/components/schemas/ExchangeRate/properties/type"
+                      },  
+                      "des" : {
+                        "$ref" : "#/components/schemas/ExchangeRate/properties/des"
+                      },                                       
+                      "rate" : {
+                        "$ref" : "#/components/schemas/ExchangeRate/properties/rate"
+                      },  
+                      "bouns" : {
+                        "$ref" : "#/components/schemas/ExchangeRate/properties/bouns"
+                      },  
+                      "rangeUpper" : {
+                        "$ref" : "#/components/schemas/ExchangeRate/properties/rangeUpper"
+                      },       
+                      "rangeLower" : {
+                        "$ref" : "#/components/schemas/ExchangeRate/properties/rangeLower"
+                      }                                      
                     }                
                   }                  
                 }

@@ -92,22 +92,7 @@ export class TransactionController implements Controller {
     )
         .then((result) =>{
           // custom begin getExchangeRate
-          res.json({
-            result: {
-              0: {
-                range: 0,
-                rate: 120,
-              },
-              1: {
-                range: 150000,
-                rate: 130,
-              },
-              2: {
-                range: 500000,
-                rate: 140,
-              },
-            },
-          });
+          res.json({result});
 
           // custom end getExchangeRate
         }).catch((e) => {

@@ -3,6 +3,7 @@ import './user/user.controller';
 import './transaction/transaction.controller';
 import './bankAccount/bankAccount.controller';
 import './userVerifyPhoto/userVerifyPhoto.controller';
+import './exchangeRate/exchangeRate.controller';
 import path from 'path';
 import fs from 'fs';
 
