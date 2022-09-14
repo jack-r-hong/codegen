@@ -12,6 +12,70 @@ export class BankAccountService {
   @Inject()
   private bankAccountModel!: BankAccountModel;
 
+  async getBackstageBankAccountReson(
+      param :requestTypes.GetBackstageBankAccountResonParams,
+      session: Express.Request['session'],
+  ) {
+    // custom begin getBackstageBankAccountReson
+    const res = await this.bankAccountModel.getBackstageBankAccountReson(
+        param,
+        {
+        },
+    ).catch((e) =>{
+      throw e;
+    });
+    return res;
+
+    // custom end getBackstageBankAccountReson
+  }
+  async createBackstageBankAccountsReson(
+      param :requestTypes.CreateBackstageBankAccountsResonParams,
+      session: Express.Request['session'],
+  ) {
+    // custom begin createBackstageBankAccountsReson
+    const res = await this.bankAccountModel.createBackstageBankAccountsReson(
+        param,
+        {
+        },
+    ).catch((e) =>{
+      throw e;
+    });
+    return res;
+
+    // custom end createBackstageBankAccountsReson
+  }
+  async deleteBackstageBankAccountReson(
+      param :requestTypes.DeleteBackstageBankAccountResonParams,
+      session: Express.Request['session'],
+  ) {
+    // custom begin deleteBackstageBankAccountReson
+    const res = await this.bankAccountModel.deleteBackstageBankAccountReson(
+        param,
+        {
+        },
+    ).catch((e) =>{
+      throw e;
+    });
+    return res;
+
+    // custom end deleteBackstageBankAccountReson
+  }
+  async updateBackstageBankAccountReson(
+      param :requestTypes.UpdateBackstageBankAccountResonParams,
+      session: Express.Request['session'],
+  ) {
+    // custom begin updateBackstageBankAccountReson
+    const res = await this.bankAccountModel.updateBackstageBankAccountReson(
+        param,
+        {
+        },
+    ).catch((e) =>{
+      throw e;
+    });
+    return res;
+
+    // custom end updateBackstageBankAccountReson
+  }
   async getBackstageBankAccounts(
       param :requestTypes.GetBackstageBankAccountsParams,
       session: Express.Request['session'],

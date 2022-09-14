@@ -14,6 +14,66 @@ export class UserService {
   @Inject()
   private userModel!: UserModel;
 
+  async readBackstageUserReson(
+      param :requestTypes.ReadBackstageUserResonParams,
+      session: Express.Request['session'],
+  ) {
+    // custom begin readBackstageUserReson
+    const res = await this.userModel.readBackstageUserReson(
+        param,
+        {},
+    ).catch((e) =>{
+      throw e;
+    });
+    return res;
+
+    // custom end readBackstageUserReson
+  }
+  async createBackstageUserReson(
+      param :requestTypes.CreateBackstageUserResonParams,
+      session: Express.Request['session'],
+  ) {
+    // custom begin createBackstageUserReson
+    const res = await this.userModel.createBackstageUserReson(
+        param,
+        {},
+    ).catch((e) =>{
+      throw e;
+    });
+    return res;
+
+    // custom end createBackstageUserReson
+  }
+  async deleteBackstageUserReson(
+      param :requestTypes.DeleteBackstageUserResonParams,
+      session: Express.Request['session'],
+  ) {
+    // custom begin deleteBackstageUserReson
+    const res = await this.userModel.deleteBackstageUserReson(
+        param,
+        {},
+    ).catch((e) =>{
+      throw e;
+    });
+    return res;
+
+    // custom end deleteBackstageUserReson
+  }
+  async updateBackstageUserReson(
+      param :requestTypes.UpdateBackstageUserResonParams,
+      session: Express.Request['session'],
+  ) {
+    // custom begin updateBackstageUserReson
+    const res = await this.userModel.updateBackstageUserReson(
+        param,
+        {},
+    ).catch((e) =>{
+      throw e;
+    });
+    return res;
+
+    // custom end updateBackstageUserReson
+  }
   async updateBackstageUser(
       param :requestTypes.UpdateBackstageUserParams,
       session: Express.Request['session'],

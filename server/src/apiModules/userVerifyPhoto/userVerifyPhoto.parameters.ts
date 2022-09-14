@@ -14,6 +14,46 @@ interface TypedRequest<
 }
 
 
+type GetBackstageUserVerifyPhotoReqBody = {
+  }
+
+type GetBackstageUserVerifyPhotoReqQuery = {
+      type: string
+}
+
+type GetBackstageUserVerifyPhotoReqParams = {
+      userId: string
+,
+}
+
+type GetBackstageUserVerifyPhotoReqCookie = {
+}
+
+export interface GetBackstageUserVerifyPhotoRequest extends TypedRequest<
+  GetBackstageUserVerifyPhotoReqBody,
+  GetBackstageUserVerifyPhotoReqQuery,
+  GetBackstageUserVerifyPhotoReqParams,
+  GetBackstageUserVerifyPhotoReqCookie
+>{
+}
+
+export type GetBackstageUserVerifyPhotoParams = {
+      pathUserId: string
+      queryType: number
+}
+
+
+export const GetBackstageUserVerifyPhotoRequestConvert = (
+    body: GetBackstageUserVerifyPhotoReqBody,
+    query: GetBackstageUserVerifyPhotoReqQuery,
+    path: GetBackstageUserVerifyPhotoReqParams,
+    cookie: GetBackstageUserVerifyPhotoReqCookie,
+): GetBackstageUserVerifyPhotoParams => {
+  return {
+            pathUserId: path.userId,
+          queryType: parseInt(query.type),
+  };
+};
 type GetUserVerifyPhotoReqBody = {
   }
 

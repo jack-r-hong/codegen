@@ -7,6 +7,18 @@ import * as sessions from '../../sessions';
 
 
 
+export const getBackstageUserVerifyPhotoValidator: Schema = {
+  userId: {
+    in: 'params',
+    isString: true,
+    notEmpty: true,
+  },
+  type: {
+    in: 'query',
+    isInt: true,
+    notEmpty: true,
+  },
+};
 export const getUserVerifyPhotoValidator: Schema = {
 };
 export const uploadManyVerifyPhotoValidator: Schema = {

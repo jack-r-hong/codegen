@@ -8,6 +8,26 @@ import * as sessions from '../../sessions';
 
 
 export const readManyBackstageExchangeRateValidator: Schema = {
+  orderBy: {
+    in: 'query',
+    isString: true,
+  },
+  orderByField: {
+    in: 'query',
+    isString: true,
+  },
+  page: {
+    in: 'query',
+    isInt: true,
+  },
+  take: {
+    in: 'query',
+    isInt: true,
+  },
+  bos: {
+    in: 'query',
+    isInt: true,
+  },
 };
 export const createOneBackstageExchangeRateValidator: Schema = {
   'bos': {

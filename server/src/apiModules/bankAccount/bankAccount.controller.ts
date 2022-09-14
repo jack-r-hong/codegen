@@ -24,6 +24,106 @@ export class BankAccountController implements Controller {
   @Inject('app.use')
     appUse!: AppUse;
 
+  @Get('/backstage/banks/verify/reson')
+  @Validator(validSchemas.getBackstageBankAccountResonValidator)
+  async getBackstageBankAccountReson(
+      req: bankAccountParams.GetBackstageBankAccountResonRequest,
+      res: Response,
+      next: NextFunction,
+  ) {
+    BankAccountController.service.getBackstageBankAccountReson(
+        bankAccountParams.GetBackstageBankAccountResonRequestConvert(
+            req.body,
+            req.query,
+            req.params,
+            req.cookies,
+        ),
+        req.session,
+    )
+        .then((result) =>{
+          // custom begin getBackstageBankAccountReson
+          res.json({result});
+
+          // custom end getBackstageBankAccountReson
+        }).catch((e) => {
+          next(e);
+        });
+  }
+  @Post('/backstage/banks/verify/reson')
+  @Validator(validSchemas.createBackstageBankAccountsResonValidator)
+  async createBackstageBankAccountsReson(
+      req: bankAccountParams.CreateBackstageBankAccountsResonRequest,
+      res: Response,
+      next: NextFunction,
+  ) {
+    BankAccountController.service.createBackstageBankAccountsReson(
+        bankAccountParams.CreateBackstageBankAccountsResonRequestConvert(
+            req.body,
+            req.query,
+            req.params,
+            req.cookies,
+        ),
+        req.session,
+    )
+        .then((result) =>{
+          // custom begin createBackstageBankAccountsReson
+          res.json({result});
+
+          // custom end createBackstageBankAccountsReson
+        }).catch((e) => {
+          next(e);
+        });
+  }
+  @Delete('/backstage/banks/verify/reson/:resonId')
+  @Validator(validSchemas.deleteBackstageBankAccountResonValidator)
+  async deleteBackstageBankAccountReson(
+      req: bankAccountParams.DeleteBackstageBankAccountResonRequest,
+      res: Response,
+      next: NextFunction,
+  ) {
+    BankAccountController.service.deleteBackstageBankAccountReson(
+        bankAccountParams.DeleteBackstageBankAccountResonRequestConvert(
+            req.body,
+            req.query,
+            req.params,
+            req.cookies,
+        ),
+        req.session,
+    )
+        .then((result) =>{
+          // custom begin deleteBackstageBankAccountReson
+          res.json({result});
+
+          // custom end deleteBackstageBankAccountReson
+        }).catch((e) => {
+          next(e);
+        });
+  }
+  @Put('/backstage/banks/verify/reson/:resonId')
+  @Validator(validSchemas.updateBackstageBankAccountResonValidator)
+  async updateBackstageBankAccountReson(
+      req: bankAccountParams.UpdateBackstageBankAccountResonRequest,
+      res: Response,
+      next: NextFunction,
+  ) {
+    BankAccountController.service.updateBackstageBankAccountReson(
+        bankAccountParams.UpdateBackstageBankAccountResonRequestConvert(
+            req.body,
+            req.query,
+            req.params,
+            req.cookies,
+        ),
+        req.session,
+    )
+        .then((result) =>{
+          // custom begin updateBackstageBankAccountReson
+          res.json({result});
+
+          // custom end updateBackstageBankAccountReson
+        }).catch((e) => {
+          next(e);
+        });
+  }
   @Get('/backstage/banks/verify/:userId')
   @Validator(validSchemas.getBackstageBankAccountsValidator)
   async getBackstageBankAccounts(

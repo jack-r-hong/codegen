@@ -65,6 +65,13 @@ optional: {
   },
 };
 export const getExchangeRateValidator: Schema = {
+  bos: {
+    in: 'query',
+    isInt: true,
+    matches: {
+      options: /^(1|2)/,
+    },
+  },
   'JSESSIONID': {
     in: 'cookies',
     custom: {
@@ -159,7 +166,7 @@ export const readOneTransactionValidator: Schema = {
     },
   },
 };
-export const updateOneTransactionStateValidator: Schema = {
+export const updateTransactionValidator: Schema = {
   id: {
     in: 'params',
     isString: true,

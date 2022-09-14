@@ -7,6 +7,33 @@ const prisma = new PrismaClient();
 
 @Service()
 export class UserVerifyPhotoModel {
+  async getBackstageUserVerifyPhoto(
+      param: requestTypes.GetBackstageUserVerifyPhotoParams,
+      customParam: any,
+  ) {
+    // custom begin getBackstageUserVerifyPhoto
+    const res: any | null = prisma.userVerifyPhoto.findFirst(
+        {
+          where: {
+            userId: param.pathUserId,
+            type: param.queryType,
+          },
+          select: {
+            id: true,
+            path: true,
+            type: true,
+            createdAt: true,
+          },
+        },
+    ).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+    return res;
+
+    // custom end getBackstageUserVerifyPhoto
+  }
   async getUserVerifyPhoto(
       param: requestTypes.GetUserVerifyPhotoParams,
       customParam: any,

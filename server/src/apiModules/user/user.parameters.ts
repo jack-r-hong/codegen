@@ -14,6 +14,152 @@ interface TypedRequest<
 }
 
 
+type ReadBackstageUserResonReqBody = {
+  }
+
+type ReadBackstageUserResonReqQuery = {
+}
+
+type ReadBackstageUserResonReqParams = {
+}
+
+type ReadBackstageUserResonReqCookie = {
+}
+
+export interface ReadBackstageUserResonRequest extends TypedRequest<
+  ReadBackstageUserResonReqBody,
+  ReadBackstageUserResonReqQuery,
+  ReadBackstageUserResonReqParams,
+  ReadBackstageUserResonReqCookie
+>{
+}
+
+export type ReadBackstageUserResonParams = {
+}
+
+
+export const ReadBackstageUserResonRequestConvert = (
+    body: ReadBackstageUserResonReqBody,
+    query: ReadBackstageUserResonReqQuery,
+    path: ReadBackstageUserResonReqParams,
+    cookie: ReadBackstageUserResonReqCookie,
+): ReadBackstageUserResonParams => {
+  return {
+  };
+};
+type CreateBackstageUserResonReqBody = {
+  des: string,
+}
+
+type CreateBackstageUserResonReqQuery = {
+}
+
+type CreateBackstageUserResonReqParams = {
+}
+
+type CreateBackstageUserResonReqCookie = {
+}
+
+export interface CreateBackstageUserResonRequest extends TypedRequest<
+  CreateBackstageUserResonReqBody,
+  CreateBackstageUserResonReqQuery,
+  CreateBackstageUserResonReqParams,
+  CreateBackstageUserResonReqCookie
+>{
+}
+
+export type CreateBackstageUserResonParams = {
+bodyDes: string,
+}
+
+
+export const CreateBackstageUserResonRequestConvert = (
+    body: CreateBackstageUserResonReqBody,
+    query: CreateBackstageUserResonReqQuery,
+    path: CreateBackstageUserResonReqParams,
+    cookie: CreateBackstageUserResonReqCookie,
+): CreateBackstageUserResonParams => {
+  return {
+    bodyDes: body.des,
+  };
+};
+type DeleteBackstageUserResonReqBody = {
+  }
+
+type DeleteBackstageUserResonReqQuery = {
+}
+
+type DeleteBackstageUserResonReqParams = {
+      resonId: string
+,
+}
+
+type DeleteBackstageUserResonReqCookie = {
+}
+
+export interface DeleteBackstageUserResonRequest extends TypedRequest<
+  DeleteBackstageUserResonReqBody,
+  DeleteBackstageUserResonReqQuery,
+  DeleteBackstageUserResonReqParams,
+  DeleteBackstageUserResonReqCookie
+>{
+}
+
+export type DeleteBackstageUserResonParams = {
+      pathResonId: number
+}
+
+
+export const DeleteBackstageUserResonRequestConvert = (
+    body: DeleteBackstageUserResonReqBody,
+    query: DeleteBackstageUserResonReqQuery,
+    path: DeleteBackstageUserResonReqParams,
+    cookie: DeleteBackstageUserResonReqCookie,
+): DeleteBackstageUserResonParams => {
+  return {
+          pathResonId: parseInt(path.resonId),
+  };
+};
+type UpdateBackstageUserResonReqBody = {
+  des: string,
+}
+
+type UpdateBackstageUserResonReqQuery = {
+}
+
+type UpdateBackstageUserResonReqParams = {
+      resonId: string
+,
+}
+
+type UpdateBackstageUserResonReqCookie = {
+}
+
+export interface UpdateBackstageUserResonRequest extends TypedRequest<
+  UpdateBackstageUserResonReqBody,
+  UpdateBackstageUserResonReqQuery,
+  UpdateBackstageUserResonReqParams,
+  UpdateBackstageUserResonReqCookie
+>{
+}
+
+export type UpdateBackstageUserResonParams = {
+      pathResonId: number
+bodyDes: string,
+}
+
+
+export const UpdateBackstageUserResonRequestConvert = (
+    body: UpdateBackstageUserResonReqBody,
+    query: UpdateBackstageUserResonReqQuery,
+    path: UpdateBackstageUserResonReqParams,
+    cookie: UpdateBackstageUserResonReqCookie,
+): UpdateBackstageUserResonParams => {
+  return {
+    pathResonId: parseInt(path.resonId),
+    bodyDes: body.des,
+  };
+};
 type UpdateBackstageUserReqBody = {
   address: string,
 birthdate: string,

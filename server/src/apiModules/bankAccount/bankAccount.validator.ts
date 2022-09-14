@@ -7,10 +7,27 @@ import * as sessions from '../../sessions';
 
 
 
-export const getBackstageBankAccountsValidator: Schema = {
-  userId: {
-    in: 'params',
+export const getBackstageBankAccountResonValidator: Schema = {
+};
+export const createBackstageBankAccountsResonValidator: Schema = {
+  'des': {
+    in: 'body',
     isString: true,
+  },
+  'JSESSIONID': {
+    in: 'cookies',
+    custom: {
+      options: (value, {req, location, path}) => {
+        sessions.cookieAuthSessionVerify(req['session']);
+        return true;
+      },
+    },
+  },
+};
+export const deleteBackstageBankAccountResonValidator: Schema = {
+  resonId: {
+    in: 'params',
+    isInt: true,
     notEmpty: true,
   },
   'JSESSIONID': {
@@ -21,6 +38,24 @@ export const getBackstageBankAccountsValidator: Schema = {
         return true;
       },
     },
+  },
+};
+export const updateBackstageBankAccountResonValidator: Schema = {
+  resonId: {
+    in: 'params',
+    isInt: true,
+    notEmpty: true,
+  },
+  'des': {
+    in: 'body',
+    isString: true,
+  },
+};
+export const getBackstageBankAccountsValidator: Schema = {
+  userId: {
+    in: 'params',
+    isString: true,
+    notEmpty: true,
   },
 };
 export const putBackstageBankAccountsValidator: Schema = {

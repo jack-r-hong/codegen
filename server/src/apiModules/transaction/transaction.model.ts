@@ -72,14 +72,20 @@ export class TransactionModel {
   ) {
     // custom begin getExchangeRate
     const res = await prisma.exchangeRate.findMany(
-
+        {
+          where: {
+            bos: {
+              equals: param.queryBos,
+            },
+          },
+        },
     ).catch((e) => {
       throw e;
     }).finally(() => {
       prisma.$disconnect();
     });
-
     return res;
+
     // custom end getExchangeRate
   }
   async readMyTransaction(
@@ -89,7 +95,14 @@ export class TransactionModel {
     // custom begin readMyTransaction
     const res: any[] | null = await prisma.transaction.findMany({
       where: {
-        userId: customParam.userId,
+        OR: [
+          {userId: customParam.userId},
+          {transactionRecive: {
+            every: {
+              userId: customParam.userId,
+            },
+          }},
+        ],
         createdAt: {
           gte: param.queryStartTime,
           lte: param.queryEndTime,
@@ -168,6 +181,7 @@ export class TransactionModel {
         createdAt: true,
         id: true,
         point: true,
+        state: true,
         twd: true,
         // custom begin readOneTransaction
 
@@ -184,9 +198,11 @@ export class TransactionModel {
     }
     return res;
   }
-  async updateOneTransactionState(
-      param: requestTypes.UpdateOneTransactionStateParams,
+  async updateTransaction(
+      param: requestTypes.UpdateTransactionParams,
+      customParam: any,
   ) {
+    // custom begin updateTransaction
     const res: Transaction | null = await prisma.transaction.update({
       where: {
         id: param.pathId,
@@ -199,6 +215,20 @@ export class TransactionModel {
     }).finally(() => {
       prisma.$disconnect();
     });
+
+    if (param.bodyState === 2) {
+      await prisma.transactionRecive.create({
+        data: {
+          userId: customParam.userId,
+          transactionId: res.id,
+        },
+      }).catch((e) => {
+        throw e;
+      }).finally(() => {
+        prisma.$disconnect();
+      });
+    }
     return res;
+    // custom end updateTransaction
   }
 }

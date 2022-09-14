@@ -24,6 +24,106 @@ export class UserController implements Controller {
   @Inject('app.use')
     appUse!: AppUse;
 
+  @Get('/backstage/user/verify/reson')
+  @Validator(validSchemas.readBackstageUserResonValidator)
+  async readBackstageUserReson(
+      req: userParams.ReadBackstageUserResonRequest,
+      res: Response,
+      next: NextFunction,
+  ) {
+    UserController.service.readBackstageUserReson(
+        userParams.ReadBackstageUserResonRequestConvert(
+            req.body,
+            req.query,
+            req.params,
+            req.cookies,
+        ),
+        req.session,
+    )
+        .then((result) =>{
+          // custom begin readBackstageUserReson
+          res.json({result});
+
+          // custom end readBackstageUserReson
+        }).catch((e) => {
+          next(e);
+        });
+  }
+  @Post('/backstage/user/verify/reson')
+  @Validator(validSchemas.createBackstageUserResonValidator)
+  async createBackstageUserReson(
+      req: userParams.CreateBackstageUserResonRequest,
+      res: Response,
+      next: NextFunction,
+  ) {
+    UserController.service.createBackstageUserReson(
+        userParams.CreateBackstageUserResonRequestConvert(
+            req.body,
+            req.query,
+            req.params,
+            req.cookies,
+        ),
+        req.session,
+    )
+        .then((result) =>{
+          // custom begin createBackstageUserReson
+          res.json({result});
+
+          // custom end createBackstageUserReson
+        }).catch((e) => {
+          next(e);
+        });
+  }
+  @Delete('/backstage/user/verify/reson/:resonId')
+  @Validator(validSchemas.deleteBackstageUserResonValidator)
+  async deleteBackstageUserReson(
+      req: userParams.DeleteBackstageUserResonRequest,
+      res: Response,
+      next: NextFunction,
+  ) {
+    UserController.service.deleteBackstageUserReson(
+        userParams.DeleteBackstageUserResonRequestConvert(
+            req.body,
+            req.query,
+            req.params,
+            req.cookies,
+        ),
+        req.session,
+    )
+        .then((result) =>{
+          // custom begin deleteBackstageUserReson
+          res.json({result});
+
+          // custom end deleteBackstageUserReson
+        }).catch((e) => {
+          next(e);
+        });
+  }
+  @Put('/backstage/user/verify/reson/:resonId')
+  @Validator(validSchemas.updateBackstageUserResonValidator)
+  async updateBackstageUserReson(
+      req: userParams.UpdateBackstageUserResonRequest,
+      res: Response,
+      next: NextFunction,
+  ) {
+    UserController.service.updateBackstageUserReson(
+        userParams.UpdateBackstageUserResonRequestConvert(
+            req.body,
+            req.query,
+            req.params,
+            req.cookies,
+        ),
+        req.session,
+    )
+        .then((result) =>{
+          // custom begin updateBackstageUserReson
+          res.json({result});
+
+          // custom end updateBackstageUserReson
+        }).catch((e) => {
+          next(e);
+        });
+  }
   @Put('/backstage/user/verify/:id')
   @Validator(validSchemas.updateBackstageUserValidator)
   async updateBackstageUser(

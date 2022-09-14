@@ -12,6 +12,7 @@ export class ExchangeRateModel {
   ) {
     const res: any[] | null = await prisma.exchangeRate.findMany({
       where: {
+    bos: param.queryBos,
       },
       select: {
         bos: true,
@@ -25,6 +26,11 @@ export class ExchangeRateModel {
 
         // custom end readManyBackstageExchangeRate
       },
+      orderBy: {
+        [param.queryOrderByField]: param.queryOrderBy,
+      },
+      skip: param.queryPage * param.queryTake,
+      take: param.queryTake,
     }).catch((e) => {
       throw e;
     }).finally(() => {

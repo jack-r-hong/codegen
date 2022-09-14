@@ -14,6 +14,152 @@ interface TypedRequest<
 }
 
 
+type GetBackstageBankAccountResonReqBody = {
+  }
+
+type GetBackstageBankAccountResonReqQuery = {
+}
+
+type GetBackstageBankAccountResonReqParams = {
+}
+
+type GetBackstageBankAccountResonReqCookie = {
+}
+
+export interface GetBackstageBankAccountResonRequest extends TypedRequest<
+  GetBackstageBankAccountResonReqBody,
+  GetBackstageBankAccountResonReqQuery,
+  GetBackstageBankAccountResonReqParams,
+  GetBackstageBankAccountResonReqCookie
+>{
+}
+
+export type GetBackstageBankAccountResonParams = {
+}
+
+
+export const GetBackstageBankAccountResonRequestConvert = (
+    body: GetBackstageBankAccountResonReqBody,
+    query: GetBackstageBankAccountResonReqQuery,
+    path: GetBackstageBankAccountResonReqParams,
+    cookie: GetBackstageBankAccountResonReqCookie,
+): GetBackstageBankAccountResonParams => {
+  return {
+  };
+};
+type CreateBackstageBankAccountsResonReqBody = {
+  des: string,
+}
+
+type CreateBackstageBankAccountsResonReqQuery = {
+}
+
+type CreateBackstageBankAccountsResonReqParams = {
+}
+
+type CreateBackstageBankAccountsResonReqCookie = {
+}
+
+export interface CreateBackstageBankAccountsResonRequest extends TypedRequest<
+  CreateBackstageBankAccountsResonReqBody,
+  CreateBackstageBankAccountsResonReqQuery,
+  CreateBackstageBankAccountsResonReqParams,
+  CreateBackstageBankAccountsResonReqCookie
+>{
+}
+
+export type CreateBackstageBankAccountsResonParams = {
+bodyDes: string,
+}
+
+
+export const CreateBackstageBankAccountsResonRequestConvert = (
+    body: CreateBackstageBankAccountsResonReqBody,
+    query: CreateBackstageBankAccountsResonReqQuery,
+    path: CreateBackstageBankAccountsResonReqParams,
+    cookie: CreateBackstageBankAccountsResonReqCookie,
+): CreateBackstageBankAccountsResonParams => {
+  return {
+    bodyDes: body.des,
+  };
+};
+type DeleteBackstageBankAccountResonReqBody = {
+  }
+
+type DeleteBackstageBankAccountResonReqQuery = {
+}
+
+type DeleteBackstageBankAccountResonReqParams = {
+      resonId: string
+,
+}
+
+type DeleteBackstageBankAccountResonReqCookie = {
+}
+
+export interface DeleteBackstageBankAccountResonRequest extends TypedRequest<
+  DeleteBackstageBankAccountResonReqBody,
+  DeleteBackstageBankAccountResonReqQuery,
+  DeleteBackstageBankAccountResonReqParams,
+  DeleteBackstageBankAccountResonReqCookie
+>{
+}
+
+export type DeleteBackstageBankAccountResonParams = {
+      pathResonId: number
+}
+
+
+export const DeleteBackstageBankAccountResonRequestConvert = (
+    body: DeleteBackstageBankAccountResonReqBody,
+    query: DeleteBackstageBankAccountResonReqQuery,
+    path: DeleteBackstageBankAccountResonReqParams,
+    cookie: DeleteBackstageBankAccountResonReqCookie,
+): DeleteBackstageBankAccountResonParams => {
+  return {
+          pathResonId: parseInt(path.resonId),
+  };
+};
+type UpdateBackstageBankAccountResonReqBody = {
+  des: string,
+}
+
+type UpdateBackstageBankAccountResonReqQuery = {
+}
+
+type UpdateBackstageBankAccountResonReqParams = {
+      resonId: string
+,
+}
+
+type UpdateBackstageBankAccountResonReqCookie = {
+}
+
+export interface UpdateBackstageBankAccountResonRequest extends TypedRequest<
+  UpdateBackstageBankAccountResonReqBody,
+  UpdateBackstageBankAccountResonReqQuery,
+  UpdateBackstageBankAccountResonReqParams,
+  UpdateBackstageBankAccountResonReqCookie
+>{
+}
+
+export type UpdateBackstageBankAccountResonParams = {
+      pathResonId: number
+bodyDes: string,
+}
+
+
+export const UpdateBackstageBankAccountResonRequestConvert = (
+    body: UpdateBackstageBankAccountResonReqBody,
+    query: UpdateBackstageBankAccountResonReqQuery,
+    path: UpdateBackstageBankAccountResonReqParams,
+    cookie: UpdateBackstageBankAccountResonReqCookie,
+): UpdateBackstageBankAccountResonParams => {
+  return {
+    pathResonId: parseInt(path.resonId),
+    bodyDes: body.des,
+  };
+};
 type GetBackstageBankAccountsReqBody = {
   }
 

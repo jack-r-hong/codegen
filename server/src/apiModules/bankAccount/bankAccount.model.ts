@@ -7,6 +7,81 @@ const prisma = new PrismaClient();
 
 @Service()
 export class BankAccountModel {
+  async getBackstageBankAccountReson(
+      param: requestTypes.GetBackstageBankAccountResonParams,
+      customParam: any,
+  ) {
+    // custom begin getBackstageBankAccountReson
+    const res: any | null = await prisma.bankAccountVerifyReson.findMany()
+        .catch((e) => {
+          throw e;
+        }).finally(() => {
+          prisma.$disconnect();
+        });
+    return res;
+
+    // custom end getBackstageBankAccountReson
+  }
+  async createBackstageBankAccountsReson(
+      param: requestTypes.CreateBackstageBankAccountsResonParams,
+      customParam: any,
+  ) {
+    // custom begin createBackstageBankAccountsReson
+    const res: any | null = await prisma.bankAccountVerifyReson.create({
+      data: {
+        des: param.bodyDes,
+      },
+    })
+        .catch((e) => {
+          throw e;
+        }).finally(() => {
+          prisma.$disconnect();
+        });
+    return res;
+
+    // custom end createBackstageBankAccountsReson
+  }
+  async deleteBackstageBankAccountReson(
+      param: requestTypes.DeleteBackstageBankAccountResonParams,
+      customParam: any,
+  ) {
+    // custom begin deleteBackstageBankAccountReson
+    const res: any | null = await prisma.bankAccountVerifyReson.delete({
+      where: {
+        id: param.pathResonId,
+      },
+    })
+        .catch((e) => {
+          throw e;
+        }).finally(() => {
+          prisma.$disconnect();
+        });
+    return res;
+
+    // custom end deleteBackstageBankAccountReson
+  }
+  async updateBackstageBankAccountReson(
+      param: requestTypes.UpdateBackstageBankAccountResonParams,
+      customParam: any,
+  ) {
+    // custom begin updateBackstageBankAccountReson
+    const res: any | null = await prisma.bankAccountVerifyReson.update({
+      data: {
+        des: param.bodyDes,
+      },
+      where: {
+        id: param.pathResonId,
+      },
+    })
+        .catch((e) => {
+          throw e;
+        }).finally(() => {
+          prisma.$disconnect();
+        });
+    return res;
+
+    // custom end updateBackstageBankAccountReson
+  }
   async getBackstageBankAccounts(
       param: requestTypes.GetBackstageBankAccountsParams,
       customParam: any,

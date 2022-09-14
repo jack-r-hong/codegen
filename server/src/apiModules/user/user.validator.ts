@@ -7,6 +7,32 @@ import * as sessions from '../../sessions';
 
 
 
+export const readBackstageUserResonValidator: Schema = {
+};
+export const createBackstageUserResonValidator: Schema = {
+  'des': {
+    in: 'body',
+    isString: true,
+  },
+};
+export const deleteBackstageUserResonValidator: Schema = {
+  resonId: {
+    in: 'params',
+    isInt: true,
+    notEmpty: true,
+  },
+};
+export const updateBackstageUserResonValidator: Schema = {
+  resonId: {
+    in: 'params',
+    isInt: true,
+    notEmpty: true,
+  },
+  'des': {
+    in: 'body',
+    isString: true,
+  },
+};
 export const updateBackstageUserValidator: Schema = {
   id: {
     in: 'params',

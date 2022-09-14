@@ -7,6 +7,78 @@ const prisma = new PrismaClient();
 
 @Service()
 export class UserModel {
+  async readBackstageUserReson(
+      param: requestTypes.ReadBackstageUserResonParams,
+      customParam: any,
+  ) {
+    // custom begin readBackstageUserReson
+    const res = await prisma.userVerifyReson.findMany()
+        .catch((e) => {
+          throw e;
+        }).finally(() => {
+          prisma.$disconnect();
+        });
+    return res;
+
+    // custom end readBackstageUserReson
+  }
+  async createBackstageUserReson(
+      param: requestTypes.CreateBackstageUserResonParams,
+      customParam: any,
+  ) {
+    // custom begin createBackstageUserReson
+    const res = await prisma.userVerifyReson.create({
+      data: {
+        des: param.bodyDes,
+      },
+    }).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+    return res;
+
+    // custom end createBackstageUserReson
+  }
+  async deleteBackstageUserReson(
+      param: requestTypes.DeleteBackstageUserResonParams,
+      customParam: any,
+  ) {
+    // custom begin deleteBackstageUserReson
+    const res = await prisma.userVerifyReson.delete({
+      where: {
+        id: param.pathResonId,
+      },
+    }).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+    return res;
+
+    // custom end deleteBackstageUserReson
+  }
+  async updateBackstageUserReson(
+      param: requestTypes.UpdateBackstageUserResonParams,
+      customParam: any,
+  ) {
+    // custom begin updateBackstageUserReson
+    const res = await prisma.userVerifyReson.update({
+      where: {
+        id: param.pathResonId,
+      },
+      data: {
+        des: param.bodyDes,
+      },
+    }).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+    return res;
+
+    // custom end updateBackstageUserReson
+  }
   async updateBackstageUser(
       param: requestTypes.UpdateBackstageUserParams,
       customParam: any,

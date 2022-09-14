@@ -3,6 +3,7 @@ import {UserVerifyPhotoModel} from './userVerifyPhoto.model';
 import * as requestTypes from './userVerifyPhoto.parameters';
 import {errors} from '../../errors';
 // custom begin import
+import {promises as fs} from 'fs';
 
 // custom end import
 
@@ -12,6 +13,22 @@ export class UserVerifyPhotoService {
   @Inject()
   private userVerifyPhotoModel!: UserVerifyPhotoModel;
 
+  async getBackstageUserVerifyPhoto(
+      param :requestTypes.GetBackstageUserVerifyPhotoParams,
+      session: Express.Request['session'],
+  ) {
+    // custom begin getBackstageUserVerifyPhoto
+    const res = await this.userVerifyPhotoModel.getBackstageUserVerifyPhoto(
+        param,
+        {userId: session.userInfo!.id},
+    ).catch((e) =>{
+      throw e;
+    });
+    const data = await fs.readFile(res.path);
+    return data;
+
+    // custom end getBackstageUserVerifyPhoto
+  }
   async getUserVerifyPhoto(
       param :requestTypes.GetUserVerifyPhotoParams,
       session: Express.Request['session'],

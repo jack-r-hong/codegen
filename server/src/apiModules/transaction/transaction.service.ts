@@ -94,6 +94,7 @@ export class TransactionService {
       throw e;
     });
     return res;
+
     // custom end getExchangeRate
   }
   async readMyTransaction(
@@ -145,21 +146,18 @@ export class TransactionService {
     // custom end readOneTransaction2
     return res;
   }
-  async updateOneTransactionState(
-      param :requestTypes.UpdateOneTransactionStateParams,
+  async updateTransaction(
+      param :requestTypes.UpdateTransactionParams,
       session: Express.Request['session'],
   ) {
-    // custom begin updateOneTransactionState
-
-    // custom end updateOneTransactionState
-
-    const res = await this.transactionModel.updateOneTransactionState(
+    // custom begin updateTransaction
+    const res = await this.transactionModel.updateTransaction(
         param,
+        {userId: session.userInfo?.id},
     ).catch((e) =>{
       throw e;
     });
 
-    // custom begin updateOneTransactionState2
     if (!session.transaction) {
       session.transaction = {
         id: param.pathId,
@@ -169,21 +167,21 @@ export class TransactionService {
         bos: res.bos,
       };
     }
-    if (param.bodyState) {
+    if (Number.isInteger(param.bodyState)) {
       await wSCIModel.pub(
           param.pathId,
           JSON.stringify({
             state: res.state,
           }),
       );
-      session.transaction.process = param.bodyState;
+      session.transaction.process = param.bodyState as number;
     }
     if (param.bodyState === 4) {
       session.transaction = undefined;
     }
 
-    // custom end updateOneTransactionState2
     return res;
+    // custom end updateTransaction
   }
 }
 

@@ -102,6 +102,7 @@ type GetExchangeRateReqBody = {
   }
 
 type GetExchangeRateReqQuery = {
+      bos: string
 }
 
 type GetExchangeRateReqParams = {
@@ -119,6 +120,7 @@ export interface GetExchangeRateRequest extends TypedRequest<
 }
 
 export type GetExchangeRateParams = {
+      queryBos: number
 }
 
 
@@ -129,6 +131,7 @@ export const GetExchangeRateRequestConvert = (
     cookie: GetExchangeRateReqCookie,
 ): GetExchangeRateParams => {
   return {
+          queryBos: parseInt(query.bos),
   };
 };
 type ReadMyTransactionReqBody = {
@@ -264,41 +267,41 @@ export const ReadOneTransactionRequestConvert = (
             pathId: path.id,
   };
 };
-type UpdateOneTransactionStateReqBody = {
+type UpdateTransactionReqBody = {
   state: string|undefined,
 }
 
-type UpdateOneTransactionStateReqQuery = {
+type UpdateTransactionReqQuery = {
 }
 
-type UpdateOneTransactionStateReqParams = {
+type UpdateTransactionReqParams = {
       id: string
 ,
 }
 
-type UpdateOneTransactionStateReqCookie = {
+type UpdateTransactionReqCookie = {
 }
 
-export interface UpdateOneTransactionStateRequest extends TypedRequest<
-  UpdateOneTransactionStateReqBody,
-  UpdateOneTransactionStateReqQuery,
-  UpdateOneTransactionStateReqParams,
-  UpdateOneTransactionStateReqCookie
+export interface UpdateTransactionRequest extends TypedRequest<
+  UpdateTransactionReqBody,
+  UpdateTransactionReqQuery,
+  UpdateTransactionReqParams,
+  UpdateTransactionReqCookie
 >{
 }
 
-export type UpdateOneTransactionStateParams = {
+export type UpdateTransactionParams = {
       pathId: string
 bodyState: number|undefined,
 }
 
 
-export const UpdateOneTransactionStateRequestConvert = (
-    body: UpdateOneTransactionStateReqBody,
-    query: UpdateOneTransactionStateReqQuery,
-    path: UpdateOneTransactionStateReqParams,
-    cookie: UpdateOneTransactionStateReqCookie,
-): UpdateOneTransactionStateParams => {
+export const UpdateTransactionRequestConvert = (
+    body: UpdateTransactionReqBody,
+    query: UpdateTransactionReqQuery,
+    path: UpdateTransactionReqParams,
+    cookie: UpdateTransactionReqCookie,
+): UpdateTransactionParams => {
   return {
       pathId: path.id,
     bodyState: body.state? parseInt(body.state):undefined,

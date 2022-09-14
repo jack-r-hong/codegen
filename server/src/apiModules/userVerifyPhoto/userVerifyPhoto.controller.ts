@@ -24,6 +24,32 @@ export class UserVerifyPhotoController implements Controller {
   @Inject('app.use')
     appUse!: AppUse;
 
+  @Get('/backstage/real_verify/photo/:userId')
+  @Validator(validSchemas.getBackstageUserVerifyPhotoValidator)
+  async getBackstageUserVerifyPhoto(
+      req: userVerifyPhotoParams.GetBackstageUserVerifyPhotoRequest,
+      res: Response,
+      next: NextFunction,
+  ) {
+    UserVerifyPhotoController.service.getBackstageUserVerifyPhoto(
+        userVerifyPhotoParams.GetBackstageUserVerifyPhotoRequestConvert(
+            req.body,
+            req.query,
+            req.params,
+            req.cookies,
+        ),
+        req.session,
+    )
+        .then((result) =>{
+          // custom begin getBackstageUserVerifyPhoto
+          res.type('image/png');
+          res.status(200).send(result);
+
+          // custom end getBackstageUserVerifyPhoto
+        }).catch((e) => {
+          next(e);
+        });
+  }
   @Get('/real_verify/photo')
   @Validator(validSchemas.getUserVerifyPhotoValidator)
   async getUserVerifyPhoto(

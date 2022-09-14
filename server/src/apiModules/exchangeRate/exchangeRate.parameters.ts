@@ -18,6 +18,11 @@ type ReadManyBackstageExchangeRateReqBody = {
   }
 
 type ReadManyBackstageExchangeRateReqQuery = {
+      orderBy: string
+      orderByField: string
+      page: string
+      take: string
+      bos: string
 }
 
 type ReadManyBackstageExchangeRateReqParams = {
@@ -35,6 +40,11 @@ export interface ReadManyBackstageExchangeRateRequest extends TypedRequest<
 }
 
 export type ReadManyBackstageExchangeRateParams = {
+      queryOrderBy: string
+      queryOrderByField: string
+      queryPage: number
+      queryTake: number
+      queryBos: number
 }
 
 
@@ -45,6 +55,11 @@ export const ReadManyBackstageExchangeRateRequestConvert = (
     cookie: ReadManyBackstageExchangeRateReqCookie,
 ): ReadManyBackstageExchangeRateParams => {
   return {
+            queryOrderBy: query.orderBy,
+            queryOrderByField: query.orderByField,
+          queryPage: parseInt(query.page),
+          queryTake: parseInt(query.take),
+          queryBos: parseInt(query.bos),
   };
 };
 type CreateOneBackstageExchangeRateReqBody = {

@@ -10,6 +10,17 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model BackstageAdmin {
+  account  String  @map("account")                 
+  createdAt  DateTime  @default(now()) @map("created_at")                 
+  id  Int @id @default(autoincrement()) @map("id")                 
+  password  String  @map("password")                 
+  status  Int  @default(1)  @map("status")                 
+  
+    // custom begin BackstageAdmin
+
+    // custom end BackstageAdmin
+}
 model BankAccount {
   account  Int  @map("account")                 
   code  Int  @map("code")                 
@@ -77,6 +88,20 @@ model ExchangeRate {
 
     // custom end ExchangeRate
 }
+model PayManage {
+  createdAt  DateTime  @default(now()) @map("created_at")                 
+  id  Int @id @default(autoincrement()) @map("id")                 
+  qrCode  String  @map("qr_code")                 
+  remark  String  @map("remark")                 
+  status  Int  @default(1)  @map("status")                 
+  type  Int  @map("type")                 
+  user User? @relation(fields: [userId], references: [id])
+  userId String @map("user_id")  
+  
+    // custom begin PayManage
+
+    // custom end PayManage
+}
 model Transaction {
   account  String  @map("account")                 
   bankAccount  Int  @map("bank_account")                 
@@ -131,6 +156,7 @@ model User {
   bankAccount BankAccount[]
   userLevel UserLevel? @relation(fields: [level], references: [level])
   level Int @map("level") @default(1) 
+  payManage PayManage[]
   transaction Transaction[]
   transactionRecive TransactionRecive[]
   userTransaction UserTransaction?

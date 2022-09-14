@@ -172,14 +172,14 @@ export class TransactionController implements Controller {
         });
   }
   @Put('/transaction/:id')
-  @Validator(validSchemas.updateOneTransactionStateValidator)
-  async updateOneTransactionState(
-      req: transactionParams.UpdateOneTransactionStateRequest,
+  @Validator(validSchemas.updateTransactionValidator)
+  async updateTransaction(
+      req: transactionParams.UpdateTransactionRequest,
       res: Response,
       next: NextFunction,
   ) {
-    TransactionController.service.updateOneTransactionState(
-        transactionParams.UpdateOneTransactionStateRequestConvert(
+    TransactionController.service.updateTransaction(
+        transactionParams.UpdateTransactionRequestConvert(
             req.body,
             req.query,
             req.params,
@@ -188,7 +188,9 @@ export class TransactionController implements Controller {
         req.session,
     )
         .then((result) =>{
+          // custom begin updateTransaction
           res.json(result);
+          // custom end updateTransaction
         }).catch((e) => {
           next(e);
         });

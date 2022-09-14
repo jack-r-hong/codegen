@@ -527,6 +527,60 @@
         }
       }
     },   
+    "/backstage/real_verify/photo/{userId}": {
+      "get" : {
+        "tags" : [ "userVerifyPhoto" ],
+        "summary" : "Logs user into the system",
+        "operationId" : "getBackstageUserVerifyPhoto",
+        "parameters" : [ 
+          {
+            "name" : "userId",
+            "in" : "path",
+            "schema" : {
+              "type" : "string",
+              "format": "uuid"
+            },
+            "required": true
+          },
+          {
+            "name" : "type",
+            "in" : "query",
+            "schema" : {
+              "type" : "integer"
+            },
+            "required": true
+          }                              
+        ],          
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "result": {
+                      "type" : "object",
+                      "properties" : {
+                        "id" : {
+                          "type" : "integer"
+                        }                        
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/BadRequest"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },    
     "/backstage/users": {
       "get" : {
         "tags" : [ "user" ],
@@ -714,7 +768,147 @@
           "cookieAuth" : []
         }]
       }     
-    },        
+    }, 
+    "/backstage/user/verify/reson": {   
+      "get" : {
+        "tags" : [ "user" ],
+        "summary" : "Logs user into the system",
+        "operationId" : "readBackstageUserReson", 
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/BackstageUser"
+          },          
+          "400" : {
+            "$ref" : "#/components/responses/BadRequest"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/Unauthorized"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          },          
+          "409" : {
+            "description": "bank account duplicate"
+          }          
+        }
+      },  
+      "post" : {
+        "tags" : [ "user" ],
+        "summary" : "Logs user into the system",
+        "operationId" : "createBackstageUserReson",
+        "requestBody":{
+          "content": {
+            "application/json" : {
+              "schema" : {
+                "type": "object",
+                "properties": {
+                  "des": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },           
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/BackstageUser"
+          },          
+          "400" : {
+            "$ref" : "#/components/responses/BadRequest"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/Unauthorized"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          },          
+          "409" : {
+            "description": "bank account duplicate"
+          }          
+        }
+      }                    
+    },   
+    "/backstage/user/verify/reson/{resonId}": {   
+      "put" : {
+        "tags" : [ "user" ],
+        "summary" : "Logs user into the system",
+        "operationId" : "updateBackstageUserReson", 
+        "parameters" : [ 
+          {
+            "name" : "resonId",
+            "in" : "path",
+            "schema" : {
+              "type" : "integer"
+            },
+            "required": true
+          }                   
+        ],    
+        "requestBody":{
+          "content": {
+            "application/json" : {
+              "schema" : {
+                "type": "object",
+                "properties": {
+                  "des": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },     
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/BackstageUser"
+          },          
+          "400" : {
+            "$ref" : "#/components/responses/BadRequest"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/Unauthorized"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          },          
+          "409" : {
+            "description": "bank account duplicate"
+          }          
+        }
+      },  
+      "delete" : {
+        "tags" : [ "user" ],
+        "summary" : "Logs user into the system",
+        "operationId" : "deleteBackstageUserReson", 
+        "parameters" : [ 
+          {
+            "name" : "resonId",
+            "in" : "path",
+            "schema" : {
+              "type" : "integer"
+            },
+            "required": true
+          }                   
+        ],           
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/BackstageUser"
+          },          
+          "400" : {
+            "$ref" : "#/components/responses/BadRequest"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/Unauthorized"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          },          
+          "409" : {
+            "description": "bank account duplicate"
+          }          
+        }
+      }                     
+    },                 
     "/user/{id}": {
       "put" : {
         "tags" : [ "user" ],
@@ -1082,7 +1276,7 @@
       "put" : {
         "tags" : [ "transaction" ],
         "summary" : "Update transaction by id",
-        "operationId" : "updateOneTransactionState",
+        "operationId" : "updateTransaction",
         "parameters" : [ {
           "name" : "id",
           "in" : "path",
@@ -1469,10 +1663,7 @@
           "403" : {
             "$ref" : "#/components/responses/Forbidden"
           }
-        },
-        "security" : [ {
-          "cookieAuth" : [ ]
-        } ]
+        }
       },
       "put" : {
         "tags" : [ "bankAccount" ],
@@ -1507,57 +1698,41 @@
       }      
 
     },
-    "/backstage/pay_manage" : {     
+    "/backstage/banks/verify/reson" : {     
       "get" : {
-        "tags" : [ "payManage" ],
+        "tags" : [ "bankAccount" ],
         "summary" : "get account",
-        "operationId" : "getBackstageBankAccounts",             
-        "parameters" : [ 
-          {
-            "name" : "userId",
-            "in" : "path",
-            "description" : "User id",
-            "required" : true,
-            "schema" : {
-              "type" : "string",
-              "format": "uuid"
-            }
-          }
-        ],           
+        "operationId" : "getBackstageBankAccountReson",                   
         "responses" : {
           "200" : {
-            "$ref" : "#/components/responses/BackstageBankAccountArray"
+            "$ref" : "#/components/responses/ResonDes"
           },
           "403" : {
             "$ref" : "#/components/responses/Forbidden"
           }
-        },
-        "security" : [ {
-          "cookieAuth" : [ ]
-        } ]
+        }
       },
-      "put" : {
+      "post" : {
         "tags" : [ "bankAccount" ],
         "summary" : "get account",
-        "operationId" : "putBackstageBankAccounts",                       
-        "parameters" : [ 
-          {
-            "name" : "userId",
-            "in" : "path",
-            "description" : "User id",
-            "required" : true,
-            "schema" : {
-              "type" : "string",
-              "format": "uuid"
+        "operationId" : "createBackstageBankAccountsReson",                            
+        "requestBody":{
+          "content": {
+            "application/json" : {
+              "schema" : {
+                "type": "object",
+                "properties": {
+                  "des": {
+                    "type": "string"
+                  }
+                }
+              }
             }
           }
-        ],          
-        "requestBody" : {
-          "$ref" : "#/components/requestBodies/BackstageBankAccountVerifyUpdate"
-        },              
+        },        
         "responses" : {
           "200" : {
-            "$ref" : "#/components/responses/BackstageBankAccountArray"
+            "$ref" : "#/components/responses/ResonDes"
           },
           "403" : {
             "$ref" : "#/components/responses/Forbidden"
@@ -1567,12 +1742,135 @@
           "cookieAuth" : [ ]
         } ]
       }      
-    },
-    "/backstage/pay_manage/{id}" : {     
+    },  
+    "/backstage/banks/verify/reson/{resonId}" : {     
       "put" : {
         "tags" : [ "bankAccount" ],
         "summary" : "get account",
-        "operationId" : "putBackstageBankAccounts",                       
+        "operationId" : "updateBackstageBankAccountReson",             
+        "parameters" : [ 
+          {
+            "name" : "resonId",
+            "in" : "path",
+            "required" : true,
+            "schema" : {
+              "type" : "integer"
+            }
+          }
+        ],           
+        "requestBody":{
+          "content": {
+            "application/json" : {
+              "schema" : {
+                "type": "object",
+                "properties": {
+                  "des": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },           
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/ResonDes"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "bankAccount" ],
+        "summary" : "get account",
+        "operationId" : "deleteBackstageBankAccountReson",                       
+        "parameters" : [ 
+          {
+            "name" : "resonId",
+            "in" : "path",
+            "required" : true,
+            "schema" : {
+              "type" : "integer"
+            }
+          }
+        ],          
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/ResonDes"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          }
+        },
+        "security" : [ {
+          "cookieAuth" : [ ]
+        } ]
+      }      
+
+    },         
+    "/backstage/pay_manage" : {     
+      "get" : {
+        "tags" : [ "payManage" ],
+        "summary" : "get account",
+        "operationId" : "readManyBackstagePayManage",   
+        "parameters" : [ 
+          {
+            "name" : "page",
+            "in" : "query",
+            "required" : true,
+            "schema" : {
+              "type" : "integer"
+            }
+          },
+          {
+            "name" : "take",
+            "in" : "query",
+            "required" : true,
+            "schema" : {
+              "type" : "integer"
+            }
+          },
+          {
+            "name" : "type",
+            "in" : "query",
+            "required" : true,
+            "schema" : {
+              "type" : "integer"
+            }
+          }                        
+        ],                             
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/ReadManyPayManage"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "payManage" ],
+        "summary" : "get account",
+        "operationId" : "careateBackstagePayManage",                              
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/CreatePayManage"
+        },              
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/BackstageBankAccountArray"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          }
+        }
+      }      
+    },
+    "/backstage/pay_manage/{id}" : {     
+      "put" : {
+        "tags" : [ "payManage" ],
+        "summary" : "get account",
+        "operationId" : "updateBackstagePayManage",                       
         "parameters" : [ 
           {
             "name" : "id",
@@ -1580,13 +1878,12 @@
             "description" : "User id",
             "required" : true,
             "schema" : {
-              "type" : "string",
-              "format": "uuid"
+              "type" : "integer"
             }
           }
         ],          
         "requestBody" : {
-          "$ref" : "#/components/requestBodies/BackstageBankAccountVerifyUpdate"
+          "$ref" : "#/components/requestBodies/UpdatePayManage"
         },              
         "responses" : {
           "200" : {
@@ -1595,12 +1892,86 @@
           "403" : {
             "$ref" : "#/components/responses/Forbidden"
           }
-        },
-        "security" : [ {
-          "cookieAuth" : [ ]
-        } ]
-      }      
-    }        
+        }
+      },
+      "delete" : {
+        "tags" : [ "payManage" ],
+        "summary" : "get account",
+        "operationId" : "deleteOneBackstagePayManage",                       
+        "parameters" : [ 
+          {
+            "name" : "id",
+            "in" : "path",
+            "description" : "User id",
+            "required" : true,
+            "schema" : {
+              "type" : "integer"
+            }
+          }
+        ],            
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/BackstageBankAccountArray"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          }
+        }
+      }              
+    },    
+    "/backstage/pay_manage/photo/{id}" : {     
+      "post" : {
+        "tags" : [ "payManage" ],
+        "summary" : "get account",
+        "operationId" : "uploadManyQrCode",                       
+        "parameters" : [ 
+          {
+            "name" : "id",
+            "in" : "path",
+            "description" : "User id",
+            "required" : true,
+            "schema" : {
+              "type" : "integer"
+            }
+          }
+        ],          
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/UploadPhotoQRCode"
+        },              
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/BackstageBankAccountArray"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "payManage" ],
+        "summary" : "get account",
+        "operationId" : "deleteQrCode",                       
+        "parameters" : [ 
+          {
+            "name" : "id",
+            "in" : "path",
+            "description" : "User id",
+            "required" : true,
+            "schema" : {
+              "type" : "integer"
+            }
+          }
+        ],                       
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/BackstageBankAccountArray"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          }
+        }
+      }                
+    }           
   },
   "externalDocs" : {
     "description" : "Find out more about Swagger",
@@ -2113,39 +2484,39 @@
             "description": "status map:\n * `1` - line pay\n * `2` - 街口支付\n",
             "enum": [1, 2]
           },            
-          "url" : {
-            "type" : "string"
+          "qrCode" : {
+            "type" : "string",
+            "default": ""
           },  
           "remark" : {
-            "type" : "string"
+            "type" : "string",
+            "default": ""
           },     
           "status" : {
             "type" : "integer",
             "default": 1,
             "description" : "status map:\n * `1` - 未設定\n * `2` - 目前使用\n * `3` - 停用\n"
-          },                         
+          },     
+          "userId" : {
+            "$ref" : "#/components/schemas/User/properties/id"
+          },                            
           "createdAt" : {
             "type" : "string",
             "format" : "date-time"
           }       
         }
       },
-      "BackstageUser" : {
+      "BackstageAdmin" : {
         "type" : "object",
         "description" : "database",
         "properties" : {
           "id" : {
             "type" : "integer"
-          },  
-          "type" : {
-            "type" : "integer",
-            "description": "status map:\n * `1` - line pay\n * `2` - 街口支付\n",
-            "enum": [1, 2]
-          },            
-          "url" : {
+          },          
+          "account" : {
             "type" : "string"
           },  
-          "remark" : {
+          "password" : {
             "type" : "string"
           },     
           "status" : {
@@ -2158,7 +2529,7 @@
             "format" : "date-time"
           }       
         }
-      },      
+      },        
       "ExchangeRate" : {
         "type" : "object",
         "description" : "database",
@@ -2600,7 +2971,6 @@
         },
         "description" : "List of user object"
       },
-      
       "UserArray" : {
         "content" : {
           "application/json" : {
@@ -2742,7 +3112,60 @@
           }
         },
         "required" : true
-      }         
+      },
+      "CreatePayManage" : {
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "type" : {
+                  "$ref" : "#/components/schemas/PayManage/properties/type"
+                }            
+              }
+            }
+          }
+        },
+        "required" : true
+      },
+      "UpdatePayManage" : {
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "remark" : {
+                  "$ref" : "#/components/schemas/PayManage/properties/remark"
+                },
+                "status" : {
+                  "$ref" : "#/components/schemas/PayManage/properties/status"
+                }                
+              }
+            }
+          }
+        },
+        "required" : true
+      },      
+      "UploadPhotoQRCode" : {
+        "content" : {
+          "multipart/form-data" : {
+            "schema" : {
+                "type" : "object",
+                "properties" : {              
+                  "files" : {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "binary"
+                    }
+                  }              
+              }
+            }
+          }
+        },
+        "description" : "List of user object",
+        "required" : true
+      }                  
     },
     "parameters" : {
       "createdAt" : {
@@ -2938,7 +3361,7 @@
                   "type" : "integer"
                 },   
                 "state" : {
-                  "$ref": "#/components/schemas/Transaction/properties/state"
+                  "type" : "integer"
                 },                        
                 "createdAt" : {
                   "type" : "string",
@@ -3190,7 +3613,61 @@
             }
           }
         }
-      },      
+      },    
+      "ReadManyPayManage" : {
+        "description" : "Ok",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type": "array",
+              "items": {
+                "type" : "object",
+                "properties" : {
+                  "type" : {
+                    "type" : "integer",
+                    "description": "status map:\n * `1` - line pay\n * `2` - 街口支付\n",
+                    "enum": [1, 2]
+                  },            
+                  "qrCode" : {
+                    "type" : "string",
+                    "default": ""
+                  },  
+                  "remark" : {
+                    "type" : "string",
+                    "default": ""
+                  },     
+                  "status" : {
+                    "type" : "integer",
+                    "default": 1,
+                    "description" : "status map:\n * `1` - 未設定\n * `2` - 目前使用\n * `3` - 停用\n"
+                  }
+                }                
+              }                  
+            }
+          }
+        }
+      },   
+      "ResonDes" : {
+        "description" : "Ok",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type": "array",
+              "items": {
+                "type" : "object",
+                "properties" : {
+                  "id" : {
+                    "type" : "integer"
+                  },     
+                  "des" : {
+                    "type" : "string"
+                  }
+                }                
+              }                  
+            }
+          }
+        }
+      },               
       "BadRequest" : {
         "description" : "Bad request"
       },
