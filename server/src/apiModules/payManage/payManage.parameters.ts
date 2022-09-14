@@ -58,6 +58,7 @@ export const ReadManyBackstagePayManageRequestConvert = (
 };
 type CareateBackstagePayManageReqBody = {
   type: string,
+userId: string,
 }
 
 type CareateBackstagePayManageReqQuery = {
@@ -79,6 +80,7 @@ export interface CareateBackstagePayManageRequest extends TypedRequest<
 
 export type CareateBackstagePayManageParams = {
 bodyType: number,
+bodyUserId: string,
 }
 
 
@@ -90,6 +92,7 @@ export const CareateBackstagePayManageRequestConvert = (
 ): CareateBackstagePayManageParams => {
   return {
     bodyType: parseInt(body.type),
+    bodyUserId: body.userId,
   };
 };
 type DeleteQrCodeReqBody = {

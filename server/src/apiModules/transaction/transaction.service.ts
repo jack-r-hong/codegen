@@ -3,6 +3,7 @@ import {TransactionModel} from './transaction.model';
 import * as requestTypes from './transaction.parameters';
 import {errors} from '../../errors';
 // custom begin import
+import {promises as fs} from 'fs';
 import {Container} from 'typedi';
 import {WSClientIdModel} from '../../redisClient/models/webSocketModels';
 const wSCIModel = Container.get(WSClientIdModel);
@@ -112,6 +113,26 @@ export class TransactionService {
 
     // custom end readMyTransaction
   }
+  async getPayPhoto(
+      param :requestTypes.GetPayPhotoParams,
+      session: Express.Request['session'],
+  ) {
+    // custom begin getPayPhoto
+    const res = await this.transactionModel.getPayPhoto(
+        param,
+        {userId: session.userInfo?.id},
+    ).catch((e) =>{
+      throw e;
+    });
+
+    if (res && res.user.payManage && res.user.payManage[0]) {
+      const photo = await fs.readFile( res.user.payManage[0].qrCode, 'base64');
+      return photo;
+    }
+    throw new errors.NotFindError;
+
+    // custom end getPayPhoto
+  }
   async readPendingTransaction(
       param :requestTypes.ReadPendingTransactionParams,
       session: Express.Request['session'],
@@ -157,7 +178,6 @@ export class TransactionService {
     ).catch((e) =>{
       throw e;
     });
-
     if (!session.transaction) {
       session.transaction = {
         id: param.pathId,
@@ -179,8 +199,8 @@ export class TransactionService {
     if (param.bodyState === 4) {
       session.transaction = undefined;
     }
-
     return res;
+
     // custom end updateTransaction
   }
 }

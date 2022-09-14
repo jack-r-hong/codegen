@@ -24,7 +24,13 @@ export class UserVerifyPhotoService {
     ).catch((e) =>{
       throw e;
     });
-    const data = await fs.readFile(res.path);
+    if (!res || !res.path) {
+      throw new errors.NotFindError;
+    }
+    const data = await fs.readFile(res.path)
+        .catch(() => {
+          throw new errors.NotFindError;
+        });
     return data;
 
     // custom end getBackstageUserVerifyPhoto

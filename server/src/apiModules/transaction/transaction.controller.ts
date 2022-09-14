@@ -124,6 +124,32 @@ export class TransactionController implements Controller {
           next(e);
         });
   }
+  @Get('/transaction/pay_photo')
+  @Validator(validSchemas.getPayPhotoValidator)
+  async getPayPhoto(
+      req: transactionParams.GetPayPhotoRequest,
+      res: Response,
+      next: NextFunction,
+  ) {
+    TransactionController.service.getPayPhoto(
+        transactionParams.GetPayPhotoRequestConvert(
+            req.body,
+            req.query,
+            req.params,
+            req.cookies,
+        ),
+        req.session,
+    )
+        .then((result) =>{
+          // custom begin getPayPhoto
+
+          res.json({result});
+
+          // custom end getPayPhoto
+        }).catch((e) => {
+          next(e);
+        });
+  }
   @Get('/transaction/pending')
   @Validator(validSchemas.readPendingTransactionValidator)
   async readPendingTransaction(
@@ -190,6 +216,7 @@ export class TransactionController implements Controller {
         .then((result) =>{
           // custom begin updateTransaction
           res.json(result);
+
           // custom end updateTransaction
         }).catch((e) => {
           next(e);

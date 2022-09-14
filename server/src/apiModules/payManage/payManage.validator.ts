@@ -28,9 +28,10 @@ export const careateBackstagePayManageValidator: Schema = {
   'type': {
     in: 'body',
     isInt: true,
-    matches: {
-      options: /^(1|2)/,
-    },
+  },
+  'userId': {
+    in: 'body',
+    isString: true,
   },
 };
 export const deleteQrCodeValidator: Schema = {

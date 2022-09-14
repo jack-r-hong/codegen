@@ -1236,7 +1236,55 @@
           "cookieAuth" : [ ]
         } ]
       }
-    },        
+    },   
+    "/transaction/pay_photo" : {
+      "get" : {
+        "tags" : [ "transaction" ],
+        "summary" : "Get transaction by id",
+        "operationId" : "getPayPhoto",   
+        "parameters" : [ 
+          {
+            "name" : "type",
+            "in" : "query",
+            "required" : true,
+            "description": "status map:\n * `1` - line pay\n * `2` - 街口支付\n",
+            "schema" : {
+              "type" : "integer",
+              "enum": [1, 2]
+            }
+          },
+          {
+            "name" : "transactionId",
+            "in" : "query",
+            "required" : true,
+            "schema" : {
+              "type" : "string",
+              "format": "uuid"
+            }
+          }
+        ],         
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/Transaction"
+          },
+          "400" : {
+            "$ref" : "#/components/responses/BadRequest"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/Unauthorized"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          },
+          "404" : {
+            "$ref" : "#/components/responses/NotFound"
+          }
+        },
+        "security" : [ {
+          "cookieAuth" : [ ]
+        } ]
+      }
+    },     
     "/transaction/{id}" : {
       "get" : {
         "tags" : [ "transaction" ],
@@ -1875,7 +1923,7 @@
           {
             "name" : "id",
             "in" : "path",
-            "description" : "User id",
+            "description" : "id",
             "required" : true,
             "schema" : {
               "type" : "integer"
@@ -1928,7 +1976,7 @@
           {
             "name" : "id",
             "in" : "path",
-            "description" : "User id",
+            "description" : "id",
             "required" : true,
             "schema" : {
               "type" : "integer"
@@ -2414,7 +2462,7 @@
           },                
           "twd" : {
             "type" : "integer"
-          },   
+          },        
           "state" : {
             "type" : "integer",
             "format" : "int32",
@@ -2459,13 +2507,15 @@
             "format" : "date-time"
           }, 
           "transactionId" : {
-            "$ref" : "#/components/schemas/Transaction/properties/id"
+            "$ref" : "#/components/schemas/Transaction/properties/id",
+            "unique": true
           },
           "transaction" : {
             "$ref" : "#/components/schemas/Transaction"
           },                 
           "userId" : {
-            "$ref" : "#/components/schemas/User/properties/id"
+            "$ref" : "#/components/schemas/User/properties/id",
+            "unique": true
           },
           "user" : {
             "$ref" : "#/components/schemas/User"
@@ -3120,7 +3170,11 @@
               "type" : "object",
               "properties" : {
                 "type" : {
-                  "$ref" : "#/components/schemas/PayManage/properties/type"
+                  "type": "integer"
+                },
+                "userId" : {
+                  "type": "string",
+                  "format": "uuid"
                 }            
               }
             }
@@ -3623,6 +3677,9 @@
               "items": {
                 "type" : "object",
                 "properties" : {
+                  "id" : {
+                    "type" : "integer"
+                  },                    
                   "type" : {
                     "type" : "integer",
                     "description": "status map:\n * `1` - line pay\n * `2` - 街口支付\n",

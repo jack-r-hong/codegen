@@ -185,6 +185,45 @@ export const ReadMyTransactionRequestConvert = (
             queryEndTime: query.end_time,
   };
 };
+type GetPayPhotoReqBody = {
+  }
+
+type GetPayPhotoReqQuery = {
+      type: string
+      transactionId: string
+}
+
+type GetPayPhotoReqParams = {
+}
+
+type GetPayPhotoReqCookie = {
+}
+
+export interface GetPayPhotoRequest extends TypedRequest<
+  GetPayPhotoReqBody,
+  GetPayPhotoReqQuery,
+  GetPayPhotoReqParams,
+  GetPayPhotoReqCookie
+>{
+}
+
+export type GetPayPhotoParams = {
+      queryType: number
+      queryTransactionId: string
+}
+
+
+export const GetPayPhotoRequestConvert = (
+    body: GetPayPhotoReqBody,
+    query: GetPayPhotoReqQuery,
+    path: GetPayPhotoReqParams,
+    cookie: GetPayPhotoReqCookie,
+): GetPayPhotoParams => {
+  return {
+          queryType: parseInt(query.type),
+            queryTransactionId: query.transactionId,
+  };
+};
 type ReadPendingTransactionReqBody = {
   }
 

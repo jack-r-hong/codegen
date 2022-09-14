@@ -65,7 +65,7 @@ export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
           const d = JSON.parse(message);
           d.isAgent = isAgent;
           ws.send(event.msg(d));
-          if (d.state === 4) {
+          if (d.state === 4 || d.state === 0) {
             wSCIModel.subscriberQuit(subscriber).then(()=> {});
             setTimeout(() => {
               ws.close();

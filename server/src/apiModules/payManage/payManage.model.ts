@@ -15,6 +15,7 @@ export class PayManageModel {
     type: param.queryType,
       },
       select: {
+        id: true,
         qrCode: true,
         remark: true,
         status: true,
@@ -37,6 +38,19 @@ export class PayManageModel {
       customParam: any,
   ) {
     // custom begin careateBackstagePayManage
+    const res: any | null = await prisma.payManage.create({
+      data: {
+        type: param.bodyType,
+        userId: param.bodyUserId,
+        qrCode: '',
+        remark: '',
+      },
+    }).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+    return res;
 
     // custom end careateBackstagePayManage
   }
@@ -45,6 +59,29 @@ export class PayManageModel {
       customParam: any,
   ) {
     // custom begin deleteQrCode
+    const res: PayManage | null = await prisma.payManage.findUnique({
+      where: {
+        id: param.pathId,
+      },
+    }).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+    await prisma.payManage.update({
+      where: {
+        id: param.pathId,
+      },
+      data: {
+        qrCode: '',
+        status: 1,
+      },
+    }).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+    return res;
 
     // custom end deleteQrCode
   }
@@ -54,7 +91,19 @@ export class PayManageModel {
       ownerId: string,
   ) {
     // custom begin uploadManyQrCode
-    const res = {};
+    const res: PayManage | null = await prisma.payManage.update({
+      where: {
+        id: param.pathId,
+      },
+      data: {
+        status: 2,
+        qrCode: files[0]!.path.replace('\\', '/'),
+      },
+    }).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
 
     // custom end uploadManyQrCode
     return res;
@@ -78,6 +127,20 @@ export class PayManageModel {
       customParam: any,
   ) {
     // custom begin updateBackstagePayManage
+    const res: PayManage | null = await prisma.payManage.update({
+      where: {
+        id: param.pathId,
+      },
+      data: {
+        remark: param.bodyRemark,
+        status: param.bodyStatus,
+      },
+    }).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+    return res;
 
     // custom end updateBackstagePayManage
   }

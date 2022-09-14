@@ -123,6 +123,30 @@ export const readMyTransactionValidator: Schema = {
     },
   },
 };
+export const getPayPhotoValidator: Schema = {
+  type: {
+    in: 'query',
+    isInt: true,
+    notEmpty: true,
+    matches: {
+      options: /^(1|2)/,
+    },
+  },
+  transactionId: {
+    in: 'query',
+    isString: true,
+    notEmpty: true,
+  },
+  'JSESSIONID': {
+    in: 'cookies',
+    custom: {
+      options: (value, {req, location, path}) => {
+        sessions.cookieAuthSessionVerify(req['session']);
+        return true;
+      },
+    },
+  },
+};
 export const readPendingTransactionValidator: Schema = {
   orderBy: {
     in: 'query',

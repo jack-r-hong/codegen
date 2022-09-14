@@ -98,9 +98,7 @@ export class TransactionModel {
         OR: [
           {userId: customParam.userId},
           {transactionRecive: {
-            every: {
-              userId: customParam.userId,
-            },
+            userId: customParam.userId,
           }},
         ],
         createdAt: {
@@ -133,6 +131,43 @@ export class TransactionModel {
     return res;
 
     // custom end readMyTransaction
+  }
+  async getPayPhoto(
+      param: requestTypes.GetPayPhotoParams,
+      customParam: any,
+  ) {
+    // custom begin getPayPhoto
+    const res: any | null = await prisma.transactionRecive.findFirst({
+      where: {
+        transactionId: param.queryTransactionId,
+        user: {
+          payManage: {
+            some: {
+              status: 3,
+            },
+          },
+        },
+      },
+      select: {
+        user: {
+          select: {
+            payManage: {
+              select: {
+                qrCode: true,
+              },
+            },
+          },
+        },
+      },
+    }).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+
+    return res;
+
+    // custom end getPayPhoto
   }
   async readPendingTransaction(
       param: requestTypes.ReadPendingTransactionParams,
@@ -215,7 +250,6 @@ export class TransactionModel {
     }).finally(() => {
       prisma.$disconnect();
     });
-
     if (param.bodyState === 2) {
       await prisma.transactionRecive.create({
         data: {
@@ -229,6 +263,7 @@ export class TransactionModel {
       });
     }
     return res;
+
     // custom end updateTransaction
   }
 }

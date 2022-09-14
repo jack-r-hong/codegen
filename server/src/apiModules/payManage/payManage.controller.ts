@@ -64,6 +64,7 @@ export class PayManageController implements Controller {
     )
         .then((result) =>{
           // custom begin careateBackstagePayManage
+          res.json({result});
 
           // custom end careateBackstagePayManage
         }).catch((e) => {
@@ -88,6 +89,7 @@ export class PayManageController implements Controller {
     )
         .then((result) =>{
           // custom begin deleteQrCode
+          res.json({result});
 
           // custom end deleteQrCode
         }).catch((e) => {
@@ -158,6 +160,7 @@ export class PayManageController implements Controller {
     )
         .then((result) =>{
           // custom begin updateBackstagePayManage
+          res.json({result});
 
           // custom end updateBackstagePayManage
         }).catch((e) => {

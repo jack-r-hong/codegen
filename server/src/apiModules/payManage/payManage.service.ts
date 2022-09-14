@@ -3,6 +3,7 @@ import {PayManageModel} from './payManage.model';
 import * as requestTypes from './payManage.parameters';
 import {errors} from '../../errors';
 // custom begin import
+import {promises as fs} from 'fs';
 
 // custom end import
 
@@ -36,6 +37,13 @@ export class PayManageService {
       session: Express.Request['session'],
   ) {
     // custom begin careateBackstagePayManage
+    const res = await this.payManageModel.careateBackstagePayManage(
+        param,
+        {},
+    ).catch((e) =>{
+      throw e;
+    });
+    return res;
 
     // custom end careateBackstagePayManage
   }
@@ -44,6 +52,20 @@ export class PayManageService {
       session: Express.Request['session'],
   ) {
     // custom begin deleteQrCode
+    const res = await this.payManageModel.deleteQrCode(
+        param,
+        {},
+    ).catch((e) =>{
+      throw e;
+    });
+    if (!res) {
+      return;
+    }
+    const path = res.qrCode;
+    await fs.unlink(path)
+        .catch((e) => {
+        });
+    return res;
 
     // custom end deleteQrCode
   }
@@ -93,6 +115,13 @@ export class PayManageService {
       session: Express.Request['session'],
   ) {
     // custom begin updateBackstagePayManage
+    const res = await this.payManageModel.updateBackstagePayManage(
+        param,
+        {},
+    ).catch((e) =>{
+      throw e;
+    });
+    return res;
 
     // custom end updateBackstagePayManage
   }
