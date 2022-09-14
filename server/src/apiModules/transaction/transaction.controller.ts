@@ -142,7 +142,6 @@ export class TransactionController implements Controller {
     )
         .then((result) =>{
           // custom begin getPayPhoto
-
           res.json({result});
 
           // custom end getPayPhoto

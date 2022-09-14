@@ -111,6 +111,7 @@ model Transaction {
   bos  Int  @map("bos")                 
   createdAt  DateTime  @default(now()) @map("created_at")                 
   id  String @id @default(uuid()) @map("id")                 
+  payMethod  Int  @map("pay_method")                 
   point  Int  @map("point")                 
   state  Int  @default(1)  @map("state")                 
   twd  Int  @map("twd")                 

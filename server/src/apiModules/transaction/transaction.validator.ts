@@ -23,6 +23,13 @@ export const createTransactionValidator: Schema = {
       options: /^(1|2)/,
     },
   },
+  'payMethod': {
+    in: 'body',
+    isInt: true,
+    matches: {
+      options: /^(1|2|3|4)/,
+    },
+  },
   'point': {
     in: 'body',
     isInt: true,

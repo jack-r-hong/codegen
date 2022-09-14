@@ -124,7 +124,6 @@ export class TransactionService {
     ).catch((e) =>{
       throw e;
     });
-
     if (res && res.user.payManage && res.user.payManage[0]) {
       const photo = await fs.readFile( res.user.payManage[0].qrCode, 'base64');
       return photo;

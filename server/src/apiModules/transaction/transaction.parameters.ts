@@ -18,6 +18,7 @@ type CreateTransactionReqBody = {
   account: string,
 bankId: string,
 bos: string,
+payMethod: string,
 point: string,
 twd: string,
 }
@@ -43,6 +44,7 @@ export type CreateTransactionParams = {
 bodyAccount: string,
 bodyBankId: number,
 bodyBos: number,
+bodyPayMethod: number,
 bodyPoint: number,
 bodyTwd: number,
 }
@@ -58,6 +60,7 @@ export const CreateTransactionRequestConvert = (
     bodyAccount: body.account,
     bodyBankId: parseInt(body.bankId),
     bodyBos: parseInt(body.bos),
+    bodyPayMethod: parseInt(body.payMethod),
     bodyPoint: parseInt(body.point),
     bodyTwd: parseInt(body.twd),
   };

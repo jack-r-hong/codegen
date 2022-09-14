@@ -164,7 +164,6 @@ export class TransactionModel {
     }).finally(() => {
       prisma.$disconnect();
     });
-
     return res;
 
     // custom end getPayPhoto

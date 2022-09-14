@@ -2462,7 +2462,13 @@
           },                
           "twd" : {
             "type" : "integer"
-          },        
+          },      
+          "payMethod" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "status map:\n  * `1` - linePay\n * `2` - 街口支付\n * `3` -超商\n * `4` - ATM\n",
+            "enum" : [1, 2, 3, 4]
+          },                   
           "state" : {
             "type" : "integer",
             "format" : "int32",
@@ -3141,6 +3147,9 @@
                 },  
                 "bankId" : {
                   "$ref" : "#/components/schemas/BankAccount/properties/id"
+                },
+                "payMethod": {
+                  "$ref" : "#/components/schemas/Transaction/properties/payMethod"
                 }
               }
             }
