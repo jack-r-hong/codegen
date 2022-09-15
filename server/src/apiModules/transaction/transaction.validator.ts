@@ -16,6 +16,10 @@ export const createTransactionValidator: Schema = {
     in: 'body',
     isInt: true,
   },
+  'bonusPoint': {
+    in: 'body',
+    isInt: true,
+  },
   'bos': {
     in: 'body',
     isInt: true,
@@ -27,7 +31,7 @@ export const createTransactionValidator: Schema = {
     in: 'body',
     isInt: true,
     matches: {
-      options: /^(1|2|3|4)/,
+      options: /^(1|2|3|4|5)/,
     },
   },
   'point': {

@@ -17,6 +17,7 @@ interface TypedRequest<
 type CreateTransactionReqBody = {
   account: string,
 bankId: string,
+bonusPoint: string,
 bos: string,
 payMethod: string,
 point: string,
@@ -43,6 +44,7 @@ export interface CreateTransactionRequest extends TypedRequest<
 export type CreateTransactionParams = {
 bodyAccount: string,
 bodyBankId: number,
+bodyBonusPoint: number,
 bodyBos: number,
 bodyPayMethod: number,
 bodyPoint: number,
@@ -59,6 +61,7 @@ export const CreateTransactionRequestConvert = (
   return {
     bodyAccount: body.account,
     bodyBankId: parseInt(body.bankId),
+    bodyBonusPoint: parseInt(body.bonusPoint),
     bodyBos: parseInt(body.bos),
     bodyPayMethod: parseInt(body.payMethod),
     bodyPoint: parseInt(body.point),
@@ -98,7 +101,7 @@ export const UpdateTransactionStateRequestConvert = (
     cookie: UpdateTransactionStateReqCookie,
 ): UpdateTransactionStateParams => {
   return {
-    bodyState: body.state? parseInt(body.state):undefined,
+    bodyState: typeof body.state === 'number' ? body.state : undefined,
   };
 };
 type GetExchangeRateReqBody = {
@@ -346,7 +349,7 @@ export const UpdateTransactionRequestConvert = (
 ): UpdateTransactionParams => {
   return {
       pathId: path.id,
-    bodyState: body.state? parseInt(body.state):undefined,
+    bodyState: typeof body.state === 'number' ? body.state : undefined,
   };
 };
 

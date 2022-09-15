@@ -246,7 +246,7 @@ export const UpdateBackstagePayManageRequestConvert = (
   return {
     pathId: parseInt(path.id),
     bodyRemark: body.remark,
-    bodyStatus: body.status? parseInt(body.status):undefined,
+    bodyStatus: typeof body.status === 'number' ? body.status : undefined,
   };
 };
 

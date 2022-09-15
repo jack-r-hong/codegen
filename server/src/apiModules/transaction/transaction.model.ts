@@ -15,7 +15,7 @@ export class TransactionModel {
     const res: Transaction | null = await prisma.transaction.create({
       data: {
         account: param.bodyAccount,
-        bonusPoint: 0,
+        bonusPoint: param.bodyBonusPoint,
         bos: param.bodyBos,
         point: param.bodyPoint,
         twd: param.bodyTwd,
@@ -23,6 +23,7 @@ export class TransactionModel {
         bankAccount: customParam.bankAccount,
         bankCode: customParam.bankCode,
         bankName: customParam.bankName,
+        payMethod: param.bodyPayMethod,
       },
     }).catch((e) => {
       throw e;
@@ -112,6 +113,7 @@ export class TransactionModel {
         state: true,
         twd: true,
         bos: true,
+        payMethod: true,
         bonusPoint: true,
         createdAt: true,
         bankAccount: true,
@@ -185,6 +187,7 @@ export class TransactionModel {
         bos: true,
         bonusPoint: true,
         account: true,
+        payMethod: true,
         createdAt: true,
       },
       orderBy: {
@@ -210,10 +213,14 @@ export class TransactionModel {
       },
       select: {
         account: true,
+        bankAccount: true,
+        bankCode: true,
+        bankName: true,
         bonusPoint: true,
         bos: true,
         createdAt: true,
         id: true,
+        payMethod: true,
         point: true,
         state: true,
         twd: true,
@@ -237,7 +244,7 @@ export class TransactionModel {
       customParam: any,
   ) {
     // custom begin updateTransaction
-    const res: Transaction | null = await prisma.transaction.update({
+    let res: any | null = await prisma.transaction.update({
       where: {
         id: param.pathId,
       },
@@ -250,10 +257,17 @@ export class TransactionModel {
       prisma.$disconnect();
     });
     if (param.bodyState === 2) {
-      await prisma.transactionRecive.create({
+      res = await prisma.transaction.update({
+        where: {
+          id: param.pathId,
+        },
         data: {
-          userId: customParam.userId,
-          transactionId: res.id,
+          state: param.bodyState,
+          transactionRecive: {
+            create: {
+              userId: customParam.userId,
+            },
+          },
         },
       }).catch((e) => {
         throw e;

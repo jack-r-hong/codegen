@@ -7,6 +7,3 @@
 */
 -- CreateIndex
 CREATE UNIQUE INDEX `TransactionRecive_transaction_id_key` ON `TransactionRecive`(`transaction_id`);
-
--- CreateIndex
-CREATE UNIQUE INDEX `TransactionRecive_user_id_key` ON `TransactionRecive`(`user_id`);

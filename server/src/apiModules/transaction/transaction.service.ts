@@ -186,14 +186,14 @@ export class TransactionService {
         bos: res.bos,
       };
     }
-    if (Number.isInteger(param.bodyState)) {
+    if (typeof param.bodyState === 'number') {
       await wSCIModel.pub(
           param.pathId,
           JSON.stringify({
             state: res.state,
           }),
       );
-      session.transaction.process = param.bodyState as number;
+      session.transaction.process = param.bodyState;
     }
     if (param.bodyState === 4) {
       session.transaction = undefined;

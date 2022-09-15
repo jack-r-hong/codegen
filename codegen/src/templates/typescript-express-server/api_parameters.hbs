@@ -136,7 +136,7 @@ export type {{fpc data.operationId}}Params = {
 {{~#*inline "RequestConvertBody"}}
   {{#if (equal p.type "integer") ~}}
     {{#if (or  p.nullable p.default) ~}}
-    body{{fpc @key}}: body.{{@key}}? parseInt(body.{{@key}}):undefined,
+    body{{fpc @key}}: typeof body.{{@key}} === 'number' ? body.{{@key}} : undefined,
     {{else ~}}
     body{{fpc @key}}: parseInt(body.{{@key}}),
     {{/if}}

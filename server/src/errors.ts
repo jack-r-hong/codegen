@@ -111,6 +111,8 @@ const prismaDBErrorHender = (err: Prisma.PrismaClientKnownRequestError) => {
       return httpErrors(409);
     case 'P2003':
       return httpErrors(403);
+    case 'P2011':
+      return httpErrors(409);
     case 'P2025':
       return httpErrors(404);
     default:

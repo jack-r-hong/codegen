@@ -2467,7 +2467,7 @@
             "type" : "integer",
             "format" : "int32",
             "description" : "status map:\n  * `1` - linePay\n * `2` - 街口支付\n * `3` -超商\n * `4` - ATM\n",
-            "enum" : [1, 2, 3, 4]
+            "enum" : [1, 2, 3, 4, 5]
           },                   
           "state" : {
             "type" : "integer",
@@ -2520,8 +2520,7 @@
             "$ref" : "#/components/schemas/Transaction"
           },                 
           "userId" : {
-            "$ref" : "#/components/schemas/User/properties/id",
-            "unique": true
+            "$ref" : "#/components/schemas/User/properties/id"
           },
           "user" : {
             "$ref" : "#/components/schemas/User"
@@ -3150,7 +3149,10 @@
                 },
                 "payMethod": {
                   "$ref" : "#/components/schemas/Transaction/properties/payMethod"
-                }
+                },
+                "bonusPoint": {
+                  "$ref" : "#/components/schemas/Transaction/properties/bonusPoint"
+                }                
               }
             }
           }
@@ -3432,7 +3434,19 @@
                 }, 
                 "account" : {
                   "type" : "string"
-                },      
+                },   
+                "payMethod" : {
+                  "type" : "integer"
+                },                     
+                "bankAccount" : {
+                  "type" : "integer"
+                },   
+                "bankCode" : {
+                  "type" : "integer"
+                },   
+                "bankName" : {
+                  "type" : "string"
+                },                        
                 "userId" : {
                   "$ref" : "#/components/schemas/User/properties/id"
                 },
