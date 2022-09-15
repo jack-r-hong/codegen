@@ -107,15 +107,6 @@ export const putBackstageBankAccountsValidator: Schema = {
   'dataList.*.verifyId': {
     isInt: true,
   },
-  'JSESSIONID': {
-    in: 'cookies',
-    custom: {
-      options: (value, {req, location, path}) => {
-        sessions.cookieAuthSessionVerify(req['session']);
-        return true;
-      },
-    },
-  },
 };
 export const createBankAccountsValidator: Schema = {
   'data': {

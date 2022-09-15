@@ -5,6 +5,118 @@ import {errors} from '../../errors';
 // custom begin import
 import bcrypt from 'bcrypt';
 import svgCaptcha from 'svg-captcha';
+import {promises as fs} from 'fs';
+const userVerifyResponeFormat = async (data: any) => {
+  const {
+    userStatus,
+    name,
+    email,
+    birthdate,
+    country,
+    idCard,
+    idCardDate,
+    idCardPosiition,
+    idCardType,
+    city,
+    area,
+    address,
+    userVerify,
+    userVerifyPhoto,
+  } = data;
+  const verify = {
+    name: userVerify.name,
+    email: userVerify.email,
+    birthdate: userVerify.birthdate,
+    country: userVerify.country,
+    idCardDate: userVerify.idCardDate,
+    idCardPosiition: userVerify.idCardPosiition,
+    idCardType: userVerify.idCardType,
+    idCardPhoto: userVerify.idCardPhoto,
+    city: userVerify.city,
+    area: userVerify.area,
+    address: userVerify.address,
+    certificate: userVerify.certificate,
+    selfie: userVerify.selfie,
+    sign: userVerify.sign,
+  };
+  const verifyDes = {
+    name: '',
+    email: '',
+    birthdate: '',
+    country: '',
+    idCardDate: '',
+    idCardPosiition: '',
+    idCardType: '',
+    idCardPhoto: '',
+    city: '',
+    area: '',
+    address: '',
+    certificate: '',
+    selfie: '',
+    sign: '',
+  };
+  const photos = {
+    idCard1: '',
+    idCard2: '',
+    certificate1: '',
+    certificate2: '',
+    selfie: '',
+    sign: '',
+  };
+  for (const e of userVerifyPhoto) {
+    const data = await fs.readFile(e.path, 'base64')
+        .catch(() => {
+          return '';
+        });
+    switch (e.type) {
+      case 1:
+        photos.idCard1 = data;
+        break;
+      case 2:
+        photos.idCard2 = data;
+        break;
+      case 3:
+        photos.certificate1 = data;
+        break;
+      case 4:
+        photos.certificate2 = data;
+        break;
+      case 5:
+        photos.selfie = data;
+        break;
+      case 6:
+        photos.sign = data;
+        break;
+    }
+  }
+  userVerify.userVerifyResonDes.forEach((element: {
+  field: 'name' | 'email' | 'birthdate' | 'country' |
+  'idCardPhoto' | 'idCardDate' | 'idCardPosiition' | 'idCardType' |
+  'city' | 'area' | 'address' | 'certificate' | 'selfie' | 'sign',
+  userVerifyReson: {
+    des: string
+  }
+}) => {
+    verifyDes[element.field] = element.userVerifyReson.des;
+  });
+  return {
+    userStatus,
+    name,
+    email,
+    birthdate,
+    country,
+    idCard,
+    idCardDate,
+    idCardPosiition,
+    idCardType,
+    city,
+    area,
+    address,
+    verify,
+    verifyDes,
+    photos,
+  };
+};
 
 // custom end import
 
@@ -70,6 +182,8 @@ export class UserService {
     ).catch((e) =>{
       throw e;
     });
+
+
     return res;
 
     // custom end updateBackstageUserReson
@@ -85,6 +199,7 @@ export class UserService {
     ).catch((e) =>{
       throw e;
     });
+
     return res;
 
     // custom end updateBackstageUser
@@ -104,6 +219,7 @@ export class UserService {
     });
 
     // custom begin readOneBackstageUser2
+    return userVerifyResponeFormat(res);
 
     // custom end readOneBackstageUser2
     return res;
@@ -163,6 +279,20 @@ export class UserService {
     throw new errors.LoginFailError;
 
     // custom end loginUser
+  }
+  async getRealVerify(
+      param :requestTypes.GetRealVerifyParams,
+      session: Express.Request['session'],
+  ) {
+    // custom begin getRealVerify
+    const dataHandle = await this.userModel.getRealVerify(param,
+        {userId: session.userInfo?.id!})
+        .catch((e) =>{
+          throw e;
+        });
+    return userVerifyResponeFormat(dataHandle);
+
+    // custom end getRealVerify
   }
   async postRealVerify(
       param :requestTypes.PostRealVerifyParams,

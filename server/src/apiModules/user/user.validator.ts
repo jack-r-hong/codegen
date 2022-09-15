@@ -46,12 +46,30 @@ export const updateBackstageUserValidator: Schema = {
       options: /^(1|2|3)/,
     },
   },
+  'addressResonId': {
+    in: 'body',
+    isInt: true,
+optional: {
+  options: {
+    nullable: true,
+  },
+},
+  },
   'birthdate': {
     in: 'body',
     isInt: true,
     matches: {
       options: /^(1|2|3)/,
     },
+  },
+  'birthdateResonId': {
+    in: 'body',
+    isInt: true,
+optional: {
+  options: {
+    nullable: true,
+  },
+},
   },
   'certificate': {
     in: 'body',
@@ -60,12 +78,30 @@ export const updateBackstageUserValidator: Schema = {
       options: /^(1|2|3)/,
     },
   },
+  'certificateResonId': {
+    in: 'body',
+    isInt: true,
+optional: {
+  options: {
+    nullable: true,
+  },
+},
+  },
   'country': {
     in: 'body',
     isInt: true,
     matches: {
       options: /^(1|2|3)/,
     },
+  },
+  'countryResonId': {
+    in: 'body',
+    isInt: true,
+optional: {
+  options: {
+    nullable: true,
+  },
+},
   },
   'email': {
     in: 'body',
@@ -74,12 +110,30 @@ export const updateBackstageUserValidator: Schema = {
       options: /^(1|2|3)/,
     },
   },
+  'emailResonId': {
+    in: 'body',
+    isInt: true,
+optional: {
+  options: {
+    nullable: true,
+  },
+},
+  },
   'idCardDate': {
     in: 'body',
     isInt: true,
     matches: {
       options: /^(1|2|3)/,
     },
+  },
+  'idCardDateResonId': {
+    in: 'body',
+    isInt: true,
+optional: {
+  options: {
+    nullable: true,
+  },
+},
   },
   'idCardPhoto': {
     in: 'body',
@@ -88,12 +142,30 @@ export const updateBackstageUserValidator: Schema = {
       options: /^(1|2|3)/,
     },
   },
+  'idCardPhotoResonId': {
+    in: 'body',
+    isInt: true,
+optional: {
+  options: {
+    nullable: true,
+  },
+},
+  },
   'idCardPosiition': {
     in: 'body',
     isInt: true,
     matches: {
       options: /^(1|2|3)/,
     },
+  },
+  'idCardPosiitionResonId': {
+    in: 'body',
+    isInt: true,
+optional: {
+  options: {
+    nullable: true,
+  },
+},
   },
   'idCardType': {
     in: 'body',
@@ -102,12 +174,30 @@ export const updateBackstageUserValidator: Schema = {
       options: /^(1|2|3)/,
     },
   },
+  'idCardTypeResonId': {
+    in: 'body',
+    isInt: true,
+optional: {
+  options: {
+    nullable: true,
+  },
+},
+  },
   'name': {
     in: 'body',
     isInt: true,
     matches: {
       options: /^(1|2|3)/,
     },
+  },
+  'nameResonId': {
+    in: 'body',
+    isInt: true,
+optional: {
+  options: {
+    nullable: true,
+  },
+},
   },
   'selfie': {
     in: 'body',
@@ -116,6 +206,15 @@ export const updateBackstageUserValidator: Schema = {
       options: /^(1|2|3)/,
     },
   },
+  'selfieResonId': {
+    in: 'body',
+    isInt: true,
+optional: {
+  options: {
+    nullable: true,
+  },
+},
+  },
   'sign': {
     in: 'body',
     isInt: true,
@@ -123,15 +222,14 @@ export const updateBackstageUserValidator: Schema = {
       options: /^(1|2|3)/,
     },
   },
-  'userVerifyResonDes': {
+  'signResonId': {
     in: 'body',
-    isArray: true,
-  },
-  'userVerifyResonDes.*.field': {
-    isString: true,
-  },
-  'userVerifyResonDes.*.userVerifyResonId': {
     isInt: true,
+optional: {
+  options: {
+    nullable: true,
+  },
+},
   },
   'JSESSIONID': {
     in: 'cookies',
@@ -189,6 +287,17 @@ export const loginUserValidator: Schema = {
   'phonePrefix': {
     in: 'body',
     isString: true,
+  },
+};
+export const getRealVerifyValidator: Schema = {
+  'JSESSIONID': {
+    in: 'cookies',
+    custom: {
+      options: (value, {req, location, path}) => {
+        sessions.cookieAuthSessionVerify(req['session']);
+        return true;
+      },
+    },
   },
 };
 export const postRealVerifyValidator: Schema = {

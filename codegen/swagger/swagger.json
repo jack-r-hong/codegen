@@ -301,6 +301,28 @@
       }
     },
     "/real_verify": {
+      "get" : {
+        "tags" : [ "user" ],
+        "summary" : "Logs user into the system",
+        "operationId" : "getRealVerify",
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/RealVerify"
+          },
+          "400" : {
+            "$ref" : "#/components/responses/BadRequest"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/Unauthorized"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          }        
+        },
+        "security" : [ {
+          "cookieAuth" : [ ]
+        } ]
+      },      
       "post" : {
         "tags" : [ "user" ],
         "summary" : "Logs user into the system",
@@ -553,24 +575,7 @@
         ],          
         "responses" : {
           "200" : {
-            "description" : "successful operation",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "type" : "object",
-                  "properties" : {
-                    "result": {
-                      "type" : "object",
-                      "properties" : {
-                        "id" : {
-                          "type" : "integer"
-                        }                        
-                      }
-                    }
-                  }
-                }
-              }
-            }
+            "$ref" : "#/components/responses/RealVerify"
           },
           "400" : {
             "$ref" : "#/components/responses/BadRequest"
@@ -776,7 +781,7 @@
         "operationId" : "readBackstageUserReson", 
         "responses" : {
           "200" : {
-            "$ref" : "#/components/responses/BackstageUser"
+            "$ref" : "#/components/responses/ResonDes"
           },          
           "400" : {
             "$ref" : "#/components/responses/BadRequest"
@@ -812,7 +817,7 @@
         },           
         "responses" : {
           "200" : {
-            "$ref" : "#/components/responses/BackstageUser"
+            "$ref" : "#/components/responses/ResonDes"
           },          
           "400" : {
             "$ref" : "#/components/responses/BadRequest"
@@ -860,7 +865,7 @@
         },     
         "responses" : {
           "200" : {
-            "$ref" : "#/components/responses/BackstageUser"
+            "$ref" : "#/components/responses/ResonDes"
           },          
           "400" : {
             "$ref" : "#/components/responses/BadRequest"
@@ -892,7 +897,7 @@
         ],           
         "responses" : {
           "200" : {
-            "$ref" : "#/components/responses/BackstageUser"
+            "$ref" : "#/components/responses/ResonDes"
           },          
           "400" : {
             "$ref" : "#/components/responses/BadRequest"
@@ -1739,12 +1744,8 @@
           "403" : {
             "$ref" : "#/components/responses/Forbidden"
           }
-        },
-        "security" : [ {
-          "cookieAuth" : [ ]
-        } ]
+        }
       }      
-
     },
     "/backstage/banks/verify/reson" : {     
       "get" : {
@@ -2890,20 +2891,54 @@
                   "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
                   "enum": [1,2,3]
                 },
-                "userVerifyResonDes": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "field": {
-                        "type": "string"
-                      },
-                      "userVerifyResonId": {
-                        "type": "integer"
-                      }
-                    } 
-                  }
-                }                                                           
+                "nameResonId" : {
+                  "type" : "integer",
+                  "nullable": true
+                },        
+                "emailResonId" : {
+                  "type" : "integer",
+                  "nullable": true
+                },                                  
+                "birthdateResonId" : {
+                  "type" : "integer",
+                  "nullable": true
+                },
+                "countryResonId" : {
+                  "type" : "integer",
+                  "nullable": true
+                },                
+                "idCardDateResonId" : {
+                  "type" : "integer",
+                  "nullable": true
+                },  
+                "idCardPosiitionResonId" : {
+                  "type" : "integer",
+                  "nullable": true
+                },  
+                "idCardTypeResonId" : {
+                  "type" : "integer",
+                  "nullable": true
+                },  
+                "idCardPhotoResonId" : {
+                  "type" : "integer",
+                  "nullable": true
+                },  
+                "certificateResonId" : {
+                  "type" : "integer",
+                  "nullable": true
+                },  
+                "selfieResonId" : {
+                  "type" : "integer",
+                  "nullable": true
+                },  
+                "signResonId" : {
+                  "type" : "integer",
+                  "nullable": true
+                },  
+                "addressResonId" : {
+                  "type" : "integer",
+                  "nullable": true
+                }                                                      
               }
             }
           }
@@ -3727,6 +3762,133 @@
           }
         }
       },   
+      "RealVerify" :{
+        "description" : "Ok",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type": "array",
+              "items": {
+                "type" : "object",
+                "properties" : {
+                  "userStatus" : {
+                    "type" : "integer"
+                  },   
+                  "name" : {
+                    "type" : "string"
+                  },         
+                  "email" : {
+                    "type" : "string"
+                  },     
+                  "birthdate" : {
+                    "type" : "string"
+                  },     
+                  "country" : {
+                    "type" : "string"
+                  },       
+                  "idCard" : {
+                    "type" : "string"
+                  },        
+                  "idCardDate" : {
+                    "type" : "string"
+                  },             
+                  "idCardPosiition" : {
+                    "type" : "string"
+                  },             
+                  "idCardType" : {
+                    "type" : "string"
+                  },             
+                  "city" : {
+                    "type" : "string"
+                  },             
+                  "area" : {
+                    "type" : "string"
+                  },                                        
+                  "address" : {
+                    "type" : "string"
+                  },               
+                  "verify":{
+                    "type": "object",
+                    "properties": {
+                      "name" : {
+                        "type" : "integer"
+                      },         
+                      "email" : {
+                        "type" : "integer"
+                      },     
+                      "birthdate" : {
+                        "type" : "integer"
+                      },     
+                      "country" : {
+                        "type" : "integer"
+                      },       
+                      "idCardPhoto" : {
+                        "type" : "integer"
+                      },        
+                      "idCardDate" : {
+                        "type" : "integer"
+                      },             
+                      "idCardPosiition" : {
+                        "type" : "integer"
+                      },             
+                      "idCardType" : {
+                        "type" : "integer"
+                      },             
+                      "city" : {
+                        "type" : "integer"
+                      },             
+                      "area" : {
+                        "type" : "integer"
+                      },                                        
+                      "address" : {
+                        "type" : "integer"
+                      }      
+                    }
+                  }, 
+                  "verifyDes":{
+                    "type": "object",
+                    "properties": {
+                      "name" : {
+                        "type" : "string"
+                      },         
+                      "email" : {
+                        "type" : "string"
+                      },     
+                      "birthdate" : {
+                        "type" : "string"
+                      },     
+                      "country" : {
+                        "type" : "string"
+                      },       
+                      "idCardPhoto" : {
+                        "type" : "string"
+                      },        
+                      "idCardDate" : {
+                        "type" : "string"
+                      },             
+                      "idCardPosiition" : {
+                        "type" : "string"
+                      },             
+                      "idCardType" : {
+                        "type" : "string"
+                      },             
+                      "city" : {
+                        "type" : "string"
+                      },             
+                      "area" : {
+                        "type" : "string"
+                      },                                        
+                      "address" : {
+                        "type" : "string"
+                      }      
+                    }
+                  }
+                }                
+              }                  
+            }
+          }
+        }   
+      },
       "ResonDes" : {
         "description" : "Ok",
         "content" : {

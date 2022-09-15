@@ -15,7 +15,7 @@ interface TypedRequest<
 
 {{#*inline "nullable"}}
   {{~#if p.nullable ~}}
-    |null
+    |undefined
   {{~else~}}
     {{~#if p.default ~}}
       |undefined

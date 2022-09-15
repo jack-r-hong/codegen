@@ -244,6 +244,31 @@ export class UserController implements Controller {
           next(e);
         });
   }
+  @Get('/real_verify')
+  @Validator(validSchemas.getRealVerifyValidator)
+  async getRealVerify(
+      req: userParams.GetRealVerifyRequest,
+      res: Response,
+      next: NextFunction,
+  ) {
+    UserController.service.getRealVerify(
+        userParams.GetRealVerifyRequestConvert(
+            req.body,
+            req.query,
+            req.params,
+            req.cookies,
+        ),
+        req.session,
+    )
+        .then((result) =>{
+          // custom begin getRealVerify
+          res.json(result);
+
+          // custom end getRealVerify
+        }).catch((e) => {
+          next(e);
+        });
+  }
   @Post('/real_verify')
   @Validator(validSchemas.postRealVerifyValidator)
   async postRealVerify(

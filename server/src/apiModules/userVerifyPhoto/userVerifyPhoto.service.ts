@@ -20,14 +20,14 @@ export class UserVerifyPhotoService {
     // custom begin getBackstageUserVerifyPhoto
     const res = await this.userVerifyPhotoModel.getBackstageUserVerifyPhoto(
         param,
-        {userId: session.userInfo!.id},
+        {},
     ).catch((e) =>{
       throw e;
     });
     if (!res || !res.path) {
       throw new errors.NotFindError;
     }
-    const data = await fs.readFile(res.path)
+    const data = await fs.readFile(res.path, 'base64')
         .catch(() => {
           throw new errors.NotFindError;
         });

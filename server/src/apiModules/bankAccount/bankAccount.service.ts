@@ -98,11 +98,11 @@ export class BankAccountService {
         bankAccountVerify,
       } = e;
       const verify = {
-        id: bankAccountVerify.id,
-        account: bankAccountVerify.account,
-        code: bankAccountVerify.code,
-        name: bankAccountVerify.name,
-        photo: bankAccountVerify.photo,
+        id: bankAccountVerify.id??null,
+        account: bankAccountVerify.account??null,
+        code: bankAccountVerify.code??null,
+        name: bankAccountVerify.name??null,
+        photo: bankAccountVerify.photo??null,
       };
       const verifyDes = {
         account: '',

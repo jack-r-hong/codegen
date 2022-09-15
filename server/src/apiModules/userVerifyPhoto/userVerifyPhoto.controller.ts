@@ -42,8 +42,7 @@ export class UserVerifyPhotoController implements Controller {
     )
         .then((result) =>{
           // custom begin getBackstageUserVerifyPhoto
-          res.type('image/png');
-          res.status(200).send(result);
+          res.json({result});
 
           // custom end getBackstageUserVerifyPhoto
         }).catch((e) => {

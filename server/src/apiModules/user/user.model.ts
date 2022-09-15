@@ -84,6 +84,32 @@ export class UserModel {
       customParam: any,
   ) {
     // custom begin updateBackstageUser
+    const fields = {
+      'bodyAddress': 1,
+      'bodyBirthdate': 1,
+      'bodyCertificate': 1,
+      'bodyCountry': 1,
+      'bodyEmail': 1,
+      'bodyIdCardDate': 1,
+      'bodyIdCardPhoto': 1,
+      'bodyIdCardPosiition': 1,
+      'bodyIdCardType': 1,
+      'bodyName': 1,
+      'bodySelfie': 1,
+      'bodySign': 1,
+    };
+
+
+    const isVerified = (Object.keys(fields) as ( keyof typeof fields)[] )
+        .every((key) => {
+          if (param[key] === 2) {
+            return true;
+          }
+          return false;
+        });
+
+    const userStatus = isVerified? 1: 3;
+
     const userVerifyRes = await prisma.userVerify.update({
       where: {
         userId: param.pathId,
@@ -101,35 +127,75 @@ export class UserModel {
         name: param.bodyName,
         selfie: param.bodySelfie,
         sign: param.bodySign,
+        user: {
+          update: {
+            userStatus,
+          },
+        },
+      },
+      select: {
+        address: true,
+        birthdate: true,
+        certificate: true,
+        country: true,
+        email: true,
+        idCardDate: true,
+        idCardPhoto: true,
+        idCardPosiition: true,
+        idCardType: true,
+        name: true,
+        selfie: true,
+        sign: true,
+        id: true,
       },
     });
+
+
+    const resonMap = {
+      bodyAddressResonId: 'address',
+      bodyBirthdateResonId: 'birthdate',
+      bodyCertificateResonId: 'certificate',
+      bodyCountryResonId: 'country',
+      bodyEmailResonId: 'email',
+      bodyIdCardDateResonId: 'idCardDate',
+      bodyIdCardPhotoResonId: 'idCardPhoto',
+      bodyIdCardPosiitionResonId: 'idCardPosiition',
+      bodyIdCardTypeResonId: 'idCardType',
+      bodyNameResonId: 'name',
+      bodySelfieResonId: 'selfie',
+      bodySignResonId: 'sign',
+    } as const;
+
     await prisma.$transaction(
-        param.bodyUserVerifyResonDes.map((e) =>
-          prisma.userVerifyResonDes.upsert({
-            where: {
-              uniqueUserField: {
-                userVerifyId: userVerifyRes.id,
-                field: e.bodyField,
-              },
-            },
-            update: {
-              field: e.bodyField,
-              UserVerifyResonId: e.bodyUserVerifyResonId,
-            },
-            create: {
-              UserVerifyResonId: e.bodyUserVerifyResonId,
-              field: e.bodyField,
-              userVerifyId: userVerifyRes.id,
-            },
-          }),
-        ),
+        (Object.keys(resonMap) as (keyof typeof resonMap)[] )
+            .filter((key) => {
+              return !!param[key];
+            }).map((key) =>
+              prisma.userVerifyResonDes.upsert({
+                where: {
+                  uniqueUserField: {
+                    userVerifyId: userVerifyRes.id,
+                    field: resonMap[key],
+                  },
+                },
+                update: {
+                  field: resonMap[key],
+                  UserVerifyResonId: param[key],
+                },
+                create: {
+                  UserVerifyResonId: param[key] as number,
+                  field: resonMap[key],
+                  userVerifyId: userVerifyRes.id,
+                },
+              }),
+            ),
     ).catch((e) => {
       throw e;
     }).finally(() => {
       prisma.$disconnect();
     });
-    return userVerifyRes;
 
+    return userVerifyRes;
     // custom end updateBackstageUser
   }
   async readOneBackstageUser(
@@ -262,34 +328,75 @@ export class UserModel {
 
     // custom end loginUser
   }
+  async getRealVerify(
+      param: requestTypes.GetRealVerifyParams,
+      customParam: any,
+  ) {
+    // custom begin getRealVerify
+    const res: any | null = await prisma.user.findUnique({
+      where: {
+        id: customParam.userId,
+      },
+      select: {
+        userStatus: true,
+        name: true,
+        email: true,
+        birthdate: true,
+        country: true,
+        idCard: true,
+        idCardDate: true,
+        idCardPosiition: true,
+        idCardType: true,
+        city: true,
+        area: true,
+        address: true,
+        userVerifyPhoto: true,
+        userVerify: {
+          select: {
+            address: true,
+            birthdate: true,
+            certificate: true,
+            country: true,
+            email: true,
+            id: true,
+            idCardDate: true,
+            idCardPhoto: true,
+            idCardPosiition: true,
+            idCardType: true,
+            name: true,
+            selfie: true,
+            sign: true,
+            userVerifyResonDes: {
+              select: {
+                field: true,
+                userVerifyReson: {
+                  select: {
+                    des: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    }).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+    if (res === null) {
+      throw new errors.NotFindError;
+    }
+    return res;
+
+    // custom end getRealVerify
+  }
   async postRealVerify(
       param: requestTypes.PostRealVerifyParams,
       customParam: any,
   ) {
     // custom begin postRealVerify
-    await prisma.$transaction(
-        param.bodyBankAccounts.map((e, i) => {
-          return prisma.bankAccount.create({
-            data: {
-              userId: customParam.userId,
-              account: e.bodyAccount,
-              code: e.bodyAccount,
-              name: e.bodyName,
-              order: i + 1,
-              bankAccountVerify: {
-                create: {
-                  account: 1,
-                  code: 1,
-                  name: 1,
-                  photo: 1,
-                },
-              },
-            },
-          });
-        }),
-    ).catch((e) => {
-      throw e;
-    });
+
     const res: any | null = await prisma.user.update({
       data: {
         name: param.bodyName,
@@ -320,6 +427,31 @@ export class UserModel {
     if (res === null) {
       throw new errors.NotFindError;
     }
+    await prisma.$transaction(
+        param.bodyBankAccounts.map((e, i) => {
+          return prisma.bankAccount.create({
+            data: {
+              userId: customParam.userId,
+              account: e.bodyAccount,
+              code: e.bodyAccount,
+              name: e.bodyName,
+              order: i + 1,
+              bankAccountVerify: {
+                create: {
+                  account: 1,
+                  code: 1,
+                  name: 1,
+                  photo: 1,
+                },
+              },
+            },
+          });
+        }),
+    ).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
     return res;
 
     // custom end postRealVerify

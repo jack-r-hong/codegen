@@ -9,6 +9,7 @@ import parse from 'url-parse';
 import {WSOnMessage, WSToken} from './base';
 
 import './transaction';
+import './transactionChatroom';
 
 
 export class WebsocketApp {

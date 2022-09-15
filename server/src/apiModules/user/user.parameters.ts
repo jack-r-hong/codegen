@@ -162,21 +162,29 @@ export const UpdateBackstageUserResonRequestConvert = (
 };
 type UpdateBackstageUserReqBody = {
   address: string,
+addressResonId: string|undefined,
 birthdate: string,
+birthdateResonId: string|undefined,
 certificate: string,
+certificateResonId: string|undefined,
 country: string,
+countryResonId: string|undefined,
 email: string,
+emailResonId: string|undefined,
 idCardDate: string,
+idCardDateResonId: string|undefined,
 idCardPhoto: string,
+idCardPhotoResonId: string|undefined,
 idCardPosiition: string,
+idCardPosiitionResonId: string|undefined,
 idCardType: string,
+idCardTypeResonId: string|undefined,
 name: string,
+nameResonId: string|undefined,
 selfie: string,
+selfieResonId: string|undefined,
 sign: string,
-        userVerifyResonDes: {
-                field: string,
-                userVerifyResonId: string,
-        }[],
+signResonId: string|undefined,
 }
 
 type UpdateBackstageUserReqQuery = {
@@ -201,21 +209,29 @@ export interface UpdateBackstageUserRequest extends TypedRequest<
 export type UpdateBackstageUserParams = {
       pathId: string
 bodyAddress: number,
+bodyAddressResonId: number|undefined,
 bodyBirthdate: number,
+bodyBirthdateResonId: number|undefined,
 bodyCertificate: number,
+bodyCertificateResonId: number|undefined,
 bodyCountry: number,
+bodyCountryResonId: number|undefined,
 bodyEmail: number,
+bodyEmailResonId: number|undefined,
 bodyIdCardDate: number,
+bodyIdCardDateResonId: number|undefined,
 bodyIdCardPhoto: number,
+bodyIdCardPhotoResonId: number|undefined,
 bodyIdCardPosiition: number,
+bodyIdCardPosiitionResonId: number|undefined,
 bodyIdCardType: number,
+bodyIdCardTypeResonId: number|undefined,
 bodyName: number,
+bodyNameResonId: number|undefined,
 bodySelfie: number,
+bodySelfieResonId: number|undefined,
 bodySign: number,
-        bodyUserVerifyResonDes: {
-            bodyField: string,
-            bodyUserVerifyResonId: number,
-        }[],
+bodySignResonId: number|undefined,
 }
 
 
@@ -228,23 +244,29 @@ export const UpdateBackstageUserRequestConvert = (
   return {
       pathId: path.id,
     bodyAddress: parseInt(body.address),
+    bodyAddressResonId: typeof body.addressResonId === 'number' ? body.addressResonId : undefined,
     bodyBirthdate: parseInt(body.birthdate),
+    bodyBirthdateResonId: typeof body.birthdateResonId === 'number' ? body.birthdateResonId : undefined,
     bodyCertificate: parseInt(body.certificate),
+    bodyCertificateResonId: typeof body.certificateResonId === 'number' ? body.certificateResonId : undefined,
     bodyCountry: parseInt(body.country),
+    bodyCountryResonId: typeof body.countryResonId === 'number' ? body.countryResonId : undefined,
     bodyEmail: parseInt(body.email),
+    bodyEmailResonId: typeof body.emailResonId === 'number' ? body.emailResonId : undefined,
     bodyIdCardDate: parseInt(body.idCardDate),
+    bodyIdCardDateResonId: typeof body.idCardDateResonId === 'number' ? body.idCardDateResonId : undefined,
     bodyIdCardPhoto: parseInt(body.idCardPhoto),
+    bodyIdCardPhotoResonId: typeof body.idCardPhotoResonId === 'number' ? body.idCardPhotoResonId : undefined,
     bodyIdCardPosiition: parseInt(body.idCardPosiition),
+    bodyIdCardPosiitionResonId: typeof body.idCardPosiitionResonId === 'number' ? body.idCardPosiitionResonId : undefined,
     bodyIdCardType: parseInt(body.idCardType),
+    bodyIdCardTypeResonId: typeof body.idCardTypeResonId === 'number' ? body.idCardTypeResonId : undefined,
     bodyName: parseInt(body.name),
+    bodyNameResonId: typeof body.nameResonId === 'number' ? body.nameResonId : undefined,
     bodySelfie: parseInt(body.selfie),
+    bodySelfieResonId: typeof body.selfieResonId === 'number' ? body.selfieResonId : undefined,
     bodySign: parseInt(body.sign),
-    bodyUserVerifyResonDes: body.userVerifyResonDes.map((body :any) => {
-      return {
-        bodyField: body.field,
-        bodyUserVerifyResonId: parseInt(body.userVerifyResonId),
-      };
-    }),
+    bodySignResonId: typeof body.signResonId === 'number' ? body.signResonId : undefined,
   };
 };
 type ReadOneBackstageUserReqBody = {
@@ -402,6 +424,39 @@ export const LoginUserRequestConvert = (
     bodyPassword: body.password,
     bodyPhone: body.phone,
     bodyPhonePrefix: body.phonePrefix,
+  };
+};
+type GetRealVerifyReqBody = {
+  }
+
+type GetRealVerifyReqQuery = {
+}
+
+type GetRealVerifyReqParams = {
+}
+
+type GetRealVerifyReqCookie = {
+}
+
+export interface GetRealVerifyRequest extends TypedRequest<
+  GetRealVerifyReqBody,
+  GetRealVerifyReqQuery,
+  GetRealVerifyReqParams,
+  GetRealVerifyReqCookie
+>{
+}
+
+export type GetRealVerifyParams = {
+}
+
+
+export const GetRealVerifyRequestConvert = (
+    body: GetRealVerifyReqBody,
+    query: GetRealVerifyReqQuery,
+    path: GetRealVerifyReqParams,
+    cookie: GetRealVerifyReqCookie,
+): GetRealVerifyParams => {
+  return {
   };
 };
 type PostRealVerifyReqBody = {
