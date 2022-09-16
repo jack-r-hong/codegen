@@ -29,6 +29,17 @@ export class PayManageService {
 
     // custom begin readManyBackstagePayManage2
 
+    for (const e of res ) {
+      let photo = '';
+
+      if (e.qrCode) {
+        photo = await fs.readFile( e.qrCode, 'base64')
+            .catch(() => '');
+      }
+
+      e.qrCode = photo;
+    }
+
     // custom end readManyBackstagePayManage2
     return res;
   }
