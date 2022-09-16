@@ -83,6 +83,21 @@ export class TransactionService {
 
     // custom end updateTransactionState
   }
+  async readPendingTransaction(
+      param :requestTypes.ReadPendingTransactionParams,
+      session: Express.Request['session'],
+  ) {
+    // custom begin readPendingTransaction
+    const res = await this.transactionModel.readPendingTransaction(
+        param,
+        {},
+    ).catch((e) =>{
+      throw e;
+    });
+    return res;
+
+    // custom end readPendingTransaction
+  }
   async getExchangeRate(
       param :requestTypes.GetExchangeRateParams,
       session: Express.Request['session'],
@@ -131,21 +146,6 @@ export class TransactionService {
     throw new errors.NotFindError;
 
     // custom end getPayPhoto
-  }
-  async readPendingTransaction(
-      param :requestTypes.ReadPendingTransactionParams,
-      session: Express.Request['session'],
-  ) {
-    // custom begin readPendingTransaction
-    const res = await this.transactionModel.readPendingTransaction(
-        param,
-        {},
-    ).catch((e) =>{
-      throw e;
-    });
-    return res;
-
-    // custom end readPendingTransaction
   }
   async readOneTransaction(
       param :requestTypes.ReadOneTransactionParams,

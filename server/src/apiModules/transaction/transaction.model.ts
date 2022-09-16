@@ -67,6 +67,52 @@ export class TransactionModel {
 
     // custom end updateTransactionState
   }
+  async readPendingTransaction(
+      param: requestTypes.ReadPendingTransactionParams,
+      customParam: any,
+  ) {
+    // custom begin readPendingTransaction
+    let where: {state: 1} | { state: {
+      gt: number,
+      lt: number,
+    }, } = {
+      state: 1,
+    };
+    if (param.pathAgentShow === 'processing' ) {
+      where = {
+        state: {
+          gt: 1,
+          lt: 4,
+        },
+      };
+    }
+    const res: any[] | null = await prisma.transaction.findMany({
+      where,
+      select: {
+        id: true,
+        point: true,
+        state: true,
+        twd: true,
+        bos: true,
+        bonusPoint: true,
+        account: true,
+        payMethod: true,
+        createdAt: true,
+      },
+      orderBy: {
+        [param.queryOrderByField]: param.queryOrderBy,
+      },
+      skip: param.queryPage * param.queryTake,
+      take: param.queryTake,
+    }).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+    return res;
+
+    // custom end readPendingTransaction
+  }
   async getExchangeRate(
       param: requestTypes.GetExchangeRateParams,
       customParam: any,
@@ -169,40 +215,6 @@ export class TransactionModel {
     return res;
 
     // custom end getPayPhoto
-  }
-  async readPendingTransaction(
-      param: requestTypes.ReadPendingTransactionParams,
-      customParam: any,
-  ) {
-    // custom begin readPendingTransaction
-    const res: any[] | null = await prisma.transaction.findMany({
-      where: {
-        state: 1,
-      },
-      select: {
-        id: true,
-        point: true,
-        state: true,
-        twd: true,
-        bos: true,
-        bonusPoint: true,
-        account: true,
-        payMethod: true,
-        createdAt: true,
-      },
-      orderBy: {
-        [param.queryOrderByField]: param.queryOrderBy,
-      },
-      skip: param.queryPage * param.queryTake,
-      take: param.queryTake,
-    }).catch((e) => {
-      throw e;
-    }).finally(() => {
-      prisma.$disconnect();
-    });
-    return res;
-
-    // custom end readPendingTransaction
   }
   async readOneTransaction(
       param: requestTypes.ReadOneTransactionParams,

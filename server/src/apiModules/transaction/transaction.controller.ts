@@ -74,6 +74,31 @@ export class TransactionController implements Controller {
           next(e);
         });
   }
+  @Get('/transaction/agent/:agentShow')
+  @Validator(validSchemas.readPendingTransactionValidator)
+  async readPendingTransaction(
+      req: transactionParams.ReadPendingTransactionRequest,
+      res: Response,
+      next: NextFunction,
+  ) {
+    TransactionController.service.readPendingTransaction(
+        transactionParams.ReadPendingTransactionRequestConvert(
+            req.body,
+            req.query,
+            req.params,
+            req.cookies,
+        ),
+        req.session,
+    )
+        .then((result) =>{
+          // custom begin readPendingTransaction
+          res.json({result});
+
+          // custom end readPendingTransaction
+        }).catch((e) => {
+          next(e);
+        });
+  }
   @Get('/transaction/exchange_rate')
   @Validator(validSchemas.getExchangeRateValidator)
   async getExchangeRate(
@@ -145,31 +170,6 @@ export class TransactionController implements Controller {
           res.json({result});
 
           // custom end getPayPhoto
-        }).catch((e) => {
-          next(e);
-        });
-  }
-  @Get('/transaction/pending')
-  @Validator(validSchemas.readPendingTransactionValidator)
-  async readPendingTransaction(
-      req: transactionParams.ReadPendingTransactionRequest,
-      res: Response,
-      next: NextFunction,
-  ) {
-    TransactionController.service.readPendingTransaction(
-        transactionParams.ReadPendingTransactionRequestConvert(
-            req.body,
-            req.query,
-            req.params,
-            req.cookies,
-        ),
-        req.session,
-    )
-        .then((result) =>{
-          // custom begin readPendingTransaction
-          res.json({result});
-
-          // custom end readPendingTransaction
         }).catch((e) => {
           next(e);
         });

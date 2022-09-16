@@ -75,6 +75,40 @@ optional: {
     },
   },
 };
+export const readPendingTransactionValidator: Schema = {
+  orderBy: {
+    in: 'query',
+    isString: true,
+  },
+  orderByField: {
+    in: 'query',
+    isString: true,
+  },
+  page: {
+    in: 'query',
+    isInt: true,
+  },
+  take: {
+    in: 'query',
+    isInt: true,
+  },
+  agentShow: {
+    in: 'params',
+    isString: true,
+    matches: {
+      options: /^(pending|processing)/,
+    },
+  },
+  'JSESSIONID': {
+    in: 'cookies',
+    custom: {
+      options: (value, {req, location, path}) => {
+        sessions.cookieAuthSessionVerify(req['session']);
+        return true;
+      },
+    },
+  },
+};
 export const getExchangeRateValidator: Schema = {
   bos: {
     in: 'query',
@@ -147,33 +181,6 @@ export const getPayPhotoValidator: Schema = {
     in: 'query',
     isString: true,
     notEmpty: true,
-  },
-  'JSESSIONID': {
-    in: 'cookies',
-    custom: {
-      options: (value, {req, location, path}) => {
-        sessions.cookieAuthSessionVerify(req['session']);
-        return true;
-      },
-    },
-  },
-};
-export const readPendingTransactionValidator: Schema = {
-  orderBy: {
-    in: 'query',
-    isString: true,
-  },
-  orderByField: {
-    in: 'query',
-    isString: true,
-  },
-  page: {
-    in: 'query',
-    isInt: true,
-  },
-  take: {
-    in: 'query',
-    isInt: true,
   },
   'JSESSIONID': {
     in: 'cookies',

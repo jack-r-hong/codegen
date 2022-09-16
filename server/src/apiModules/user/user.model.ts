@@ -98,8 +98,6 @@ export class UserModel {
       'bodySelfie': 1,
       'bodySign': 1,
     };
-
-
     const isVerified = (Object.keys(fields) as ( keyof typeof fields)[] )
         .every((key) => {
           if (param[key] === 2) {
@@ -107,9 +105,7 @@ export class UserModel {
           }
           return false;
         });
-
     const userStatus = isVerified? 1: 3;
-
     const userVerifyRes = await prisma.userVerify.update({
       where: {
         userId: param.pathId,
@@ -149,8 +145,6 @@ export class UserModel {
         id: true,
       },
     });
-
-
     const resonMap = {
       bodyAddressResonId: 'address',
       bodyBirthdateResonId: 'birthdate',
@@ -165,7 +159,6 @@ export class UserModel {
       bodySelfieResonId: 'selfie',
       bodySignResonId: 'sign',
     } as const;
-
     await prisma.$transaction(
         (Object.keys(resonMap) as (keyof typeof resonMap)[] )
             .filter((key) => {
@@ -194,8 +187,8 @@ export class UserModel {
     }).finally(() => {
       prisma.$disconnect();
     });
-
     return userVerifyRes;
+
     // custom end updateBackstageUser
   }
   async readOneBackstageUser(
@@ -396,7 +389,6 @@ export class UserModel {
       customParam: any,
   ) {
     // custom begin postRealVerify
-
     const res: any | null = await prisma.user.update({
       data: {
         name: param.bodyName,

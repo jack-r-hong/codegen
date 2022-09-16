@@ -104,6 +104,55 @@ export const UpdateTransactionStateRequestConvert = (
     bodyState: typeof body.state === 'number' ? body.state : undefined,
   };
 };
+type ReadPendingTransactionReqBody = {
+  }
+
+type ReadPendingTransactionReqQuery = {
+      orderBy: string
+      orderByField: string
+      page: string
+      take: string
+}
+
+type ReadPendingTransactionReqParams = {
+      agentShow: string
+,
+}
+
+type ReadPendingTransactionReqCookie = {
+}
+
+export interface ReadPendingTransactionRequest extends TypedRequest<
+  ReadPendingTransactionReqBody,
+  ReadPendingTransactionReqQuery,
+  ReadPendingTransactionReqParams,
+  ReadPendingTransactionReqCookie
+>{
+}
+
+export type ReadPendingTransactionParams = {
+      queryOrderBy: string
+      queryOrderByField: string
+      queryPage: number
+      queryTake: number
+      pathAgentShow: string
+}
+
+
+export const ReadPendingTransactionRequestConvert = (
+    body: ReadPendingTransactionReqBody,
+    query: ReadPendingTransactionReqQuery,
+    path: ReadPendingTransactionReqParams,
+    cookie: ReadPendingTransactionReqCookie,
+): ReadPendingTransactionParams => {
+  return {
+            queryOrderBy: query.orderBy,
+            queryOrderByField: query.orderByField,
+          queryPage: parseInt(query.page),
+          queryTake: parseInt(query.take),
+            pathAgentShow: path.agentShow,
+  };
+};
 type GetExchangeRateReqBody = {
   }
 
@@ -228,51 +277,6 @@ export const GetPayPhotoRequestConvert = (
   return {
           queryType: parseInt(query.type),
             queryTransactionId: query.transactionId,
-  };
-};
-type ReadPendingTransactionReqBody = {
-  }
-
-type ReadPendingTransactionReqQuery = {
-      orderBy: string
-      orderByField: string
-      page: string
-      take: string
-}
-
-type ReadPendingTransactionReqParams = {
-}
-
-type ReadPendingTransactionReqCookie = {
-}
-
-export interface ReadPendingTransactionRequest extends TypedRequest<
-  ReadPendingTransactionReqBody,
-  ReadPendingTransactionReqQuery,
-  ReadPendingTransactionReqParams,
-  ReadPendingTransactionReqCookie
->{
-}
-
-export type ReadPendingTransactionParams = {
-      queryOrderBy: string
-      queryOrderByField: string
-      queryPage: number
-      queryTake: number
-}
-
-
-export const ReadPendingTransactionRequestConvert = (
-    body: ReadPendingTransactionReqBody,
-    query: ReadPendingTransactionReqQuery,
-    path: ReadPendingTransactionReqParams,
-    cookie: ReadPendingTransactionReqCookie,
-): ReadPendingTransactionParams => {
-  return {
-            queryOrderBy: query.orderBy,
-            queryOrderByField: query.orderByField,
-          queryPage: parseInt(query.page),
-          queryTake: parseInt(query.take),
   };
 };
 type ReadOneTransactionReqBody = {

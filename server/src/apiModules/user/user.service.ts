@@ -182,8 +182,6 @@ export class UserService {
     ).catch((e) =>{
       throw e;
     });
-
-
     return res;
 
     // custom end updateBackstageUserReson
@@ -199,7 +197,6 @@ export class UserService {
     ).catch((e) =>{
       throw e;
     });
-
     return res;
 
     // custom end updateBackstageUser

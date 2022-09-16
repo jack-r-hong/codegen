@@ -1179,7 +1179,7 @@
         } ]
       }
     },    
-    "/transaction/pending" : {
+    "/transaction/agent/{agentShow}" : {
       "get" : {
         "tags" : [ "transaction" ],
         "summary" : "Get transaction by id",
@@ -1218,7 +1218,15 @@
               "type" : "integer",
               "default": 10
             }    
-          }                   
+          },
+          {
+            "name" : "agentShow",
+            "in" : "path",
+            "schema" : {
+              "type" : "string",
+              "enum": ["pending", "processing"]
+            }            
+          }                             
         ],        
         "responses" : {
           "200" : {
@@ -1241,7 +1249,7 @@
           "cookieAuth" : [ ]
         } ]
       }
-    },   
+    },  
     "/transaction/pay_photo" : {
       "get" : {
         "tags" : [ "transaction" ],
