@@ -4,6 +4,7 @@ import * as requestTypes from './backstageAdmin.parameters';
 import {errors} from '../../errors';
 // custom begin import
 import bcrypt from 'bcrypt';
+
 // custom end import
 
 
@@ -22,6 +23,7 @@ export class BackstageAdminService {
           throw e;
         });
     return res;
+
     // custom end getAdminFromId
   }
   async adminLogin(
@@ -36,7 +38,6 @@ export class BackstageAdminService {
     if (res !== null) {
       const {id, status, password} = res;
       const match = await bcrypt.compare(param.bodyPassword, password);
-
       if (match) {
         return {
           id,
@@ -73,6 +74,7 @@ export class BackstageAdminService {
       throw e;
     });
     return {success: true};
+
     // custom end adminRegister
   }
 }

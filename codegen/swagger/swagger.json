@@ -1159,7 +1159,17 @@
               "format" : "date-time",
               "default": "2022-09-12T02:26:29.050Z"
             }    
-          }                                     
+          },
+          {
+            "name" : "state",
+            "in" : "query",
+            "schema" : {
+              "type" : "string",
+              "format" : "int32",
+              "description" : "status map:\n  * `failed` - Failed\n * `all` - All\n * `pending` - Pending\n * `processing` - Processing\n",
+              "enum" : ["failed", "all", "pending", "processing"]     
+            }    
+          }                                                   
         ],        
         "responses" : {
           "200" : {

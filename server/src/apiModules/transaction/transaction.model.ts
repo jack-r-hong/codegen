@@ -140,6 +140,18 @@ export class TransactionModel {
       customParam: any,
   ) {
     // custom begin readMyTransaction
+    let state :undefined | any = undefined;
+
+    if (param.queryState === 'failed') {
+      state = 0;
+    } else if (param.queryState === 'pending') {
+      state = 1;
+    } else if (param.queryState === 'processing') {
+      state = {
+        gt: 1,
+        lt: 4,
+      };
+    }
     const res: any[] | null = await prisma.transaction.findMany({
       where: {
         OR: [
@@ -148,6 +160,7 @@ export class TransactionModel {
             userId: customParam.userId,
           }},
         ],
+        state,
         createdAt: {
           gte: param.queryStartTime,
           lte: param.queryEndTime,
