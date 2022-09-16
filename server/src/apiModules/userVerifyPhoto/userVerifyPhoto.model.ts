@@ -66,17 +66,27 @@ export class UserVerifyPhotoModel {
       ownerId: string,
   ) {
     // custom begin uploadManyVerifyPhoto
-    const data = files.map((e, i) => {
-      return {
-        path: e.path.replace('\\', '/'),
-        userId: ownerId,
-        type: param.queryTypes[i]!,
-      };
-    });
-    const res: any = await prisma.userVerifyPhoto.createMany({
-      data,
-      skipDuplicates: true,
-    }).catch((e) => {
+
+    const res = prisma.$transaction(
+        files.map((e, i) => {
+          return prisma.userVerifyPhoto.upsert({
+            where: {
+              uniqueType: {
+                userId: ownerId,
+                type: param.queryTypes[i]!,
+              },
+            },
+            create: {
+              path: e.path.replace('\\', '/'),
+              userId: ownerId,
+              type: param.queryTypes[i]!,
+            },
+            update: {
+              path: e.path.replace('\\', '/'),
+            },
+          });
+        }),
+    ).catch((e) => {
       throw e;
     }).finally(() => {
       prisma.$disconnect();
