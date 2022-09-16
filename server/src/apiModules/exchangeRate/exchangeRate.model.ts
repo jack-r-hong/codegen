@@ -18,6 +18,7 @@ export class ExchangeRateModel {
         bos: true,
         bouns: true,
         des: true,
+        id: true,
         rangeLower: true,
         rangeUpper: true,
         rate: true,

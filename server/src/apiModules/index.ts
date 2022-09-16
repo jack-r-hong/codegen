@@ -5,6 +5,7 @@ import './bankAccount/bankAccount.controller';
 import './userVerifyPhoto/userVerifyPhoto.controller';
 import './exchangeRate/exchangeRate.controller';
 import './payManage/payManage.controller';
+import './backstageAdmin/backstageAdmin.controller';
 import path from 'path';
 import fs from 'fs';
 

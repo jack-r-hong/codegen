@@ -50,7 +50,11 @@
     {
       "name" : "payManage",
       "description" : "Operations about user"
-    }    
+    },
+    {
+      "name" : "backstageAdmin",
+      "description" : "Operations about backstageAdmin"
+    }     
   ],
   "paths" : {
     "/captcha" : {
@@ -2028,7 +2032,76 @@
           }
         }
       }                
-    }           
+    },
+    "/backstage/admin" : {     
+      "post" : {
+        "tags" : [ "backstageAdmin" ],
+        "summary" : "get account",
+        "operationId" : "getAdminFromId",                              
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                  "type" : "object",
+                  "properties" : {              
+                    "id": {
+                      "type": "string",
+                      "format": "uuid"
+                    }
+                  }
+              }
+            }
+          },
+          "description" : "List of user object",
+          "required" : true
+        },              
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/AdminDetail"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          }
+        }
+      }               
+    },    
+    "/backstage/admin/register" : {     
+      "post" : {
+        "tags" : [ "backstageAdmin" ],
+        "summary" : "get account",
+        "operationId" : "adminRegister",                            
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/AdminLogin"
+        },              
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/AdminDetail"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          }
+        }
+      }               
+    },      
+    "/backstage/admin/login" : {     
+      "post" : {
+        "tags" : [ "backstageAdmin" ],
+        "summary" : "get account",
+        "operationId" : "adminLogin",                            
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/AdminLogin"
+        },              
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/AdminDetail"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          }
+        }
+      }               
+    }   
+    
   },
   "externalDocs" : {
     "description" : "Find out more about Swagger",
@@ -2575,10 +2648,18 @@
         "description" : "database",
         "properties" : {
           "id" : {
-            "type" : "integer"
-          },          
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "name" : {
+            "type" : "string",
+            "minLength" : 8,
+            "maxLength" : 30,
+            "nullable" : true
+          },    
           "account" : {
-            "type" : "string"
+            "type" : "string",
+            "uniqueItems": true
           },  
           "password" : {
             "type" : "string"
@@ -3273,7 +3354,26 @@
         },
         "description" : "List of user object",
         "required" : true
-      }                  
+      },
+      "AdminLogin" : {
+        "content" : {
+          "application/json" : {
+            "schema" : {
+                "type" : "object",
+                "properties" : {              
+                  "account": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                }
+            }
+          }
+        },
+        "description" : "List of user object",
+        "required" : true
+      }                       
     },
     "parameters" : {
       "createdAt" : {
@@ -3664,6 +3764,9 @@
               "items": {
                 "type" : "object",
                 "properties" : {
+                  "id" : {
+                    "$ref" : "#/components/schemas/ExchangeRate/properties/id"
+                  },               
                   "bos" : {
                     "$ref" : "#/components/schemas/ExchangeRate/properties/bos"
                   },  
@@ -3917,7 +4020,26 @@
             }
           }
         }
-      },               
+      },   
+      "AdminDetail" : {
+        "description" : "Ok",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "id" : {
+                  "type" : "string",
+                  "format": "uuid"
+                },     
+                "status" : {
+                  "type" : "integer"
+                }
+              }                    
+            }
+          }
+        }
+      },                      
       "BadRequest" : {
         "description" : "Bad request"
       },

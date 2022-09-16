@@ -11,9 +11,10 @@ datasource db {
 }
 
 model BackstageAdmin {
-  account  String  @map("account")                 
+  account  String  @unique  @map("account")                 
   createdAt  DateTime  @default(now()) @map("created_at")                 
-  id  Int @id @default(autoincrement()) @map("id")                 
+  id  String @id @default(uuid()) @map("id")                 
+  name  String?   @map("name")                 
   password  String  @map("password")                 
   status  Int  @default(1)  @map("status")                 
   
