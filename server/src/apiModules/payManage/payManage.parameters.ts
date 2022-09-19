@@ -21,6 +21,7 @@ type ReadManyBackstagePayManageReqQuery = {
       page: string
       take: string
       type: string
+      userId: string
 }
 
 type ReadManyBackstagePayManageReqParams = {
@@ -41,6 +42,7 @@ export type ReadManyBackstagePayManageParams = {
       queryPage: number
       queryTake: number
       queryType: number
+      queryUserId: string
 }
 
 
@@ -54,6 +56,7 @@ export const ReadManyBackstagePayManageRequestConvert = (
           queryPage: parseInt(query.page),
           queryTake: parseInt(query.take),
           queryType: parseInt(query.type),
+            queryUserId: query.userId,
   };
 };
 type CareateBackstagePayManageReqBody = {

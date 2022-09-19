@@ -1974,8 +1974,7 @@
             "name" : "userId",
             "in" : "query",
             "schema" : {
-              "type" : "string",
-              "nullable": true
+              "type" : "string"
             }
           }                                    
         ],                             
@@ -3620,6 +3619,33 @@
         },
         "description" : "List of user object"
       },      
+      "BackstageAgentArray" : {
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "type" : "object",
+                "properties" : {
+                  "id" : {
+                    "$ref" : "#/components/schemas/User/properties/id"
+                  },                   
+                  "phone" : {
+                    "$ref" : "#/components/schemas/User/properties/phone"
+                  },                  
+                  "phonePrefix" : {
+                    "$ref" : "#/components/schemas/User/properties/phonePrefix"
+                  },
+                  "name" : {
+                    "$ref" : "#/components/schemas/User/properties/name"
+                  }                                        
+                }
+              }          
+            }
+          }
+        },
+        "description" : "List of user object"
+      },       
       "Transaction" : {
         "description" : "Ok",
         "content" : {

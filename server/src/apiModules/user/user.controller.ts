@@ -42,7 +42,8 @@ export class UserController implements Controller {
     )
         .then((result) =>{
           // custom begin getUserBackstageAgents
-          res.json({result});
+          res.json(result);
+
           // custom end getUserBackstageAgents
         }).catch((e) => {
           next(e);

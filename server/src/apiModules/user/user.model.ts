@@ -21,9 +21,6 @@ export class UserModel {
         phone: true,
         phonePrefix: true,
         name: true,
-        // custom begin readManyUserBackstage
-
-        // custom end readManyUserBackstage
       },
       orderBy: {
         [param.queryOrderByField]: param.queryOrderBy,
@@ -36,6 +33,7 @@ export class UserModel {
       prisma.$disconnect();
     });
     return res;
+
     // custom end getUserBackstageAgents
   }
   async readBackstageUserReson(

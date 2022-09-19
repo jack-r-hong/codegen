@@ -13,6 +13,7 @@ export class PayManageModel {
     const res: any[] | null = await prisma.payManage.findMany({
       where: {
     type: param.queryType,
+    userId: param.queryUserId,
       },
       select: {
         id: true,

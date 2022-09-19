@@ -23,6 +23,10 @@ export const readManyBackstagePayManageValidator: Schema = {
     isInt: true,
     notEmpty: true,
   },
+  userId: {
+    in: 'query',
+    isString: true,
+  },
 };
 export const careateBackstagePayManageValidator: Schema = {
   'type': {
