@@ -7,6 +7,37 @@ const prisma = new PrismaClient();
 
 @Service()
 export class UserModel {
+  async getUserBackstageAgents(
+      param: requestTypes.GetUserBackstageAgentsParams,
+      customParam: any,
+  ) {
+    // custom begin getUserBackstageAgents
+    const res: any[] | null = await prisma.user.findMany({
+      where: {
+        userStatus: 10,
+      },
+      select: {
+        id: true,
+        phone: true,
+        phonePrefix: true,
+        name: true,
+        // custom begin readManyUserBackstage
+
+        // custom end readManyUserBackstage
+      },
+      orderBy: {
+        [param.queryOrderByField]: param.queryOrderBy,
+      },
+      skip: param.queryPage * param.queryTake,
+      take: param.queryTake,
+    }).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+    return res;
+    // custom end getUserBackstageAgents
+  }
   async readBackstageUserReson(
       param: requestTypes.ReadBackstageUserResonParams,
       customParam: any,

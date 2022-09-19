@@ -7,6 +7,24 @@ import * as sessions from '../../sessions';
 
 
 
+export const getUserBackstageAgentsValidator: Schema = {
+  orderBy: {
+    in: 'query',
+    isString: true,
+  },
+  orderByField: {
+    in: 'query',
+    isString: true,
+  },
+  page: {
+    in: 'query',
+    isInt: true,
+  },
+  take: {
+    in: 'query',
+    isInt: true,
+  },
+};
 export const readBackstageUserResonValidator: Schema = {
 };
 export const createBackstageUserResonValidator: Schema = {

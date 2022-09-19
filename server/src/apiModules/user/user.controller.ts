@@ -24,6 +24,30 @@ export class UserController implements Controller {
   @Inject('app.use')
     appUse!: AppUse;
 
+  @Get('/backstage/agnets')
+  @Validator(validSchemas.getUserBackstageAgentsValidator)
+  async getUserBackstageAgents(
+      req: userParams.GetUserBackstageAgentsRequest,
+      res: Response,
+      next: NextFunction,
+  ) {
+    UserController.service.getUserBackstageAgents(
+        userParams.GetUserBackstageAgentsRequestConvert(
+            req.body,
+            req.query,
+            req.params,
+            req.cookies,
+        ),
+        req.session,
+    )
+        .then((result) =>{
+          // custom begin getUserBackstageAgents
+          res.json({result});
+          // custom end getUserBackstageAgents
+        }).catch((e) => {
+          next(e);
+        });
+  }
   @Get('/backstage/user/verify/reson')
   @Validator(validSchemas.readBackstageUserResonValidator)
   async readBackstageUserReson(

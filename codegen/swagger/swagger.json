@@ -650,6 +650,66 @@
         }
       } 
     },   
+    "/backstage/agnets": {
+      "get" : {
+        "tags" : [ "user" ],
+        "summary" : "backstage",
+        "operationId" : "getUserBackstageAgents",
+        "parameters" : [ 
+          {
+            "name" : "orderBy",
+            "in" : "query",
+            "description" : "The name that needs to be fetched. Use user1 for testing.",
+            "schema" : {
+              "type" : "string",
+              "default": "desc"
+            }
+          },
+          {
+            "name" : "orderByField",
+            "in" : "query",
+            "description" : "The name that needs to be fetched. Use user1 for testing.",
+            "schema" : {
+              "type" : "string",
+              "default": "createdAt"
+            }
+          },
+          {
+            "name" : "page",
+            "in" : "query",
+            "schema" : {
+              "type" : "integer",
+              "default": 0
+            }            
+          },
+          {
+            "name" : "take",
+            "in" : "query",
+            "schema" : {
+              "type" : "integer",
+              "default": 10
+            }    
+          }                   
+        ],            
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/BackstageUserArray"
+          },
+          "400" : {
+            "$ref" : "#/components/responses/BadRequest"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/Unauthorized"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          },          
+          "409" : {
+            "description": "bank account duplicate"
+          }          
+        }
+      } 
+    },       
     "/backstage/user/{id}": {
       "get" : {
         "tags" : [ "user" ],
@@ -1909,7 +1969,15 @@
             "schema" : {
               "type" : "integer"
             }
-          }                        
+          },  
+          {
+            "name" : "userId",
+            "in" : "query",
+            "schema" : {
+              "type" : "string",
+              "nullable": true
+            }
+          }                                    
         ],                             
         "responses" : {
           "200" : {

@@ -129,6 +129,21 @@ export class UserService {
   @Inject()
   private userModel!: UserModel;
 
+  async getUserBackstageAgents(
+      param :requestTypes.GetUserBackstageAgentsParams,
+      session: Express.Request['session'],
+  ) {
+    // custom begin getUserBackstageAgents
+    const res = await this.userModel.getUserBackstageAgents(
+        param,
+        {},
+    ).catch((e) =>{
+      throw e;
+    });
+    return res;
+
+    // custom end getUserBackstageAgents
+  }
   async readBackstageUserReson(
       param :requestTypes.ReadBackstageUserResonParams,
       session: Express.Request['session'],

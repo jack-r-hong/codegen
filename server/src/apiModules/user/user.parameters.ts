@@ -14,6 +14,51 @@ interface TypedRequest<
 }
 
 
+type GetUserBackstageAgentsReqBody = {
+  }
+
+type GetUserBackstageAgentsReqQuery = {
+      orderBy: string
+      orderByField: string
+      page: string
+      take: string
+}
+
+type GetUserBackstageAgentsReqParams = {
+}
+
+type GetUserBackstageAgentsReqCookie = {
+}
+
+export interface GetUserBackstageAgentsRequest extends TypedRequest<
+  GetUserBackstageAgentsReqBody,
+  GetUserBackstageAgentsReqQuery,
+  GetUserBackstageAgentsReqParams,
+  GetUserBackstageAgentsReqCookie
+>{
+}
+
+export type GetUserBackstageAgentsParams = {
+      queryOrderBy: string
+      queryOrderByField: string
+      queryPage: number
+      queryTake: number
+}
+
+
+export const GetUserBackstageAgentsRequestConvert = (
+    body: GetUserBackstageAgentsReqBody,
+    query: GetUserBackstageAgentsReqQuery,
+    path: GetUserBackstageAgentsReqParams,
+    cookie: GetUserBackstageAgentsReqCookie,
+): GetUserBackstageAgentsParams => {
+  return {
+            queryOrderBy: query.orderBy,
+            queryOrderByField: query.orderByField,
+          queryPage: parseInt(query.page),
+          queryTake: parseInt(query.take),
+  };
+};
 type ReadBackstageUserResonReqBody = {
   }
 
