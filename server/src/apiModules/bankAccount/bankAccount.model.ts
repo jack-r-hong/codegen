@@ -280,4 +280,7 @@ export class BankAccountModel {
     }
     return res;
   }
+  // custom begin model
+
+  // custom end model
 }

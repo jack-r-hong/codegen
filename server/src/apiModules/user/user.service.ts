@@ -114,7 +114,10 @@ const userVerifyResponeFormat = async (data: any) => {
     address,
     verify,
     verifyDes,
-    photos,
+    idCardPhoto: [photos.idCard1, photos.idCard2],
+    certificatePhoto: [photos.certificate1, photos.certificate2],
+    selfiePhoto: photos.selfie,
+    signPhoto: photos.sign,
   };
 };
 

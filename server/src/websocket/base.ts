@@ -60,27 +60,29 @@ export class MyWebSocketServer extends WebSocketServer {
   // }
 }
 
+type Data = any
+
 @Service()
 export class WSEvent {
   eventName;
-  data!: Object;
+  data!: Data;
   constructor(eventName: string ) {
     this.eventName = eventName;
   }
 
-  msg(data: Object) {
+  msg(data: Data) {
     return JSON.stringify({
       event: this.eventName,
-      data: data,
+      data,
     });
   }
 
   parse(message: string) {
     const self = new WSEvent(this.eventName);
     try {
-      self.data = JSON.parse(message).data;
+      self.data = JSON.parse(message);
     } catch {
-      self.data = 'parseError';
+      self.data = {data: 'parseError'};
     }
 
     return self;

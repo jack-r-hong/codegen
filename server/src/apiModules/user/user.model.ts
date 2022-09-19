@@ -584,4 +584,24 @@ export class UserModel {
     });
     return res;
   }
+  // custom begin model
+  async getUserName(
+      userId: string,
+  ) {
+    const res: {name: string | null} | null = await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+      select: {
+        name: true,
+      },
+    }).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+    return res;
+  }
+
+  // custom end model
 }

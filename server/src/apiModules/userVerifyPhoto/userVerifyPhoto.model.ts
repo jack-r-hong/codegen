@@ -66,7 +66,6 @@ export class UserVerifyPhotoModel {
       ownerId: string,
   ) {
     // custom begin uploadManyVerifyPhoto
-
     const res = prisma.$transaction(
         files.map((e, i) => {
           return prisma.userVerifyPhoto.upsert({
@@ -95,4 +94,7 @@ export class UserVerifyPhotoModel {
     // custom end uploadManyVerifyPhoto
     return res;
   }
+  // custom begin model
+
+  // custom end model
 }

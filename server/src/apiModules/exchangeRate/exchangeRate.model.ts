@@ -94,4 +94,7 @@ export class ExchangeRateModel {
     });
     return res;
   }
+  // custom begin model
+
+  // custom end model
 }

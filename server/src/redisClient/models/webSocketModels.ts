@@ -3,6 +3,7 @@ import {ModelBase} from './index';
 import {Service} from 'typedi';
 import {UserId} from './userId';
 import {Mixin} from 'ts-mixer';
+import {Queue} from './queue';
 
 class WebSocketBase extends RedisClient {
 
@@ -16,3 +17,12 @@ export class WSClientIdModel extends
   }
 }
 
+@Service()
+export class WSClientQueueModel extends
+  Mixin(Queue, WebSocketBase) {
+  constructor() {
+    super();
+  }
+
+  override key: string = super.setKey('psm');
+}

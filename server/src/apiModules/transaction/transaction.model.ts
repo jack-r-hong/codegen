@@ -141,7 +141,6 @@ export class TransactionModel {
   ) {
     // custom begin readMyTransaction
     let state :undefined | any = undefined;
-
     if (param.queryState === 'failed') {
       state = 0;
     } else if (param.queryState === 'pending') {
@@ -304,4 +303,7 @@ export class TransactionModel {
 
     // custom end updateTransaction
   }
+  // custom begin model
+
+  // custom end model
 }

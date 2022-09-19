@@ -144,4 +144,7 @@ export class PayManageModel {
 
     // custom end updateBackstagePayManage
   }
+  // custom begin model
+
+  // custom end model
 }

@@ -34,7 +34,32 @@ export class Queue implements ModelBase {
     return res;
   }
 
+  async sub(userId: string, cb: any) {
+    const subscriber = this.client.duplicate();
+
+    await subscriber.connect();
+
+    await subscriber.subscribe(userId, cb);
+
+    return subscriber;
+  }
+
+  async pub(userId: string, data: string) {
+    const result = await this.client.publish(userId, data);
+
+    return {result};
+  }
+
   async del() {
     return await this.client.del(this.key);
+  }
+
+  async close() {
+    return await this.client;
+  }
+
+  async subscriberQuit(subscriber: RedisClientType) {
+    await subscriber.unsubscribe();
+    await subscriber.quit();
   }
 }

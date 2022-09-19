@@ -74,4 +74,7 @@ export class BackstageAdminModel {
 
     // custom end adminRegister
   }
+  // custom begin model
+
+  // custom end model
 }
