@@ -54,7 +54,11 @@
     {
       "name" : "backstageAdmin",
       "description" : "Operations about backstageAdmin"
-    }     
+    },
+    {
+      "name" : "transactionChatroom",
+      "description" : "Operations about transactionChatroom"
+    }       
   ],
   "paths" : {
     "/captcha" : {
@@ -2901,7 +2905,33 @@
             "format" : "date-time"
           }   
         }
-      }
+      },
+      "TransactionChatroom" : {
+        "type" : "object",
+        "description" : "database",
+        "properties" : {
+          "id" : {
+            "type" : "integer"
+          },     
+          "type" : {
+            "type" : "string",
+            "enum" : [ "text", "image/base64" ]            
+          },         
+          "data" : {
+            "type" : "string"
+          },               
+          "transcationId" : {
+            "type" : "string"
+          }, 
+          "userId" : {
+            "type" : "string"
+          },  
+          "createdAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          }   
+        }
+      }      
     },
     "requestBodies" : {
       "UserRegister" : {

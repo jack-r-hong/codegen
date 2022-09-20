@@ -27,7 +27,6 @@ export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
   async onStartMessage(ws: WebSocket, req: IncomingMessage) {
     const url = req.url;
 
-
     if (!url) {
       ws.send(event.msg({error: true, message: 'notAuth'}));
       return;
@@ -41,7 +40,7 @@ export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
 
     const query = qs.parse(queryString);
     const {login_session: userId, transaction_id: transactionId} = query;
-    console.log(userId, transactionId);
+    // console.log(userId, transactionId);
 
     // 判斷 is agent
 
@@ -56,15 +55,18 @@ export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
       ws.send(event.msg({error: true, message: 'notAuth'}));
       return;
     }
-    
+
     const subscriber = await wSCIModel.sub(transactionId as string,
         (message: any)=>{
           event.eventName = 'send';
           const data = JSON.parse(message);
           data.name = (resUser as {name: string}).name;
-          ws.send(event.msg(data));
 
-          wSCIModel.push(JSON.stringify(data));
+          data.userId = userId;
+
+          wSCIModel.rPush(JSON.stringify(data));
+
+          ws.send(event.msg(data));
         });
 
     ws.on('message', async function message(message: string) {
@@ -86,12 +88,4 @@ export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
       wSCIModel.subscriberQuit(subscriber).then(()=> {});
     });
   };
-
-  getHistory() {
-
-  }
-
-  setHistory() {
-
-  }
 }

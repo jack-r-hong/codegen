@@ -715,11 +715,15 @@ export class UserModel {
   async getUserName(
       userId: string,
   ) {
-    const res: {name: string | null} | null = await prisma.user.findUnique({
+    const res: {
+      name: string | null,
+      id: string
+    } | null = await prisma.user.findUnique({
       where: {
         id: userId,
       },
       select: {
+        id: true,
         name: true,
       },
     }).catch((e) => {

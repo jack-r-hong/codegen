@@ -19,6 +19,10 @@ export class Queue implements ModelBase {
     return await this.client.lPush(this.getKey(), data);
   }
 
+  async rPush(data: string) {
+    return await this.client.rPush(this.getKey(), data);
+  }
+
   async get(count = -1) {
     return await this.client.lRange(this.key, 0, count);
   }
