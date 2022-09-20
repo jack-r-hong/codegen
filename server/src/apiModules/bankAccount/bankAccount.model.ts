@@ -97,7 +97,20 @@ export class BankAccountModel {
         id: true,
         name: true,
         status: true,
+        order: true,
         userId: true,
+        user: {
+          select: {
+            userVerifyPhoto: {
+              where: {
+                type: {
+                  gt: 6,
+                  lt: 10,
+                },
+              },
+            },
+          },
+        },
         bankAccountVerify: {
           select: {
             account: true,

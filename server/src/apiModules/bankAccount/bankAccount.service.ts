@@ -3,7 +3,7 @@ import {BankAccountModel} from './bankAccount.model';
 import * as requestTypes from './bankAccount.parameters';
 import {errors} from '../../errors';
 // custom begin import
-
+import {promises as fs} from 'fs';
 // custom end import
 
 
@@ -88,6 +88,49 @@ export class BankAccountService {
     ).catch((e) =>{
       throw e;
     });
+
+    const bankAccounts = [
+      {
+        data: '',
+        name: '',
+      },
+      {
+        data: '',
+        name: '',
+      },
+      {
+        data: '',
+        name: '',
+      },
+    ];
+
+    for (const e of res[0].user.userVerifyPhoto) {
+      const data = await fs.readFile(e.path, 'base64')
+          .catch(() => {
+            return '';
+          });
+      switch (e.type) {
+        case 7:
+          bankAccounts[0] = {
+            data,
+            name: 'bankAccount1',
+          };
+          break;
+        case 8:
+          bankAccounts[1] = {
+            data,
+            name: 'bankAccount2',
+          };
+          break;
+        case 9:
+          bankAccounts[2] = {
+            data,
+            name: 'bankAccount3',
+          };
+          break;
+      }
+    }
+
     return res.map((e: any) => {
       const {
         account,
@@ -118,14 +161,30 @@ export class BankAccountService {
       }) => {
         verifyDes[element.field] = element.bankAccountVerifyReson.des;
       });
+
       return {
-        account,
-        code,
         id,
-        name,
+        account: {
+          val: account,
+          des: verifyDes.account,
+          verify: verify.account,
+        },
+        code: {
+          val: code,
+          des: verifyDes.code,
+          verify: verify.code,
+        },
+        name: {
+          val: name,
+          des: verifyDes.name,
+          verify: verify.name,
+        },
+        photo: {
+          val: [bankAccounts[e.order - 1]],
+          des: verifyDes.photo,
+          verify: verify.photo,
+        },
         status,
-        verify,
-        verifyDes,
       };
     });
 
