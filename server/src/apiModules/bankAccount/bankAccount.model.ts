@@ -242,7 +242,6 @@ export class BankAccountModel {
       customParam: any,
   ) {
     // custom begin getMyBankAccounts
-
     const res: any | null = await prisma.bankAccount.findMany({
       where: {
         status: Number.isNaN(customParam.status) ?undefined: customParam.status,

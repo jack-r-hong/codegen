@@ -340,7 +340,6 @@ const userVerifyResponeFormat2 = async (data: any) => {
 }) => {
     verifyDes[element.field] = element.userVerifyReson.des;
   });
-
   const bankAccounts = bankAccount.map((e: {
     code: number,
     name: string,
@@ -360,20 +359,17 @@ const userVerifyResponeFormat2 = async (data: any) => {
     }
   }) => {
     const bankAccountVerify = e.bankAccountVerify;
-
     const des = {
       code: '',
       account: '',
       name: '',
       photo: '',
     };
-
     bankAccountVerify.bankAccountVerifyResonDes.forEach((e2) => {
       const field = e2.field;
       des[field as ('code' | 'account' | 'name' | 'photo')] =
        e2.bankAccountVerifyReson.des;
     });
-
     return {
       code: {
         val: e.code,
@@ -397,7 +393,6 @@ const userVerifyResponeFormat2 = async (data: any) => {
       },
     };
   });
-
   return {
     userStatus,
     name,

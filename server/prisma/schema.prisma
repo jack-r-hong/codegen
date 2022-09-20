@@ -124,6 +124,19 @@ model Transaction {
 
     // custom end Transaction
 }
+model TransactionChatroom {
+  createdAt  DateTime  @default(now()) @map("created_at")                 
+  id  Int @id @default(autoincrement()) @map("id")                 
+  name  String  @map("name")                 
+  transactionId  String  @map("transaction_id")                 
+  type  String  @map("type")                 
+  userId  String  @map("user_id")                 
+  
+    // custom begin TransactionChatroom
+  text String 
+  data Bytes? @map("data") @db.Blob
+    // custom end TransactionChatroom
+}
 model TransactionRecive {
   createdAt  DateTime  @default(now()) @map("created_at")                 
   id  String @id @default(uuid()) @map("id")                 

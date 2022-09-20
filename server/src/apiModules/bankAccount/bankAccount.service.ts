@@ -4,6 +4,7 @@ import * as requestTypes from './bankAccount.parameters';
 import {errors} from '../../errors';
 // custom begin import
 import {promises as fs} from 'fs';
+
 // custom end import
 
 
@@ -88,7 +89,6 @@ export class BankAccountService {
     ).catch((e) =>{
       throw e;
     });
-
     const bankAccounts = [
       {
         data: '',
@@ -103,7 +103,6 @@ export class BankAccountService {
         name: '',
       },
     ];
-
     for (const e of res[0].user.userVerifyPhoto) {
       const data = await fs.readFile(e.path, 'base64')
           .catch(() => {
@@ -130,7 +129,6 @@ export class BankAccountService {
           break;
       }
     }
-
     return res.map((e: any) => {
       const {
         account,
@@ -161,7 +159,6 @@ export class BankAccountService {
       }) => {
         verifyDes[element.field] = element.bankAccountVerifyReson.des;
       });
-
       return {
         id,
         account: {

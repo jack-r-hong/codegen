@@ -486,8 +486,6 @@ export class UserModel {
     if (res === null) {
       throw new errors.NotFindError;
     }
-
-
     return res;
 
     // custom end getRealVerify

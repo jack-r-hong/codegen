@@ -3,6 +3,8 @@ import {WSToken, WSOnMessage, MyWebSocketServer, WSEvent} from './base';
 import {WSClientQueueModel} from '../redisClient/models/webSocketModels';
 import {UserModel} from '../apiModules/user/user.model';
 import {TransactionModel} from '../apiModules/transaction/transaction.model';
+import {TransactionChatroomModel}
+  from '../apiModules/transactionChatroom/transactionChatroom.model';
 
 import {Service, Container} from 'typedi';
 import {IncomingMessage} from 'http';
@@ -13,6 +15,7 @@ const event = new WSEvent('transaction_chatroom');
 const wSCIModel = Container.get(WSClientQueueModel);
 const userModel = Container.get(UserModel);
 const transactionModel = Container.get(TransactionModel);
+const transactionChatroomModel = Container.get(TransactionChatroomModel);
 
 
 @Service({id: WSToken, multiple: true})
@@ -63,8 +66,16 @@ export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
           data.name = (resUser as {name: string}).name;
 
           data.userId = userId;
-
-          wSCIModel.rPush(JSON.stringify(data));
+          transactionChatroomModel.createMessage(
+            transactionId as string,
+            (userId as string),
+            data.type,
+            data.name?? '',
+            data.text,
+            data.type === 'image'? Buffer.from(data.data, 'base64'): undefined,
+          ).then((e) => console.log(e),
+          ).catch((e) => console.log(e),
+          );
 
           ws.send(event.msg(data));
         });
@@ -79,9 +90,21 @@ export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
     });
 
     event.eventName = 'ready';
-    const all = await wSCIModel.get();
+    const res = await transactionChatroomModel.getMessages(
+      transactionId as string,
+    );
+
     ws.send(event.msg(
-        all.map((e) => JSON.parse(e)),
+        res.map((e) => {
+          return {
+            name: e.name,
+            userId: e.userId,
+            createdAt: e.createdAt,
+            text: e.text,
+            data: e.type === 'image' && e.data? e.data.toString('base64'): null,
+            type: e.type,
+          };
+        }),
     ));
 
     ws.on('close', () => {

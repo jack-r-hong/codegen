@@ -2916,13 +2916,13 @@
           "type" : {
             "type" : "string",
             "enum" : [ "text", "image/base64" ]            
-          },         
-          "data" : {
-            "type" : "string"
-          },               
-          "transcationId" : {
+          },                   
+          "transactionId" : {
             "type" : "string"
           }, 
+          "name" : {
+            "type" : "string"
+          },           
           "userId" : {
             "type" : "string"
           },  
