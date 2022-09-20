@@ -8,19 +8,19 @@ import * as sessions from '../../sessions';
 
 
 export const getUserBackstageAgentsValidator: Schema = {
-  orderBy: {
+  'orderBy': {
     in: 'query',
     isString: true,
   },
-  orderByField: {
+  'orderByField': {
     in: 'query',
     isString: true,
   },
-  page: {
+  'page': {
     in: 'query',
     isInt: true,
   },
-  take: {
+  'take': {
     in: 'query',
     isInt: true,
   },
@@ -34,14 +34,14 @@ export const createBackstageUserResonValidator: Schema = {
   },
 };
 export const deleteBackstageUserResonValidator: Schema = {
-  resonId: {
+  'resonId': {
     in: 'params',
     isInt: true,
     notEmpty: true,
   },
 };
 export const updateBackstageUserResonValidator: Schema = {
-  resonId: {
+  'resonId': {
     in: 'params',
     isInt: true,
     notEmpty: true,
@@ -52,7 +52,7 @@ export const updateBackstageUserResonValidator: Schema = {
   },
 };
 export const updateBackstageUserValidator: Schema = {
-  id: {
+  'id': {
     in: 'params',
     isString: true,
     notEmpty: true,
@@ -260,26 +260,63 @@ optional: {
   },
 };
 export const readOneBackstageUserValidator: Schema = {
-  id: {
+  'id': {
     in: 'params',
     isString: true,
     notEmpty: true,
   },
 };
-export const readManyUserBackstageValidator: Schema = {
-  orderBy: {
+export const readBackstageUserTransactionValidator: Schema = {
+  'id': {
+    in: 'params',
+    isString: true,
+    notEmpty: true,
+  },
+  'orderBy': {
     in: 'query',
     isString: true,
   },
-  orderByField: {
+  'orderByField': {
     in: 'query',
     isString: true,
   },
-  page: {
+  'page': {
     in: 'query',
     isInt: true,
   },
-  take: {
+  'take': {
+    in: 'query',
+    isInt: true,
+  },
+  'start_time': {
+    in: 'query',
+    isString: true,
+    matches: {
+      options: /\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z)/,
+    },
+  },
+  'end_time': {
+    in: 'query',
+    isString: true,
+    matches: {
+      options: /\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z)/,
+    },
+  },
+};
+export const readManyUserBackstageValidator: Schema = {
+  'orderBy': {
+    in: 'query',
+    isString: true,
+  },
+  'orderByField': {
+    in: 'query',
+    isString: true,
+  },
+  'page': {
+    in: 'query',
+    isInt: true,
+  },
+  'take': {
     in: 'query',
     isInt: true,
   },
@@ -519,7 +556,7 @@ export const getUserMyStatusValidator: Schema = {
   },
 };
 export const updateOneyUserValidator: Schema = {
-  id: {
+  'id': {
     in: 'params',
     isString: true,
     notEmpty: true,

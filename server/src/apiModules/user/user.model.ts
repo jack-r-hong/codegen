@@ -252,6 +252,9 @@ export class UserModel {
             idCardPosiition: true,
             idCardType: true,
             idCardPhoto: true,
+            idCard: true,
+            area: true,
+            city: true,
             name: true,
             selfie: true,
             certificate: true,
@@ -281,6 +284,51 @@ export class UserModel {
       throw new errors.NotFindError;
     }
     return res;
+  }
+  async readBackstageUserTransaction(
+      param: requestTypes.ReadBackstageUserTransactionParams,
+      customParam: any,
+  ) {
+    // custom begin readBackstageUserTransaction
+    const res: any[] | null = await prisma.transaction.findMany({
+      where: {
+        OR: [
+          {userId: param.pathId},
+          {transactionRecive: {
+            userId: param.pathId,
+          }},
+        ],
+        createdAt: {
+          gte: param.queryStartTime,
+          lte: param.queryEndTime,
+        },
+      },
+      select: {
+        id: true,
+        point: true,
+        state: true,
+        twd: true,
+        bos: true,
+        payMethod: true,
+        bonusPoint: true,
+        createdAt: true,
+        bankAccount: true,
+        bankCode: true,
+        bankName: true,
+      },
+      orderBy: {
+        [param.queryOrderByField]: param.queryOrderBy,
+      },
+      skip: param.queryPage * param.queryTake,
+      take: param.queryTake,
+    }).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+    return res;
+
+    // custom end readBackstageUserTransaction
   }
   async readManyUserBackstage(
       param: requestTypes.ReadManyUserBackstageParams,
@@ -376,11 +424,14 @@ export class UserModel {
         userVerify: {
           select: {
             address: true,
+            area: true,
+            city: true,
             birthdate: true,
             certificate: true,
             country: true,
             email: true,
             id: true,
+            idCard: true,
             idCardDate: true,
             idCardPhoto: true,
             idCardPosiition: true,
@@ -400,6 +451,32 @@ export class UserModel {
             },
           },
         },
+        bankAccount: {
+          select: {
+            code: true,
+            name: true,
+            account: true,
+            order: true,
+            bankAccountVerify: {
+              select: {
+                code: true,
+                name: true,
+                account: true,
+                photo: true,
+                bankAccountVerifyResonDes: {
+                  select: {
+                    field: true,
+                    bankAccountVerifyReson: {
+                      select: {
+                        des: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
       },
     }).catch((e) => {
       throw e;
@@ -409,6 +486,8 @@ export class UserModel {
     if (res === null) {
       throw new errors.NotFindError;
     }
+
+
     return res;
 
     // custom end getRealVerify
@@ -450,13 +529,32 @@ export class UserModel {
     }
     await prisma.$transaction(
         param.bodyBankAccounts.map((e, i) => {
-          return prisma.bankAccount.create({
-            data: {
-              userId: customParam.userId,
+          return prisma.bankAccount.upsert({
+            where: {
+              uniqueOrder: {
+                userId: customParam.userId,
+                order: i + 1,
+              },
+            },
+            update: {
               account: e.bodyAccount,
               code: e.bodyAccount,
               name: e.bodyName,
+              bankAccountVerify: {
+                update: {
+                  account: 1,
+                  code: 1,
+                  name: 1,
+                  photo: 1,
+                },
+              },
+            },
+            create: {
+              userId: customParam.userId,
               order: i + 1,
+              account: e.bodyAccount,
+              code: e.bodyAccount,
+              name: e.bodyName,
               bankAccountVerify: {
                 create: {
                   account: 1,

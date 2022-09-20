@@ -6,6 +6,27 @@ import {errors} from '../../errors';
 import bcrypt from 'bcrypt';
 import svgCaptcha from 'svg-captcha';
 import {promises as fs} from 'fs';
+type UserField = {
+  val: string,
+  verify: number,
+  des: string,
+}
+const fieldMap = [
+  'name',
+  'email',
+  'birthdate',
+  'country',
+  'idCard',
+  'idCardDate',
+  'idCardPosiition',
+  'idCardType',
+  'city',
+  'area',
+  'address',
+  'certificate',
+  'selfie',
+  'sign',
+];
 const userVerifyResponeFormat = async (data: any) => {
   const {
     userStatus,
@@ -44,6 +65,216 @@ const userVerifyResponeFormat = async (data: any) => {
     email: '',
     birthdate: '',
     country: '',
+    idCard: '',
+    idCardDate: '',
+    idCardPosiition: '',
+    idCardType: '',
+    idCardPhoto: '',
+    city: '',
+    area: '',
+    address: '',
+    certificate: '',
+    selfie: '',
+    sign: '',
+  };
+  const photos = {
+    idCard1: {
+      data: '',
+      name: '',
+    },
+    idCard2: {
+      data: '',
+      name: '',
+    },
+    certificate1: {
+      data: '',
+      name: '',
+    },
+    certificate2: {
+      data: '',
+      name: '',
+    },
+    selfie: {
+      data: '',
+      name: '',
+    },
+    sign: {
+      data: '',
+      name: '',
+    },
+  };
+  for (const e of userVerifyPhoto) {
+    const data = await fs.readFile(e.path, 'base64')
+        .catch(() => {
+          return '';
+        });
+    switch (e.type) {
+      case 1:
+        photos.idCard1.data = data;
+        photos.idCard1.name = `idCard1`;
+        break;
+      case 2:
+        photos.idCard2.data = data;
+        photos.idCard2.name = `$dCard2`;
+        break;
+      case 3:
+        photos.certificate1.data = data;
+        photos.certificate1.name = `certificate1`;
+        break;
+      case 4:
+        photos.certificate2.data = data;
+        photos.certificate2.name = `certificate2`;
+        break;
+      case 5:
+        photos.selfie.data = data;
+        photos.selfie.name = `selfie`;
+        break;
+      case 6:
+        photos.sign.data = data;
+        photos.sign.name = `sign`;
+        break;
+    }
+  }
+  userVerify.userVerifyResonDes.forEach((element: {
+  field: 'name' | 'email' | 'birthdate' | 'country' | 'idCard' |
+  'idCardPhoto' | 'idCardDate' | 'idCardPosiition' | 'idCardType' |
+  'city' | 'area' | 'address' | 'certificate' | 'selfie' | 'sign',
+  userVerifyReson: {
+    des: string
+  }
+  }) => {
+    verifyDes[element.field] = element.userVerifyReson.des;
+  });
+  return {
+    userStatus,
+    name: {
+      val: name,
+      des: verifyDes.name,
+      verify: userVerify.name,
+    },
+    email: {
+      val: email,
+      des: verifyDes.email,
+      verify: userVerify.email,
+    },
+    birthdate: {
+      val: birthdate,
+      des: verifyDes.birthdate,
+      verify: userVerify.birthdate,
+    },
+    country: {
+      val: country,
+      des: verifyDes.country,
+      verify: userVerify.country,
+    },
+    idCard: {
+      val: idCard,
+      des: verifyDes.idCard,
+      verify: userVerify.idCard,
+    },
+    idCardDate: {
+      val: idCardDate,
+      des: verifyDes.idCardDate,
+      verify: userVerify.idCardDate,
+    },
+    idCardPosiition: {
+      val: idCardPosiition,
+      des: verifyDes.idCardPosiition,
+      verify: userVerify.idCardPosiition,
+    },
+    idCardType: {
+      val: idCardType,
+      des: verifyDes.idCardType,
+      verify: userVerify.idCardType,
+    },
+    city: {
+      val: city,
+      des: verifyDes.city,
+      verify: userVerify.city,
+    },
+    area: {
+      val: area,
+      des: verifyDes.area,
+      verify: userVerify.area,
+    },
+    address: {
+      val: address,
+      des: verifyDes.address,
+      verify: userVerify.address,
+    },
+    idCardPhoto: {
+      val: [
+        photos.idCard1,
+        photos.idCard2,
+      ],
+      des: verifyDes.idCardPhoto,
+      verify: userVerify.idCardPhoto,
+    },
+    certificate: {
+      val: [
+        photos.certificate1,
+        photos.certificate2,
+      ],
+      des: verifyDes.certificate,
+      verify: userVerify.certificate,
+    },
+    selfie: {
+      val: [
+        photos.selfie,
+      ],
+      des: verifyDes.selfie,
+      verify: userVerify.selfie,
+    },
+    sign: {
+      val: [
+        photos.sign,
+      ],
+      des: verifyDes.sign,
+      verify: userVerify.sign,
+    },
+  };
+};
+const userVerifyResponeFormat2 = async (data: any) => {
+  const {
+    userStatus,
+    name,
+    email,
+    birthdate,
+    country,
+    idCard,
+    idCardDate,
+    idCardPosiition,
+    idCardType,
+    city,
+    area,
+    address,
+    userVerify,
+    userVerifyPhoto,
+    bankAccount,
+  } = data;
+  const verify = {
+    name: userVerify.name,
+    email: userVerify.email,
+    birthdate: userVerify.birthdate,
+    country: userVerify.country,
+    idCard: userVerify.idCard,
+    idCardDate: userVerify.idCardDate,
+    idCardPosiition: userVerify.idCardPosiition,
+    idCardType: userVerify.idCardType,
+    idCardPhoto: userVerify.idCardPhoto,
+    city: userVerify.city,
+    area: userVerify.area,
+    address: userVerify.address,
+    certificate: userVerify.certificate,
+    selfie: userVerify.selfie,
+    sign: userVerify.sign,
+  };
+  const verifyDes = {
+    name: '',
+    email: '',
+    birthdate: '',
+    country: '',
+    idCard: '',
     idCardDate: '',
     idCardPosiition: '',
     idCardType: '',
@@ -62,6 +293,7 @@ const userVerifyResponeFormat = async (data: any) => {
     certificate2: '',
     selfie: '',
     sign: '',
+    bankAccounts: ['', '', ''],
   };
   for (const e of userVerifyPhoto) {
     const data = await fs.readFile(e.path, 'base64')
@@ -87,10 +319,19 @@ const userVerifyResponeFormat = async (data: any) => {
       case 6:
         photos.sign = data;
         break;
+      case 7:
+        photos.bankAccounts[0] = data;
+        break;
+      case 8:
+        photos.bankAccounts[1] = data;
+        break;
+      case 9:
+        photos.bankAccounts[2] = data;
+        break;
     }
   }
   userVerify.userVerifyResonDes.forEach((element: {
-  field: 'name' | 'email' | 'birthdate' | 'country' |
+  field: 'name' | 'email' | 'birthdate' | 'country' | 'idCard' |
   'idCardPhoto' | 'idCardDate' | 'idCardPosiition' | 'idCardType' |
   'city' | 'area' | 'address' | 'certificate' | 'selfie' | 'sign',
   userVerifyReson: {
@@ -99,6 +340,64 @@ const userVerifyResponeFormat = async (data: any) => {
 }) => {
     verifyDes[element.field] = element.userVerifyReson.des;
   });
+
+  const bankAccounts = bankAccount.map((e: {
+    code: number,
+    name: string,
+    account: number,
+    order: number,
+    bankAccountVerify: {
+      code: number,
+      name: number,
+      account: number,
+      photo: number,
+      bankAccountVerifyResonDes: {
+        field: string,
+        bankAccountVerifyReson: {
+          des: string
+        }
+      }[]
+    }
+  }) => {
+    const bankAccountVerify = e.bankAccountVerify;
+
+    const des = {
+      code: '',
+      account: '',
+      name: '',
+      photo: '',
+    };
+
+    bankAccountVerify.bankAccountVerifyResonDes.forEach((e2) => {
+      const field = e2.field;
+      des[field as ('code' | 'account' | 'name' | 'photo')] =
+       e2.bankAccountVerifyReson.des;
+    });
+
+    return {
+      code: {
+        val: e.code,
+        des: des.code,
+        verify: bankAccountVerify.code,
+      },
+      account: {
+        val: e.account,
+        des: des.account,
+        verify: bankAccountVerify.account,
+      },
+      name: {
+        val: e.name,
+        des: des.name,
+        verify: bankAccountVerify.name,
+      },
+      photo: {
+        val: photos.bankAccounts[e.order - 1],
+        des: des.photo,
+        verify: bankAccountVerify.photo,
+      },
+    };
+  });
+
   return {
     userStatus,
     name,
@@ -118,6 +417,7 @@ const userVerifyResponeFormat = async (data: any) => {
     certificatePhoto: [photos.certificate1, photos.certificate2],
     selfiePhoto: photos.selfie,
     signPhoto: photos.sign,
+    bankAccounts,
   };
 };
 
@@ -239,6 +539,21 @@ export class UserService {
     // custom end readOneBackstageUser2
     return res;
   }
+  async readBackstageUserTransaction(
+      param :requestTypes.ReadBackstageUserTransactionParams,
+      session: Express.Request['session'],
+  ) {
+    // custom begin readBackstageUserTransaction
+    const res = await this.userModel.readBackstageUserTransaction(
+        param,
+        {},
+    ).catch((e) =>{
+      throw e;
+    });
+    return res;
+
+    // custom end readBackstageUserTransaction
+  }
   async readManyUserBackstage(
       param :requestTypes.ReadManyUserBackstageParams,
       session: Express.Request['session'],
@@ -305,7 +620,7 @@ export class UserService {
         .catch((e) =>{
           throw e;
         });
-    return userVerifyResponeFormat(dataHandle);
+    return userVerifyResponeFormat2(dataHandle);
 
     // custom end getRealVerify
   }

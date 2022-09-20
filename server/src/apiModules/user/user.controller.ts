@@ -24,7 +24,7 @@ export class UserController implements Controller {
   @Inject('app.use')
     appUse!: AppUse;
 
-  @Get('/backstage/agnets')
+  @Get('/backstage/agents')
   @Validator(validSchemas.getUserBackstageAgentsValidator)
   async getUserBackstageAgents(
       req: userParams.GetUserBackstageAgentsRequest,
@@ -192,6 +192,31 @@ export class UserController implements Controller {
     )
         .then((result) =>{
           res.json(result);
+        }).catch((e) => {
+          next(e);
+        });
+  }
+  @Get('/backstage/user/:id/transaction')
+  @Validator(validSchemas.readBackstageUserTransactionValidator)
+  async readBackstageUserTransaction(
+      req: userParams.ReadBackstageUserTransactionRequest,
+      res: Response,
+      next: NextFunction,
+  ) {
+    UserController.service.readBackstageUserTransaction(
+        userParams.ReadBackstageUserTransactionRequestConvert(
+            req.body,
+            req.query,
+            req.params,
+            req.cookies,
+        ),
+        req.session,
+    )
+        .then((result) =>{
+          // custom begin readBackstageUserTransaction
+          res.json(result);
+
+          // custom end readBackstageUserTransaction
         }).catch((e) => {
           next(e);
         });

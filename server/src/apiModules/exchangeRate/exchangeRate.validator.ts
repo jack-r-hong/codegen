@@ -8,23 +8,23 @@ import * as sessions from '../../sessions';
 
 
 export const readManyBackstageExchangeRateValidator: Schema = {
-  orderBy: {
+  'orderBy': {
     in: 'query',
     isString: true,
   },
-  orderByField: {
+  'orderByField': {
     in: 'query',
     isString: true,
   },
-  page: {
+  'page': {
     in: 'query',
     isInt: true,
   },
-  take: {
+  'take': {
     in: 'query',
     isInt: true,
   },
-  bos: {
+  'bos': {
     in: 'query',
     isInt: true,
   },
@@ -66,14 +66,14 @@ export const createOneBackstageExchangeRateValidator: Schema = {
   },
 };
 export const deleteOneBackstageExchangeRateValidator: Schema = {
-  id: {
+  'id': {
     in: 'params',
     isInt: true,
     notEmpty: true,
   },
 };
 export const updateOneBackstageExchangeRateValidator: Schema = {
-  id: {
+  'id': {
     in: 'params',
     isInt: true,
     notEmpty: true,

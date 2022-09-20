@@ -76,23 +76,23 @@ optional: {
   },
 };
 export const readPendingTransactionValidator: Schema = {
-  orderBy: {
+  'orderBy': {
     in: 'query',
     isString: true,
   },
-  orderByField: {
+  'orderByField': {
     in: 'query',
     isString: true,
   },
-  page: {
+  'page': {
     in: 'query',
     isInt: true,
   },
-  take: {
+  'take': {
     in: 'query',
     isInt: true,
   },
-  agentShow: {
+  'agentShow': {
     in: 'params',
     isString: true,
     matches: {
@@ -110,7 +110,7 @@ export const readPendingTransactionValidator: Schema = {
   },
 };
 export const getExchangeRateValidator: Schema = {
-  bos: {
+  'bos': {
     in: 'query',
     isInt: true,
     matches: {
@@ -128,37 +128,37 @@ export const getExchangeRateValidator: Schema = {
   },
 };
 export const readMyTransactionValidator: Schema = {
-  orderBy: {
+  'orderBy': {
     in: 'query',
     isString: true,
   },
-  orderByField: {
+  'orderByField': {
     in: 'query',
     isString: true,
   },
-  page: {
+  'page': {
     in: 'query',
     isInt: true,
   },
-  take: {
+  'take': {
     in: 'query',
     isInt: true,
   },
-  start_time: {
+  'start_time': {
     in: 'query',
     isString: true,
     matches: {
       options: /\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z)/,
     },
   },
-  end_time: {
+  'end_time': {
     in: 'query',
     isString: true,
     matches: {
       options: /\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z)/,
     },
   },
-  state: {
+  'state': {
     in: 'query',
     isString: true,
     matches: {
@@ -176,7 +176,7 @@ export const readMyTransactionValidator: Schema = {
   },
 };
 export const getPayPhotoValidator: Schema = {
-  type: {
+  'type': {
     in: 'query',
     isInt: true,
     notEmpty: true,
@@ -184,7 +184,7 @@ export const getPayPhotoValidator: Schema = {
       options: /^(1|2)/,
     },
   },
-  transactionId: {
+  'transactionId': {
     in: 'query',
     isString: true,
     notEmpty: true,
@@ -200,7 +200,7 @@ export const getPayPhotoValidator: Schema = {
   },
 };
 export const readOneTransactionValidator: Schema = {
-  id: {
+  'id': {
     in: 'params',
     isString: true,
     notEmpty: true,
@@ -216,7 +216,7 @@ export const readOneTransactionValidator: Schema = {
   },
 };
 export const updateTransactionValidator: Schema = {
-  id: {
+  'id': {
     in: 'params',
     isString: true,
     notEmpty: true,

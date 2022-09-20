@@ -195,11 +195,14 @@ model UserTransaction {
 }
 model UserVerify {
   address  Int  @default(1)  @map("address")                 
+  area  Int  @default(1)  @map("area")                 
   birthdate  Int  @default(1)  @map("birthdate")                 
   certificate  Int  @default(1)  @map("certificate")                 
+  city  Int  @default(1)  @map("city")                 
   country  Int  @default(1)  @map("country")                 
   email  Int  @default(1)  @map("email")                 
   id  Int @id @default(autoincrement()) @map("id")                 
+  idCard  Int  @default(1)  @map("id_card")                 
   idCardDate  Int  @default(1)  @map("id_card_date")                 
   idCardPhoto  Int  @default(1)  @map("id_card_photo")                 
   idCardPosiition  Int  @default(1)  @map("id_card_posiition")                 

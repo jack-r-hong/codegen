@@ -351,6 +351,61 @@ export const ReadOneBackstageUserRequestConvert = (
             pathId: path.id,
   };
 };
+type ReadBackstageUserTransactionReqBody = {
+  }
+
+type ReadBackstageUserTransactionReqQuery = {
+      orderBy: string
+      orderByField: string
+      page: string
+      take: string
+      start_time: string
+      end_time: string
+}
+
+type ReadBackstageUserTransactionReqParams = {
+      id: string
+,
+}
+
+type ReadBackstageUserTransactionReqCookie = {
+}
+
+export interface ReadBackstageUserTransactionRequest extends TypedRequest<
+  ReadBackstageUserTransactionReqBody,
+  ReadBackstageUserTransactionReqQuery,
+  ReadBackstageUserTransactionReqParams,
+  ReadBackstageUserTransactionReqCookie
+>{
+}
+
+export type ReadBackstageUserTransactionParams = {
+      pathId: string
+      queryOrderBy: string
+      queryOrderByField: string
+      queryPage: number
+      queryTake: number
+      queryStartTime: string
+      queryEndTime: string
+}
+
+
+export const ReadBackstageUserTransactionRequestConvert = (
+    body: ReadBackstageUserTransactionReqBody,
+    query: ReadBackstageUserTransactionReqQuery,
+    path: ReadBackstageUserTransactionReqParams,
+    cookie: ReadBackstageUserTransactionReqCookie,
+): ReadBackstageUserTransactionParams => {
+  return {
+            pathId: path.id,
+            queryOrderBy: query.orderBy,
+            queryOrderByField: query.orderByField,
+          queryPage: parseInt(query.page),
+          queryTake: parseInt(query.take),
+            queryStartTime: query.start_time,
+            queryEndTime: query.end_time,
+  };
+};
 type ReadManyUserBackstageReqBody = {
   }
 

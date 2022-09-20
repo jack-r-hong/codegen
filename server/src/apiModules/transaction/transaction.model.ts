@@ -197,33 +197,24 @@ export class TransactionModel {
       customParam: any,
   ) {
     // custom begin getPayPhoto
-    const res: any | null = await prisma.transactionRecive.findFirst({
+    const res: any | null = await prisma.payManage.findFirst({
       where: {
-        transactionId: param.queryTransactionId,
         user: {
-          payManage: {
+          transactionRecive: {
             some: {
-              status: 3,
+              transactionId: param.queryTransactionId,
             },
           },
         },
-      },
-      select: {
-        user: {
-          select: {
-            payManage: {
-              select: {
-                qrCode: true,
-              },
-            },
-          },
-        },
+        type: param.queryType,
+        status: 3,
       },
     }).catch((e) => {
       throw e;
     }).finally(() => {
       prisma.$disconnect();
     });
+    console.log(res);
     return res;
 
     // custom end getPayPhoto

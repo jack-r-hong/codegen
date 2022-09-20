@@ -6,7 +6,7 @@ import * as sessions from '../../sessions';
 // custom end import
 
 {{~#*inline "schema"}}
-  {{p.name}}: {
+  '{{p.name}}': {
     in: '
         {{~#if (equal p.in "path")~}}
             params
@@ -25,13 +25,6 @@ import * as sessions from '../../sessions';
       },
     },
         {{/if}}
-        {{#if p.schema.nullable }}
-    optional: {
-      options: {
-        nullable: true,
-      },
-    },
-        {{/if}} 
         {{#if (equal p.schema.type "integer") }}
     isInt: true,
         {{/if}}

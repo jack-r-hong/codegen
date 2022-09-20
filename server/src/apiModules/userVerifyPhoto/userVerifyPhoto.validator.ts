@@ -8,12 +8,12 @@ import * as sessions from '../../sessions';
 
 
 export const getBackstageUserVerifyPhotoValidator: Schema = {
-  userId: {
+  'userId': {
     in: 'params',
     isString: true,
     notEmpty: true,
   },
-  type: {
+  'type': {
     in: 'query',
     isInt: true,
     notEmpty: true,
@@ -22,7 +22,7 @@ export const getBackstageUserVerifyPhotoValidator: Schema = {
 export const getUserVerifyPhotoValidator: Schema = {
 };
 export const uploadManyVerifyPhotoValidator: Schema = {
-  types: {
+  'types': {
     in: 'query',
     notEmpty: true,
   },

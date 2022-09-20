@@ -650,7 +650,7 @@
         }
       } 
     },   
-    "/backstage/agnets": {
+    "/backstage/agents": {
       "get" : {
         "tags" : [ "user" ],
         "summary" : "backstage",
@@ -745,6 +745,93 @@
         }
       }
     },    
+    "/backstage/user/{id}/transaction": {
+      "get" : {
+        "tags" : [ "user" ],
+        "summary" : "Logs user into the system",
+        "operationId" : "readBackstageUserTransaction", 
+        "parameters" : [ 
+          {
+            "name" : "id",
+            "in" : "path",
+            "schema" : {
+              "type" : "string",
+              "format": "uuid"
+            },
+            "required": true
+          },
+          {
+            "name" : "orderBy",
+            "in" : "query",
+            "description" : "The name that needs to be fetched. Use user1 for testing.",
+            "schema" : {
+              "type" : "string",
+              "default": "desc"
+            }
+          },
+          {
+            "name" : "orderByField",
+            "in" : "query",
+            "description" : "The name that needs to be fetched. Use user1 for testing.",
+            "schema" : {
+              "type" : "string",
+              "default": "createdAt"
+            }
+          },
+          {
+            "name" : "page",
+            "in" : "query",
+            "schema" : {
+              "type" : "integer",
+              "default": 0
+            }            
+          },
+          {
+            "name" : "take",
+            "in" : "query",
+            "schema" : {
+              "type" : "integer",
+              "default": 10
+            }    
+          },          
+          {
+            "name" : "start_time",
+            "in" : "query",
+            "schema" : {
+              "type" : "string",
+              "format" : "date-time",
+              "default": "2022-09-13T02:26:29.050Z"
+            }    
+          },
+          {
+            "name" : "end_time",
+            "in" : "query",
+            "schema" : {
+              "type" : "string",
+              "format" : "date-time",
+              "default": "2022-09-12T02:26:29.050Z"
+            }    
+          }                 
+        ],                     
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/BackstageUserTransaction"
+          },          
+          "400" : {
+            "$ref" : "#/components/responses/BadRequest"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/Unauthorized"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          },          
+          "409" : {
+            "description": "bank account duplicate"
+          }          
+        }
+      }
+    },        
     "/backstage/user/verify/{id}": {   
       "put" : {
         "tags" : [ "user" ],
@@ -1756,7 +1843,8 @@
               "type" : "integer",
               "enum": [1,2],
               "default": 1,
-              "description" : "status map:\n * `1` - 未驗證\n * `2` - 已驗證\n"
+              "description" : "status map:\n * `1` - 未驗證\n * `2` - 已驗證\n",
+              "nullable": true
             }
           }
         ],               
@@ -2389,6 +2477,34 @@
             "enum": [1,2,3],
             "default": 1
           },     
+          "address" : {
+            "type" : "integer",
+            "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
+            "enum": [1,2,3],
+            "default": 1
+          },
+          "city" : {
+            "type" : "integer",
+            "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
+            "enum": [1,2,3],
+            "default": 1
+          },
+          "area" : {
+            "type" : "integer",
+            "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
+            "enum": [1,2,3],
+            "default": 1
+          },                    
+          "updatedAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          },       
+          "idCard" : {
+            "type" : "integer",
+            "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
+            "enum": [1,2,3],
+            "default": 1
+          },                
           "idCardDate" : {
             "type" : "integer",
             "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
@@ -2431,16 +2547,6 @@
             "enum": [1,2,3],
             "default": 1
           },                                                                  
-          "address" : {
-            "type" : "integer",
-            "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
-            "enum": [1,2,3],
-            "default": 1
-          },
-          "updatedAt" : {
-            "type" : "string",
-            "format" : "date-time"
-          },           
           "userId" : {
             "$ref" : "#/components/schemas/User/properties/id",
             "unique": true
@@ -4158,7 +4264,29 @@
       },
       "Conflict" : {
         "description" : "Conflict"
+      },
+      "BackstageUserTransaction" : {
+        "description" : "Ok",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type": "array",
+              "items": {
+                "type" : "object",
+                "properties" : {
+                  "userStatus" : {
+                    "type" : "integer"
+                  },   
+                  "name" : {
+                    "type" : "string"
+                  }
+                }                
+              }                  
+            }
+          }
+        }   
       }
+      
     },
     "securitySchemes" : {
       "cookieAuth" : {

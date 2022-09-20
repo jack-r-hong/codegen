@@ -60,7 +60,8 @@ pub fn path_parameter_helper(
                 _ => c
             }
         })
-        .collect();
+        .filter(|c| !c.is_whitespace())
+        .collect::<String>();
     
     out.write(&rendered.trim())?;
     Ok(())

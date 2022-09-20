@@ -8,22 +8,22 @@ import * as sessions from '../../sessions';
 
 
 export const readManyBackstagePayManageValidator: Schema = {
-  page: {
+  'page': {
     in: 'query',
     isInt: true,
     notEmpty: true,
   },
-  take: {
+  'take': {
     in: 'query',
     isInt: true,
     notEmpty: true,
   },
-  type: {
+  'type': {
     in: 'query',
     isInt: true,
     notEmpty: true,
   },
-  userId: {
+  'userId': {
     in: 'query',
     isString: true,
   },
@@ -39,28 +39,28 @@ export const careateBackstagePayManageValidator: Schema = {
   },
 };
 export const deleteQrCodeValidator: Schema = {
-  id: {
+  'id': {
     in: 'params',
     isInt: true,
     notEmpty: true,
   },
 };
 export const uploadManyQrCodeValidator: Schema = {
-  id: {
+  'id': {
     in: 'params',
     isInt: true,
     notEmpty: true,
   },
 };
 export const deleteOneBackstagePayManageValidator: Schema = {
-  id: {
+  'id': {
     in: 'params',
     isInt: true,
     notEmpty: true,
   },
 };
 export const updateBackstagePayManageValidator: Schema = {
-  id: {
+  'id': {
     in: 'params',
     isInt: true,
     notEmpty: true,

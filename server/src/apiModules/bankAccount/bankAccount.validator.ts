@@ -25,7 +25,7 @@ export const createBackstageBankAccountsResonValidator: Schema = {
   },
 };
 export const deleteBackstageBankAccountResonValidator: Schema = {
-  resonId: {
+  'resonId': {
     in: 'params',
     isInt: true,
     notEmpty: true,
@@ -41,7 +41,7 @@ export const deleteBackstageBankAccountResonValidator: Schema = {
   },
 };
 export const updateBackstageBankAccountResonValidator: Schema = {
-  resonId: {
+  'resonId': {
     in: 'params',
     isInt: true,
     notEmpty: true,
@@ -52,14 +52,14 @@ export const updateBackstageBankAccountResonValidator: Schema = {
   },
 };
 export const getBackstageBankAccountsValidator: Schema = {
-  userId: {
+  'userId': {
     in: 'params',
     isString: true,
     notEmpty: true,
   },
 };
 export const putBackstageBankAccountsValidator: Schema = {
-  userId: {
+  'userId': {
     in: 'params',
     isString: true,
     notEmpty: true,
@@ -139,8 +139,13 @@ export const createBankAccountsValidator: Schema = {
   },
 };
 export const getMyBankAccountsValidator: Schema = {
-  status: {
+  'status': {
     in: 'query',
+    optional: {
+      options: {
+        nullable: true,
+      },
+    },
     isInt: true,
     matches: {
       options: /^(1|2)/,
@@ -157,7 +162,7 @@ export const getMyBankAccountsValidator: Schema = {
   },
 };
 export const readOneBankAccountValidator: Schema = {
-  id: {
+  'id': {
     in: 'params',
     isInt: true,
     notEmpty: true,
