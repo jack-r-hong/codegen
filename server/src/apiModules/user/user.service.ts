@@ -584,9 +584,11 @@ export class UserService {
       session: Express.Request['session'],
   ) {
     // custom begin loginUser
-    const res = await this.userModel.loginUser(param, null).catch((e) =>{
-      throw e;
-    });
+    param.bodyPhone = param.bodyPhone.replace(/^0/, '');
+    const res = await this.userModel.loginUser(param, null)
+        .catch((e) =>{
+          throw e;
+        });
     if (res !== null) {
       const {id, userStatus, password} = res;
       const match = await bcrypt.compare(param.bodyPassword, password);
@@ -652,9 +654,7 @@ export class UserService {
       session: Express.Request['session'],
   ) {
     // custom begin registerUser
-    console.log(session.userRegister);
-    console.log(session.captcha);
-    
+
     if (!session.userRegister ||
       !param.bodyPhoneCaptcha ||
       param.bodyPhoneCaptcha !== session.userRegister.verify ||
@@ -682,13 +682,15 @@ export class UserService {
         },
     );
     await this.userModel.registerUser(param, {
-      phone: session.userRegister.phone,
+      phone: param.bodyPhone.replace(/^0/, ''),
       phonePrefix: session.userRegister.phonePrefix,
       password: hash,
       salt: salt,
     }).catch((e) =>{
       throw e;
     });
+
+    session.destroy(() => {});
     return {success: true};
 
     // custom end registerUser
@@ -712,14 +714,14 @@ export class UserService {
       session: Express.Request['session'],
   ) {
     // custom begin phoneCheck
-    if (session.userRegister) {
-      /** todo: send phone message api */
-      session.userRegister = {
-        verify: '123456',
-        phonePrefix: '886',
-        phone: param.bodyPhone,
-      };
-    }
+
+    /** todo: send phone message api */
+    session.userRegister = {
+      verify: '123456',
+      phonePrefix: '886',
+      phone: param.bodyPhone,
+    };
+
 
     // custom end phoneCheck
   }
