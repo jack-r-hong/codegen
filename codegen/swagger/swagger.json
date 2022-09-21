@@ -144,43 +144,7 @@
         }
       }
     },
-    "/register/phone_check" : {
-      "get" : {
-        "tags" : [ "user" ],
-        "summary" : "send verify code to phone",
-        "description" : "send verify code to phone.",
-        "operationId" : "sendPhoneCheck",
-        "responses" : {
-          "200" : {
-            "description" : "Ok",
-            "headers" : {
-              "Set-Cookie" : {
-                "description" : "jwt cookie",
-                "schema" : {
-                  "type" : "string",
-                  "format" : "jwt"
-                }
-              }
-            },            
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/User"
-                }
-              }
-            }
-          },
-          "400" : {
-            "$ref" : "#/components/responses/BadRequest"
-          },
-          "401" : {
-            "$ref" : "#/components/responses/Unauthorized"
-          },
-          "409" : {
-            "description": "已有電話"
-          }
-        }
-      },      
+    "/register/phone_check" : {  
       "post" : {
         "tags" : [ "user" ],
         "summary" : "phone check",
@@ -2314,6 +2278,10 @@
             "enum" : [ 1, 2, 3, 4, 10, 11 ],
             "default" : 2
           },    
+          "isAgent" : {
+            "type" : "boolean",
+            "default": "false"
+          },             
           "email" : {
             "type" : "string",
             "format" : "email",

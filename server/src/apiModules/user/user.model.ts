@@ -405,6 +405,7 @@ export class UserModel {
         name: true,
         password: true,
         userStatus: true,
+        isAgent: true,
       },
     }).catch((e) => {
       throw e;
@@ -673,22 +674,14 @@ export class UserModel {
       prisma.$disconnect();
     });
     return res;
-    // custom end registerUser
-  }
-  async sendPhoneCheck(
-      param: requestTypes.SendPhoneCheckParams,
-      customParam: any,
-  ) {
-    // custom begin sendPhoneCheck
 
-    // custom end sendPhoneCheck
+    // custom end registerUser
   }
   async phoneCheck(
       param: requestTypes.PhoneCheckParams,
       customParam: any,
   ) {
     // custom begin phoneCheck
-
 
     // custom end phoneCheck
   }
@@ -697,12 +690,13 @@ export class UserModel {
       customParam: any,
   ) {
     // custom begin getUserMyStatus
-    const res: {userStatus: number} | null = await prisma.user.findUnique({
+    const res: {userStatus: number, isAgent: boolean} | null = await prisma.user.findUnique({
       where: {
         id: customParam.userId,
       },
       select: {
         userStatus: true,
+        isAgent: true,
       },
     }).catch((e) => {
       throw e;

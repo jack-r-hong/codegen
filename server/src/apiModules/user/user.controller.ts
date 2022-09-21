@@ -394,31 +394,6 @@ export class UserController implements Controller {
           next(e);
         });
   }
-  @Get('/register/phone_check')
-  @Validator(validSchemas.sendPhoneCheckValidator)
-  async sendPhoneCheck(
-      req: userParams.SendPhoneCheckRequest,
-      res: Response,
-      next: NextFunction,
-  ) {
-    UserController.service.sendPhoneCheck(
-        userParams.SendPhoneCheckRequestConvert(
-            req.body,
-            req.query,
-            req.params,
-            req.cookies,
-        ),
-        req.session,
-    )
-        .then((result) =>{
-          // custom begin sendPhoneCheck
-          res.json({result});
-
-          // custom end sendPhoneCheck
-        }).catch((e) => {
-          next(e);
-        });
-  }
   @Post('/register/phone_check')
   @Validator(validSchemas.phoneCheckValidator)
   async phoneCheck(

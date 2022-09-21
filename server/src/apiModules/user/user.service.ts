@@ -590,16 +590,18 @@ export class UserService {
           throw e;
         });
     if (res !== null) {
-      const {id, userStatus, password} = res;
+      const {id, userStatus, password, isAgent} = res;
       const match = await bcrypt.compare(param.bodyPassword, password);
       if (match) {
         session.userInfo = {
           id,
           userStatus,
+          isAgent,
         };
         return {
           id,
           userStatus,
+          isAgent,
         };
       }
     }
@@ -654,7 +656,6 @@ export class UserService {
       session: Express.Request['session'],
   ) {
     // custom begin registerUser
-
     if (!session.userRegister ||
       !param.bodyPhoneCaptcha ||
       param.bodyPhoneCaptcha !== session.userRegister.verify ||
@@ -667,7 +668,6 @@ export class UserService {
     if (param.bodyPassword !== param.bodyPasswordCheck) {
       throw new errors.CaptchaError;
     }
-
     const saltRounds = 10;
     const myPlaintextPassword = param.bodyPassword;
     const {hash, salt} = await new Promise<{hash: string, salt: string}>(
@@ -689,39 +689,22 @@ export class UserService {
     }).catch((e) =>{
       throw e;
     });
-
     session.destroy(() => {});
     return {success: true};
 
     // custom end registerUser
-  }
-  async sendPhoneCheck(
-      param :requestTypes.SendPhoneCheckParams,
-      session: Express.Request['session'],
-  ) {
-    // custom begin sendPhoneCheck
-    if (session.userRegister) {
-      /** todo: send phone message api */
-      /**  const {phonePrefix, phone} = session.userRegister; */
-      session.userRegister.verify = '123456';
-    }
-    return {success: true};
-
-    // custom end sendPhoneCheck
   }
   async phoneCheck(
       param :requestTypes.PhoneCheckParams,
       session: Express.Request['session'],
   ) {
     // custom begin phoneCheck
-
     /** todo: send phone message api */
     session.userRegister = {
       verify: '123456',
       phonePrefix: '886',
       phone: param.bodyPhone,
     };
-
 
     // custom end phoneCheck
   }
@@ -742,6 +725,7 @@ export class UserService {
     session.userInfo = {
       id: session.userInfo!.id,
       userStatus: res.userStatus,
+      isAgent: res.isAgent,
     };
     return res;
 

@@ -25,7 +25,7 @@ model {{fpc @key}} {
                 {{~ref d2.$ref}} 
                 {{~ space}} {{id_default @key d2.format ~}}
                 {{~#if d2.uniqueItems}} @unique {{/if}}   
-                {{~#if d2.default }} @default({{d2.default}}) {{/if}}                  
+                {{~#if d2.default }} @default({{d2.default}}) {{/if}}       
                 {{~#if (equal @key "createdAt") }} @default(now()){{/if}}  
                 {{~#if (equal @key "updatedAt") }}  @default(now()) @updatedAt{{/if}} 
                 {{~space}} @map("{{snake_case @key}}")                 

@@ -588,8 +588,6 @@ export const registerUserValidator: Schema = {
     isString: true,
   },
 };
-export const sendPhoneCheckValidator: Schema = {
-};
 export const phoneCheckValidator: Schema = {
   'phone': {
     in: 'body',

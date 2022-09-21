@@ -9,6 +9,7 @@
     "build": "webpack --mode production",
     "dev": "npm run mig-dep && nodemon -L src/index.ts --config ./other/nodemon.json",
     "test": "jest",
+    "mig-dev-c": "prisma migrate dev --create-only --name ",
     "mig-dev": "prisma migrate dev --name ",
     "mig-dep": "prisma migrate deploy",
     "gen": "prisma generate ",

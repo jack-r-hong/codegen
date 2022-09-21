@@ -777,39 +777,6 @@ export const RegisterUserRequestConvert = (
     bodyPromoteCode: body.promoteCode,
   };
 };
-type SendPhoneCheckReqBody = {
-  }
-
-type SendPhoneCheckReqQuery = {
-}
-
-type SendPhoneCheckReqParams = {
-}
-
-type SendPhoneCheckReqCookie = {
-}
-
-export interface SendPhoneCheckRequest extends TypedRequest<
-  SendPhoneCheckReqBody,
-  SendPhoneCheckReqQuery,
-  SendPhoneCheckReqParams,
-  SendPhoneCheckReqCookie
->{
-}
-
-export type SendPhoneCheckParams = {
-}
-
-
-export const SendPhoneCheckRequestConvert = (
-    body: SendPhoneCheckReqBody,
-    query: SendPhoneCheckReqQuery,
-    path: SendPhoneCheckReqParams,
-    cookie: SendPhoneCheckReqCookie,
-): SendPhoneCheckParams => {
-  return {
-  };
-};
 type PhoneCheckReqBody = {
   phone: string,
 }

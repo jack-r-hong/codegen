@@ -6,29 +6,30 @@ import {redisSessionClient as redisClient} from './redisClient';
 import {errors} from './errors';
 
 export type UserInfo = {
-    id: string;
-    userStatus: number;
+    id: string,
+    userStatus: number,
+    isAgent: boolean,
 }
 
 type UserRegister = {
-  phonePrefix: string,
-  phone: string,
-  verify: string,
+  phonePrefix: string
+  phone: string
+  verify: string
 }
 
 type Transaction = {
-  id: string,
-  process: number,
-  requestUserId: string,
-  receiveUserId: string,
-  bos: number,
+  id: string
+  process: number
+  requestUserId: string
+  receiveUserId: string
+  bos: number
 }
 
 declare module 'express-session' {
  // eslint-disable-next-line no-unused-vars
   interface Session {
-    userInfo?: UserInfo,
-    captcha?: String,
+    userInfo?: UserInfo
+    captcha?: String
     userRegister?: UserRegister
     transaction?: Transaction
   }

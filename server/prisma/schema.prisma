@@ -149,6 +149,7 @@ model User {
   idCardDate  String?   @map("id_card_date")                 
   idCardPosiition  String?   @map("id_card_posiition")                 
   idCardType  Int?   @map("id_card_type")                 
+  isAgent  Boolean  @default(false)  @map("is_agent")                 
   name  String?   @map("name")                 
   password  String  @map("password")                 
   phone  String  @map("phone")                 
