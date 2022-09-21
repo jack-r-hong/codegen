@@ -73,6 +73,22 @@ optional: {
   },
 },
   },
+  'area': {
+    in: 'body',
+    isInt: true,
+    matches: {
+      options: /^(1|2|3)/,
+    },
+  },
+  'areaResonId': {
+    in: 'body',
+    isInt: true,
+optional: {
+  options: {
+    nullable: true,
+  },
+},
+  },
   'birthdate': {
     in: 'body',
     isInt: true,
@@ -97,6 +113,22 @@ optional: {
     },
   },
   'certificateResonId': {
+    in: 'body',
+    isInt: true,
+optional: {
+  options: {
+    nullable: true,
+  },
+},
+  },
+  'city': {
+    in: 'body',
+    isInt: true,
+    matches: {
+      options: /^(1|2|3)/,
+    },
+  },
+  'cityResonId': {
     in: 'body',
     isInt: true,
 optional: {
@@ -136,6 +168,13 @@ optional: {
     nullable: true,
   },
 },
+  },
+  'idCard': {
+    in: 'body',
+    isInt: true,
+    matches: {
+      options: /^(1|2|3)/,
+    },
   },
   'idCardDate': {
     in: 'body',
@@ -177,6 +216,15 @@ optional: {
     },
   },
   'idCardPosiitionResonId': {
+    in: 'body',
+    isInt: true,
+optional: {
+  options: {
+    nullable: true,
+  },
+},
+  },
+  'idCardResonId': {
     in: 'body',
     isInt: true,
 optional: {
@@ -531,7 +579,11 @@ export const registerUserValidator: Schema = {
     in: 'body',
     isString: true,
   },
-  'phonePrefix': {
+  'phoneCaptcha': {
+    in: 'body',
+    isString: true,
+  },
+  'promoteCode': {
     in: 'body',
     isString: true,
   },
@@ -539,7 +591,7 @@ export const registerUserValidator: Schema = {
 export const sendPhoneCheckValidator: Schema = {
 };
 export const phoneCheckValidator: Schema = {
-  'verify': {
+  'phone': {
     in: 'body',
     isString: true,
   },

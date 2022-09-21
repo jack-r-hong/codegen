@@ -208,20 +208,26 @@ export const UpdateBackstageUserResonRequestConvert = (
 type UpdateBackstageUserReqBody = {
   address: string,
 addressResonId: string|undefined,
+area: string,
+areaResonId: string|undefined,
 birthdate: string,
 birthdateResonId: string|undefined,
 certificate: string,
 certificateResonId: string|undefined,
+city: string,
+cityResonId: string|undefined,
 country: string,
 countryResonId: string|undefined,
 email: string,
 emailResonId: string|undefined,
+idCard: string,
 idCardDate: string,
 idCardDateResonId: string|undefined,
 idCardPhoto: string,
 idCardPhotoResonId: string|undefined,
 idCardPosiition: string,
 idCardPosiitionResonId: string|undefined,
+idCardResonId: string|undefined,
 idCardType: string,
 idCardTypeResonId: string|undefined,
 name: string,
@@ -255,20 +261,26 @@ export type UpdateBackstageUserParams = {
       pathId: string
 bodyAddress: number,
 bodyAddressResonId: number|undefined,
+bodyArea: number,
+bodyAreaResonId: number|undefined,
 bodyBirthdate: number,
 bodyBirthdateResonId: number|undefined,
 bodyCertificate: number,
 bodyCertificateResonId: number|undefined,
+bodyCity: number,
+bodyCityResonId: number|undefined,
 bodyCountry: number,
 bodyCountryResonId: number|undefined,
 bodyEmail: number,
 bodyEmailResonId: number|undefined,
+bodyIdCard: number,
 bodyIdCardDate: number,
 bodyIdCardDateResonId: number|undefined,
 bodyIdCardPhoto: number,
 bodyIdCardPhotoResonId: number|undefined,
 bodyIdCardPosiition: number,
 bodyIdCardPosiitionResonId: number|undefined,
+bodyIdCardResonId: number|undefined,
 bodyIdCardType: number,
 bodyIdCardTypeResonId: number|undefined,
 bodyName: number,
@@ -290,20 +302,26 @@ export const UpdateBackstageUserRequestConvert = (
       pathId: path.id,
     bodyAddress: parseInt(body.address),
     bodyAddressResonId: typeof body.addressResonId === 'number' ? body.addressResonId : undefined,
+    bodyArea: parseInt(body.area),
+    bodyAreaResonId: typeof body.areaResonId === 'number' ? body.areaResonId : undefined,
     bodyBirthdate: parseInt(body.birthdate),
     bodyBirthdateResonId: typeof body.birthdateResonId === 'number' ? body.birthdateResonId : undefined,
     bodyCertificate: parseInt(body.certificate),
     bodyCertificateResonId: typeof body.certificateResonId === 'number' ? body.certificateResonId : undefined,
+    bodyCity: parseInt(body.city),
+    bodyCityResonId: typeof body.cityResonId === 'number' ? body.cityResonId : undefined,
     bodyCountry: parseInt(body.country),
     bodyCountryResonId: typeof body.countryResonId === 'number' ? body.countryResonId : undefined,
     bodyEmail: parseInt(body.email),
     bodyEmailResonId: typeof body.emailResonId === 'number' ? body.emailResonId : undefined,
+    bodyIdCard: parseInt(body.idCard),
     bodyIdCardDate: parseInt(body.idCardDate),
     bodyIdCardDateResonId: typeof body.idCardDateResonId === 'number' ? body.idCardDateResonId : undefined,
     bodyIdCardPhoto: parseInt(body.idCardPhoto),
     bodyIdCardPhotoResonId: typeof body.idCardPhotoResonId === 'number' ? body.idCardPhotoResonId : undefined,
     bodyIdCardPosiition: parseInt(body.idCardPosiition),
     bodyIdCardPosiitionResonId: typeof body.idCardPosiitionResonId === 'number' ? body.idCardPosiitionResonId : undefined,
+    bodyIdCardResonId: typeof body.idCardResonId === 'number' ? body.idCardResonId : undefined,
     bodyIdCardType: parseInt(body.idCardType),
     bodyIdCardTypeResonId: typeof body.idCardTypeResonId === 'number' ? body.idCardTypeResonId : undefined,
     bodyName: parseInt(body.name),
@@ -713,7 +731,8 @@ type RegisterUserReqBody = {
 password: string,
 passwordCheck: string,
 phone: string,
-phonePrefix: string,
+phoneCaptcha: string,
+promoteCode: string,
 }
 
 type RegisterUserReqQuery = {
@@ -738,7 +757,8 @@ bodyCaptcha: string,
 bodyPassword: string,
 bodyPasswordCheck: string,
 bodyPhone: string,
-bodyPhonePrefix: string,
+bodyPhoneCaptcha: string,
+bodyPromoteCode: string,
 }
 
 
@@ -753,7 +773,8 @@ export const RegisterUserRequestConvert = (
     bodyPassword: body.password,
     bodyPasswordCheck: body.passwordCheck,
     bodyPhone: body.phone,
-    bodyPhonePrefix: body.phonePrefix,
+    bodyPhoneCaptcha: body.phoneCaptcha,
+    bodyPromoteCode: body.promoteCode,
   };
 };
 type SendPhoneCheckReqBody = {
@@ -790,7 +811,7 @@ export const SendPhoneCheckRequestConvert = (
   };
 };
 type PhoneCheckReqBody = {
-  verify: string,
+  phone: string,
 }
 
 type PhoneCheckReqQuery = {
@@ -811,7 +832,7 @@ export interface PhoneCheckRequest extends TypedRequest<
 }
 
 export type PhoneCheckParams = {
-bodyVerify: string,
+bodyPhone: string,
 }
 
 
@@ -822,7 +843,7 @@ export const PhoneCheckRequestConvert = (
     cookie: PhoneCheckReqCookie,
 ): PhoneCheckParams => {
   return {
-    bodyVerify: body.verify,
+    bodyPhone: body.phone,
   };
 };
 type GetUserMyStatusReqBody = {

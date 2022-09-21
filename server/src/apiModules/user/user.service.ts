@@ -652,20 +652,44 @@ export class UserService {
       session: Express.Request['session'],
   ) {
     // custom begin registerUser
-    const {bodyPassword, bodyPhone, bodyPhonePrefix,
-      bodyPasswordCheck, bodyCaptcha} = param;
-    if (bodyPassword !== bodyPasswordCheck) {
-      throw new errors.CaptchaError('bodyPasswordCheck');
+    console.log(session.userRegister);
+    console.log(session.captcha);
+    
+    if (!session.userRegister ||
+      !param.bodyPhoneCaptcha ||
+      param.bodyPhoneCaptcha !== session.userRegister.verify ||
+      param.bodyPassword !== param.bodyPasswordCheck ||
+      param.bodyPhoneCaptcha !== session.userRegister.verify||
+      param.bodyCaptcha !== session.captcha
+    ) {
+      throw new errors.CaptchaError;
     }
-    if (bodyCaptcha !== session.captcha) {
-      throw new errors.CaptchaError('captcha');
+    if (param.bodyPassword !== param.bodyPasswordCheck) {
+      throw new errors.CaptchaError;
     }
-    session.userRegister = {
-      phone: bodyPhone!,
-      phonePrefix: bodyPhonePrefix!,
-      password: bodyPassword!,
-    };
-    return true;
+
+    const saltRounds = 10;
+    const myPlaintextPassword = param.bodyPassword;
+    const {hash, salt} = await new Promise<{hash: string, salt: string}>(
+        (resolve, reject) => {
+          bcrypt.genSalt(saltRounds, function(err, salt) {
+            if (err) throw err;
+            bcrypt.hash(myPlaintextPassword, salt, function(err, hash) {
+              if (err) throw err;
+              resolve({hash, salt});
+            });
+          });
+        },
+    );
+    await this.userModel.registerUser(param, {
+      phone: session.userRegister.phone,
+      phonePrefix: session.userRegister.phonePrefix,
+      password: hash,
+      salt: salt,
+    }).catch((e) =>{
+      throw e;
+    });
+    return {success: true};
 
     // custom end registerUser
   }
@@ -688,33 +712,14 @@ export class UserService {
       session: Express.Request['session'],
   ) {
     // custom begin phoneCheck
-    if (!session.userRegister ||
-      !param.bodyVerify ||
-      param.bodyVerify !== session.userRegister.verify) {
-      throw new errors.CaptchaError;
+    if (session.userRegister) {
+      /** todo: send phone message api */
+      session.userRegister = {
+        verify: '123456',
+        phonePrefix: '886',
+        phone: param.bodyPhone,
+      };
     }
-    const saltRounds = 10;
-    const myPlaintextPassword = session.userRegister.password;
-    const {hash, salt} = await new Promise<{hash: string, salt: string}>(
-        (resolve, reject) => {
-          bcrypt.genSalt(saltRounds, function(err, salt) {
-            if (err) throw err;
-            bcrypt.hash(myPlaintextPassword, salt, function(err, hash) {
-              if (err) throw err;
-              resolve({hash, salt});
-            });
-          });
-        },
-    );
-    await this.userModel.phoneCheck(param, {
-      phone: session.userRegister.phone,
-      phonePrefix: session.userRegister.phonePrefix,
-      password: hash,
-      salt: salt,
-    }).catch((e) =>{
-      throw e;
-    });
-    return {success: true};
 
     // custom end phoneCheck
   }

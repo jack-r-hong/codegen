@@ -115,10 +115,13 @@ export class UserModel {
     // custom begin updateBackstageUser
     const fields = {
       'bodyAddress': 1,
+      'bodyCity': 1,
+      'bodyArea': 1,
       'bodyBirthdate': 1,
       'bodyCertificate': 1,
       'bodyCountry': 1,
       'bodyEmail': 1,
+      'bodyIdCard': 1,
       'bodyIdCardDate': 1,
       'bodyIdCardPhoto': 1,
       'bodyIdCardPosiition': 1,
@@ -141,10 +144,13 @@ export class UserModel {
       },
       data: {
         address: param.bodyAddress,
+        area: param.bodyArea,
         birthdate: param.bodyBirthdate,
+        city: param.bodyCity,
         certificate: param.bodyCertificate,
         country: param.bodyCountry,
         email: param.bodyEmail,
+        idCard: param.bodyIdCard,
         idCardDate: param.bodyIdCardDate,
         idCardPhoto: param.bodyIdCardPhoto,
         idCardPosiition: param.bodyIdCardPosiition,
@@ -160,10 +166,13 @@ export class UserModel {
       },
       select: {
         address: true,
+        area: true,
         birthdate: true,
         certificate: true,
+        city: true,
         country: true,
         email: true,
+        idCard: true,
         idCardDate: true,
         idCardPhoto: true,
         idCardPosiition: true,
@@ -176,10 +185,13 @@ export class UserModel {
     });
     const resonMap = {
       bodyAddressResonId: 'address',
+      bodyAreaResonId: 'area',
       bodyBirthdateResonId: 'birthdate',
+      bodyCityResonId: 'city',
       bodyCertificateResonId: 'certificate',
       bodyCountryResonId: 'country',
       bodyEmailResonId: 'email',
+      bodyIdCardResonId: 'idCard',
       bodyIdCardDateResonId: 'idCardDate',
       bodyIdCardPhotoResonId: 'idCardPhoto',
       bodyIdCardPosiitionResonId: 'idCardPosiition',
@@ -190,10 +202,18 @@ export class UserModel {
     } as const;
     await prisma.$transaction(
         (Object.keys(resonMap) as (keyof typeof resonMap)[] )
-            .filter((key) => {
-              return !!param[key];
-            }).map((key) =>
-              prisma.userVerifyResonDes.upsert({
+            .map((key) => {
+              if (!param[key]) {
+                return prisma.userVerifyResonDes.delete({
+                  where: {
+                    uniqueUserField: {
+                      userVerifyId: userVerifyRes.id,
+                      field: resonMap[key],
+                    },
+                  },
+                });
+              }
+              return prisma.userVerifyResonDes.upsert({
                 where: {
                   uniqueUserField: {
                     userVerifyId: userVerifyRes.id,
@@ -209,8 +229,8 @@ export class UserModel {
                   field: resonMap[key],
                   userVerifyId: userVerifyRes.id,
                 },
-              }),
-            ),
+              });
+            }),
     ).catch((e) => {
       throw e;
     }).finally(() => {
@@ -617,22 +637,6 @@ export class UserModel {
       customParam: any,
   ) {
     // custom begin registerUser
-
-    // custom end registerUser
-  }
-  async sendPhoneCheck(
-      param: requestTypes.SendPhoneCheckParams,
-      customParam: any,
-  ) {
-    // custom begin sendPhoneCheck
-
-    // custom end sendPhoneCheck
-  }
-  async phoneCheck(
-      param: requestTypes.PhoneCheckParams,
-      customParam: any,
-  ) {
-    // custom begin phoneCheck
     const res: User | null = await prisma.user.create({
       data: {
         phone: customParam.phone,
@@ -669,6 +673,22 @@ export class UserModel {
       prisma.$disconnect();
     });
     return res;
+    // custom end registerUser
+  }
+  async sendPhoneCheck(
+      param: requestTypes.SendPhoneCheckParams,
+      customParam: any,
+  ) {
+    // custom begin sendPhoneCheck
+
+    // custom end sendPhoneCheck
+  }
+  async phoneCheck(
+      param: requestTypes.PhoneCheckParams,
+      customParam: any,
+  ) {
+    // custom begin phoneCheck
+
 
     // custom end phoneCheck
   }

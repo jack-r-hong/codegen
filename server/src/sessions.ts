@@ -13,8 +13,7 @@ export type UserInfo = {
 type UserRegister = {
   phonePrefix: string,
   phone: string,
-  password: string,
-  verify?: string,
+  verify: string,
 }
 
 type Transaction = {

@@ -2905,33 +2905,7 @@
             "format" : "date-time"
           }   
         }
-      },
-      "TransactionChatroom" : {
-        "type" : "object",
-        "description" : "database",
-        "properties" : {
-          "id" : {
-            "type" : "integer"
-          },     
-          "type" : {
-            "type" : "string",
-            "enum" : [ "text", "image/base64" ]            
-          },                   
-          "transactionId" : {
-            "type" : "string"
-          }, 
-          "name" : {
-            "type" : "string"
-          },           
-          "userId" : {
-            "type" : "string"
-          },  
-          "createdAt" : {
-            "type" : "string",
-            "format" : "date-time"
-          }   
-        }
-      }      
+      }   
     },
     "requestBodies" : {
       "UserRegister" : {
@@ -2942,19 +2916,22 @@
               "properties" : {
                 "phone" : {
                   "$ref" : "#/components/schemas/User/properties/phone"
-                },        
-                "phonePrefix" : {
-                  "$ref" : "#/components/schemas/User/properties/phonePrefix"
-                },                                  
+                },                                      
                 "password" : {
                   "$ref" : "#/components/schemas/User/properties/password"
                 },
                 "passwordCheck" : {
                   "$ref" : "#/components/schemas/User/properties/password"
-                },                
+                }, 
+                "phoneCaptcha" : {
+                  "type": "string"
+                },                    
                 "captcha" : {
                   "type": "string"
-                }
+                },
+                "promoteCode" : {
+                  "type": "string"
+                }                
               }
             }
           }
@@ -2968,7 +2945,7 @@
             "schema" : {
               "type" : "object",
               "properties" : {
-                "verify" : {
+                "phone" : {
                   "type": "string"
                 }
               }
@@ -3152,7 +3129,12 @@
                   "type" : "integer",
                   "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
                   "enum": [1,2,3]
-                },                
+                },  
+                "idCard" : {
+                  "type" : "integer",
+                  "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
+                  "enum": [1,2,3]
+                },                               
                 "idCardDate" : {
                   "type" : "integer",
                   "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
@@ -3193,6 +3175,16 @@
                   "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
                   "enum": [1,2,3]
                 },
+                "city" : {
+                  "type" : "integer",
+                  "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
+                  "enum": [1,2,3]
+                },
+                "area" : {
+                  "type" : "integer",
+                  "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
+                  "enum": [1,2,3]
+                },                                
                 "nameResonId" : {
                   "type" : "integer",
                   "nullable": true
@@ -3205,10 +3197,22 @@
                   "type" : "integer",
                   "nullable": true
                 },
+                "areaResonId" : {
+                  "type" : "integer",
+                  "nullable": true
+                },                      
+                "cityResonId" : {
+                  "type" : "integer",
+                  "nullable": true
+                },                   
                 "countryResonId" : {
                   "type" : "integer",
                   "nullable": true
-                },                
+                },             
+                "idCardResonId" : {
+                  "type" : "integer",
+                  "nullable": true
+                },     
                 "idCardDateResonId" : {
                   "type" : "integer",
                   "nullable": true

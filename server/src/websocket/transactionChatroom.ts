@@ -9,7 +9,6 @@ import {TransactionChatroomModel}
 import {Service, Container} from 'typedi';
 import {IncomingMessage} from 'http';
 import qs from 'qs';
-import {json} from 'body-parser';
 
 const event = new WSEvent('transaction_chatroom');
 const wSCIModel = Container.get(WSClientQueueModel);
