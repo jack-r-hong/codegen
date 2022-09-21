@@ -1,9 +1,9 @@
 import {Service} from 'typedi';
-import {PrismaClient, PayManage} from '@prisma/client';
+import * as Prisma from '@prisma/client';
 import * as requestTypes from './payManage.parameters';
 import {errors} from '../../errors';
 
-const prisma = new PrismaClient();
+const prisma = new Prisma.PrismaClient();
 
 @Service()
 export class PayManageModel {
@@ -60,7 +60,7 @@ export class PayManageModel {
       customParam: any,
   ) {
     // custom begin deleteQrCode
-    const res: PayManage | null = await prisma.payManage.findUnique({
+    const res: Prisma.PayManage | null = await prisma.payManage.findUnique({
       where: {
         id: param.pathId,
       },
@@ -92,7 +92,7 @@ export class PayManageModel {
       ownerId: string,
   ) {
     // custom begin uploadManyQrCode
-    const res: PayManage | null = await prisma.payManage.update({
+    const res: Prisma.PayManage | null = await prisma.payManage.update({
       where: {
         id: param.pathId,
       },
@@ -112,7 +112,7 @@ export class PayManageModel {
   async deleteOneBackstagePayManage(
       param: requestTypes.DeleteOneBackstagePayManageParams,
   ) {
-    const res: PayManage | null = await prisma.payManage.delete({
+    const res: Prisma.PayManage | null = await prisma.payManage.delete({
       where: {
         id: param.pathId,
       },
@@ -128,7 +128,7 @@ export class PayManageModel {
       customParam: any,
   ) {
     // custom begin updateBackstagePayManage
-    const res: PayManage | null = await prisma.payManage.update({
+    const res: Prisma.PayManage | null = await prisma.payManage.update({
       where: {
         id: param.pathId,
       },

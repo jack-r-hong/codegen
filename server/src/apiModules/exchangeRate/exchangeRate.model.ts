@@ -1,9 +1,9 @@
 import {Service} from 'typedi';
-import {PrismaClient, ExchangeRate} from '@prisma/client';
+import * as Prisma from '@prisma/client';
 import * as requestTypes from './exchangeRate.parameters';
 import {errors} from '../../errors';
 
-const prisma = new PrismaClient();
+const prisma = new Prisma.PrismaClient();
 
 @Service()
 export class ExchangeRateModel {
@@ -42,7 +42,7 @@ export class ExchangeRateModel {
   async createOneBackstageExchangeRate(
       param: requestTypes.CreateOneBackstageExchangeRateParams,
   ) {
-    const res: ExchangeRate | null = await prisma.exchangeRate.create({
+    const res: Prisma.ExchangeRate | null = await prisma.exchangeRate.create({
       data: {
         bos: param.bodyBos,
         bouns: param.bodyBouns,
@@ -62,7 +62,7 @@ export class ExchangeRateModel {
   async deleteOneBackstageExchangeRate(
       param: requestTypes.DeleteOneBackstageExchangeRateParams,
   ) {
-    const res: ExchangeRate | null = await prisma.exchangeRate.delete({
+    const res: Prisma.ExchangeRate | null = await prisma.exchangeRate.delete({
       where: {
         id: param.pathId,
       },
@@ -76,7 +76,7 @@ export class ExchangeRateModel {
   async updateOneBackstageExchangeRate(
       param: requestTypes.UpdateOneBackstageExchangeRateParams,
   ) {
-    const res: ExchangeRate | null = await prisma.exchangeRate.update({
+    const res: Prisma.ExchangeRate | null = await prisma.exchangeRate.update({
       where: {
         id: param.pathId,
       },

@@ -10,6 +10,7 @@ import {WSOnMessage, WSToken} from './base';
 
 import './transaction';
 import './transactionChatroom';
+import './serviceChatroom';
 
 
 export class WebsocketApp {

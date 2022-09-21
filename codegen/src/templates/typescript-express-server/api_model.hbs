@@ -1,12 +1,12 @@
 import {Service} from 'typedi';
-import {PrismaClient, {{fpc tag~}}  } from '@prisma/client';
+import * as Prisma from '@prisma/client';
 import * as requestTypes from './{{tag}}.parameters';
 import {errors} from '../../errors';
 
-const prisma = new PrismaClient();
+const prisma = new Prisma.PrismaClient();
 
 {{~#*inline "createOne"}}
-    const res: {{fpc ../../tag}} | null = await prisma.{{../../tag}}.create({
+    const res: Prisma.{{fpc ../../tag}} | null = await prisma.{{../../tag}}.create({
       data: {
       {{#if d.requestBody.content.[application/json].schema.type}}
         {{#if (equal d.requestBody.content.[application/json].schema.type "object") }}
@@ -136,7 +136,7 @@ const prisma = new PrismaClient();
 {{/inline}}
 
 {{~#*inline "updateOne"}}
-    const res: {{fpc ../../tag}} | null = await prisma.{{../../tag}}.update({
+    const res: Prisma.{{fpc ../../tag}} | null = await prisma.{{../../tag}}.update({
       where: {
         {{#each d.parameters}}
         {{name}}: param.{{in}}{{fpc name}},
@@ -192,7 +192,7 @@ const prisma = new PrismaClient();
 {{/inline}}
 
 {{~#*inline "deleteOne"}}
-    const res: {{fpc ../../tag}} | null = await prisma.{{../../tag}}.delete({
+    const res: Prisma.{{fpc ../../tag}} | null = await prisma.{{../../tag}}.delete({
       where: {
         {{#each d.parameters}}
         {{name}}: param.{{in}}{{fpc name}},

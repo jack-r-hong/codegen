@@ -1,9 +1,9 @@
 import {Service} from 'typedi';
-import {PrismaClient, Transaction} from '@prisma/client';
+import * as Prisma from '@prisma/client';
 import * as requestTypes from './transaction.parameters';
 import {errors} from '../../errors';
 
-const prisma = new PrismaClient();
+const prisma = new Prisma.PrismaClient();
 
 @Service()
 export class TransactionModel {
@@ -12,7 +12,7 @@ export class TransactionModel {
       customParam: any,
   ) {
     // custom begin createTransaction
-    const res: Transaction | null = await prisma.transaction.create({
+    const res: Prisma.Transaction | null = await prisma.transaction.create({
       data: {
         account: param.bodyAccount,
         bonusPoint: param.bodyBonusPoint,
@@ -39,7 +39,7 @@ export class TransactionModel {
       customParam: any,
   ) {
     // custom begin updateTransactionState
-    const res: Transaction | null = await prisma.transaction.update({
+    const res: Prisma.Transaction | null = await prisma.transaction.update({
       where: {
         id: customParam.tId,
       },

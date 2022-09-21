@@ -1,9 +1,9 @@
 import {Service} from 'typedi';
-import {PrismaClient, User} from '@prisma/client';
+import * as Prisma from '@prisma/client';
 import * as requestTypes from './user.parameters';
 import {errors} from '../../errors';
 
-const prisma = new PrismaClient();
+const prisma = new Prisma.PrismaClient();
 
 @Service()
 export class UserModel {
@@ -530,6 +530,26 @@ export class UserModel {
         area: param.bodyArea,
         address: param.bodyArea,
         userStatus: 3,
+        userVerify: {
+          update: {
+            address: 1,
+            area: 1,
+            birthdate: 1,
+            certificate: 1,
+            city: 1,
+            country: 1,
+            email: 1,
+            id: 1,
+            idCard: 1,
+            idCardDate: 1,
+            idCardPhoto: 1,
+            idCardPosiition: 1,
+            idCardType: 1,
+            name: 1,
+            selfie: 1,
+            sign: 1,
+          },
+        },
       },
       where: {
         id: customParam.userId,
@@ -638,7 +658,7 @@ export class UserModel {
       customParam: any,
   ) {
     // custom begin registerUser
-    const res: User | null = await prisma.user.create({
+    const res: Prisma.User | null = await prisma.user.create({
       data: {
         phone: customParam.phone,
         phonePrefix: customParam.phonePrefix,
@@ -710,7 +730,7 @@ export class UserModel {
   async updateOneyUser(
       param: requestTypes.UpdateOneyUserParams,
   ) {
-    const res: User | null = await prisma.user.update({
+    const res: Prisma.User | null = await prisma.user.update({
       where: {
         id: param.pathId,
       },

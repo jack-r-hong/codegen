@@ -1,9 +1,9 @@
 import {Service} from 'typedi';
-import {PrismaClient, BankAccount} from '@prisma/client';
+import * as Prisma from '@prisma/client';
 import * as requestTypes from './bankAccount.parameters';
 import {errors} from '../../errors';
 
-const prisma = new PrismaClient();
+const prisma = new Prisma.PrismaClient();
 
 @Service()
 export class BankAccountModel {

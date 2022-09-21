@@ -7,9 +7,9 @@ import {
   ControllerToken,
   AppUse,
 } from '../baseController';
-import {TransactionChatroomService} from './transactionChatroom.service';
-import * as transactionChatroomParams from './transactionChatroom.parameters';
-import * as validSchemas from './transactionChatroom.validator';
+import {ChatroomService} from './chatroom.service';
+import * as chatroomParams from './chatroom.parameters';
+import * as validSchemas from './chatroom.validator';
 
 // eslint-disable-next-line no-unused-vars
 const {Get, Post, Put, Delete} = httpMethods;
@@ -17,10 +17,10 @@ const {Get, Post, Put, Delete} = httpMethods;
 const {Validator, FormData, limiter} = middlewareDecorator;
 
 @Service({id: ControllerToken, multiple: true})
-export class TransactionChatroomController implements Controller {
+export class ChatroomController implements Controller {
   constructor() {}
 
-  static service = Container.get(TransactionChatroomService);
+  static service = Container.get(ChatroomService);
   @Inject('app.use')
     appUse!: AppUse;
 

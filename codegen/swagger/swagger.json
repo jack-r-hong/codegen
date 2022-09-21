@@ -56,8 +56,8 @@
       "description" : "Operations about backstageAdmin"
     },
     {
-      "name" : "transactionChatroom",
-      "description" : "Operations about transactionChatroom"
+      "name" : "chatroom",
+      "description" : "Operations about chatroom"
     }       
   ],
   "paths" : {

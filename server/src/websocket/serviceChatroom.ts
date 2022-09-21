@@ -2,7 +2,6 @@ import WebSocket from 'ws';
 import {WSToken, WSOnMessage, MyWebSocketServer, WSEvent} from './base';
 import {WSClientQueueModel} from '../redisClient/models/webSocketModels';
 import {UserModel} from '../apiModules/user/user.model';
-import {TransactionModel} from '../apiModules/transaction/transaction.model';
 import {ChatroomModel}
   from '../apiModules/chatroom/chatroom.model';
 
@@ -10,11 +9,11 @@ import {Service, Container} from 'typedi';
 import {IncomingMessage} from 'http';
 import qs from 'qs';
 
-const event = new WSEvent('transaction_chatroom');
+const event = new WSEvent('service_chatroom');
 const wSCIModel = Container.get(WSClientQueueModel);
 const userModel = Container.get(UserModel);
-const transactionModel = Container.get(TransactionModel);
 const chatroomModel = Container.get(ChatroomModel);
+
 
 @Service({id: WSToken, multiple: true})
 export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
@@ -40,30 +39,25 @@ export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
     }
 
     const query = qs.parse(queryString);
-    const {login_session: userId, transaction_id: transactionId} = query;
-    // console.log(userId, transactionId);
+    const {login_session: userId} = query;
 
     const resUser = await userModel.getUserName(userId as string )
         .catch((e) => false);
 
-    const resTran = await transactionModel
-        .readOneTransaction({pathId: transactionId as string})
-        .catch((e) => false);
 
-    if (!resTran || !resUser) {
+    if ( !resUser) {
       ws.send(event.msg({error: true, message: 'notAuth'}));
       return;
     }
 
-    const subscriber = await wSCIModel.sub(transactionId as string,
+    const subscriber = await wSCIModel.sub(userId as string,
         (message: any)=>{
           event.eventName = 'send';
           const data = JSON.parse(message);
           data.name = (resUser as {name: string}).name;
 
           data.userId = userId;
-          chatroomModel.createTransactionMessage(
-            transactionId as string,
+          chatroomModel.createServiceMessage(
             userId as string,
             data.type,
             data.name?? '',
@@ -80,14 +74,14 @@ export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
       const data = event.parse(message).data;
 
       await wSCIModel.pub(
-          transactionId as string,
-          JSON.stringify(data),
+        userId as string,
+        JSON.stringify(data),
       );
     });
 
     event.eventName = 'ready';
-    const res = await chatroomModel.getTransactionMessages(
-      transactionId as string,
+    const res = await chatroomModel.getServiceMessages(
+        userId as string,
     );
 
     ws.send(event.msg(
