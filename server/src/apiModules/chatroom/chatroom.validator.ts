@@ -7,3 +7,15 @@ import * as sessions from '../../sessions';
 
 
 
+export const serviceTokenValidator: Schema = {
+  'userId': {
+    in: 'body',
+    isString: true,
+  },
+};
+export const transactionTokenValidator: Schema = {
+  'transactionId': {
+    in: 'body',
+    isString: true,
+  },
+};

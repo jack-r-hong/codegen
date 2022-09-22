@@ -24,4 +24,54 @@ export class ChatroomController implements Controller {
   @Inject('app.use')
     appUse!: AppUse;
 
+  @Post('/chatroom/service/token')
+  @Validator(validSchemas.serviceTokenValidator)
+  async serviceToken(
+      req: chatroomParams.ServiceTokenRequest,
+      res: Response,
+      next: NextFunction,
+  ) {
+    ChatroomController.service.serviceToken(
+        chatroomParams.ServiceTokenRequestConvert(
+            req.body,
+            req.query,
+            req.params,
+            req.cookies,
+        ),
+        req.session,
+    )
+        .then((result) =>{
+          // custom begin serviceToken
+          res.json(result);
+
+          // custom end serviceToken
+        }).catch((e) => {
+          next(e);
+        });
+  }
+  @Post('/chatroom/transaction/token')
+  @Validator(validSchemas.transactionTokenValidator)
+  async transactionToken(
+      req: chatroomParams.TransactionTokenRequest,
+      res: Response,
+      next: NextFunction,
+  ) {
+    ChatroomController.service.transactionToken(
+        chatroomParams.TransactionTokenRequestConvert(
+            req.body,
+            req.query,
+            req.params,
+            req.cookies,
+        ),
+        req.session,
+    )
+        .then((result) =>{
+          // custom begin transactionToken
+          res.json(result);
+
+          // custom end transactionToken
+        }).catch((e) => {
+          next(e);
+        });
+  }
 }

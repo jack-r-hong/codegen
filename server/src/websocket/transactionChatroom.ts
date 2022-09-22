@@ -1,19 +1,15 @@
 import WebSocket from 'ws';
 import {WSToken, WSOnMessage, MyWebSocketServer, WSEvent} from './base';
 import {WSClientQueueModel} from '../redisClient/models/webSocketModels';
-import {UserModel} from '../apiModules/user/user.model';
-import {TransactionModel} from '../apiModules/transaction/transaction.model';
 import {ChatroomModel}
   from '../apiModules/chatroom/chatroom.model';
-
+import {chatroomKey} from '../jwt';
 import {Service, Container} from 'typedi';
 import {IncomingMessage} from 'http';
 import qs from 'qs';
 
 const event = new WSEvent('transaction_chatroom');
 const wSCIModel = Container.get(WSClientQueueModel);
-const userModel = Container.get(UserModel);
-const transactionModel = Container.get(TransactionModel);
 const chatroomModel = Container.get(ChatroomModel);
 
 @Service({id: WSToken, multiple: true})
@@ -34,42 +30,40 @@ export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
     }
 
     const queryString = url.split('?')[1];
+
     if (!queryString) {
       ws.send(event.msg({error: true, message: 'notAuth'}));
       return;
     }
 
     const query = qs.parse(queryString);
-    const {login_session: userId, transaction_id: transactionId} = query;
-    // console.log(userId, transactionId);
+    const {token} = query;
 
-    const resUser = await userModel.getUserName(userId as string )
-        .catch((e) => false);
+    const tokenV = chatroomKey.tokenVerify(token as string);
 
-    const resTran = await transactionModel
-        .readOneTransaction({pathId: transactionId as string})
-        .catch((e) => false);
-
-    if (!resTran || !resUser) {
+    if (!token || !tokenV) {
       ws.send(event.msg({error: true, message: 'notAuth'}));
       return;
     }
+
+    const {userId, userName, transactionId} =
+     tokenV as {userId: string, userName: string, transactionId: string };
 
     const subscriber = await wSCIModel.sub(transactionId as string,
         (message: any)=>{
           event.eventName = 'send';
           const data = JSON.parse(message);
-          data.name = (resUser as {name: string}).name;
+          data.name = userName;
 
           data.userId = userId;
           chatroomModel.createTransactionMessage(
-            transactionId as string,
-            userId as string,
-            data.type,
-            data.name?? '',
-            data.text,
+              transactionId,
+              userId,
+              data.type,
+              data.name?? '',
+              data.text,
             data.type === 'image'? Buffer.from(data.data, 'base64'): undefined,
-          ).then((e) => console.log(e),
+          ).then((e) => {},
           ).catch((e) => console.log(e),
           );
 
@@ -80,14 +74,14 @@ export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
       const data = event.parse(message).data;
 
       await wSCIModel.pub(
-          transactionId as string,
+          transactionId,
           JSON.stringify(data),
       );
     });
 
     event.eventName = 'ready';
     const res = await chatroomModel.getTransactionMessages(
-      transactionId as string,
+        transactionId,
     );
 
     ws.send(event.msg(

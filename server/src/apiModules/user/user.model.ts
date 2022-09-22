@@ -528,7 +528,7 @@ export class UserModel {
         idCardType: param.bodyIdCardType,
         city: param.bodyCity,
         area: param.bodyArea,
-        address: param.bodyArea,
+        address: param.bodyAddress,
         userStatus: 3,
         userVerify: {
           update: {
@@ -539,7 +539,6 @@ export class UserModel {
             city: 1,
             country: 1,
             email: 1,
-            id: 1,
             idCard: 1,
             idCardDate: 1,
             idCardPhoto: 1,

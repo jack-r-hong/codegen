@@ -4,6 +4,7 @@ import {WSClientQueueModel} from '../redisClient/models/webSocketModels';
 import {UserModel} from '../apiModules/user/user.model';
 import {ChatroomModel}
   from '../apiModules/chatroom/chatroom.model';
+import {chatroomKey} from '../jwt';
 
 import {Service, Container} from 'typedi';
 import {IncomingMessage} from 'http';
@@ -13,7 +14,6 @@ const event = new WSEvent('service_chatroom');
 const wSCIModel = Container.get(WSClientQueueModel);
 const userModel = Container.get(UserModel);
 const chatroomModel = Container.get(ChatroomModel);
-
 
 @Service({id: WSToken, multiple: true})
 export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
@@ -27,6 +27,7 @@ export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
   async onStartMessage(ws: WebSocket, req: IncomingMessage) {
     const url = req.url;
 
+
     if (!url) {
       ws.send(event.msg({error: true, message: 'notAuth'}));
       return;
@@ -39,7 +40,17 @@ export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
     }
 
     const query = qs.parse(queryString);
-    const {login_session: userId} = query;
+    const {token} = query;
+
+    const tokenV = chatroomKey.tokenVerify(token as string);
+
+    if (!token || !tokenV) {
+      ws.send(event.msg({error: true, message: 'notAuth'}));
+      return;
+    }
+
+    const {userId, userName} =
+     tokenV as {userId: string, userName: string };
 
     const resUser = await userModel.getUserName(userId as string )
         .catch((e) => false);
@@ -54,7 +65,7 @@ export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
         (message: any)=>{
           event.eventName = 'send';
           const data = JSON.parse(message);
-          data.name = (resUser as {name: string}).name;
+          data.name = userName;
 
           data.userId = userId;
           chatroomModel.createServiceMessage(
@@ -63,7 +74,7 @@ export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
             data.name?? '',
             data.text,
             data.type === 'image'? Buffer.from(data.data, 'base64'): undefined,
-          ).then((e) => console.log(e),
+          ).then((e) => {},
           ).catch((e) => console.log(e),
           );
 

@@ -27,5 +27,6 @@ class ApiKey {
 }
 
 export const userInfoApiKey = new ApiKey('userInfo', 7 * 24 * 60 * 60 * 1000);
+export const chatroomKey = new ApiKey('chatroomKey', 7 * 24 * 60 * 60 * 1000);
 
 

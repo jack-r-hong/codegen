@@ -7,6 +7,63 @@ const prisma = new Prisma.PrismaClient();
 
 @Service()
 export class ChatroomModel {
+  async serviceToken(
+      param: requestTypes.ServiceTokenParams,
+      customParam: any,
+  ) {
+    // custom begin serviceToken
+    const res = await prisma.user.findUnique({
+      where: {
+        id: param.bodyUserId,
+      },
+      select: {
+        id: true,
+        name: true,
+      },
+    }).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+    return res;
+    // custom end serviceToken
+  }
+  async transactionToken(
+      param: requestTypes.TransactionTokenParams,
+      customParam: any,
+  ) {
+    // custom begin transactionToken
+    const res = await prisma.transaction.findUnique({
+      where: {
+        id: param.bodyTransactionId,
+      },
+      select: {
+        user: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        transactionRecive: {
+          select: {
+            user: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+          },
+        },
+      },
+    }).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+    return res;
+
+    // custom end transactionToken
+  }
   // custom begin model
   async createTransactionMessage(
       transactionId: string,
