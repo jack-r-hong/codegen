@@ -200,6 +200,7 @@ type ReadMyTransactionReqQuery = {
       start_time: string
       end_time: string
       state: string
+      bos: string
 }
 
 type ReadMyTransactionReqParams = {
@@ -224,6 +225,7 @@ export type ReadMyTransactionParams = {
       queryStartTime: string
       queryEndTime: string
       queryState: string
+      queryBos: number
 }
 
 
@@ -241,6 +243,7 @@ export const ReadMyTransactionRequestConvert = (
             queryStartTime: query.start_time,
             queryEndTime: query.end_time,
             queryState: query.state,
+          queryBos: parseInt(query.bos),
   };
 };
 type GetPayPhotoReqBody = {

@@ -26,6 +26,7 @@ export class ChatroomModel {
       prisma.$disconnect();
     });
     return res;
+
     // custom end serviceToken
   }
   async transactionToken(
@@ -42,6 +43,7 @@ export class ChatroomModel {
           select: {
             id: true,
             name: true,
+            isAgent: true,
           },
         },
         transactionRecive: {
@@ -50,6 +52,7 @@ export class ChatroomModel {
               select: {
                 id: true,
                 name: true,
+                isAgent: true,
               },
             },
           },

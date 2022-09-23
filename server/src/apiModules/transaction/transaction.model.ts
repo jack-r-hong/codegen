@@ -141,13 +141,17 @@ export class TransactionModel {
   ) {
     // custom begin readMyTransaction
     let state :undefined | any = undefined;
+    let bos : undefined | number = undefined;
+    if (param.queryBos === 1 || param.queryBos === 2) {
+      bos = param.queryBos;
+    }
     if (param.queryState === 'failed') {
       state = 0;
     } else if (param.queryState === 'pending') {
       state = 1;
     } else if (param.queryState === 'processing') {
       state = {
-        gt: 1,
+        gt: 0,
         lt: 4,
       };
     }
@@ -164,6 +168,7 @@ export class TransactionModel {
           gte: param.queryStartTime,
           lte: param.queryEndTime,
         },
+        bos,
       },
       select: {
         id: true,

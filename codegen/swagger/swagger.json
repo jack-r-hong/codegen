@@ -859,7 +859,8 @@
                         "birthdate": 1,
                         "certificate": 1,
                         "country": 1,
-                        "email": 1,
+                        "gameUid": 1,
+                        "lineId": 1,
                         "id": 9,
                         "idCardDate": 1,
                         "idCardPhoto": 1,
@@ -887,10 +888,7 @@
           "409" : {
             "description": "bank account duplicate"
           }          
-        },
-        "security" : [{
-          "cookieAuth" : []
-        }]
+        }
       }     
     }, 
     "/backstage/user/verify/reson": {   
@@ -1284,7 +1282,17 @@
               "description" : "status map:\n  * `failed` - Failed\n * `all` - All\n * `pending` - Pending\n * `processing` - Processing\n",
               "enum" : ["failed", "all", "pending", "processing"]     
             }    
-          }                                                   
+          },
+          {
+            "name" : "bos",
+            "in" : "query",
+            "description" : "status map:\n * `0` - All \n * `1` - Buy\n * `2` - Sell\n",
+            "schema" : {
+              "type" : "integer",
+              "format" : "int32",
+              "enum" : [ 0, 1, 2 ]
+            }
+          }                                                  
         ],        
         "responses" : {
           "200" : {
@@ -2317,10 +2325,13 @@
           "isAgent" : {
             "type" : "boolean",
             "default": "false"
-          },             
-          "email" : {
+          },      
+          "gameUid" : {
             "type" : "string",
-            "format" : "email",
+            "nullable" : true
+          },      
+          "lineId" : {
+            "type" : "string",
             "nullable" : true
           },          
           "birthdate" : {
@@ -2467,12 +2478,18 @@
             "enum": [1,2,3],
             "default": 1
           },
-          "email" : {
+          "lineId" : {
             "type" : "integer",
             "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
             "enum": [1,2,3],
             "default": 1
-          },          
+          },     
+          "gameUid" : {
+            "type" : "integer",
+            "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
+            "enum": [1,2,3],
+            "default": 1
+          },                  
           "birthdate" : {
             "type" : "integer",
             "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
@@ -2580,7 +2597,8 @@
               "name", 
               "phonePrefix", 
               "phone", 
-              "email", 
+              "lineId",
+              "gameUid",
               "birthdate",
               "country", 
               "idCardDate", 
@@ -2969,15 +2987,17 @@
                   "type" : "string",
                   "minLength" : 3,
                   "maxLength" : 30
-                },
-                "email" : {
-                  "type" : "string",
-                  "format" : "email"
-                },                                       
+                },                                  
                 "birthdate" : {
                   "type" : "string",
                   "format" : "date"
                 },  
+                "gameUid" : {
+                  "type" : "string"
+                },      
+                "lineId" : {
+                  "type" : "string"
+                }, 
                 "country" : {
                   "description": "residence country",
                   "type" : "string"
@@ -3043,10 +3063,14 @@
                   "minLength" : 3,
                   "maxLength" : 30
                 },
-                "email" : {
+                "gameUid" : {
                   "type" : "string",
-                  "format" : "email"
-                },                                       
+                  "nullable" : true
+                },      
+                "lineId" : {
+                  "type" : "string",
+                  "nullable" : true
+                },                                    
                 "birthdate" : {
                   "type" : "string",
                   "format" : "date"
@@ -3119,11 +3143,16 @@
                   "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
                   "enum": [1,2,3]
                 },        
-                "email" : {
+                "lineId" : {
                   "type" : "integer",
                   "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
                   "enum": [1,2,3]
-                },                                  
+                },         
+                "gameUid" : {
+                  "type" : "integer",
+                  "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
+                  "enum": [1,2,3]
+                },                             
                 "birthdate" : {
                   "type" : "integer",
                   "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
@@ -3193,10 +3222,14 @@
                   "type" : "integer",
                   "nullable": true
                 },        
-                "emailResonId" : {
+                "gameUidResonId" : {
                   "type" : "integer",
                   "nullable": true
-                },                                  
+                },        
+                "lineIdResonId" : {
+                  "type" : "integer",
+                  "nullable": true
+                },                                 
                 "birthdateResonId" : {
                   "type" : "integer",
                   "nullable": true
@@ -3319,9 +3352,6 @@
                 "name" : {
                   "$ref" : "#/components/schemas/User/properties/name"
                 },
-                "email" : {
-                  "$ref" : "#/components/schemas/User/properties/email"
-                },
                 "password" : {
                   "$ref" : "#/components/schemas/User/properties/password"
                 },
@@ -3384,9 +3414,6 @@
                   "properties" : {
                     "name" : {
                       "$ref" : "#/components/schemas/User/properties/name"
-                    },
-                    "email" : {
-                      "$ref" : "#/components/schemas/User/properties/email"
                     },
                     "password" : {
                       "$ref" : "#/components/schemas/User/properties/password"
@@ -3665,10 +3692,6 @@
                 "name" : {
                   "type" : "string"
                 },
-                "email" : {
-                  "type" : "string",
-                  "format" : "email"
-                },
                 "phone" : {
                   "type" : "string",
                   "format" : "phone",
@@ -3700,10 +3723,6 @@
                 },
                 "name" : {
                   "type" : "string"
-                },
-                "email" : {
-                  "type" : "string",
-                  "format" : "email"
                 },
                 "birthdate" : {
                   "type" : "string",
@@ -4168,9 +4187,14 @@
                   "name" : {
                     "type" : "string"
                   },         
-                  "email" : {
-                    "type" : "string"
-                  },     
+                  "gameUid" : {
+                    "type" : "string",
+                    "nullable" : true
+                  },      
+                  "lineId" : {
+                    "type" : "string",
+                    "nullable" : true
+                  },         
                   "birthdate" : {
                     "type" : "string"
                   },     
@@ -4204,9 +4228,12 @@
                       "name" : {
                         "type" : "integer"
                       },         
-                      "email" : {
+                      "gameUid" : {
                         "type" : "integer"
-                      },     
+                      },      
+                      "lineId" : {
+                        "type" : "integer"
+                      },         
                       "birthdate" : {
                         "type" : "integer"
                       },     
@@ -4242,9 +4269,12 @@
                       "name" : {
                         "type" : "string"
                       },         
-                      "email" : {
+                      "gameUid" : {
                         "type" : "string"
-                      },     
+                      },      
+                      "lineId" : {
+                        "type" : "string"
+                      },               
                       "birthdate" : {
                         "type" : "string"
                       },     

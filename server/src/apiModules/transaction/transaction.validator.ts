@@ -165,6 +165,13 @@ export const readMyTransactionValidator: Schema = {
       options: /^(failed|all|pending|processing)/,
     },
   },
+  'bos': {
+    in: 'query',
+    isInt: true,
+    matches: {
+      options: /^(0|1|2)/,
+    },
+  },
   'JSESSIONID': {
     in: 'cookies',
     custom: {

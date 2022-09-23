@@ -153,14 +153,14 @@ optional: {
   },
 },
   },
-  'email': {
+  'gameUid': {
     in: 'body',
     isInt: true,
     matches: {
       options: /^(1|2|3)/,
     },
   },
-  'emailResonId': {
+  'gameUidResonId': {
     in: 'body',
     isInt: true,
 optional: {
@@ -249,6 +249,22 @@ optional: {
   },
 },
   },
+  'lineId': {
+    in: 'body',
+    isInt: true,
+    matches: {
+      options: /^(1|2|3)/,
+    },
+  },
+  'lineIdResonId': {
+    in: 'body',
+    isInt: true,
+optional: {
+  options: {
+    nullable: true,
+  },
+},
+  },
   'name': {
     in: 'body',
     isInt: true,
@@ -296,15 +312,6 @@ optional: {
     nullable: true,
   },
 },
-  },
-  'JSESSIONID': {
-    in: 'cookies',
-    custom: {
-      options: (value, {req, location, path}) => {
-        sessions.cookieAuthSessionVerify(req['session']);
-        return true;
-      },
-    },
   },
 };
 export const readOneBackstageUserValidator: Schema = {
@@ -437,10 +444,9 @@ export const postRealVerifyValidator: Schema = {
     in: 'body',
     isString: true,
   },
-  'email': {
+  'gameUid': {
     in: 'body',
     isString: true,
-    isEmail: true,
   },
   'idCard': {
     in: 'body',
@@ -460,6 +466,10 @@ export const postRealVerifyValidator: Schema = {
     matches: {
       options: /^(1|2|3)/,
     },
+  },
+  'lineId': {
+    in: 'body',
+    isString: true,
   },
   'name': {
     in: 'body',
@@ -503,10 +513,14 @@ export const putRealVerifyValidator: Schema = {
     in: 'body',
     isString: true,
   },
-  'email': {
+  'gameUid': {
     in: 'body',
     isString: true,
-    isEmail: true,
+optional: {
+  options: {
+    nullable: true,
+  },
+},
   },
   'idCard': {
     in: 'body',
@@ -526,6 +540,15 @@ export const putRealVerifyValidator: Schema = {
     matches: {
       options: /^(1|2|3)/,
     },
+  },
+  'lineId': {
+    in: 'body',
+    isString: true,
+optional: {
+  options: {
+    nullable: true,
+  },
+},
   },
   'name': {
     in: 'body',

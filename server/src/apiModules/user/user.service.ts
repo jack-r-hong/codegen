@@ -6,32 +6,19 @@ import {errors} from '../../errors';
 import bcrypt from 'bcrypt';
 import svgCaptcha from 'svg-captcha';
 import {promises as fs} from 'fs';
+import axios from 'axios';
+import {query} from 'express-validator';
 type UserField = {
   val: string,
   verify: number,
   des: string,
 }
-const fieldMap = [
-  'name',
-  'email',
-  'birthdate',
-  'country',
-  'idCard',
-  'idCardDate',
-  'idCardPosiition',
-  'idCardType',
-  'city',
-  'area',
-  'address',
-  'certificate',
-  'selfie',
-  'sign',
-];
 const userVerifyResponeFormat = async (data: any) => {
   const {
     userStatus,
     name,
-    email,
+    lineId,
+    gameUid,
     birthdate,
     country,
     idCard,
@@ -44,25 +31,10 @@ const userVerifyResponeFormat = async (data: any) => {
     userVerify,
     userVerifyPhoto,
   } = data;
-  const verify = {
-    name: userVerify.name,
-    email: userVerify.email,
-    birthdate: userVerify.birthdate,
-    country: userVerify.country,
-    idCardDate: userVerify.idCardDate,
-    idCardPosiition: userVerify.idCardPosiition,
-    idCardType: userVerify.idCardType,
-    idCardPhoto: userVerify.idCardPhoto,
-    city: userVerify.city,
-    area: userVerify.area,
-    address: userVerify.address,
-    certificate: userVerify.certificate,
-    selfie: userVerify.selfie,
-    sign: userVerify.sign,
-  };
   const verifyDes = {
     name: '',
-    email: '',
+    lineId: '',
+    gameUid: '',
     birthdate: '',
     country: '',
     idCard: '',
@@ -136,7 +108,7 @@ const userVerifyResponeFormat = async (data: any) => {
     }
   }
   userVerify.userVerifyResonDes.forEach((element: {
-  field: 'name' | 'email' | 'birthdate' | 'country' | 'idCard' |
+  field: 'name' | 'lineId' | 'gameUid' | 'birthdate' | 'country' | 'idCard' |
   'idCardPhoto' | 'idCardDate' | 'idCardPosiition' | 'idCardType' |
   'city' | 'area' | 'address' | 'certificate' | 'selfie' | 'sign',
   userVerifyReson: {
@@ -152,10 +124,15 @@ const userVerifyResponeFormat = async (data: any) => {
       des: verifyDes.name,
       verify: userVerify.name,
     },
-    email: {
-      val: email,
-      des: verifyDes.email,
-      verify: userVerify.email,
+    lineId: {
+      val: lineId,
+      des: verifyDes.lineId,
+      verify: userVerify.lineId,
+    },
+    gameUid: {
+      val: gameUid,
+      des: verifyDes.gameUid,
+      verify: userVerify.gameUid,
     },
     birthdate: {
       val: birthdate,
@@ -238,7 +215,8 @@ const userVerifyResponeFormat2 = async (data: any) => {
   const {
     userStatus,
     name,
-    email,
+    lineId,
+    gameUid,
     birthdate,
     country,
     idCard,
@@ -254,7 +232,8 @@ const userVerifyResponeFormat2 = async (data: any) => {
   } = data;
   const verify = {
     name: userVerify.name,
-    email: userVerify.email,
+    lineId: userVerify.lineId,
+    gameUid: userVerify.gameUid,
     birthdate: userVerify.birthdate,
     country: userVerify.country,
     idCard: userVerify.idCard,
@@ -271,7 +250,8 @@ const userVerifyResponeFormat2 = async (data: any) => {
   };
   const verifyDes = {
     name: '',
-    email: '',
+    lineId: '',
+    gameUid: '',
     birthdate: '',
     country: '',
     idCard: '',
@@ -331,7 +311,7 @@ const userVerifyResponeFormat2 = async (data: any) => {
     }
   }
   userVerify.userVerifyResonDes.forEach((element: {
-  field: 'name' | 'email' | 'birthdate' | 'country' | 'idCard' |
+  field: 'name' | 'lineId' | 'gameUid' | 'birthdate' | 'country' | 'idCard' |
   'idCardPhoto' | 'idCardDate' | 'idCardPosiition' | 'idCardType' |
   'city' | 'area' | 'address' | 'certificate' | 'selfie' | 'sign',
   userVerifyReson: {
@@ -396,7 +376,8 @@ const userVerifyResponeFormat2 = async (data: any) => {
   return {
     userStatus,
     name,
-    email,
+    gameUid,
+    lineId,
     birthdate,
     country,
     idCard,
@@ -700,11 +681,21 @@ export class UserService {
   ) {
     // custom begin phoneCheck
     /** todo: send phone message api */
+    const code = Math.random().toFixed(6).substring(2);
+    const phonePrefix = '886';
+    const phone = param.bodyPhone.replace(/^0/, '');
     session.userRegister = {
-      verify: '123456',
-      phonePrefix: '886',
-      phone: param.bodyPhone,
+      verify: code,
+      phonePrefix,
+      phone,
     };
+
+    await axios.get('http://api.twsms.com/json/sms_send.php', {params: {
+      username: 'admin888',
+      password: 'dls24068812',
+      mobile: `${phonePrefix}${phone}`,
+      message: `好幣多平台簡訊驗證碼: ${code}。請勿代收簡訊以防詐騙。`,
+    }});
 
     // custom end phoneCheck
   }

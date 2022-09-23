@@ -22,18 +22,15 @@ export class ChatroomService {
         .catch((e) => {
           throw e;
         });
-
     if (!res) {
       throw new errors.AuthenticationFailedError;
     }
-
     if (res && res.id === session.userInfo?.id) {
       return chatroomKey.generateAccessToken({
         userName: res.name?? '',
         userId: res.id,
       });
     }
-
     throw new errors.AuthenticationFailedError;
 
     // custom end serviceToken
@@ -43,24 +40,21 @@ export class ChatroomService {
       session: Express.Request['session'],
   ) {
     // custom begin transactionToken
-
     const res = await this.chatroomModel.transactionToken(param, {})
         .catch((e) => {
           throw e;
         });
-
     if (!res) {
       throw new errors.AuthenticationFailedError;
     }
-
     if (res.user && res.user.id === session.userInfo?.id) {
       return chatroomKey.generateAccessToken({
         transactionId: param.bodyTransactionId,
         userName: res.user.name?? '',
         userId: res.user.id,
+        isAgent: res.user.isAgent,
       });
     }
-
     if (res.transactionRecive &&
       res.transactionRecive.user &&
       res.transactionRecive.user.id === session.userInfo?.id
@@ -69,9 +63,9 @@ export class ChatroomService {
         transactionId: param.bodyTransactionId,
         userName: res.transactionRecive.user.name?? '',
         userId: res.transactionRecive.user.id,
+        isAgent: res.transactionRecive.user.isAgent,
       });
     }
-
     throw new errors.AuthenticationFailedError;
 
     // custom end transactionToken

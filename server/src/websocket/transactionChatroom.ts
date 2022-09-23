@@ -39,6 +39,11 @@ export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
     const query = qs.parse(queryString);
     const {token} = query;
 
+    if (!token) {
+      ws.send(event.msg({error: true, message: 'notAuth'}));
+      return;
+    }
+
     const tokenV = chatroomKey.tokenVerify(token as string);
 
     if (!token || !tokenV) {
@@ -46,10 +51,24 @@ export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
       return;
     }
 
-    const {userId, userName, transactionId} =
-     tokenV as {userId: string, userName: string, transactionId: string };
+    const {userId, userName, transactionId, isAgent} =
+     tokenV as {userId: string, userName: string,
+      transactionId: string, isAgent: boolean};
 
-    const subscriber = await wSCIModel.sub(transactionId as string,
+    const dataFormat = (data: any) => {
+      // console.log(data.userId, userId, userId === data.userId);
+
+      return {
+        data: data.type === 'image' && data.data?
+          data.data.toString('base64'): data.text,
+        type: data.type,
+        time: data.createdAt,
+        name: data.name,
+        role: isAgent? 2: 1,
+        isSelf: userId === data.userId,
+      };
+    };
+    const subscriber = await wSCIModel.sub(transactionId + 'chatroom',
         (message: any)=>{
           event.eventName = 'send';
           const data = JSON.parse(message);
@@ -61,20 +80,20 @@ export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
               userId,
               data.type,
               data.name?? '',
-              data.text,
+              data.type === 'text'? data.data: '',
             data.type === 'image'? Buffer.from(data.data, 'base64'): undefined,
-          ).then((e) => {},
+          ).then((e) => {
+            ws.send(event.msg(dataFormat(e)));
+          },
           ).catch((e) => console.log(e),
           );
-
-          ws.send(event.msg(data));
         });
 
     ws.on('message', async function message(message: string) {
       const data = event.parse(message).data;
 
       await wSCIModel.pub(
-          transactionId,
+          transactionId + 'chatroom',
           JSON.stringify(data),
       );
     });
@@ -86,14 +105,7 @@ export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
 
     ws.send(event.msg(
         res.map((e) => {
-          return {
-            name: e.name,
-            userId: e.userId,
-            createdAt: e.createdAt,
-            text: e.text,
-            data: e.type === 'image' && e.data? e.data.toString('base64'): null,
-            type: e.type,
-          };
+          return dataFormat(e);
         }),
     ));
 

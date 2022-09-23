@@ -120,7 +120,8 @@ export class UserModel {
       'bodyBirthdate': 1,
       'bodyCertificate': 1,
       'bodyCountry': 1,
-      'bodyEmail': 1,
+      'bodyLineId': 1,
+      'bodyGameUid': 1,
       'bodyIdCard': 1,
       'bodyIdCardDate': 1,
       'bodyIdCardPhoto': 1,
@@ -149,7 +150,8 @@ export class UserModel {
         city: param.bodyCity,
         certificate: param.bodyCertificate,
         country: param.bodyCountry,
-        email: param.bodyEmail,
+        lineId: param.bodyLineId,
+        gameUid: param.bodyGameUid,
         idCard: param.bodyIdCard,
         idCardDate: param.bodyIdCardDate,
         idCardPhoto: param.bodyIdCardPhoto,
@@ -171,7 +173,8 @@ export class UserModel {
         certificate: true,
         city: true,
         country: true,
-        email: true,
+        lineId: true,
+        gameUid: true,
         idCard: true,
         idCardDate: true,
         idCardPhoto: true,
@@ -190,7 +193,8 @@ export class UserModel {
       bodyCityResonId: 'city',
       bodyCertificateResonId: 'certificate',
       bodyCountryResonId: 'country',
-      bodyEmailResonId: 'email',
+      bodyGameUidResonId: 'gameUid',
+      bodyLineId: 'lineId',
       bodyIdCardResonId: 'idCard',
       bodyIdCardDateResonId: 'idCardDate',
       bodyIdCardPhotoResonId: 'idCardPhoto',
@@ -204,12 +208,10 @@ export class UserModel {
         (Object.keys(resonMap) as (keyof typeof resonMap)[] )
             .map((key) => {
               if (!param[key]) {
-                return prisma.userVerifyResonDes.delete({
+                return prisma.userVerifyResonDes.deleteMany({
                   where: {
-                    uniqueUserField: {
-                      userVerifyId: userVerifyRes.id,
-                      field: resonMap[key],
-                    },
+                    userVerifyId: userVerifyRes.id,
+                    field: resonMap[key],
                   },
                 });
               }
@@ -253,7 +255,6 @@ export class UserModel {
         birthdate: true,
         city: true,
         country: true,
-        email: true,
         id: true,
         idCard: true,
         idCardDate: true,
@@ -261,13 +262,16 @@ export class UserModel {
         idCardType: true,
         name: true,
         userVerifyPhoto: true,
+        lineId: true,
+        gameUid: true,
         // custom begin readOneBackstageUser
         userVerify: {
           select: {
             address: true,
             birthdate: true,
             country: true,
-            email: true,
+            lineId: true,
+            gameUid: true,
             idCardDate: true,
             idCardPosiition: true,
             idCardType: true,
@@ -400,7 +404,7 @@ export class UserModel {
         },
       },
       select: {
-        email: true,
+        phone: true,
         id: true,
         name: true,
         password: true,
@@ -431,7 +435,8 @@ export class UserModel {
       select: {
         userStatus: true,
         name: true,
-        email: true,
+        gameUid: true,
+        lineId: true,
         birthdate: true,
         country: true,
         idCard: true,
@@ -450,7 +455,8 @@ export class UserModel {
             birthdate: true,
             certificate: true,
             country: true,
-            email: true,
+            gameUid: true,
+            lineId: true,
             id: true,
             idCard: true,
             idCardDate: true,
@@ -519,7 +525,6 @@ export class UserModel {
     const res: any | null = await prisma.user.update({
       data: {
         name: param.bodyName,
-        email: param.bodyEmail,
         birthdate: param.bodyBirthdate,
         country: param.bodyCountry,
         idCard: param.bodyIdCard,
@@ -529,6 +534,8 @@ export class UserModel {
         city: param.bodyCity,
         area: param.bodyArea,
         address: param.bodyAddress,
+        gameUid: param.bodyGameUid,
+        lineId: param.bodyLineId,
         userStatus: 3,
         userVerify: {
           update: {
@@ -538,7 +545,8 @@ export class UserModel {
             certificate: 1,
             city: 1,
             country: 1,
-            email: 1,
+            gameUid: 1,
+            lineId: 1,
             idCard: 1,
             idCardDate: 1,
             idCardPhoto: 1,
@@ -621,7 +629,8 @@ export class UserModel {
     const res: any | null = await prisma.user.update({
       data: {
         name: param.bodyName,
-        email: param.bodyEmail,
+        lineId: param.bodyLineId,
+        gameUid: param.bodyGameUid,
         birthdate: param.bodyBirthdate,
         country: param.bodyCountry,
         idCard: param.bodyIdCard,
@@ -665,7 +674,8 @@ export class UserModel {
         userVerify: {
           create: {
             name: 1,
-            email: 1,
+            gameUid: 1,
+            lineId: 1,
             birthdate: 1,
             country: 1,
             idCardDate: 1,
@@ -709,7 +719,8 @@ export class UserModel {
       customParam: any,
   ) {
     // custom begin getUserMyStatus
-    const res: {userStatus: number, isAgent: boolean} | null = await prisma.user.findUnique({
+    const res: {userStatus: number, isAgent: boolean} | null =
+    await prisma.user.findUnique({
       where: {
         id: customParam.userId,
       },
