@@ -6,7 +6,7 @@ import {errors} from '../../errors';
 import bcrypt from 'bcrypt';
 import svgCaptcha from 'svg-captcha';
 import {promises as fs} from 'fs';
-import axios from 'axios';
+import {getPhoneCheck} from '../../utils/axios';
 import {query} from 'express-validator';
 type UserField = {
   val: string,
@@ -689,13 +689,7 @@ export class UserService {
       phonePrefix,
       phone,
     };
-
-    await axios.get('http://api.twsms.com/json/sms_send.php', {params: {
-      username: 'admin888',
-      password: 'dls24068812',
-      mobile: `${phonePrefix}${phone}`,
-      message: `好幣多平台簡訊驗證碼: ${code}。請勿代收簡訊以防詐騙。`,
-    }});
+    await getPhoneCheck(phonePrefix, phone, code);
 
     // custom end phoneCheck
   }

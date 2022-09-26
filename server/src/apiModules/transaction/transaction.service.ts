@@ -9,6 +9,12 @@ import {WSClientIdModel} from '../../redisClient/models/webSocketModels';
 const wSCIModel = Container.get(WSClientIdModel);
 import {BankAccountModel} from '../bankAccount/bankAccount.model';
 const bankAccountModel = new BankAccountModel();
+const payMethodMap = {
+  1: 'LinePay',
+  2: '街口支付',
+  3: '超商儲值',
+  4: 'ATM轉帳',
+};
 
 // custom end import
 
@@ -124,6 +130,23 @@ export class TransactionService {
     ).catch((e) =>{
       throw e;
     });
+    return {
+      'total': {
+        'point': 2000,
+        'bonusPoint': 1000,
+        'totalPoint': 3000,
+        'twd': 4000,
+      },
+      'dataList': res.map((e) => {
+        const res = e;
+        Object.assign(e, {
+          recommod: 'recommod',
+          gameUid: 'gameUid',
+          payMethod: payMethodMap[e.payMethod as 1|2|3|4],
+        });
+        return res;
+      }),
+    };
     return res;
 
     // custom end readMyTransaction

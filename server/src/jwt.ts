@@ -18,11 +18,18 @@ class ApiKey {
   }
 
   tokenVerify(token: string) {
-    const res = jwt.verify(
-        token,
-        process.env['TOKEN_SECRET'] as string,
-    );
-    return res;
+    try {
+      const res = jwt.verify(
+          token,
+          process.env['TOKEN_SECRET'] as string,
+      );
+
+      return res;
+    } catch (e) {
+      console.log(e);
+
+      return false;
+    }
   }
 }
 

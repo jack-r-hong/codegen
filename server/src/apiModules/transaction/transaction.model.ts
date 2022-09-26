@@ -154,7 +154,9 @@ export class TransactionModel {
         gt: 0,
         lt: 4,
       };
-    }
+    } else if (param.queryState === 'completed') {
+      state = 4;
+    };
     const res: any[] | null = await prisma.transaction.findMany({
       where: {
         OR: [

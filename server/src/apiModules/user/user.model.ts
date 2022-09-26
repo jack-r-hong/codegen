@@ -262,8 +262,6 @@ export class UserModel {
         idCardType: true,
         name: true,
         userVerifyPhoto: true,
-        lineId: true,
-        gameUid: true,
         // custom begin readOneBackstageUser
         userVerify: {
           select: {

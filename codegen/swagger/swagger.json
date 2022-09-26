@@ -1280,23 +1280,23 @@
               "type" : "string",
               "format" : "int32",
               "description" : "status map:\n  * `failed` - Failed\n * `all` - All\n * `pending` - Pending\n * `processing` - Processing\n",
-              "enum" : ["failed", "all", "pending", "processing"]     
+              "enum" : ["failed", "all", "pending", "processing", "completed"]     
             }    
           },
           {
             "name" : "bos",
             "in" : "query",
-            "description" : "status map:\n * `0` - All \n * `1` - Buy\n * `2` - Sell\n",
+            "description" : "status map:\n * `3` - All \n * `1` - Buy\n * `2` - Sell\n",
             "schema" : {
               "type" : "integer",
               "format" : "int32",
-              "enum" : [ 0, 1, 2 ]
+              "enum" : [ 1, 2, 3 ]
             }
           }                                                  
         ],        
         "responses" : {
           "200" : {
-            "$ref" : "#/components/responses/Transaction"
+            "$ref" : "#/components/responses/MyTransaction"
           },
           "400" : {
             "$ref" : "#/components/responses/BadRequest"
@@ -1932,10 +1932,7 @@
           "403" : {
             "$ref" : "#/components/responses/Forbidden"
           }
-        },
-        "security" : [ {
-          "cookieAuth" : [ ]
-        } ]
+        }
       }      
     },  
     "/backstage/banks/verify/reson/{resonId}" : {     
@@ -1997,10 +1994,7 @@
           "403" : {
             "$ref" : "#/components/responses/Forbidden"
           }
-        },
-        "security" : [ {
-          "cookieAuth" : [ ]
-        } ]
+        }
       }      
 
     },         
@@ -3899,7 +3893,88 @@
             }
           }
         }
-      },      
+      },   
+      "MyTransaction" : {
+        "description" : "Ok",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "totalPoint": {
+                  "type": "integer"
+                },
+                "totalBonusPoint": {
+                  "type": "integer"
+                },
+                "totalTWD": {
+                  "type": "integer"
+                },
+                "dataList": {
+                  "type": "array",
+                  "items": {
+                    "type" : "object",
+                    "properties" : {
+                      "id" : {
+                          "type" : "string"
+                      },
+                      "manufacturer": {
+                        "type" : "string"
+                      },
+                      "serviceCharge": {
+                        "type" : "integer"
+                      },
+                      "bos" : {
+                        "type" : "integer",
+                        "format" : "int32",
+                        "description" : "status map:\n * `1` - Buy\n * `2` - Sell\n",
+                        "enum" : [ 1, 2 ]            
+                      },
+                      "bonusPoint" : {
+                        "type" : "integer"
+                      },  
+                      "point" : {
+                        "type" : "integer"
+                      },                
+                      "twd" : {
+                        "type" : "integer"
+                      },   
+                      "state" : {
+                        "type" : "integer"
+                      },                        
+                      "createdAt" : {
+                        "type" : "string",
+                        "format" : "date-time"
+                      }, 
+                      "account" : {
+                        "type" : "string"
+                      },   
+                      "payMethod" : {
+                        "type" : "integer"
+                      },                     
+                      "bankAccount" : {
+                        "type" : "integer"
+                      },   
+                      "bankCode" : {
+                        "type" : "integer"
+                      },   
+                      "bankName" : {
+                        "type" : "string"
+                      },
+                      "gameUid" : {
+                        "type" : "string"
+                      },
+                      "recommod": {
+                        "type" : "string"
+                      }
+                    }
+                  }                  
+                }
+              }              
+            }
+          }
+        }
+      },          
       "BankAccount" : {
         "description" : "Ok",
         "content" : {

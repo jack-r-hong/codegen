@@ -14,30 +14,12 @@ export const createBackstageBankAccountsResonValidator: Schema = {
     in: 'body',
     isString: true,
   },
-  'JSESSIONID': {
-    in: 'cookies',
-    custom: {
-      options: (value, {req, location, path}) => {
-        sessions.cookieAuthSessionVerify(req['session']);
-        return true;
-      },
-    },
-  },
 };
 export const deleteBackstageBankAccountResonValidator: Schema = {
   'resonId': {
     in: 'params',
     isInt: true,
     notEmpty: true,
-  },
-  'JSESSIONID': {
-    in: 'cookies',
-    custom: {
-      options: (value, {req, location, path}) => {
-        sessions.cookieAuthSessionVerify(req['session']);
-        return true;
-      },
-    },
   },
 };
 export const updateBackstageBankAccountResonValidator: Schema = {

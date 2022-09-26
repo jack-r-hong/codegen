@@ -162,14 +162,14 @@ export const readMyTransactionValidator: Schema = {
     in: 'query',
     isString: true,
     matches: {
-      options: /^(failed|all|pending|processing)/,
+      options: /^(failed|all|pending|processing|completed)/,
     },
   },
   'bos': {
     in: 'query',
     isInt: true,
     matches: {
-      options: /^(0|1|2)/,
+      options: /^(1|2|3)/,
     },
   },
   'JSESSIONID': {
