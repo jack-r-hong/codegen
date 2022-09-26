@@ -109,14 +109,18 @@ export const readPendingTransactionValidator: Schema = {
     },
   },
 };
-export const getExchangeRateValidator: Schema = {
-  'bos': {
-    in: 'query',
-    isInt: true,
-    matches: {
-      options: /^(1|2)/,
+export const getExchangeRateBuyValidator: Schema = {
+  'JSESSIONID': {
+    in: 'cookies',
+    custom: {
+      options: (value, {req, location, path}) => {
+        sessions.cookieAuthSessionVerify(req['session']);
+        return true;
+      },
     },
   },
+};
+export const getExchangeRateSellValidator: Schema = {
   'JSESSIONID': {
     in: 'cookies',
     custom: {

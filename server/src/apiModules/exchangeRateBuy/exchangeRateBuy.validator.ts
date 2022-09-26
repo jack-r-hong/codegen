@@ -7,7 +7,7 @@ import * as sessions from '../../sessions';
 
 
 
-export const readManyBackstageExchangeRateValidator: Schema = {
+export const readManyBackstageExchangeRateBuyValidator: Schema = {
   'orderBy': {
     in: 'query',
     isString: true,
@@ -24,19 +24,8 @@ export const readManyBackstageExchangeRateValidator: Schema = {
     in: 'query',
     isInt: true,
   },
-  'bos': {
-    in: 'query',
-    isInt: true,
-  },
 };
-export const createOneBackstageExchangeRateValidator: Schema = {
-  'bos': {
-    in: 'body',
-    isInt: true,
-    matches: {
-      options: /^(1|2)/,
-    },
-  },
+export const createOneBackstageExchangeRateBuyValidator: Schema = {
   'bouns': {
     in: 'body',
     isInt: true,
@@ -45,15 +34,11 @@ export const createOneBackstageExchangeRateValidator: Schema = {
     in: 'body',
     isString: true,
   },
-  'rangeLower': {
+  'dollars': {
     in: 'body',
     isInt: true,
   },
-  'rangeUpper': {
-    in: 'body',
-    isInt: true,
-  },
-  'rate': {
+  'point': {
     in: 'body',
     isInt: true,
   },
@@ -65,14 +50,14 @@ export const createOneBackstageExchangeRateValidator: Schema = {
     },
   },
 };
-export const deleteOneBackstageExchangeRateValidator: Schema = {
+export const deleteOneBackstageExchangeRateBuyValidator: Schema = {
   'id': {
     in: 'params',
     isInt: true,
     notEmpty: true,
   },
 };
-export const updateOneBackstageExchangeRateValidator: Schema = {
+export const updateOneBackstageExchangeRateBuyValidator: Schema = {
   'id': {
     in: 'params',
     isInt: true,
@@ -86,15 +71,11 @@ export const updateOneBackstageExchangeRateValidator: Schema = {
     in: 'body',
     isString: true,
   },
-  'rangeLower': {
+  'dollars': {
     in: 'body',
     isInt: true,
   },
-  'rangeUpper': {
-    in: 'body',
-    isInt: true,
-  },
-  'rate': {
+  'point': {
     in: 'body',
     isInt: true,
   },

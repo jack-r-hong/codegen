@@ -14,7 +14,7 @@ export class UserModel {
     // custom begin getUserBackstageAgents
     const res: any[] | null = await prisma.user.findMany({
       where: {
-        userStatus: 10,
+        isAgent: true,
       },
       select: {
         id: true,

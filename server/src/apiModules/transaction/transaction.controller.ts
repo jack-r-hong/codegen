@@ -99,15 +99,15 @@ export class TransactionController implements Controller {
           next(e);
         });
   }
-  @Get('/transaction/exchange_rate')
-  @Validator(validSchemas.getExchangeRateValidator)
-  async getExchangeRate(
-      req: transactionParams.GetExchangeRateRequest,
+  @Get('/transaction/exchange_rate/buy')
+  @Validator(validSchemas.getExchangeRateBuyValidator)
+  async getExchangeRateBuy(
+      req: transactionParams.GetExchangeRateBuyRequest,
       res: Response,
       next: NextFunction,
   ) {
-    TransactionController.service.getExchangeRate(
-        transactionParams.GetExchangeRateRequestConvert(
+    TransactionController.service.getExchangeRateBuy(
+        transactionParams.GetExchangeRateBuyRequestConvert(
             req.body,
             req.query,
             req.params,
@@ -116,10 +116,33 @@ export class TransactionController implements Controller {
         req.session,
     )
         .then((result) =>{
-          // custom begin getExchangeRate
-          res.json({result});
-
-          // custom end getExchangeRate
+          // custom begin getExchangeRateBuy
+          res.json(result);
+          // custom end getExchangeRateBuy
+        }).catch((e) => {
+          next(e);
+        });
+  }
+  @Get('/transaction/exchange_rate/sell')
+  @Validator(validSchemas.getExchangeRateSellValidator)
+  async getExchangeRateSell(
+      req: transactionParams.GetExchangeRateSellRequest,
+      res: Response,
+      next: NextFunction,
+  ) {
+    TransactionController.service.getExchangeRateSell(
+        transactionParams.GetExchangeRateSellRequestConvert(
+            req.body,
+            req.query,
+            req.params,
+            req.cookies,
+        ),
+        req.session,
+    )
+        .then((result) =>{
+          // custom begin getExchangeRateSell
+          res.json(result);
+          // custom end getExchangeRateSell
         }).catch((e) => {
           next(e);
         });

@@ -74,20 +74,31 @@ model BankAccountVerifyResonDes {
 
     // custom end BankAccountVerifyResonDes
 }
-model ExchangeRate {
-  bos  Int  @map("bos")                 
+model ExchangeRateBuy {
   bouns  Int  @map("bouns")                 
-  createdAt  DateTime  @default(now()) @map("created_at")                 
+  des  String  @map("des")                 
+  dollars  Int  @map("dollars")                 
+  id  Int @id @default(autoincrement()) @map("id")                 
+  point  Int  @map("point")                 
+  type  Int  @map("type")                 
+  updatedAt  DateTime   @default(now()) @updatedAt @map("updated_at")                 
+  
+    // custom begin ExchangeRateBuy
+
+    // custom end ExchangeRateBuy
+}
+model ExchangeRateSell {
   des  String  @map("des")                 
   id  Int @id @default(autoincrement()) @map("id")                 
   rangeLower  Int  @map("range_lower")                 
   rangeUpper  Int  @map("range_upper")                 
   rate  Int  @map("rate")                 
   type  Int  @map("type")                 
+  updatedAt  DateTime   @default(now()) @updatedAt @map("updated_at")                 
   
-    // custom begin ExchangeRate
+    // custom begin ExchangeRateSell
 
-    // custom end ExchangeRate
+    // custom end ExchangeRateSell
 }
 model PayManage {
   createdAt  DateTime  @default(now()) @map("created_at")                 

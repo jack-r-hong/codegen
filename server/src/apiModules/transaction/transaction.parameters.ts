@@ -153,40 +153,70 @@ export const ReadPendingTransactionRequestConvert = (
             pathAgentShow: path.agentShow,
   };
 };
-type GetExchangeRateReqBody = {
+type GetExchangeRateBuyReqBody = {
   }
 
-type GetExchangeRateReqQuery = {
-      bos: string
+type GetExchangeRateBuyReqQuery = {
 }
 
-type GetExchangeRateReqParams = {
+type GetExchangeRateBuyReqParams = {
 }
 
-type GetExchangeRateReqCookie = {
+type GetExchangeRateBuyReqCookie = {
 }
 
-export interface GetExchangeRateRequest extends TypedRequest<
-  GetExchangeRateReqBody,
-  GetExchangeRateReqQuery,
-  GetExchangeRateReqParams,
-  GetExchangeRateReqCookie
+export interface GetExchangeRateBuyRequest extends TypedRequest<
+  GetExchangeRateBuyReqBody,
+  GetExchangeRateBuyReqQuery,
+  GetExchangeRateBuyReqParams,
+  GetExchangeRateBuyReqCookie
 >{
 }
 
-export type GetExchangeRateParams = {
-      queryBos: number
+export type GetExchangeRateBuyParams = {
 }
 
 
-export const GetExchangeRateRequestConvert = (
-    body: GetExchangeRateReqBody,
-    query: GetExchangeRateReqQuery,
-    path: GetExchangeRateReqParams,
-    cookie: GetExchangeRateReqCookie,
-): GetExchangeRateParams => {
+export const GetExchangeRateBuyRequestConvert = (
+    body: GetExchangeRateBuyReqBody,
+    query: GetExchangeRateBuyReqQuery,
+    path: GetExchangeRateBuyReqParams,
+    cookie: GetExchangeRateBuyReqCookie,
+): GetExchangeRateBuyParams => {
   return {
-          queryBos: parseInt(query.bos),
+  };
+};
+type GetExchangeRateSellReqBody = {
+  }
+
+type GetExchangeRateSellReqQuery = {
+}
+
+type GetExchangeRateSellReqParams = {
+}
+
+type GetExchangeRateSellReqCookie = {
+}
+
+export interface GetExchangeRateSellRequest extends TypedRequest<
+  GetExchangeRateSellReqBody,
+  GetExchangeRateSellReqQuery,
+  GetExchangeRateSellReqParams,
+  GetExchangeRateSellReqCookie
+>{
+}
+
+export type GetExchangeRateSellParams = {
+}
+
+
+export const GetExchangeRateSellRequestConvert = (
+    body: GetExchangeRateSellReqBody,
+    query: GetExchangeRateSellReqQuery,
+    path: GetExchangeRateSellReqParams,
+    cookie: GetExchangeRateSellReqCookie,
+): GetExchangeRateSellParams => {
+  return {
   };
 };
 type ReadMyTransactionReqBody = {

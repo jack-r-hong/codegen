@@ -44,9 +44,13 @@
       "description" : "Operations about user"
     },
     {
-      "name" : "exchangeRate",
+      "name" : "exchangeRateBuy",
       "description" : "Operations about user"
     },
+    {
+      "name" : "exchangeRateSell",
+      "description" : "Operations about user"
+    },    
     {
       "name" : "payManage",
       "description" : "Operations about user"
@@ -1511,27 +1515,14 @@
         } ]
       }      
     },
-    "/transaction/exchange_rate" : {     
+    "/transaction/exchange_rate/buy" : {     
       "get" : {
         "tags" : [ "transaction" ],
         "summary" : "get exchang rate",
-        "operationId" : "getExchangeRate",      
-        "parameters": [
-          {
-            "name" : "bos",
-            "in" : "query",
-            "description" : "status map:\n * `1` - Buy\n * `2` - Sell\n",
-            "schema" : {
-              "type" : "integer",
-              "format" : "int32",
-              "description" : "status map:\n * `1` - Buy\n * `2` - Sell\n",
-              "enum" : [ 1, 2 ]
-            }
-          }
-        ],      
+        "operationId" : "getExchangeRateBuy",      
         "responses" : {
           "200" : {
-            "$ref" : "#/components/responses/ExchangeRateArray"
+            "$ref" : "#/components/responses/BackstageExchangeRateArrayBuy"
           },
           "403" : {
             "$ref" : "#/components/responses/Forbidden"
@@ -1541,13 +1532,30 @@
           "cookieAuth" : [ ]
         } ]
       }
-
     },   
-    "/backstage/exchange_rate" : {     
+    "/transaction/exchange_rate/sell" : {     
       "get" : {
-        "tags" : [ "exchangeRate" ],
+        "tags" : [ "transaction" ],
         "summary" : "get exchang rate",
-        "operationId" : "readManyBackstageExchangeRate",       
+        "operationId" : "getExchangeRateSell",         
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/BackstageExchangeRateArraySell"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          }
+        },
+        "security" : [ {
+          "cookieAuth" : [ ]
+        } ]
+      }
+    },       
+    "/backstage/exchange_rate/buy" : {     
+      "get" : {
+        "tags" : [ "exchangeRateBuy" ],
+        "summary" : "get exchang rate",
+        "operationId" : "readManyBackstageExchangeRateBuy",       
         "parameters" : [ 
           {
             "name" : "orderBy",
@@ -1582,18 +1590,11 @@
               "type" : "integer",
               "default": 10
             }    
-          },
-          {
-            "name" : "bos",
-            "in" : "query",
-            "schema" : {
-              "type" : "integer"
-            }    
-          }          
+          }      
         ],                   
         "responses" : {
           "200" : {
-            "$ref":  "#/components/responses/BackstageExchangeRateArray"
+            "$ref":  "#/components/responses/BackstageExchangeRateArrayBuy"
           },
           "403" : {
             "$ref" : "#/components/responses/Forbidden"
@@ -1601,45 +1602,15 @@
         }
       },
       "post" : {
-        "tags" : [ "exchangeRate" ],
+        "tags" : [ "exchangeRateBuy" ],
         "summary" : "cteate exchang rate",
-        "operationId" : "createOneBackstageExchangeRate",   
+        "operationId" : "createOneBackstageExchangeRateBuy",   
         "requestBody": {
-          "$ref": "#/components/requestBodies/CreateExchangeRate"
+          "$ref": "#/components/requestBodies/CreateExchangeRateBuy"
         },                 
         "responses" : {
           "200" : {
-            "description" : "Ok",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "type" : "object",
-                  "properties" : {
-                    "result":{
-                      "type": "object"
-                    }
-                  }
-                },
-                "example": {
-                  "result": {
-                      "0": {
-                          "range": 0,
-                          "rate": 120
-                      },
-                      "1": {
-                          "range": 150000,
-                          "rate": 130
-                      },
-                      "2": {
-                          "range": 500000,
-                          "rate": 140
-                      }
-                  }
-                }          
-              }
-
-            }
-            
+            "$ref":  "#/components/responses/BackstageExchangeRateArrayBuy"
           },
           "403" : {
             "$ref" : "#/components/responses/Forbidden"
@@ -1647,11 +1618,11 @@
         }
       }      
     }, 
-    "/backstage/exchange_rate/{id}" : {     
+    "/backstage/exchange_rate/buy/{id}" : {     
       "put" : {
-        "tags" : [ "exchangeRate" ],
+        "tags" : [ "exchangeRateBuy" ],
         "summary" : "get exchang rate",
-        "operationId" : "updateOneBackstageExchangeRate",            
+        "operationId" : "updateOneBackstageExchangeRateBuy",            
         "parameters" : [ {
           "name" : "id",
           "in" : "path",
@@ -1661,41 +1632,11 @@
           }
         } ],       
         "requestBody": {
-          "$ref": "#/components/requestBodies/UpdateExchangeRate"
+          "$ref": "#/components/requestBodies/UpdateExchangeRateBuy"
         },
         "responses" : {
           "200" : {
-            "description" : "Ok",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "type" : "object",
-                  "properties" : {
-                    "result":{
-                      "type": "object"
-                    }
-                  }
-                },
-                "example": {
-                  "result": {
-                      "0": {
-                          "range": 0,
-                          "rate": 120
-                      },
-                      "1": {
-                          "range": 150000,
-                          "rate": 130
-                      },
-                      "2": {
-                          "range": 500000,
-                          "rate": 140
-                      }
-                  }
-                }          
-              }
-
-            }
-            
+            "$ref":  "#/components/responses/BackstageExchangeRateArrayBuy"
           },
           "403" : {
             "$ref" : "#/components/responses/Forbidden"
@@ -1703,9 +1644,9 @@
         }
       },
       "delete" : {
-        "tags" : [ "exchangeRate" ],
+        "tags" : [ "exchangeRateBuy" ],
         "summary" : "get exchang rate",
-        "operationId" : "deleteOneBackstageExchangeRate",            
+        "operationId" : "deleteOneBackstageExchangeRateBuy",            
         "parameters" : [ {
           "name" : "id",
           "in" : "path",
@@ -1716,44 +1657,128 @@
         } ],        
         "responses" : {
           "200" : {
-            "description" : "Ok",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "type" : "object",
-                  "properties" : {
-                    "result":{
-                      "type": "object"
-                    }
-                  }
-                },
-                "example": {
-                  "result": {
-                      "0": {
-                          "range": 0,
-                          "rate": 120
-                      },
-                      "1": {
-                          "range": 150000,
-                          "rate": 130
-                      },
-                      "2": {
-                          "range": 500000,
-                          "rate": 140
-                      }
-                  }
-                }          
-              }
-
-            }
-            
+            "$ref":  "#/components/responses/BackstageExchangeRateArrayBuy"
           },
           "403" : {
             "$ref" : "#/components/responses/Forbidden"
           }
         }
       }      
-    },           
+    },  
+    "/backstage/exchange_rate/sell" : {     
+      "get" : {
+        "tags" : [ "exchangeRateSell" ],
+        "summary" : "get exchang rate",
+        "operationId" : "readManyBackstageExchangeRateSell",       
+        "parameters" : [ 
+          {
+            "name" : "orderBy",
+            "in" : "query",
+            "description" : "The name that needs to be fetched. Use user1 for testing.",
+            "schema" : {
+              "type" : "string",
+              "default": "desc"
+            }
+          },
+          {
+            "name" : "orderByField",
+            "in" : "query",
+            "description" : "The name that needs to be fetched. Use user1 for testing.",
+            "schema" : {
+              "type" : "string",
+              "default": "createdAt"
+            }
+          },
+          {
+            "name" : "page",
+            "in" : "query",
+            "schema" : {
+              "type" : "integer",
+              "default": 0
+            }            
+          },
+          {
+            "name" : "take",
+            "in" : "query",
+            "schema" : {
+              "type" : "integer",
+              "default": 10
+            }    
+          }       
+        ],                   
+        "responses" : {
+          "200" : {
+            "$ref":  "#/components/responses/BackstageExchangeRateArraySell"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "exchangeRateSell" ],
+        "summary" : "cteate exchang rate",
+        "operationId" : "createOneBackstageExchangeRateSell",   
+        "requestBody": {
+          "$ref": "#/components/requestBodies/CreateExchangeRateSell"
+        },                 
+        "responses" : {
+          "200" : {
+            "$ref":  "#/components/responses/BackstageExchangeRateArraySell"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          }
+        }
+      }      
+    },     
+    "/backstage/exchange_rate/sell/{id}" : {     
+      "put" : {
+        "tags" : [ "exchangeRateSell" ],
+        "summary" : "get exchang rate",
+        "operationId" : "updateOneBackstageExchangeRateSell",            
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],       
+        "requestBody": {
+          "$ref": "#/components/requestBodies/UpdateExchangeRateSell"
+        },
+        "responses" : {
+          "200" : {
+            "$ref":  "#/components/responses/BackstageExchangeRateArraySell"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "exchangeRateSell" ],
+        "summary" : "get exchang rate",
+        "operationId" : "deleteOneBackstageExchangeRateSell",            
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],        
+        "responses" : {
+          "200" : {
+            "$ref":  "#/components/responses/BackstageExchangeRateArraySell"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          }
+        }
+      }      
+    },        
     "/bank" : {     
       "post" : {
         "tags" : [ "bankAccount" ],
@@ -2878,19 +2903,13 @@
           }       
         }
       },        
-      "ExchangeRate" : {
+      "ExchangeRateSell" : {
         "type" : "object",
         "description" : "database",
         "properties" : {
           "id" : {
             "type" : "integer"
-          },     
-          "bos" : {
-            "type" : "integer",
-            "format" : "int32",
-            "description" : "status map:\n * `1` - Buy\n * `2` - Sell\n",
-            "enum" : [ 1, 2 ]            
-          },         
+          },            
           "type" : {
             "type" : "integer",
             "description" : "type map:\n * `1` - 大頭家幣:台幣\n * `2` - 大頭家幣:美金\n",
@@ -2903,11 +2922,7 @@
           "rate" : {
             "type" : "integer",
             "description": "匯率"
-          },    
-          "bouns" : {
-            "type" : "integer",
-            "description": "贈送點數"
-          },                   
+          },                       
           "rangeUpper" : {
             "type" : "integer",
             "description": "上限"
@@ -2916,12 +2931,46 @@
             "type" : "integer",
             "description": "下限"
           },                                                                   
-          "createdAt" : {
+          "updatedAt" : {
             "type" : "string",
             "format" : "date-time"
           }   
         }
-      }   
+      },
+      "ExchangeRateBuy" : {
+        "type" : "object",
+        "description" : "database",
+        "properties" : {
+          "id" : {
+            "type" : "integer"
+          },             
+          "type" : {
+            "type" : "integer",
+            "description" : "type map:\n * `1` - 大頭家幣:台幣\n * `2` - 大頭家幣:美金\n",
+            "enum" : [ 1, 2 ]               
+          },     
+          "des" : {
+            "type" : "string",
+            "description": "描述"
+          },    
+          "bouns" : {
+            "type" : "integer",
+            "description": "贈送點數"
+          },  
+          "point": {
+            "type" : "integer",
+            "description": "點數ˋ"
+          },           
+          "dollars": {
+            "type" : "integer",
+            "description": "金額"
+          },                                                                                  
+          "updatedAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          }   
+        }
+      }        
     },
     "requestBodies" : {
       "UserRegister" : {
@@ -3430,32 +3479,26 @@
         "description" : "List of user object",
         "required" : true
       },
-      "CreateExchangeRate" : {
+      "CreateExchangeRateBuy" : {
         "content" : {
           "application/json" : {
             "schema" : {
               "type" : "object",
-              "properties" : {
-                "bos" : {
-                  "$ref" : "#/components/schemas/ExchangeRate/properties/bos"
-                },  
+              "properties" : {  
                 "type" : {
-                  "$ref" : "#/components/schemas/ExchangeRate/properties/type"
+                  "$ref" : "#/components/schemas/ExchangeRateBuy/properties/type"
                 },  
                 "des" : {
-                  "$ref" : "#/components/schemas/ExchangeRate/properties/des"
-                },                                       
-                "rate" : {
-                  "$ref" : "#/components/schemas/ExchangeRate/properties/rate"
-                },  
+                  "$ref" : "#/components/schemas/ExchangeRateBuy/properties/des"
+                },                                        
                 "bouns" : {
-                  "$ref" : "#/components/schemas/ExchangeRate/properties/bouns"
+                  "$ref" : "#/components/schemas/ExchangeRateBuy/properties/bouns"
                 },  
-                "rangeUpper" : {
-                  "$ref" : "#/components/schemas/ExchangeRate/properties/rangeUpper"
+                "point" : {
+                  "$ref" : "#/components/schemas/ExchangeRateBuy/properties/point"
                 },       
-                "rangeLower" : {
-                  "$ref" : "#/components/schemas/ExchangeRate/properties/rangeLower"
+                "dollars" : {
+                  "$ref" : "#/components/schemas/ExchangeRateBuy/properties/dollars"
                 }
               }
             }
@@ -3463,27 +3506,52 @@
         },
         "description" : "List of user object",
         "required" : true
-      },          
-      "UpdateExchangeRate" : {
+      },        
+      "CreateExchangeRateSell" : {
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type" : "object",
+              "properties" : { 
+                "type" : {
+                  "$ref" : "#/components/schemas/ExchangeRateSell/properties/type"
+                },  
+                "des" : {
+                  "$ref" : "#/components/schemas/ExchangeRateSell/properties/des"
+                },                                       
+                "rate" : {
+                  "$ref" : "#/components/schemas/ExchangeRateSell/properties/rate"
+                },  
+                "rangeUpper" : {
+                  "$ref" : "#/components/schemas/ExchangeRateSell/properties/rangeUpper"
+                },       
+                "rangeLower" : {
+                  "$ref" : "#/components/schemas/ExchangeRateSell/properties/rangeLower"
+                }
+              }
+            }
+          }
+        },
+        "description" : "List of user object",
+        "required" : true
+      },           
+      "UpdateExchangeRateBuy" : {
         "content" : {
           "application/json" : {
             "schema" : {
               "type" : "object",
               "properties" : {
                 "des" : {
-                  "$ref" : "#/components/schemas/ExchangeRate/properties/des"
+                  "$ref" : "#/components/schemas/ExchangeRateBuy/properties/des"
                 },                                       
-                "rate" : {
-                  "$ref" : "#/components/schemas/ExchangeRate/properties/rate"
+                "dollars" : {
+                  "$ref" : "#/components/schemas/ExchangeRateBuy/properties/dollars"
                 },  
                 "bouns" : {
-                  "$ref" : "#/components/schemas/ExchangeRate/properties/bouns"
+                  "$ref" : "#/components/schemas/ExchangeRateBuy/properties/bouns"
                 },  
-                "rangeUpper" : {
-                  "$ref" : "#/components/schemas/ExchangeRate/properties/rangeUpper"
-                },       
-                "rangeLower" : {
-                  "$ref" : "#/components/schemas/ExchangeRate/properties/rangeLower"
+                "point" : {
+                  "$ref" : "#/components/schemas/ExchangeRateBuy/properties/point"
                 }
               }
             }
@@ -3491,7 +3559,32 @@
         },
         "description" : "List of user object",
         "required" : true
-      },         
+      },       
+      "UpdateExchangeRateSell" : {
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "des" : {
+                  "$ref" : "#/components/schemas/ExchangeRateSell/properties/des"
+                },                                       
+                "rate" : {
+                  "$ref" : "#/components/schemas/ExchangeRateSell/properties/rate"
+                },  
+                "rangeUpper" : {
+                  "$ref" : "#/components/schemas/ExchangeRateSell/properties/rangeUpper"
+                },       
+                "rangeLower" : {
+                  "$ref" : "#/components/schemas/ExchangeRateSell/properties/rangeLower"
+                }
+              }
+            }
+          }
+        },
+        "description" : "List of user object",
+        "required" : true
+      },            
       "CreateTransaction" : {
         "content" : {
           "application/json" : {
@@ -4129,7 +4222,7 @@
           }
         }
       },      
-      "BackstageExchangeRateArray" : {
+      "BackstageExchangeRateArrayBuy" : {
         "description" : "Ok",
         "content" : {
           "application/json" : {
@@ -4139,28 +4232,22 @@
                 "type" : "object",
                 "properties" : {
                   "id" : {
-                    "$ref" : "#/components/schemas/ExchangeRate/properties/id"
+                    "$ref" : "#/components/schemas/ExchangeRateBuy/properties/id"
                   },               
-                  "bos" : {
-                    "$ref" : "#/components/schemas/ExchangeRate/properties/bos"
-                  },  
                   "type" : {
-                    "$ref" : "#/components/schemas/ExchangeRate/properties/type"
+                    "$ref" : "#/components/schemas/ExchangeRateBuy/properties/type"
                   },  
                   "des" : {
-                    "$ref" : "#/components/schemas/ExchangeRate/properties/des"
+                    "$ref" : "#/components/schemas/ExchangeRateBuy/properties/des"
                   },                                       
-                  "rate" : {
-                    "$ref" : "#/components/schemas/ExchangeRate/properties/rate"
-                  },  
                   "bouns" : {
-                    "$ref" : "#/components/schemas/ExchangeRate/properties/bouns"
+                    "$ref" : "#/components/schemas/ExchangeRateBuy/properties/bouns"
                   },  
-                  "rangeUpper" : {
-                    "$ref" : "#/components/schemas/ExchangeRate/properties/rangeUpper"
+                  "point" : {
+                    "$ref" : "#/components/schemas/ExchangeRateBuy/properties/point"
                   },       
-                  "rangeLower" : {
-                    "$ref" : "#/components/schemas/ExchangeRate/properties/rangeLower"
+                  "dollars" : {
+                    "$ref" : "#/components/schemas/ExchangeRateBuy/properties/dollars"
                   }                                      
                 }                
               }
@@ -4170,47 +4257,39 @@
           }
         }
       },
-      "ExchangeRateArray" : {
+      "BackstageExchangeRateArraySell" : {
         "description" : "Ok",
         "content" : {
           "application/json" : {
             "schema" : {
-              "type": "object",
-              "properties": {
-                "result": {
-                  "type": "array",
-                  "items": {
-                    "type" : "object",
-                    "properties" : {
-                      "bos" : {
-                        "$ref" : "#/components/schemas/ExchangeRate/properties/bos"
-                      },  
-                      "type" : {
-                        "$ref" : "#/components/schemas/ExchangeRate/properties/type"
-                      },  
-                      "des" : {
-                        "$ref" : "#/components/schemas/ExchangeRate/properties/des"
-                      },                                       
-                      "rate" : {
-                        "$ref" : "#/components/schemas/ExchangeRate/properties/rate"
-                      },  
-                      "bouns" : {
-                        "$ref" : "#/components/schemas/ExchangeRate/properties/bouns"
-                      },  
-                      "rangeUpper" : {
-                        "$ref" : "#/components/schemas/ExchangeRate/properties/rangeUpper"
-                      },       
-                      "rangeLower" : {
-                        "$ref" : "#/components/schemas/ExchangeRate/properties/rangeLower"
-                      }                                      
-                    }                
-                  }                  
-                }
+              "type": "array",
+              "items": {
+                "type" : "object",
+                "properties" : {
+                  "id" : {
+                    "$ref" : "#/components/schemas/ExchangeRateSell/properties/id"
+                  },               
+                  "type" : {
+                    "$ref" : "#/components/schemas/ExchangeRateSell/properties/type"
+                  },  
+                  "des" : {
+                    "$ref" : "#/components/schemas/ExchangeRateSell/properties/des"
+                  },                                       
+                  "rate" : {
+                    "$ref" : "#/components/schemas/ExchangeRateSell/properties/rate"
+                  },  
+                  "rangeUpper" : {
+                    "$ref" : "#/components/schemas/ExchangeRateSell/properties/rangeUpper"
+                  },       
+                  "rangeLower" : {
+                    "$ref" : "#/components/schemas/ExchangeRateSell/properties/rangeLower"
+                  }                                      
+                }                
               }
             }
           }
         }
-      },    
+      },      
       "ReadManyPayManage" : {
         "description" : "Ok",
         "content" : {

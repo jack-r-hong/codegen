@@ -104,12 +104,12 @@ export class TransactionService {
 
     // custom end readPendingTransaction
   }
-  async getExchangeRate(
-      param :requestTypes.GetExchangeRateParams,
+  async getExchangeRateBuy(
+      param :requestTypes.GetExchangeRateBuyParams,
       session: Express.Request['session'],
   ) {
-    // custom begin getExchangeRate
-    const res = await this.transactionModel.getExchangeRate(
+    // custom begin getExchangeRateBuy
+    const res = await this.transactionModel.getExchangeRateBuy(
         param,
         {},
     ).catch((e) =>{
@@ -117,7 +117,22 @@ export class TransactionService {
     });
     return res;
 
-    // custom end getExchangeRate
+    // custom end getExchangeRateBuy
+  }
+  async getExchangeRateSell(
+      param :requestTypes.GetExchangeRateSellParams,
+      session: Express.Request['session'],
+  ) {
+    // custom begin getExchangeRateSell
+    const res = await this.transactionModel.getExchangeRateSell(
+        param,
+        {},
+    ).catch((e) =>{
+      throw e;
+    });
+    return res;
+
+    // custom end getExchangeRateSell
   }
   async readMyTransaction(
       param :requestTypes.ReadMyTransactionParams,

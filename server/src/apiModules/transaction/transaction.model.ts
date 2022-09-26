@@ -113,19 +113,12 @@ export class TransactionModel {
 
     // custom end readPendingTransaction
   }
-  async getExchangeRate(
-      param: requestTypes.GetExchangeRateParams,
+  async getExchangeRateBuy(
+      param: requestTypes.GetExchangeRateBuyParams,
       customParam: any,
   ) {
-    // custom begin getExchangeRate
-    const res = await prisma.exchangeRate.findMany(
-        {
-          where: {
-            bos: {
-              equals: param.queryBos,
-            },
-          },
-        },
+    // custom begin getExchangeRateBuy
+    const res = await prisma.exchangeRateBuy.findMany(
     ).catch((e) => {
       throw e;
     }).finally(() => {
@@ -133,7 +126,22 @@ export class TransactionModel {
     });
     return res;
 
-    // custom end getExchangeRate
+    // custom end getExchangeRateBuy
+  }
+  async getExchangeRateSell(
+      param: requestTypes.GetExchangeRateSellParams,
+      customParam: any,
+  ) {
+    // custom begin getExchangeRateSell
+    const res = await prisma.exchangeRateSell.findMany(
+    ).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+    return res;
+
+    // custom end getExchangeRateSell
   }
   async readMyTransaction(
       param: requestTypes.ReadMyTransactionParams,
