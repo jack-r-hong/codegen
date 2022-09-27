@@ -5,8 +5,10 @@ import {errors} from '../../errors';
 // custom begin import
 import {promises as fs} from 'fs';
 import {Container} from 'typedi';
-import {WSClientIdModel} from '../../redisClient/models/webSocketModels';
+import {WSClientIdModel,
+  WSClientTransactionModel} from '../../redisClient/models/webSocketModels';
 const wSCIModel = Container.get(WSClientIdModel);
+const wSCTModel = Container.get(WSClientTransactionModel);
 import {BankAccountModel} from '../bankAccount/bankAccount.model';
 const bankAccountModel = new BankAccountModel();
 const payMethodMap = {
@@ -46,13 +48,8 @@ export class TransactionService {
     ).catch((e) =>{
       throw e;
     });
-    session.transaction = {
-      id: res.id,
-      process: 1,
-      requestUserId: res.userId,
-      receiveUserId: '',
-      bos: res.bos,
-    };
+
+    await wSCTModel.pub(JSON.stringify(res));
     return res;
 
     // custom end createTransaction
@@ -85,6 +82,7 @@ export class TransactionService {
     if (param.bodyState === 4) {
       session.transaction = undefined;
     }
+    await wSCTModel.pub(JSON.stringify(res));
     return res;
 
     // custom end updateTransactionState
@@ -265,6 +263,7 @@ export class TransactionService {
             state: res.state,
           }),
       );
+      await wSCTModel.pub(JSON.stringify(res));
       session.transaction.process = param.bodyState;
     }
     if (param.bodyState === 4) {

@@ -12,7 +12,10 @@ export class TransactionModel {
       customParam: any,
   ) {
     // custom begin createTransaction
-    const res: Prisma.Transaction | null = await prisma.transaction.create({
+
+
+    const res =
+    await prisma.transaction.create({
       data: {
         account: param.bodyAccount,
         bonusPoint: param.bodyBonusPoint,
@@ -24,6 +27,26 @@ export class TransactionModel {
         bankCode: customParam.bankCode,
         bankName: customParam.bankName,
         payMethod: param.bodyPayMethod,
+      },
+      select: {
+        id: true,
+        account: true,
+        bonusPoint: true,
+        bos: true,
+        point: true,
+        twd: true,
+        userId: true,
+        bankAccount: true,
+        bankCode: true,
+        bankName: true,
+        payMethod: true,
+        createdAt: true,
+        state: true,
+        user: {
+          select: {
+            gameUid: true,
+          },
+        },
       },
     }).catch((e) => {
       throw e;
@@ -349,6 +372,46 @@ export class TransactionModel {
     // custom end updateTransaction
   }
   // custom begin model
+  async readRealtimeTransaction(
+      userId: string,
+      state: 'pending' | 'processing',
+  ) {
+    let where: any = undefined;
+    if (state === 'pending') {
+      where = {
+        state: 1,
+      };
+    } else if (state === 'processing') {
+      where = {
+        state: {
+          gt: 1,
+          lt: 4,
+        },
+        transactionRecive: {
+          userId,
+        },
+      };
+    }
+    const res: any[] | null = await prisma.transaction.findMany({
+      where,
+      select: {
+        id: true,
+        point: true,
+        state: true,
+        twd: true,
+        bos: true,
+        bonusPoint: true,
+        account: true,
+        payMethod: true,
+        createdAt: true,
+      },
+    }).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+    return res;
+  }
 
   // custom end model
 }

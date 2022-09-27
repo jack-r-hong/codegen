@@ -1181,7 +1181,6 @@
             "$ref" : "#/components/responses/NotFound"
           }
         },
-
         "security" : [ {
           "cookieAuth" : [ ]
         } ]
@@ -3663,24 +3662,24 @@
               "properties" : {
                 "bos" : {
                   "$ref" : "#/components/schemas/Transaction/properties/bos"
-                },      
-                "point" : {
-                  "$ref" : "#/components/schemas/Transaction/properties/point"
-                },  
+                },    
+                "buyOptionId" : {
+                  "type": "integer",
+                  "nullable": true
+                },    
                 "twd" : {
-                  "$ref" : "#/components/schemas/Transaction/properties/twd"
-                },  
-                "account" : {
-                  "$ref" : "#/components/schemas/Transaction/properties/account"
-                },  
-                "bankId" : {
-                  "$ref" : "#/components/schemas/BankAccount/properties/id"
-                },
+                  "type": "integer",
+                  "nullable": true
+                }, 
                 "payMethod": {
                   "$ref" : "#/components/schemas/Transaction/properties/payMethod"
                 },
-                "bonusPoint": {
-                  "$ref" : "#/components/schemas/Transaction/properties/bonusPoint"
+                "bankId" : {
+                  "$ref" : "#/components/schemas/BankAccount/properties/id"
+                },  
+                "image" : {
+                  "type": "string",
+                  "nullable": true
                 }                
               }
             }

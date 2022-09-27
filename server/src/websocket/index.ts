@@ -11,6 +11,7 @@ import {WSOnMessage, WSToken} from './base';
 import './transaction';
 import './transactionChatroom';
 import './serviceChatroom';
+import './realtimeTransaction';
 
 
 export class WebsocketApp {

@@ -1,6 +1,6 @@
 import WebSocket from 'ws';
 import {WSToken, WSOnMessage, MyWebSocketServer, WSEvent} from './base';
-import {WSClientQueueModel} from '../redisClient/models/webSocketModels';
+import {WSClientIdModel} from '../redisClient/models/webSocketModels';
 import {ChatroomModel}
   from '../apiModules/chatroom/chatroom.model';
 import {chatroomKey} from '../jwt';
@@ -9,7 +9,7 @@ import {IncomingMessage} from 'http';
 import qs from 'qs';
 
 const event = new WSEvent('transaction_chatroom');
-const wSCIModel = Container.get(WSClientQueueModel);
+const wSCIModel = Container.get(WSClientIdModel);
 const chatroomModel = Container.get(ChatroomModel);
 
 @Service({id: WSToken, multiple: true})

@@ -38,18 +38,18 @@ export class Queue implements ModelBase {
     return res;
   }
 
-  async sub(userId: string, cb: any) {
+  async sub( cb: any) {
     const subscriber = this.client.duplicate();
 
     await subscriber.connect();
 
-    await subscriber.subscribe(userId, cb);
+    await subscriber.subscribe(this.key + 'Sub', cb);
 
     return subscriber;
   }
 
-  async pub(userId: string, data: string) {
-    const result = await this.client.publish(userId, data);
+  async pub(data: string) {
+    const result = await this.client.publish(this.key + 'Sub', data);
 
     return {result};
   }

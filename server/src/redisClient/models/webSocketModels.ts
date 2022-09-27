@@ -26,3 +26,13 @@ export class WSClientQueueModel extends
 
   override key: string = super.setKey('psm');
 }
+
+@Service()
+export class WSClientTransactionModel extends
+  Mixin(Queue, WebSocketBase) {
+  constructor() {
+    super();
+  }
+
+  override key: string = super.setKey('wsct');
+}
