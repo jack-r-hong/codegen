@@ -2395,7 +2395,7 @@
             "description": "residence address",
             "type" : "string",
             "nullable" : true
-          },           
+          },                   
           "createdAt" : {
             "type" : "string",
             "format" : "date-time"
@@ -2403,7 +2403,7 @@
           "updatedAt" : {
             "type" : "string",
             "format" : "date-time"
-          },           
+          },        
           "level" : {
             "$ref" : "#/components/schemas/UserLevel/properties/level"
           },
@@ -2413,6 +2413,41 @@
           }  
         }
       },
+      "Referral" : {
+        "type" : "object",
+        "description" : "database",
+        "properties" : {
+          "id" : {
+            "type" : "integer"
+          },
+          "userId": {
+            "$ref" : "#/components/schemas/User/properties/id",
+            "unique": true
+          },  
+          "rebate" : {
+            "type" : "number",
+            "format" : "decimal",
+            "pattern": "^\\d{2}.\\d{2}$",
+            "precision": 4,
+            "scale": 2
+          }
+        }
+      },   
+      "ReferralMap" : {
+        "type" : "object",
+        "description" : "database",
+        "properties" : {
+          "id" : {
+            "type" : "integer"
+          },
+          "referralId": {
+            "$ref" : "#/components/schemas/Referral/properties/id"
+          },        
+          "userId": {
+            "$ref" : "#/components/schemas/User/properties/id"
+          }           
+        }
+      },                 
       "UserLevel" : {
         "type" : "object",
         "description" : "database",
@@ -2448,6 +2483,11 @@
             "type" : "integer",
             "description": "累積交易筆數"
           },          
+          "rebate" : {
+            "type" : "integer",
+            "description": "回扣",
+            "nullable": true
+          },             
           "limit" : {
             "type" : "integer",
             "description": "交易額度"

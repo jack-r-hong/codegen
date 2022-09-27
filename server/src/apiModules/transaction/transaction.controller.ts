@@ -118,6 +118,7 @@ export class TransactionController implements Controller {
         .then((result) =>{
           // custom begin getExchangeRateBuy
           res.json(result);
+
           // custom end getExchangeRateBuy
         }).catch((e) => {
           next(e);
@@ -142,6 +143,7 @@ export class TransactionController implements Controller {
         .then((result) =>{
           // custom begin getExchangeRateSell
           res.json(result);
+
           // custom end getExchangeRateSell
         }).catch((e) => {
           next(e);

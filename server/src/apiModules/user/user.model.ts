@@ -664,6 +664,37 @@ export class UserModel {
       customParam: any,
   ) {
     // custom begin registerUser
+    let referralMap: undefined | {
+      create: {
+        referralId: number,
+      },
+    } = undefined;
+
+    if (customParam.promoteCode && customParam.promoteCode !== '' ) {
+      const referralId = parseInt(customParam.promoteCode);
+      const checkCode = await prisma.referral.findUnique({
+        where: {
+          id: referralId,
+        },
+      }).catch((e) => {
+        throw new Error('referral code no map to the user');
+      }).finally(() => {
+        prisma.$disconnect();
+      });
+
+      if (!checkCode) {
+        console.log('checkCode');
+
+        throw new Error('referral code no map to the user');
+      }
+
+      referralMap = {
+        create: {
+          referralId: referralId,
+        },
+      };
+    }
+
     const res: Prisma.User | null = await prisma.user.create({
       data: {
         phone: customParam.phone,
@@ -688,18 +719,25 @@ export class UserModel {
         },
         userTransaction: {
           create: {
-            atcbw: 1000,
-            cta: 7000,
-            cnot: 4000,
-            limit: 2000,
+            atcbw: 0,
+            cta: 0,
+            cnot: 0,
+            limit: 0,
           },
         },
+        referral: {
+          create: {
+            rebate: 0,
+          },
+        },
+        referralMap,
       },
     }).catch((e) => {
       throw e;
     }).finally(() => {
       prisma.$disconnect();
     });
+
     return res;
 
     // custom end registerUser
@@ -725,6 +763,8 @@ export class UserModel {
       select: {
         userStatus: true,
         isAgent: true,
+        phone: true,
+        gameUid: true,
       },
     }).catch((e) => {
       throw e;

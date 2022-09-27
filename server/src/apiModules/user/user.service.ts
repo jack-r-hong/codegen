@@ -571,7 +571,7 @@ export class UserService {
           throw e;
         });
     if (res !== null) {
-      const {id, userStatus, password, isAgent} = res;
+      const {id, userStatus, password, isAgent, phone} = res;
       const match = await bcrypt.compare(param.bodyPassword, password);
       if (match) {
         session.userInfo = {
@@ -583,6 +583,7 @@ export class UserService {
           id,
           userStatus,
           isAgent,
+          phone,
         };
       }
     }
@@ -637,6 +638,7 @@ export class UserService {
       session: Express.Request['session'],
   ) {
     // custom begin registerUser
+
     if (!session.userRegister ||
       !param.bodyPhoneCaptcha ||
       param.bodyPhoneCaptcha !== session.userRegister.verify ||
@@ -662,14 +664,22 @@ export class UserService {
           });
         },
     );
-    await this.userModel.registerUser(param, {
+
+    const res = await this.userModel.registerUser(param, {
       phone: param.bodyPhone.replace(/^0/, ''),
       phonePrefix: session.userRegister.phonePrefix,
       password: hash,
       salt: salt,
+      promoteCode: param.bodyPromoteCode,
     }).catch((e) =>{
+      if (e.message === 'referral code no map to the user') {
+        return {success: false, message: 'referral code no map to the user'};
+      }
       throw e;
     });
+    if ((res as {success: boolean}).success === false) {
+      return res;
+    }
     session.destroy(() => {});
     return {success: true};
 
@@ -689,7 +699,6 @@ export class UserService {
       phonePrefix,
       phone,
     };
-    await getPhoneCheck(phonePrefix, phone, code);
 
     // custom end phoneCheck
   }

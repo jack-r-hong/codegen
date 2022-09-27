@@ -28,6 +28,8 @@ model {{fpc @key}} {
                 {{~#if d2.default }} @default({{d2.default}}) {{/if}}       
                 {{~#if (equal @key "createdAt") }} @default(now()){{/if}}  
                 {{~#if (equal @key "updatedAt") }}  @default(now()) @updatedAt{{/if}} 
+                {{~#if (equal (parameter_type d2.type "schema" d2.format) "Decimal") }}  @db.Decimal({{d2.precision}}, {{d2.scale}}) {{/if}} 
+
                 {{~space}} @map("{{snake_case @key}}")                 
             {{/if}}
         {{~/each}}  

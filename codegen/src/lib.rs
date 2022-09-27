@@ -90,6 +90,8 @@ fn type_convert<'a>(t:  &'a str, mode:  &'a str, format:  &'a str ) ->  &'a str{
         "string" => "string",
         "integer" if mode == "schema" => "Int",
         "integer" => "number",
+        "number" if format == "decimal" && mode == "schema" => "Decimal",
+        "number" => "number",
         "array" => "String",
         "boolean" if mode == "schema" => "Boolean",
         "boolean" => "boolean",

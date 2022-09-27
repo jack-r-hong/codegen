@@ -114,6 +114,28 @@ model PayManage {
 
     // custom end PayManage
 }
+model Referral {
+  id  Int @id @default(autoincrement()) @map("id")                 
+  rebate  Decimal   @db.Decimal(4, 2)  @map("rebate")                 
+  referralMap ReferralMap[]
+  user User? @relation(fields: [userId], references: [id])
+  userId String @map("user_id")  @unique
+  
+    // custom begin Referral
+
+    // custom end Referral
+}
+model ReferralMap {
+  id  Int @id @default(autoincrement()) @map("id")                 
+  referral Referral? @relation(fields: [referralId], references: [id])
+  referralId Int @map("referral_id")  
+  user User? @relation(fields: [userId], references: [id])
+  userId String @map("user_id")  
+  
+    // custom begin ReferralMap
+
+    // custom end ReferralMap
+}
 model Transaction {
   account  String  @map("account")                 
   bankAccount  Int  @map("bank_account")                 
@@ -172,6 +194,8 @@ model User {
   userLevel UserLevel? @relation(fields: [level], references: [level])
   level Int @map("level") @default(1) 
   payManage PayManage[]
+  referral Referral?
+  referralMap ReferralMap[]
   transaction Transaction[]
   transactionRecive TransactionRecive[]
   userTransaction UserTransaction?
@@ -198,6 +222,7 @@ model UserTransaction {
   cta  Int  @map("cta")                 
   id  Int @id @default(autoincrement()) @map("id")                 
   limit  Int  @map("limit")                 
+  rebate  Int?   @map("rebate")                 
   updatedAt  DateTime   @default(now()) @updatedAt @map("updated_at")                 
   user User? @relation(fields: [userId], references: [id])
   userId String @map("user_id")  @unique
