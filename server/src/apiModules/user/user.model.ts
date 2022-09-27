@@ -669,7 +669,6 @@ export class UserModel {
         referralId: number,
       },
     } = undefined;
-
     if (customParam.promoteCode && customParam.promoteCode !== '' ) {
       const referralId = parseInt(customParam.promoteCode);
       const checkCode = await prisma.referral.findUnique({
@@ -681,20 +680,16 @@ export class UserModel {
       }).finally(() => {
         prisma.$disconnect();
       });
-
       if (!checkCode) {
         console.log('checkCode');
-
         throw new Error('referral code no map to the user');
       }
-
       referralMap = {
         create: {
           referralId: referralId,
         },
       };
     }
-
     const res: Prisma.User | null = await prisma.user.create({
       data: {
         phone: customParam.phone,
@@ -737,7 +732,6 @@ export class UserModel {
     }).finally(() => {
       prisma.$disconnect();
     });
-
     return res;
 
     // custom end registerUser

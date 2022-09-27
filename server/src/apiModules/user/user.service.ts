@@ -638,7 +638,6 @@ export class UserService {
       session: Express.Request['session'],
   ) {
     // custom begin registerUser
-
     if (!session.userRegister ||
       !param.bodyPhoneCaptcha ||
       param.bodyPhoneCaptcha !== session.userRegister.verify ||
@@ -664,7 +663,6 @@ export class UserService {
           });
         },
     );
-
     const res = await this.userModel.registerUser(param, {
       phone: param.bodyPhone.replace(/^0/, ''),
       phonePrefix: session.userRegister.phonePrefix,

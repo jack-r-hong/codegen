@@ -1155,7 +1155,7 @@
           "cookieAuth" : []
         }]
       }     
-    },     
+    },   
     "/transaction" : {     
       "post" : {
         "tags" : [ "transaction" ],
@@ -1219,6 +1219,36 @@
         } ]
       }
     },
+    "/transaction/calculation" : {     
+      "post" : {
+        "tags" : [ "transaction" ],
+        "summary" : "post transaction by id",
+        "operationId" : "getTransactionCalculation",    
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/GetTransactionCalculation"
+        },           
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/GetTransactionCalculation"
+          },
+          "400" : {
+            "$ref" : "#/components/responses/BadRequest"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/Unauthorized"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          },
+          "404" : {
+            "$ref" : "#/components/responses/NotFound"
+          }
+        },
+        "security" : [ {
+          "cookieAuth" : [ ]
+        } ]
+      }
+    },    
     "/transaction/my" : {
       "get" : {
         "tags" : [ "transaction" ],
@@ -3658,6 +3688,32 @@
         },
         "required" : true
       },
+      "GetTransactionCalculation" : {
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "bos" : {
+                  "$ref" : "#/components/schemas/Transaction/properties/bos"
+                },      
+                "buyOptionId" : {
+                  "type": "integer",
+                  "nullable": true
+                },  
+                "twd" : {
+                  "type": "integer",
+                  "nullable": true
+                },  
+                "payMethod": {
+                  "$ref" : "#/components/schemas/Transaction/properties/payMethod"
+                }              
+              }
+            }
+          }
+        },
+        "required" : true
+      },      
       "UpdateTransaction" : {
         "content" : {
           "application/json" : {
@@ -4026,7 +4082,43 @@
             }
           }
         }
-      },   
+      },        
+      "GetTransactionCalculation" : {
+        "description" : "Ok",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "totalPoints": {
+                  "type": "number"
+                },
+                "point": {
+                  "type": "number"
+                },
+                "bonusPoint": {
+                  "type": "number"
+                }, 
+                "firstBonusPoint": {
+                  "type": "number"
+                },                 
+                "totalDollars": {
+                  "type": "number"
+                },
+                "dollars":{
+                  "type": "number"
+                },
+                "handlingFee":{
+                  "type": "number"
+                },
+                "serviceFee":{
+                  "type": "number"
+                }                
+              }              
+            }
+          }
+        }
+      },          
       "MyTransaction" : {
         "description" : "Ok",
         "content" : {

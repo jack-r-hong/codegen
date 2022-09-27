@@ -99,6 +99,31 @@ export class TransactionController implements Controller {
           next(e);
         });
   }
+  @Post('/transaction/calculation')
+  @Validator(validSchemas.getTransactionCalculationValidator)
+  async getTransactionCalculation(
+      req: transactionParams.GetTransactionCalculationRequest,
+      res: Response,
+      next: NextFunction,
+  ) {
+    TransactionController.service.getTransactionCalculation(
+        transactionParams.GetTransactionCalculationRequestConvert(
+            req.body,
+            req.query,
+            req.params,
+            req.cookies,
+        ),
+        req.session,
+    )
+        .then((result) =>{
+          // custom begin getTransactionCalculation
+          res.json(result);
+
+          // custom end getTransactionCalculation
+        }).catch((e) => {
+          next(e);
+        });
+  }
   @Get('/transaction/exchange_rate/buy')
   @Validator(validSchemas.getExchangeRateBuyValidator)
   async getExchangeRateBuy(

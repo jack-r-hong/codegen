@@ -104,6 +104,24 @@ export class TransactionService {
 
     // custom end readPendingTransaction
   }
+  async getTransactionCalculation(
+      param :requestTypes.GetTransactionCalculationParams,
+      session: Express.Request['session'],
+  ) {
+    // custom begin getTransactionCalculation
+    return {
+      'totalPoints': 1,
+      'point': 1,
+      'bonusPoint': 1,
+      'firstBonusPoint': 1,
+      'totalDollars': 1,
+      'dollars': 1,
+      'handlingFee': 1,
+      'serviceFee': 1,
+    };
+
+    // custom end getTransactionCalculation
+  }
   async getExchangeRateBuy(
       param :requestTypes.GetExchangeRateBuyParams,
       session: Express.Request['session'],
@@ -141,7 +159,7 @@ export class TransactionService {
     // custom begin readMyTransaction
     const res = await this.transactionModel.readMyTransaction(
         param,
-        {userId: session.userInfo?.id},
+        {userId: session.userInfo?.id, isAgent: session.userInfo?.isAgent},
     ).catch((e) =>{
       throw e;
     });
@@ -154,9 +172,22 @@ export class TransactionService {
       },
       'dataList': res.map((e) => {
         const res = e;
+        if (session.userInfo?.isAgent && res.userId !== session.userInfo?.id) {
+          if (res.bos === 1) {
+            res.bos = 2;
+          } else {
+            res.bos = 1;
+          }
+        }
+        if (res.transactionRecive) {
+          res.counterpartyGameUid = res.transactionRecive.user.gameUid;
+        } else {
+          res.counterpartyGameUid = null;
+        }
+        delete res.transactionRecive;
+        res.selfGameUid = res.user.gameUid;
+        delete res.user;
         Object.assign(e, {
-          recommod: 'recommod',
-          gameUid: 'gameUid',
           payMethod: payMethodMap[e.payMethod as 1|2|3|4],
         });
         return res;

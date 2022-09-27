@@ -153,6 +153,51 @@ export const ReadPendingTransactionRequestConvert = (
             pathAgentShow: path.agentShow,
   };
 };
+type GetTransactionCalculationReqBody = {
+  bos: string,
+buyOptionId: string|undefined,
+payMethod: string,
+twd: string|undefined,
+}
+
+type GetTransactionCalculationReqQuery = {
+}
+
+type GetTransactionCalculationReqParams = {
+}
+
+type GetTransactionCalculationReqCookie = {
+}
+
+export interface GetTransactionCalculationRequest extends TypedRequest<
+  GetTransactionCalculationReqBody,
+  GetTransactionCalculationReqQuery,
+  GetTransactionCalculationReqParams,
+  GetTransactionCalculationReqCookie
+>{
+}
+
+export type GetTransactionCalculationParams = {
+bodyBos: number,
+bodyBuyOptionId: number|undefined,
+bodyPayMethod: number,
+bodyTwd: number|undefined,
+}
+
+
+export const GetTransactionCalculationRequestConvert = (
+    body: GetTransactionCalculationReqBody,
+    query: GetTransactionCalculationReqQuery,
+    path: GetTransactionCalculationReqParams,
+    cookie: GetTransactionCalculationReqCookie,
+): GetTransactionCalculationParams => {
+  return {
+    bodyBos: parseInt(body.bos),
+    bodyBuyOptionId: typeof body.buyOptionId === 'number' ? body.buyOptionId : undefined,
+    bodyPayMethod: parseInt(body.payMethod),
+    bodyTwd: typeof body.twd === 'number' ? body.twd : undefined,
+  };
+};
 type GetExchangeRateBuyReqBody = {
   }
 

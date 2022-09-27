@@ -109,6 +109,49 @@ export const readPendingTransactionValidator: Schema = {
     },
   },
 };
+export const getTransactionCalculationValidator: Schema = {
+  'bos': {
+    in: 'body',
+    isInt: true,
+    matches: {
+      options: /^(1|2)/,
+    },
+  },
+  'buyOptionId': {
+    in: 'body',
+    isInt: true,
+optional: {
+  options: {
+    nullable: true,
+  },
+},
+  },
+  'payMethod': {
+    in: 'body',
+    isInt: true,
+    matches: {
+      options: /^(1|2|3|4|5)/,
+    },
+  },
+  'twd': {
+    in: 'body',
+    isInt: true,
+optional: {
+  options: {
+    nullable: true,
+  },
+},
+  },
+  'JSESSIONID': {
+    in: 'cookies',
+    custom: {
+      options: (value, {req, location, path}) => {
+        sessions.cookieAuthSessionVerify(req['session']);
+        return true;
+      },
+    },
+  },
+};
 export const getExchangeRateBuyValidator: Schema = {
   'JSESSIONID': {
     in: 'cookies',

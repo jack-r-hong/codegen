@@ -113,6 +113,14 @@ export class TransactionModel {
 
     // custom end readPendingTransaction
   }
+  async getTransactionCalculation(
+      param: requestTypes.GetTransactionCalculationParams,
+      customParam: any,
+  ) {
+    // custom begin getTransactionCalculation
+
+    // custom end getTransactionCalculation
+  }
   async getExchangeRateBuy(
       param: requestTypes.GetExchangeRateBuyParams,
       customParam: any,
@@ -149,9 +157,19 @@ export class TransactionModel {
   ) {
     // custom begin readMyTransaction
     let state :undefined | any = undefined;
-    let bos : undefined | number = undefined;
+    let bos1 : undefined | number = undefined;
+    let bos2 : undefined | number = undefined;
     if (param.queryBos === 1 || param.queryBos === 2) {
-      bos = param.queryBos;
+      if (customParam.isAgent) {
+        if (param.queryBos === 1) {
+          bos2 = 2;
+        } else {
+          bos2 = 1;
+        }
+      } else {
+        bos2 = param.queryBos;
+      }
+      bos1 = param.queryBos;
     }
     if (param.queryState === 'failed') {
       state = 0;
@@ -165,20 +183,26 @@ export class TransactionModel {
     } else if (param.queryState === 'completed') {
       state = 4;
     };
+
     const res: any[] | null = await prisma.transaction.findMany({
       where: {
         OR: [
-          {userId: customParam.userId},
-          {transactionRecive: {
+          {
             userId: customParam.userId,
-          }},
+            bos: bos1,
+          },
+          {
+            transactionRecive: {
+              userId: customParam.userId,
+            },
+            bos: bos2,
+          },
         ],
         state,
         createdAt: {
           gte: param.queryStartTime,
           lte: param.queryEndTime,
         },
-        bos,
       },
       select: {
         id: true,
@@ -192,6 +216,21 @@ export class TransactionModel {
         bankAccount: true,
         bankCode: true,
         bankName: true,
+        userId: true,
+        user: {
+          select: {
+            gameUid: true,
+          },
+        },
+        transactionRecive: {
+          select: {
+            user: {
+              select: {
+                gameUid: true,
+              },
+            },
+          },
+        },
       },
       orderBy: {
         [param.queryOrderByField]: param.queryOrderBy,
