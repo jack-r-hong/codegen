@@ -163,6 +163,7 @@ export class TransactionService {
     ).catch((e) =>{
       throw e;
     });
+
     return {
       'total': {
         'point': 2000,
@@ -179,14 +180,16 @@ export class TransactionService {
             res.bos = 1;
           }
         }
+
         if (res.transactionRecive) {
           res.counterpartyGameUid = res.transactionRecive.user.gameUid;
         } else {
           res.counterpartyGameUid = null;
         }
-        delete res.transactionRecive;
         res.selfGameUid = res.user.gameUid;
+        delete res.transactionRecive;
         delete res.user;
+        delete res.userId;
         Object.assign(e, {
           payMethod: payMethodMap[e.payMethod as 1|2|3|4],
         });
