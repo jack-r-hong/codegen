@@ -10,13 +10,57 @@ import {WSClientIdModel,
 const wSCIModel = Container.get(WSClientIdModel);
 const wSCTModel = Container.get(WSClientTransactionModel);
 import {BankAccountModel} from '../bankAccount/bankAccount.model';
+import {UserModel} from '../user/user.model';
+import {ExchangeRateBuyModel} from '../exchangeRateBuy/exchangeRateBuy.model';
+import {ExchangeRateSellModel} from '../exchangeRateSell/exchangeRateSell.model';
 const bankAccountModel = new BankAccountModel();
+const userModel = new UserModel();
+const exchangeRateBuyModel = new ExchangeRateBuyModel();
+const exchangeRateSellModel = new ExchangeRateSellModel();
 const payMethodMap = {
   1: 'LinePay',
   2: '街口支付',
   3: '超商儲值',
   4: 'ATM轉帳',
 };
+
+async function calculationTransation(
+    bos: 1|2,
+    buyOptionId: number | undefined,
+    sellTwd: number | undefined,
+) {
+  let twd = 0;
+  let point = 0;
+  let bonusPoint = 0;
+
+  if (bos === 1) {
+    if (!buyOptionId) {
+      throw new Error('bodyBuyOptionId not found');
+    }
+    const setting = await exchangeRateBuyModel.readExchangeRateBuyById(buyOptionId);
+    if (!setting) {
+      throw new Error('bodyBuyOptionId not found');
+    }
+
+    twd = setting.dollars;
+    point = setting.point;
+    bonusPoint = setting.bouns;
+    console.log(twd, point, bonusPoint);
+  }
+
+  if (bos === 2) {
+    if (!sellTwd) {
+      throw new Error('twd not found');
+    }
+    const setting = await exchangeRateSellModel.readExchangeRateSellById(1);
+    if (!setting) {
+      throw new Error('twd not found');
+    }
+
+    twd = sellTwd;
+    point = twd * setting.rate;
+  }
+}
 
 // custom end import
 
@@ -34,22 +78,68 @@ export class TransactionService {
     const dbBankData = await bankAccountModel.readOneBankAccount(
         {pathId: param.bodyBankId},
     );
-    if (!dbBankData) {
+
+    const dbUserData = await userModel.getUserMyStatus(
+        {},
+        {userId: session.userInfo?.id!},
+    );
+
+    if (!dbBankData || !dbUserData) {
       /* todo throw error */
+      return;
     }
+
+    let twd = 0;
+    let point = 0;
+    let bonusPoint = 0;
+
+    if (param.bodyBos === 1) {
+      if (!param.bodyBuyOptionId) {
+        throw new Error('bodyBuyOptionId not found');
+      }
+      const setting = await exchangeRateBuyModel.readExchangeRateBuyById(param.bodyBuyOptionId);
+      if (!setting) {
+        throw new Error('bodyBuyOptionId not found');
+      }
+
+      twd = setting.dollars;
+      point = setting.point;
+      bonusPoint = setting.bouns;
+      console.log(twd, point, bonusPoint);
+    }
+
+    if (param.bodyBos === 2) {
+      if (!param.bodyTwd) {
+        throw new Error('twd not found');
+      }
+      const setting = await exchangeRateSellModel.readExchangeRateSellById(param.bodyTwd);
+      console.log(setting);
+      
+      if (!setting) {
+        throw new Error('twd not found');
+      }
+
+      twd = param.bodyTwd;
+      point = twd * setting.rate;
+    }
+
     const res = await this.transactionModel.createTransaction(
         param,
         {
-          userId: session.userInfo?.id,
+          userId: session.userInfo?.id!,
           bankName: dbBankData.name,
           bankAccount: dbBankData.account,
           bankCode: dbBankData.code,
+          twd,
+          point,
+          bonusPoint,
+          account: dbUserData.gameUid??'',
         },
     ).catch((e) =>{
       throw e;
     });
 
-    await wSCTModel.pub(JSON.stringify(res));
+    await wSCTModel.pub(JSON.stringify({}));
     return res;
 
     // custom end createTransaction
@@ -161,7 +251,6 @@ export class TransactionService {
     ).catch((e) =>{
       throw e;
     });
-
     return {
       'total': {
         'point': 2000,
@@ -178,7 +267,6 @@ export class TransactionService {
             res.bos = 1;
           }
         }
-
         if (res.transactionRecive) {
           res.counterpartyGameUid = res.transactionRecive.user.gameUid;
         } else {

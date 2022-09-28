@@ -89,6 +89,27 @@ export class ExchangeRateBuyModel {
     return res;
   }
   // custom begin model
-
+  async readExchangeRateBuyById(
+      id: number,
+  ) {
+    const res = await prisma.exchangeRateBuy.findUnique({
+      where: {
+        id,
+      },
+      select: {
+        bouns: true,
+        des: true,
+        dollars: true,
+        id: true,
+        point: true,
+        type: true,
+      },
+    }).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+    return res;
+  }
   // custom end model
 }

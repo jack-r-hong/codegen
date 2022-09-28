@@ -13,6 +13,11 @@ const wSCIModel = Container.get(WSClientIdModel);
 const userModel = Container.get(UserModel);
 const transactionModel = Container.get(TransactionModel);
 
+async function getQrcode(userId: string) {
+  const res = await transactionModel.readTransactionQrcode(userId);
+  return res?.data?.toString('base64');
+}
+
 
 @Service({id: WSToken, multiple: true})
 export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
@@ -60,10 +65,11 @@ export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
     }
 
     const subscriber = await wSCIModel.sub(transactionId as string,
-        (message: any)=>{
+        async (message: any)=>{
           event.eventName = 'process';
           const d = JSON.parse(message);
           d.isAgent = isAgent;
+          d.image = await getQrcode(userId as string),
           ws.send(event.msg(d));
           if (d.state === 4 || d.state === 0) {
             wSCIModel.subscriberQuit(subscriber).then(()=> {});
@@ -79,6 +85,7 @@ export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
       state: resTran.state,
       bos: resTran.bos,
       ready: true,
+      image: await getQrcode(userId as string),
     }));
 
     ws.on('close', () => {

@@ -9,51 +9,73 @@ const prisma = new Prisma.PrismaClient();
 export class TransactionModel {
   async createTransaction(
       param: requestTypes.CreateTransactionParams,
-      customParam: any,
+      customParam: {
+        userId: string,
+        bankAccount: number,
+        bankName: string,
+        bankCode: number,
+        twd: number,
+        point: number,
+        bonusPoint: number,
+        account: string
+      },
   ) {
     // custom begin createTransaction
 
-
-    const res =
-    await prisma.transaction.create({
-      data: {
-        account: param.bodyAccount,
-        bonusPoint: param.bodyBonusPoint,
-        bos: param.bodyBos,
-        point: param.bodyPoint,
-        twd: param.bodyTwd,
-        userId: customParam.userId,
-        bankAccount: customParam.bankAccount,
-        bankCode: customParam.bankCode,
-        bankName: customParam.bankName,
-        payMethod: param.bodyPayMethod,
-      },
-      select: {
-        id: true,
-        account: true,
-        bonusPoint: true,
-        bos: true,
-        point: true,
-        twd: true,
-        userId: true,
-        bankAccount: true,
-        bankCode: true,
-        bankName: true,
-        payMethod: true,
-        createdAt: true,
-        state: true,
-        user: {
-          select: {
-            gameUid: true,
+    const res: any = await prisma.$transaction([
+      prisma.transaction.create({
+        data: {
+          account: '',
+          bonusPoint: customParam.bonusPoint,
+          bos: param.bodyBos,
+          point: customParam.point,
+          twd: customParam.twd,
+          userId: customParam.userId,
+          bankAccount: customParam.bankAccount,
+          bankCode: customParam.bankCode,
+          bankName: customParam.bankName,
+          payMethod: param.bodyPayMethod,
+        },
+        select: {
+          id: true,
+          account: true,
+          bonusPoint: true,
+          bos: true,
+          point: true,
+          twd: true,
+          userId: true,
+          bankAccount: true,
+          bankCode: true,
+          bankName: true,
+          payMethod: true,
+          createdAt: true,
+          state: true,
+          user: {
+            select: {
+              gameUid: true,
+            },
           },
         },
-      },
-    }).catch((e) => {
+      }),
+      prisma.transactionQrcode.upsert({
+        create: {
+          userId: customParam.userId,
+          data: Buffer.from(param.bodyImage?? '', 'base64'),
+        },
+        update: {
+          data: Buffer.from(param.bodyImage?? '', 'base64'),
+        },
+        where: {
+          userId: customParam.userId,
+        },
+      }),
+    ]).catch((e) => {
       throw e;
     }).finally(() => {
       prisma.$disconnect();
     });
-    return res;
+
+    return res[0];
 
     // custom end createTransaction
   }
@@ -206,7 +228,6 @@ export class TransactionModel {
     } else if (param.queryState === 'completed') {
       state = 4;
     };
-
     const res: any[] | null = await prisma.transaction.findMany({
       where: {
         OR: [
@@ -392,7 +413,7 @@ export class TransactionModel {
         },
       };
     }
-    const res: any[] | null = await prisma.transaction.findMany({
+    const res = await prisma.transaction.findMany({
       where,
       select: {
         id: true,
@@ -404,6 +425,34 @@ export class TransactionModel {
         account: true,
         payMethod: true,
         createdAt: true,
+        user: {
+          select: {
+            name: true,
+            gameUid: true,
+          },
+        },
+      },
+    }).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+    return res.map((e) => {
+      let t = e;
+      t = Object.assign(t, {
+        name: t.user?.gameUid,
+        gameUid: t.user?.gameUid,
+      });
+      return t;
+    });
+  }
+
+  async readTransactionQrcode(
+      userId: string,
+  ) {
+    const res = await prisma.transactionQrcode.findUnique({
+      where: {
+        userId,
       },
     }).catch((e) => {
       throw e;

@@ -89,6 +89,24 @@ export class ExchangeRateSellModel {
     return res;
   }
   // custom begin model
-
+  async readExchangeRateSellById(
+      pirce: number,
+  ) {
+    const res: Prisma.ExchangeRateSell | null = await prisma.exchangeRateSell.findFirst({
+      where: {
+        rangeUpper: {
+          gte: pirce,
+        },
+        rangeLower: {
+          lte: pirce,
+        },
+      },
+    }).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+    return res;
+  }
   // custom end model
 }

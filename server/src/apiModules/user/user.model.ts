@@ -749,7 +749,7 @@ export class UserModel {
       customParam: any,
   ) {
     // custom begin getUserMyStatus
-    const res: {userStatus: number, isAgent: boolean} | null =
+    const res =
     await prisma.user.findUnique({
       where: {
         id: customParam.userId,

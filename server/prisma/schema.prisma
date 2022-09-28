@@ -313,8 +313,17 @@ model TransactionChatroom {
   type  String  @map("type")                 
   userId  String  @map("user_id")                 
   text String 
-  data Bytes? @map("data") @db.Blob
+  data Bytes? @map("data") @db.MediumBlob
 }
+
+model TransactionQrcode {
+  id  Int @id @default(autoincrement()) @map("id")                 
+  userId  String  @map("user_id") @unique     
+  data Bytes? @map("data") @db.MediumBlob
+
+  @@map("transactionQrcode")
+}
+
 
 // custom end model
 

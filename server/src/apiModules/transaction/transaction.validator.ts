@@ -6,17 +6,8 @@ import * as sessions from '../../sessions';
 // custom end import
 
 
-
 export const createTransactionValidator: Schema = {
-  'account': {
-    in: 'body',
-    isString: true,
-  },
   'bankId': {
-    in: 'body',
-    isInt: true,
-  },
-  'bonusPoint': {
     in: 'body',
     isInt: true,
   },
@@ -27,6 +18,24 @@ export const createTransactionValidator: Schema = {
       options: /^(1|2)/,
     },
   },
+  'buyOptionId': {
+    in: 'body',
+    isInt: true,
+    optional: {
+      options: {
+        nullable: true,
+      },
+    },
+  },
+  'image': {
+    in: 'body',
+    isString: true,
+    optional: {
+      options: {
+        nullable: true,
+      },
+    },
+  },
   'payMethod': {
     in: 'body',
     isInt: true,
@@ -34,13 +43,14 @@ export const createTransactionValidator: Schema = {
       options: /^(1|2|3|4|5)/,
     },
   },
-  'point': {
-    in: 'body',
-    isInt: true,
-  },
   'twd': {
     in: 'body',
     isInt: true,
+    optional: {
+      options: {
+        nullable: true,
+      },
+    },
   },
   'JSESSIONID': {
     in: 'cookies',
@@ -56,11 +66,11 @@ export const updateTransactionStateValidator: Schema = {
   'state': {
     in: 'body',
     isInt: true,
-optional: {
-  options: {
-    nullable: true,
-  },
-},
+    optional: {
+      options: {
+        nullable: true,
+      },
+    },
     matches: {
       options: /^(0|1|2|3|4)/,
     },
@@ -120,11 +130,11 @@ export const getTransactionCalculationValidator: Schema = {
   'buyOptionId': {
     in: 'body',
     isInt: true,
-optional: {
-  options: {
-    nullable: true,
-  },
-},
+    optional: {
+      options: {
+        nullable: true,
+      },
+    },
   },
   'payMethod': {
     in: 'body',
@@ -136,11 +146,11 @@ optional: {
   'twd': {
     in: 'body',
     isInt: true,
-optional: {
-  options: {
-    nullable: true,
-  },
-},
+    optional: {
+      options: {
+        nullable: true,
+      },
+    },
   },
   'JSESSIONID': {
     in: 'cookies',
@@ -278,11 +288,11 @@ export const updateTransactionValidator: Schema = {
   'state': {
     in: 'body',
     isInt: true,
-optional: {
-  options: {
-    nullable: true,
-  },
-},
+    optional: {
+      options: {
+        nullable: true,
+      },
+    },
     matches: {
       options: /^(0|1|2|3|4)/,
     },

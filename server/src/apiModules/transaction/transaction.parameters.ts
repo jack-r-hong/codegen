@@ -15,13 +15,12 @@ interface TypedRequest<
 
 
 type CreateTransactionReqBody = {
-  account: string,
-bankId: string,
-bonusPoint: string,
+  bankId: string,
 bos: string,
+buyOptionId: string|undefined,
+image: string|undefined,
 payMethod: string,
-point: string,
-twd: string,
+twd: string|undefined,
 }
 
 type CreateTransactionReqQuery = {
@@ -42,13 +41,12 @@ export interface CreateTransactionRequest extends TypedRequest<
 }
 
 export type CreateTransactionParams = {
-bodyAccount: string,
 bodyBankId: number,
-bodyBonusPoint: number,
 bodyBos: number,
+bodyBuyOptionId: number|undefined,
+bodyImage: string|undefined,
 bodyPayMethod: number,
-bodyPoint: number,
-bodyTwd: number,
+bodyTwd: number|undefined,
 }
 
 
@@ -59,13 +57,12 @@ export const CreateTransactionRequestConvert = (
     cookie: CreateTransactionReqCookie,
 ): CreateTransactionParams => {
   return {
-    bodyAccount: body.account,
     bodyBankId: parseInt(body.bankId),
-    bodyBonusPoint: parseInt(body.bonusPoint),
     bodyBos: parseInt(body.bos),
+    bodyBuyOptionId: typeof body.buyOptionId === 'number' ? body.buyOptionId : undefined,
+    bodyImage: body.image,
     bodyPayMethod: parseInt(body.payMethod),
-    bodyPoint: parseInt(body.point),
-    bodyTwd: parseInt(body.twd),
+    bodyTwd: typeof body.twd === 'number' ? body.twd : undefined,
   };
 };
 type UpdateTransactionStateReqBody = {
