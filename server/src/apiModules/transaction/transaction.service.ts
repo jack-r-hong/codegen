@@ -14,6 +14,7 @@ import {BankAccountModel} from '../bankAccount/bankAccount.model';
 import {UserModel} from '../user/user.model';
 import {ExchangeRateBuyModel} from '../exchangeRateBuy/exchangeRateBuy.model';
 import {ExchangeRateSellModel} from '../exchangeRateSell/exchangeRateSell.model';
+const transactionModel = new TransactionModel();
 const bankAccountModel = new BankAccountModel();
 const userModel = new UserModel();
 const exchangeRateBuyModel = new ExchangeRateBuyModel();
@@ -29,9 +30,25 @@ async function calculationTransation(
     buyOptionId: number | undefined,
     sellPoint: number | undefined,
 ) {
-  let twd = 0;
-  let point = 0;
-  let bonusPoint = 0;
+  const res = {
+    twd: 0,
+    point: 0,
+    bonusPoint: 0,
+    firstBonusPoint: 0,
+    handlingFee: 0,
+    serviceFee: 0,
+    totalPoints: 0,
+    totalDollars: 0,
+  };
+
+  const transactionSetting = await transactionModel.readTransactionSetting();
+
+  if (transactionSetting) {
+    res.firstBonusPoint = transactionSetting.firstBonusPoint;
+    res.handlingFee = transactionSetting.handlingFee;
+    res.serviceFee = transactionSetting.serviceFee;
+  }
+
   if (bos === 1) {
     if (!buyOptionId) {
       throw new Error('bodyBuyOptionId not found');
@@ -41,9 +58,11 @@ async function calculationTransation(
     if (!setting) {
       throw new Error('bodyBuyOptionId not found');
     }
-    twd = setting.dollars;
-    point = setting.point;
-    bonusPoint = setting.bouns;
+    res.twd = setting.dollars;
+    res.point = setting.point;
+    res.bonusPoint = setting.bouns;
+    res.totalPoints = res.point + res.bonusPoint + res.firstBonusPoint;
+    res.totalDollars = res.twd + res.handlingFee + res.serviceFee;
   }
   if (bos === 2) {
     if (!sellPoint) {
@@ -54,11 +73,12 @@ async function calculationTransation(
     if (!setting) {
       throw new Error('sell setting no found');
     }
-    point = sellPoint;
-    twd = Math.floor(point / setting.rate);
+    res.point = sellPoint;
+    res.twd = Math.floor(res.point / setting.rate);
+    res.totalPoints = res.point;
+    res.totalDollars = res.twd - res.handlingFee - res.serviceFee;
   }
-
-  return [twd, point, bonusPoint];
+  return res;
 }
 
 // custom end import
@@ -85,13 +105,11 @@ export class TransactionService {
       /* todo throw error */
       return;
     }
-
-    const [twd, point, bonusPoint] = await calculationTransation(
+    const {twd, point, bonusPoint} = await calculationTransation(
         param.bodyBos,
         param.bodyBuyOptionId,
         param.bodyPoint,
     );
-
     const res = await this.transactionModel.createTransaction(
         param,
         {
@@ -165,15 +183,30 @@ export class TransactionService {
       session: Express.Request['session'],
   ) {
     // custom begin getTransactionCalculation
+    const {
+      twd,
+      point,
+      bonusPoint,
+      totalDollars,
+      totalPoints,
+      firstBonusPoint,
+      handlingFee,
+      serviceFee,
+    } = await calculationTransation(
+        param.bodyBos,
+        param.bodyBuyOptionId,
+        param.bodyPoint,
+    );
+
     return {
-      'totalPoints': 1,
-      'point': 1,
-      'bonusPoint': 1,
-      'firstBonusPoint': 1,
-      'totalDollars': 1,
-      'dollars': 1,
-      'handlingFee': 1,
-      'serviceFee': 1,
+      totalPoints,
+      point,
+      bonusPoint,
+      firstBonusPoint,
+      totalDollars,
+      dollars: twd,
+      handlingFee,
+      serviceFee,
     };
 
     // custom end getTransactionCalculation
@@ -264,7 +297,6 @@ export class TransactionService {
     if (!transaction) {
       throw new errors.NotFindError;
     }
-
     if (transaction.bos === 1) {
       const res = await this.transactionModel.getPayPhoto(
           param,
@@ -272,7 +304,6 @@ export class TransactionService {
       ).catch((e) =>{
         throw e;
       });
-
       if (res && res.qrCode) {
         const photo = await fs.readFile( res.qrCode, 'base64');
         return photo;
@@ -283,14 +314,11 @@ export class TransactionService {
       ).catch((e) =>{
         throw e;
       });
-
       if (res) {
         return res.data?.toString('base64');
       }
     }
-
     throw new errors.NotFindError;
-
 
     // custom end getPayPhoto
   }
@@ -307,13 +335,12 @@ export class TransactionService {
     ).catch((e) =>{
       throw e;
     });
+
+    // custom begin readOneTransaction2
     let name = null;
     let gameUid = null;
     let receiveName = null;
     let receiveGameUid = null;
-
-    // custom begin readOneTransaction2
-
     if (res.bos === 2) {
       name = res.user.name;
       gameUid = res.user.gameUid;
@@ -329,7 +356,6 @@ export class TransactionService {
         gameUid = res.transactionRecive.user.gameUid;
       }
     }
-
     const flatten ={
       name,
       gameUid,
@@ -339,6 +365,7 @@ export class TransactionService {
     delete res.user;
     delete res.transactionRecive;
     return Object.assign(res, flatten);
+
     // custom end readOneTransaction2
     return res;
   }

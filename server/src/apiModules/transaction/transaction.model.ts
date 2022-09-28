@@ -301,7 +301,6 @@ export class TransactionModel {
     }).finally(() => {
       prisma.$disconnect();
     });
-
     return res;
 
     // custom end getPayPhoto
@@ -343,6 +342,7 @@ export class TransactionModel {
             },
           },
         },
+
         // custom end readOneTransaction
       },
     }).catch((e) => {
@@ -472,7 +472,6 @@ export class TransactionModel {
     });
     return res;
   }
-
   async readTransaction(
       id: string,
   ) {
@@ -480,6 +479,15 @@ export class TransactionModel {
       where: {
         id,
       },
+    }).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+    return res;
+  }
+  async readTransactionSetting() {
+    const res = await prisma.transactionSetting.findFirst({
     }).catch((e) => {
       throw e;
     }).finally(() => {

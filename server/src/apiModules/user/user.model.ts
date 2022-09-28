@@ -205,7 +205,6 @@ export class UserModel {
       bodySignResonId: 'sign',
     } as const;
     console.log(param);
-    
     await prisma.$transaction(
         (Object.keys(resonMap) as (keyof typeof resonMap)[] )
             .map((key) => {

@@ -154,7 +154,7 @@ type GetTransactionCalculationReqBody = {
   bos: string,
 buyOptionId: string|undefined,
 payMethod: string,
-twd: string|undefined,
+point: string|undefined,
 }
 
 type GetTransactionCalculationReqQuery = {
@@ -178,7 +178,7 @@ export type GetTransactionCalculationParams = {
 bodyBos: number,
 bodyBuyOptionId: number|undefined,
 bodyPayMethod: number,
-bodyTwd: number|undefined,
+bodyPoint: number|undefined,
 }
 
 
@@ -192,7 +192,7 @@ export const GetTransactionCalculationRequestConvert = (
     bodyBos: parseInt(body.bos),
     bodyBuyOptionId: typeof body.buyOptionId === 'number' ? body.buyOptionId : undefined,
     bodyPayMethod: parseInt(body.payMethod),
-    bodyTwd: typeof body.twd === 'number' ? body.twd : undefined,
+    bodyPoint: typeof body.point === 'number' ? body.point : undefined,
   };
 };
 type GetExchangeRateBuyReqBody = {

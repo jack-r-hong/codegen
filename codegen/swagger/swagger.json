@@ -2439,7 +2439,11 @@
           "userLevel" : {
             "$ref" : "#/components/schemas/UserLevel",
             "default": 2
-          }  
+          },
+          "firstBonus" : {
+            "type": "boolean",
+            "default": false
+          }       
         }
       },
       "Referral" : {
@@ -3695,18 +3699,18 @@
               "properties" : {
                 "bos" : {
                   "$ref" : "#/components/schemas/Transaction/properties/bos"
-                },      
+                },    
                 "buyOptionId" : {
                   "type": "integer",
                   "nullable": true
-                },  
-                "twd" : {
+                },    
+                "point" : {
                   "type": "integer",
                   "nullable": true
-                },  
+                }, 
                 "payMethod": {
                   "$ref" : "#/components/schemas/Transaction/properties/payMethod"
-                }              
+                }
               }
             }
           }
