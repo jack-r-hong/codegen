@@ -108,5 +108,6 @@ export class ExchangeRateSellModel {
     });
     return res;
   }
+
   // custom end model
 }

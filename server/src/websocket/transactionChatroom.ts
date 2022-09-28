@@ -64,7 +64,7 @@ export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
         type: data.type,
         time: data.createdAt,
         name: data.name,
-        role: isAgent? 2: 1,
+        role: data.role,
         isSelf: userId === data.userId,
       };
     };
@@ -72,30 +72,28 @@ export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
         (message: any)=>{
           event.eventName = 'send';
           const data = JSON.parse(message);
-          data.name = userName;
-
-          data.userId = userId;
-          chatroomModel.createTransactionMessage(
-              transactionId,
-              userId,
-              data.type,
-              data.name?? '',
-              data.type === 'text'? data.data: '',
-            data.type === 'image'? Buffer.from(data.data, 'base64'): undefined,
-          ).then((e) => {
-            ws.send(event.msg(dataFormat(e)));
-          },
-          ).catch((e) => console.log(e),
-          );
+          ws.send(event.msg(dataFormat(data)));
         });
 
     ws.on('message', async function message(message: string) {
       const data = event.parse(message).data;
+      data.name = userName;
 
-      await wSCIModel.pub(
-          transactionId + 'chatroom',
-          JSON.stringify(data),
-      );
+      data.userId = userId;
+      chatroomModel.createTransactionMessage(
+          transactionId,
+          userId,
+          data.type,
+          data.name?? '',
+        data.type === 'text'? data.data: '',
+      data.type === 'image'? Buffer.from(data.data, 'base64'): undefined,
+      isAgent? 2: 1,
+      ).then((e) => {
+        wSCIModel.pub(
+            transactionId + 'chatroom',
+            JSON.stringify(e),
+        );
+      }).catch((e) => console.log(e));
     });
 
     event.eventName = 'ready';
@@ -109,8 +107,14 @@ export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
         }),
     ));
 
+    const timer = setInterval(() => {
+      event.eventName = 'bit';
+      // ws.send(event.msg('bit'));
+    }, 4000);
+
     ws.on('close', () => {
       wSCIModel.subscriberQuit(subscriber).then(()=> {});
+      clearInterval(timer);
     });
   };
 }

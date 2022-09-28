@@ -6,6 +6,7 @@ import * as sessions from '../../sessions';
 // custom end import
 
 
+
 export const createTransactionValidator: Schema = {
   'bankId': {
     in: 'body',
@@ -21,20 +22,20 @@ export const createTransactionValidator: Schema = {
   'buyOptionId': {
     in: 'body',
     isInt: true,
-    optional: {
-      options: {
-        nullable: true,
-      },
-    },
+optional: {
+  options: {
+    nullable: true,
+  },
+},
   },
   'image': {
     in: 'body',
     isString: true,
-    optional: {
-      options: {
-        nullable: true,
-      },
-    },
+optional: {
+  options: {
+    nullable: true,
+  },
+},
   },
   'payMethod': {
     in: 'body',
@@ -43,14 +44,14 @@ export const createTransactionValidator: Schema = {
       options: /^(1|2|3|4|5)/,
     },
   },
-  'twd': {
+  'point': {
     in: 'body',
     isInt: true,
-    optional: {
-      options: {
-        nullable: true,
-      },
-    },
+optional: {
+  options: {
+    nullable: true,
+  },
+},
   },
   'JSESSIONID': {
     in: 'cookies',
@@ -66,11 +67,11 @@ export const updateTransactionStateValidator: Schema = {
   'state': {
     in: 'body',
     isInt: true,
-    optional: {
-      options: {
-        nullable: true,
-      },
-    },
+optional: {
+  options: {
+    nullable: true,
+  },
+},
     matches: {
       options: /^(0|1|2|3|4)/,
     },
@@ -130,11 +131,11 @@ export const getTransactionCalculationValidator: Schema = {
   'buyOptionId': {
     in: 'body',
     isInt: true,
-    optional: {
-      options: {
-        nullable: true,
-      },
-    },
+optional: {
+  options: {
+    nullable: true,
+  },
+},
   },
   'payMethod': {
     in: 'body',
@@ -146,11 +147,11 @@ export const getTransactionCalculationValidator: Schema = {
   'twd': {
     in: 'body',
     isInt: true,
-    optional: {
-      options: {
-        nullable: true,
-      },
-    },
+optional: {
+  options: {
+    nullable: true,
+  },
+},
   },
   'JSESSIONID': {
     in: 'cookies',
@@ -288,11 +289,11 @@ export const updateTransactionValidator: Schema = {
   'state': {
     in: 'body',
     isInt: true,
-    optional: {
-      options: {
-        nullable: true,
-      },
-    },
+optional: {
+  options: {
+    nullable: true,
+  },
+},
     matches: {
       options: /^(0|1|2|3|4)/,
     },

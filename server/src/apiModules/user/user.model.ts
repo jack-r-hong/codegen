@@ -204,6 +204,8 @@ export class UserModel {
       bodySelfieResonId: 'selfie',
       bodySignResonId: 'sign',
     } as const;
+    console.log(param);
+    
     await prisma.$transaction(
         (Object.keys(resonMap) as (keyof typeof resonMap)[] )
             .map((key) => {
@@ -408,6 +410,7 @@ export class UserModel {
         password: true,
         userStatus: true,
         isAgent: true,
+        gameUid: true,
       },
     }).catch((e) => {
       throw e;

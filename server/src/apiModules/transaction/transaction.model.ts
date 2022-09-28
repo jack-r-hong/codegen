@@ -9,19 +9,9 @@ const prisma = new Prisma.PrismaClient();
 export class TransactionModel {
   async createTransaction(
       param: requestTypes.CreateTransactionParams,
-      customParam: {
-        userId: string,
-        bankAccount: number,
-        bankName: string,
-        bankCode: number,
-        twd: number,
-        point: number,
-        bonusPoint: number,
-        account: string
-      },
+      customParam: any,
   ) {
     // custom begin createTransaction
-
     const res: any = await prisma.$transaction([
       prisma.transaction.create({
         data: {
@@ -74,7 +64,6 @@ export class TransactionModel {
     }).finally(() => {
       prisma.$disconnect();
     });
-
     return res[0];
 
     // custom end createTransaction
@@ -295,7 +284,7 @@ export class TransactionModel {
       customParam: any,
   ) {
     // custom begin getPayPhoto
-    const res: any | null = await prisma.payManage.findFirst({
+    const res = await prisma.payManage.findFirst({
       where: {
         user: {
           transactionRecive: {
@@ -312,7 +301,7 @@ export class TransactionModel {
     }).finally(() => {
       prisma.$disconnect();
     });
-    console.log(res);
+
     return res;
 
     // custom end getPayPhoto
@@ -338,7 +327,22 @@ export class TransactionModel {
         state: true,
         twd: true,
         // custom begin readOneTransaction
-
+        user: {
+          select: {
+            name: true,
+            gameUid: true,
+          },
+        },
+        transactionRecive: {
+          select: {
+            user: {
+              select: {
+                name: true,
+                gameUid: true,
+              },
+            },
+          },
+        },
         // custom end readOneTransaction
       },
     }).catch((e) => {
@@ -395,7 +399,7 @@ export class TransactionModel {
   // custom begin model
   async readRealtimeTransaction(
       userId: string,
-      state: 'pending' | 'processing',
+      state: 'pending' | 'processing' | 'failed',
   ) {
     let where: any = undefined;
     if (state === 'pending') {
@@ -408,6 +412,13 @@ export class TransactionModel {
           gt: 1,
           lt: 4,
         },
+        transactionRecive: {
+          userId,
+        },
+      };
+    } else {
+      where = {
+        state: 0,
         transactionRecive: {
           userId,
         },
@@ -432,6 +443,7 @@ export class TransactionModel {
           },
         },
       },
+      take: 20,
     }).catch((e) => {
       throw e;
     }).finally(() => {
@@ -446,13 +458,27 @@ export class TransactionModel {
       return t;
     });
   }
-
   async readTransactionQrcode(
       userId: string,
   ) {
     const res = await prisma.transactionQrcode.findUnique({
       where: {
         userId,
+      },
+    }).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+    return res;
+  }
+
+  async readTransaction(
+      id: string,
+  ) {
+    const res = await prisma.transaction.findUnique({
+      where: {
+        id,
       },
     }).catch((e) => {
       throw e;

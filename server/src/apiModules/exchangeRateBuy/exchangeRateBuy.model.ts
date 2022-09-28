@@ -111,5 +111,6 @@ export class ExchangeRateBuyModel {
     });
     return res;
   }
+
   // custom end model
 }

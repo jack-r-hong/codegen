@@ -88,8 +88,14 @@ export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
       image: await getQrcode(userId as string),
     }));
 
+    const timer = setInterval(() => {
+      event.eventName = 'bit';
+      // ws.send(event.msg('bit'));
+    }, 4000);
+
     ws.on('close', () => {
       wSCIModel.subscriberQuit(subscriber).then(()=> {});
+      clearInterval(timer);
     });
   };
 }

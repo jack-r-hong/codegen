@@ -20,7 +20,7 @@ bos: string,
 buyOptionId: string|undefined,
 image: string|undefined,
 payMethod: string,
-twd: string|undefined,
+point: string|undefined,
 }
 
 type CreateTransactionReqQuery = {
@@ -46,7 +46,7 @@ bodyBos: number,
 bodyBuyOptionId: number|undefined,
 bodyImage: string|undefined,
 bodyPayMethod: number,
-bodyTwd: number|undefined,
+bodyPoint: number|undefined,
 }
 
 
@@ -62,7 +62,7 @@ export const CreateTransactionRequestConvert = (
     bodyBuyOptionId: typeof body.buyOptionId === 'number' ? body.buyOptionId : undefined,
     bodyImage: body.image,
     bodyPayMethod: parseInt(body.payMethod),
-    bodyTwd: typeof body.twd === 'number' ? body.twd : undefined,
+    bodyPoint: typeof body.point === 'number' ? body.point : undefined,
   };
 };
 type UpdateTransactionStateReqBody = {

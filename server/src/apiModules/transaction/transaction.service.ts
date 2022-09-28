@@ -4,6 +4,7 @@ import * as requestTypes from './transaction.parameters';
 import {errors} from '../../errors';
 // custom begin import
 import {promises as fs} from 'fs';
+import * as Prisma from '@prisma/client';
 import {Container} from 'typedi';
 import {WSClientIdModel,
   WSClientTransactionModel} from '../../redisClient/models/webSocketModels';
@@ -23,43 +24,41 @@ const payMethodMap = {
   3: '超商儲值',
   4: 'ATM轉帳',
 };
-
 async function calculationTransation(
-    bos: 1|2,
+    bos: number,
     buyOptionId: number | undefined,
-    sellTwd: number | undefined,
+    sellPoint: number | undefined,
 ) {
   let twd = 0;
   let point = 0;
   let bonusPoint = 0;
-
   if (bos === 1) {
     if (!buyOptionId) {
       throw new Error('bodyBuyOptionId not found');
     }
-    const setting = await exchangeRateBuyModel.readExchangeRateBuyById(buyOptionId);
+    const setting =
+      await exchangeRateBuyModel.readExchangeRateBuyById(buyOptionId);
     if (!setting) {
       throw new Error('bodyBuyOptionId not found');
     }
-
     twd = setting.dollars;
     point = setting.point;
     bonusPoint = setting.bouns;
-    console.log(twd, point, bonusPoint);
   }
-
   if (bos === 2) {
-    if (!sellTwd) {
-      throw new Error('twd not found');
+    if (!sellPoint) {
+      throw new Error('point not found');
     }
-    const setting = await exchangeRateSellModel.readExchangeRateSellById(1);
+    const setting =
+      await exchangeRateSellModel.readExchangeRateSellById(sellPoint);
     if (!setting) {
-      throw new Error('twd not found');
+      throw new Error('sell setting no found');
     }
-
-    twd = sellTwd;
-    point = twd * setting.rate;
+    point = sellPoint;
+    twd = Math.floor(point / setting.rate);
   }
+
+  return [twd, point, bonusPoint];
 }
 
 // custom end import
@@ -78,50 +77,20 @@ export class TransactionService {
     const dbBankData = await bankAccountModel.readOneBankAccount(
         {pathId: param.bodyBankId},
     );
-
     const dbUserData = await userModel.getUserMyStatus(
         {},
         {userId: session.userInfo?.id!},
     );
-
     if (!dbBankData || !dbUserData) {
       /* todo throw error */
       return;
     }
 
-    let twd = 0;
-    let point = 0;
-    let bonusPoint = 0;
-
-    if (param.bodyBos === 1) {
-      if (!param.bodyBuyOptionId) {
-        throw new Error('bodyBuyOptionId not found');
-      }
-      const setting = await exchangeRateBuyModel.readExchangeRateBuyById(param.bodyBuyOptionId);
-      if (!setting) {
-        throw new Error('bodyBuyOptionId not found');
-      }
-
-      twd = setting.dollars;
-      point = setting.point;
-      bonusPoint = setting.bouns;
-      console.log(twd, point, bonusPoint);
-    }
-
-    if (param.bodyBos === 2) {
-      if (!param.bodyTwd) {
-        throw new Error('twd not found');
-      }
-      const setting = await exchangeRateSellModel.readExchangeRateSellById(param.bodyTwd);
-      console.log(setting);
-      
-      if (!setting) {
-        throw new Error('twd not found');
-      }
-
-      twd = param.bodyTwd;
-      point = twd * setting.rate;
-    }
+    const [twd, point, bonusPoint] = await calculationTransation(
+        param.bodyBos,
+        param.bodyBuyOptionId,
+        param.bodyPoint,
+    );
 
     const res = await this.transactionModel.createTransaction(
         param,
@@ -138,7 +107,6 @@ export class TransactionService {
     ).catch((e) =>{
       throw e;
     });
-
     await wSCTModel.pub(JSON.stringify({}));
     return res;
 
@@ -291,17 +259,38 @@ export class TransactionService {
       session: Express.Request['session'],
   ) {
     // custom begin getPayPhoto
-    const res = await this.transactionModel.getPayPhoto(
-        param,
-        {userId: session.userInfo?.id},
-    ).catch((e) =>{
-      throw e;
-    });
-    if (res && res.qrCode) {
-      const photo = await fs.readFile( res.qrCode, 'base64');
-      return photo;
+    const transaction = await this.transactionModel.readTransaction(
+        param.queryTransactionId);
+    if (!transaction) {
+      throw new errors.NotFindError;
     }
+
+    if (transaction.bos === 1) {
+      const res = await this.transactionModel.getPayPhoto(
+          param,
+          {userId: session.userInfo?.id},
+      ).catch((e) =>{
+        throw e;
+      });
+
+      if (res && res.qrCode) {
+        const photo = await fs.readFile( res.qrCode, 'base64');
+        return photo;
+      }
+    } else {
+      const res = await this.transactionModel.readTransactionQrcode(
+          transaction.userId,
+      ).catch((e) =>{
+        throw e;
+      });
+
+      if (res) {
+        return res.data?.toString('base64');
+      }
+    }
+
     throw new errors.NotFindError;
+
 
     // custom end getPayPhoto
   }
@@ -318,9 +307,38 @@ export class TransactionService {
     ).catch((e) =>{
       throw e;
     });
+    let name = null;
+    let gameUid = null;
+    let receiveName = null;
+    let receiveGameUid = null;
 
     // custom begin readOneTransaction2
 
+    if (res.bos === 2) {
+      name = res.user.name;
+      gameUid = res.user.gameUid;
+      if (res.transactionRecive) {
+        receiveName = res.transactionRecive.user.name;
+        receiveGameUid = res.transactionRecive.user.gameUid;
+      }
+    } else {
+      receiveName = res.user.name;
+      receiveGameUid = res.user.gameUid;
+      if (res.transactionRecive) {
+        name = res.transactionRecive.user.name;
+        gameUid = res.transactionRecive.user.gameUid;
+      }
+    }
+
+    const flatten ={
+      name,
+      gameUid,
+      receiveName,
+      receiveGameUid,
+    };
+    delete res.user;
+    delete res.transactionRecive;
+    return Object.assign(res, flatten);
     // custom end readOneTransaction2
     return res;
   }

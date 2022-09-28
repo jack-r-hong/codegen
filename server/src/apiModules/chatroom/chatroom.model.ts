@@ -75,6 +75,7 @@ export class ChatroomModel {
       name: string,
       text: string,
       data: Buffer | undefined,
+      role: number,
   ) {
     const res = await prisma.transactionChatroom.create({
       data: {
@@ -84,6 +85,7 @@ export class ChatroomModel {
         type,
         name,
         text,
+        role,
       },
     }).catch((e) => {
       throw e;

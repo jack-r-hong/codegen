@@ -18,10 +18,16 @@ const getNewData = async (userId: string) => {
 
   const resProcessing = await transactionModel.readRealtimeTransaction(
         userId as string, 'processing');
+  const resFailed = await transactionModel.readRealtimeTransaction(
+          userId as string, 'failed');
 
   return {
+    dollars: 0,
+    point: 0,
+    orderCount: 0,
     pending: resPending,
     processing: resProcessing,
+    failed: resFailed,
   };
 };
 
@@ -69,7 +75,6 @@ export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
         async (message: any)=>{
           event.eventName = 'update';
           const d = JSON.parse(message);
-          console.log('subscriber realtime_transaction');
 
           ws.send(event.msg(await getNewData(userId as string)));
         });
@@ -77,8 +82,14 @@ export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
     event.eventName = 'ready';
     ws.send(event.msg(await getNewData(userId as string)));
 
+    const timer = setInterval(() => {
+      event.eventName = 'bit';
+      // ws.send(event.msg('bit'));
+    }, 4000);
+
     ws.on('close', () => {
       wSCIModel.subscriberQuit(subscriber).then(()=> {});
+      clearInterval(timer);
     });
   };
 }

@@ -2851,8 +2851,8 @@
           "state" : {
             "type" : "integer",
             "format" : "int32",
-            "description" : "status map:\n  * `0` - Failed\n * `1` - Pending\n * `2` - Pair Completed\n * `3` - Pay or recive Completed\n * `4` - Completed\n",
-            "enum" : [0, 1, 2, 3, 4],
+            "description" : "status map:\n  * `0` - Failed\n * `1` - Pending\n * `2` - Pair Completed\n * `3` - Pay or recive Completed\n * `4` - Completed\n * `5` - TiimeOutCancel\n * `6` - 申訴\n",
+            "enum" : [0, 1, 2, 3, 4, 5, 6],
             "default": 1
           },                        
           "createdAt" : {
