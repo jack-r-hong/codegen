@@ -15,7 +15,7 @@ export class TransactionModel {
     const res: any = await prisma.$transaction([
       prisma.transaction.create({
         data: {
-          account: '',
+          account: customParam.account,
           bonusPoint: customParam.bonusPoint,
           bos: param.bodyBos,
           point: customParam.point,
@@ -25,6 +25,10 @@ export class TransactionModel {
           bankCode: customParam.bankCode,
           bankName: customParam.bankName,
           payMethod: param.bodyPayMethod,
+          handlingFee: customParam.handlingFee,
+          serviceFee: customParam.serviceFee,
+          totalDollars: customParam.totalDollars,
+          totalPoints: customParam.totalPoints,
         },
         select: {
           id: true,
@@ -488,6 +492,39 @@ export class TransactionModel {
   }
   async readTransactionSetting() {
     const res = await prisma.transactionSetting.findFirst({
+    }).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+    return res;
+  }
+  async readUserFirstBonus(id: string) {
+    const res = await prisma.user.findUnique({
+      where: {
+        id,
+      },
+      select: {
+        firstBonus: true,
+      },
+    }).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+    return res;
+  }
+  async updateUserFirstBonus(id: string, firstBonus: boolean) {
+    const res = await prisma.user.update({
+      where: {
+        id,
+      },
+      data: {
+        firstBonus,
+      },
+      select: {
+        firstBonus: true,
+      },
     }).catch((e) => {
       throw e;
     }).finally(() => {

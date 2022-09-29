@@ -144,10 +144,14 @@ model Transaction {
   bonusPoint  Int  @map("bonus_point")                 
   bos  Int  @map("bos")                 
   createdAt  DateTime  @default(now()) @map("created_at")                 
+  handlingFee  Int  @map("handling_fee")                 
   id  String @id @default(uuid()) @map("id")                 
   payMethod  Int  @map("pay_method")                 
   point  Int  @map("point")                 
+  serviceFee  Int  @map("service_fee")                 
   state  Int  @default(1)  @map("state")                 
+  totalDollars  Int  @map("total_dollars")                 
+  totalPoints  Int  @map("total_points")                 
   twd  Int  @map("twd")                 
   transactionRecive TransactionRecive?
   user User? @relation(fields: [userId], references: [id])
@@ -176,6 +180,7 @@ model User {
   city  String?   @map("city")                 
   country  String?   @map("country")                 
   createdAt  DateTime  @default(now()) @map("created_at")                 
+  firstBonus  Boolean  @default(true)  @map("first_bonus")                 
   gameUid  String?   @map("game_uid")                 
   id  String @id @default(uuid()) @map("id")                 
   idCard  String?   @map("id_card")                 
@@ -322,17 +327,13 @@ model TransactionQrcode {
   data Bytes? @map("data") @db.MediumBlob
   @@map("transactionQrcode")
 }
-
 model TransactionSetting {
   id  Int @id @default(autoincrement()) @map("id")       
   firstBonusPoint Int  @map("first_bonus_point")  
   handlingFee Int  @map("handling_fee")  
   serviceFee Int  @map("service_fee")  
-    
   @@map("transactionSetting")
 }
-
-
 
 // custom end model
 

@@ -29,6 +29,7 @@ async function calculationTransation(
     bos: number,
     buyOptionId: number | undefined,
     sellPoint: number | undefined,
+    userId: string,
 ) {
   const res = {
     twd: 0,
@@ -40,15 +41,12 @@ async function calculationTransation(
     totalPoints: 0,
     totalDollars: 0,
   };
-
   const transactionSetting = await transactionModel.readTransactionSetting();
-
   if (transactionSetting) {
     res.firstBonusPoint = transactionSetting.firstBonusPoint;
     res.handlingFee = transactionSetting.handlingFee;
     res.serviceFee = transactionSetting.serviceFee;
   }
-
   if (bos === 1) {
     if (!buyOptionId) {
       throw new Error('bodyBuyOptionId not found');
@@ -57,6 +55,10 @@ async function calculationTransation(
       await exchangeRateBuyModel.readExchangeRateBuyById(buyOptionId);
     if (!setting) {
       throw new Error('bodyBuyOptionId not found');
+    }
+    const firstBonus = await transactionModel.readUserFirstBonus(userId);
+    if (!firstBonus || !firstBonus.firstBonus) {
+      res.firstBonusPoint = 0;
     }
     res.twd = setting.dollars;
     res.point = setting.point;
@@ -105,11 +107,26 @@ export class TransactionService {
       /* todo throw error */
       return;
     }
-    const {twd, point, bonusPoint} = await calculationTransation(
+    const {
+      twd,
+      point,
+      bonusPoint,
+      firstBonusPoint,
+      handlingFee,
+      serviceFee,
+      totalDollars,
+      totalPoints,
+    } = await calculationTransation(
         param.bodyBos,
         param.bodyBuyOptionId,
         param.bodyPoint,
+        session.userInfo!.id,
     );
+    if (firstBonusPoint !== 0) {
+      await this.transactionModel.updateUserFirstBonus(
+        session.userInfo?.id!,
+        false);
+    }
     const res = await this.transactionModel.createTransaction(
         param,
         {
@@ -119,8 +136,12 @@ export class TransactionService {
           bankCode: dbBankData.code,
           twd,
           point,
-          bonusPoint,
+          bonusPoint: bonusPoint + firstBonusPoint,
           account: dbUserData.gameUid??'',
+          handlingFee,
+          serviceFee,
+          totalDollars,
+          totalPoints,
         },
     ).catch((e) =>{
       throw e;
@@ -196,8 +217,8 @@ export class TransactionService {
         param.bodyBos,
         param.bodyBuyOptionId,
         param.bodyPoint,
+        session.userInfo!.id,
     );
-
     return {
       totalPoints,
       point,
