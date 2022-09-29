@@ -2892,7 +2892,7 @@
           },
           "totalPoints" : {
             "type" : "integer"
-          }   
+          }
         }
       },
       "TransactionRecive" : {
@@ -3451,16 +3451,20 @@
                         "enum": [1,2,3]
                       },   
                       "nameResonId" : {
-                        "type" : "integer"
+                        "type" : "integer",
+                        "nullable": true
                       },
                       "codeResonId" : {
-                        "type" : "integer"
+                        "type" : "integer",
+                        "nullable": true
                       },
                       "accountResonId" : {
-                        "type" : "integer"
+                        "type" : "integer",
+                        "nullable": true
                       },   
                       "photoResonId" : {
-                        "type" : "integer"
+                        "type" : "integer",
+                        "nullable": true
                       }                                                                                                             
                     }                
                   }                  
@@ -3965,6 +3969,12 @@
                   "type" : "string",
                   "nullable" : true
                 },
+                "lineId" : {
+                  "type" : "string"
+                },
+                "gameUid" : {
+                  "type" : "string"
+                },                                
                 "userVerifyPhoto": {
                   "type" : "array",
                   "items":{ 

@@ -72,7 +72,7 @@ export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
         (message: any)=>{
           event.eventName = 'send';
           const data = JSON.parse(message);
-          ws.send(event.msg(dataFormat(data)));
+          ws.send(event.msg(data));
         });
 
     ws.on('message', async function message(message: string) {
@@ -91,7 +91,7 @@ export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
       ).then((e) => {
         wSCIModel.pub(
             transactionId + 'chatroom',
-            JSON.stringify(e),
+            JSON.stringify(dataFormat(e)),
         );
       }).catch((e) => console.log(e));
     });

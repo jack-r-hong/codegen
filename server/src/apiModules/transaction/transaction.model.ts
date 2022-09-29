@@ -136,6 +136,10 @@ export class TransactionModel {
         account: true,
         payMethod: true,
         createdAt: true,
+        totalDollars: true,
+        totalPoints: true,
+        serviceFee: true,
+        handlingFee: true,
       },
       orderBy: {
         [param.queryOrderByField]: param.queryOrderBy,
@@ -328,10 +332,14 @@ export class TransactionModel {
         bonusPoint: true,
         bos: true,
         createdAt: true,
+        handlingFee: true,
         id: true,
         payMethod: true,
         point: true,
+        serviceFee: true,
         state: true,
+        totalDollars: true,
+        totalPoints: true,
         twd: true,
         // custom begin readOneTransaction
         user: {
@@ -444,6 +452,10 @@ export class TransactionModel {
         account: true,
         payMethod: true,
         createdAt: true,
+        totalDollars: true,
+        totalPoints: true,
+        serviceFee: true,
+        handlingFee: true,
         user: {
           select: {
             name: true,
@@ -503,6 +515,7 @@ export class TransactionModel {
       },
       select: {
         userId: true,
+        state: true,
         transactionRecive: {
           select: {
             userId: true,

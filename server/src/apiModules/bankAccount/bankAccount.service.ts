@@ -103,30 +103,32 @@ export class BankAccountService {
         name: '',
       },
     ];
-    for (const e of res[0].user.userVerifyPhoto) {
-      const data = await fs.readFile(e.path, 'base64')
-          .catch(() => {
-            return '';
-          });
-      switch (e.type) {
-        case 7:
-          bankAccounts[0] = {
-            data,
-            name: 'bankAccount1',
-          };
-          break;
-        case 8:
-          bankAccounts[1] = {
-            data,
-            name: 'bankAccount2',
-          };
-          break;
-        case 9:
-          bankAccounts[2] = {
-            data,
-            name: 'bankAccount3',
-          };
-          break;
+    if (res[0] && res[0].user) {
+      for (const e of res[0].user.userVerifyPhoto) {
+        const data = await fs.readFile(e.path, 'base64')
+            .catch(() => {
+              return '';
+            });
+        switch (e.type) {
+          case 7:
+            bankAccounts[0] = {
+              data,
+              name: 'bankAccount1',
+            };
+            break;
+          case 8:
+            bankAccounts[1] = {
+              data,
+              name: 'bankAccount2',
+            };
+            break;
+          case 9:
+            bankAccounts[2] = {
+              data,
+              name: 'bankAccount3',
+            };
+            break;
+        }
       }
     }
     return res.map((e: any) => {
@@ -160,7 +162,7 @@ export class BankAccountService {
         verifyDes[element.field] = element.bankAccountVerifyReson.des;
       });
       return {
-        id,
+        id: verify.id,
         account: {
           val: account,
           des: verifyDes.account,

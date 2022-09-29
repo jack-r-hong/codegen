@@ -234,13 +234,13 @@ export type PutBackstageBankAccountsParams = {
       pathUserId: string
         bodyDataList: {
             bodyAccount: number,
-            bodyAccountResonId: number,
+            bodyAccountResonId: number|undefined,
             bodyCode: number,
-            bodyCodeResonId: number,
+            bodyCodeResonId: number|undefined,
             bodyName: number,
-            bodyNameResonId: number,
+            bodyNameResonId: number|undefined,
             bodyPhoto: number,
-            bodyPhotoResonId: number,
+            bodyPhotoResonId: number|undefined,
             bodyVerifyId: number,
         }[],
 }
@@ -257,13 +257,13 @@ export const PutBackstageBankAccountsRequestConvert = (
     bodyDataList: body.dataList.map((body :any) => {
       return {
         bodyAccount: parseInt(body.account),
-        bodyAccountResonId: parseInt(body.accountResonId),
+        bodyAccountResonId: typeof body.accountResonId === 'number' ? body.accountResonId : undefined,
         bodyCode: parseInt(body.code),
-        bodyCodeResonId: parseInt(body.codeResonId),
+        bodyCodeResonId: typeof body.codeResonId === 'number' ? body.codeResonId : undefined,
         bodyName: parseInt(body.name),
-        bodyNameResonId: parseInt(body.nameResonId),
+        bodyNameResonId: typeof body.nameResonId === 'number' ? body.nameResonId : undefined,
         bodyPhoto: parseInt(body.photo),
-        bodyPhotoResonId: parseInt(body.photoResonId),
+        bodyPhotoResonId: typeof body.photoResonId === 'number' ? body.photoResonId : undefined,
         bodyVerifyId: parseInt(body.verifyId),
       };
     }),

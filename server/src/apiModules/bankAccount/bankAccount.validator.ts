@@ -58,6 +58,11 @@ export const putBackstageBankAccountsValidator: Schema = {
   },
   'dataList.*.accountResonId': {
     isInt: true,
+optional: {
+  options: {
+    nullable: true,
+  },
+},
   },
   'dataList.*.code': {
     isInt: true,
@@ -67,6 +72,11 @@ export const putBackstageBankAccountsValidator: Schema = {
   },
   'dataList.*.codeResonId': {
     isInt: true,
+optional: {
+  options: {
+    nullable: true,
+  },
+},
   },
   'dataList.*.name': {
     isInt: true,
@@ -76,6 +86,11 @@ export const putBackstageBankAccountsValidator: Schema = {
   },
   'dataList.*.nameResonId': {
     isInt: true,
+optional: {
+  options: {
+    nullable: true,
+  },
+},
   },
   'dataList.*.photo': {
     isInt: true,
@@ -85,6 +100,11 @@ export const putBackstageBankAccountsValidator: Schema = {
   },
   'dataList.*.photoResonId': {
     isInt: true,
+optional: {
+  options: {
+    nullable: true,
+  },
+},
   },
   'dataList.*.verifyId': {
     isInt: true,

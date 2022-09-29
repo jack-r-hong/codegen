@@ -87,7 +87,7 @@ export class BankAccountModel {
       customParam: any,
   ) {
     // custom begin getBackstageBankAccounts
-    const res: any | null = await prisma.bankAccount.findMany({
+    const res = await prisma.bankAccount.findMany({
       where: {
         userId: param.pathUserId,
       },
@@ -146,6 +146,7 @@ export class BankAccountModel {
   ) {
     // custom begin putBackstageBankAccounts
     const transactionArray :any[] = [];
+    console.log(param);
     const upsertQuery = (verifyId: number, resonId: number, field: string ) => {
       return prisma.bankAccountVerifyResonDes.upsert({
         where: {
@@ -160,6 +161,14 @@ export class BankAccountModel {
         },
         create: {
           bankAccountVerifyResonId: resonId,
+          field,
+          bankAccountVerifyId: verifyId,
+        },
+      });
+    };
+    const deleteQuery = (verifyId: number, field: string ) => {
+      return prisma.bankAccountVerifyResonDes.deleteMany({
+        where: {
           field,
           bankAccountVerifyId: verifyId,
         },
@@ -183,23 +192,46 @@ export class BankAccountModel {
         transactionArray.push(
             upsertQuery(e.bodyVerifyId, e.bodyAccountResonId, 'account'),
         );
+      } else {
+        transactionArray.push(
+            deleteQuery(e.bodyVerifyId, 'account'),
+        );
       }
       if (e.bodyCodeResonId) {
         transactionArray.push(
             upsertQuery(e.bodyVerifyId, e.bodyCodeResonId, 'code'),
+        );
+      } else {
+        transactionArray.push(
+            deleteQuery(e.bodyVerifyId, 'code'),
         );
       }
       if (e.bodyNameResonId) {
         transactionArray.push(
             upsertQuery(e.bodyVerifyId, e.bodyNameResonId, 'name'),
         );
+      } else {
+        transactionArray.push(
+            deleteQuery(e.bodyVerifyId, 'name'),
+        );
       }
       if (e.bodyPhotoResonId) {
         transactionArray.push(
             upsertQuery(e.bodyVerifyId, e.bodyPhotoResonId, 'photo'),
         );
+      } else {
+        transactionArray.push(
+            deleteQuery(e.bodyVerifyId, 'photo'),
+        );
       }
     }
+    const res = await prisma.$transaction(transactionArray)
+        .catch((e) => {
+          throw e;
+        }).finally(() => {
+          prisma.$disconnect();
+        });
+    return res;
 
     // custom end putBackstageBankAccounts
   }
