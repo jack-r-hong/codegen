@@ -246,7 +246,7 @@ export class UserModel {
   async readOneBackstageUser(
       param: requestTypes.ReadOneBackstageUserParams,
   ) {
-    const res: any | null = await prisma.user.findUnique({
+    const res = await prisma.user.findUnique({
       where: {
         id: param.pathId,
       },
@@ -358,7 +358,7 @@ export class UserModel {
   async readManyUserBackstage(
       param: requestTypes.ReadManyUserBackstageParams,
   ) {
-    const res: any[] | null = await prisma.user.findMany({
+    const res = await prisma.user.findMany({
       where: {
       },
       select: {
@@ -776,7 +776,7 @@ export class UserModel {
   async updateOneyUser(
       param: requestTypes.UpdateOneyUserParams,
   ) {
-    const res: Prisma.User | null = await prisma.user.update({
+    const res = await prisma.user.update({
       where: {
         id: param.pathId,
       },

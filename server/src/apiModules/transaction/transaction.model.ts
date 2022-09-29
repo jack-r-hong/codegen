@@ -320,7 +320,7 @@ export class TransactionModel {
   async readOneTransaction(
       param: requestTypes.ReadOneTransactionParams,
   ) {
-    const res: any | null = await prisma.transaction.findUnique({
+    const res = await prisma.transaction.findUnique({
       where: {
         id: param.pathId,
       },
@@ -482,7 +482,6 @@ export class TransactionModel {
       userId: string,
   ) {
     console.log(userId);
-
     const res = await prisma.transaction.aggregate({
       where: {
         OR: [
@@ -490,7 +489,6 @@ export class TransactionModel {
             transactionRecive: {
               userId,
             },
-
           },
           {
             userId,
@@ -510,9 +508,7 @@ export class TransactionModel {
     }).finally(() => {
       prisma.$disconnect();
     });
-
     console.log(res);
-
     return {
       dollars: res._sum.totalDollars,
       point: res._sum.totalPoints,

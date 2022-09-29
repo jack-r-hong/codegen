@@ -188,7 +188,6 @@ export class BankAccountModel {
             },
           }),
       );
-
       if (e.bodyAccountResonId) {
         transactionArray.push(
             upsertQuery(e.bodyVerifyId, e.bodyAccountResonId, 'account'),
@@ -300,7 +299,7 @@ export class BankAccountModel {
   async readOneBankAccount(
       param: requestTypes.ReadOneBankAccountParams,
   ) {
-    const res: any | null = await prisma.bankAccount.findUnique({
+    const res = await prisma.bankAccount.findUnique({
       where: {
         id: param.pathId,
       },

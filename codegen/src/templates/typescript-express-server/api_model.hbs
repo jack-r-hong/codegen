@@ -6,7 +6,7 @@ import {errors} from '../../errors';
 const prisma = new Prisma.PrismaClient();
 
 {{~#*inline "createOne"}}
-    const res: Prisma.{{fpc ../../tag}} | null = await prisma.{{../../tag}}.create({
+    const res = await prisma.{{../../tag}}.create({
       data: {
       {{#if d.requestBody.content.[application/json].schema.type}}
         {{#if (equal d.requestBody.content.[application/json].schema.type "object") }}
@@ -38,7 +38,7 @@ const prisma = new Prisma.PrismaClient();
       };
     });
 
-    const res: any = await prisma.{{../../tag}}.createMany({
+    const res = await prisma.{{../../tag}}.createMany({
       data,
       skipDuplicates: true,
     }).catch((e) => {
@@ -49,7 +49,7 @@ const prisma = new Prisma.PrismaClient();
 {{/inline}}
 
 {{~#*inline "readOne"}}
-    const res: any | null = await prisma.{{../../tag}}.findUnique({
+    const res = await prisma.{{../../tag}}.findUnique({
       where: {
         {{#each d.parameters}}
         {{name}}: param.{{in}}{{fpc name}},
@@ -86,7 +86,7 @@ const prisma = new Prisma.PrismaClient();
 {{/inline}}
 
 {{~#*inline "readMany"}}
-    const res: any[] | null = await prisma.{{../../tag}}.findMany({
+    const res = await prisma.{{../../tag}}.findMany({
       where: {
       {{#each d.parameters}}
         {{#if (equal name "orderBy") (equal name "orderByField")}}
@@ -136,7 +136,7 @@ const prisma = new Prisma.PrismaClient();
 {{/inline}}
 
 {{~#*inline "updateOne"}}
-    const res: Prisma.{{fpc ../../tag}} | null = await prisma.{{../../tag}}.update({
+    const res = await prisma.{{../../tag}}.update({
       where: {
         {{#each d.parameters}}
         {{name}}: param.{{in}}{{fpc name}},
@@ -192,7 +192,7 @@ const prisma = new Prisma.PrismaClient();
 {{/inline}}
 
 {{~#*inline "deleteOne"}}
-    const res: Prisma.{{fpc ../../tag}} | null = await prisma.{{../../tag}}.delete({
+    const res = await prisma.{{../../tag}}.delete({
       where: {
         {{#each d.parameters}}
         {{name}}: param.{{in}}{{fpc name}},

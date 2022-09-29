@@ -10,7 +10,7 @@ export class PayManageModel {
   async readManyBackstagePayManage(
       param: requestTypes.ReadManyBackstagePayManageParams,
   ) {
-    const res: any[] | null = await prisma.payManage.findMany({
+    const res = await prisma.payManage.findMany({
       where: {
     type: param.queryType,
     userId: param.queryUserId,
@@ -112,7 +112,7 @@ export class PayManageModel {
   async deleteOneBackstagePayManage(
       param: requestTypes.DeleteOneBackstagePayManageParams,
   ) {
-    const res: Prisma.PayManage | null = await prisma.payManage.delete({
+    const res = await prisma.payManage.delete({
       where: {
         id: param.pathId,
       },

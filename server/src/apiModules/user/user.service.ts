@@ -697,9 +697,7 @@ export class UserService {
       phonePrefix,
       phone,
     };
-
     getPhoneCheck(phonePrefix, phone, code ).then(()=>{
-
     });
 
     // custom end phoneCheck

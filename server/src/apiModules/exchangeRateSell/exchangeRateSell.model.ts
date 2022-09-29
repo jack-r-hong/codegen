@@ -10,7 +10,7 @@ export class ExchangeRateSellModel {
   async readManyBackstageExchangeRateSell(
       param: requestTypes.ReadManyBackstageExchangeRateSellParams,
   ) {
-    const res: any[] | null = await prisma.exchangeRateSell.findMany({
+    const res = await prisma.exchangeRateSell.findMany({
       where: {
       },
       select: {
@@ -39,7 +39,7 @@ export class ExchangeRateSellModel {
   async createOneBackstageExchangeRateSell(
       param: requestTypes.CreateOneBackstageExchangeRateSellParams,
   ) {
-    const res: Prisma.ExchangeRateSell | null = await prisma.exchangeRateSell.create({
+    const res = await prisma.exchangeRateSell.create({
       data: {
         des: param.bodyDes,
         rangeLower: param.bodyRangeLower,
@@ -57,7 +57,7 @@ export class ExchangeRateSellModel {
   async deleteOneBackstageExchangeRateSell(
       param: requestTypes.DeleteOneBackstageExchangeRateSellParams,
   ) {
-    const res: Prisma.ExchangeRateSell | null = await prisma.exchangeRateSell.delete({
+    const res = await prisma.exchangeRateSell.delete({
       where: {
         id: param.pathId,
       },
@@ -71,7 +71,7 @@ export class ExchangeRateSellModel {
   async updateOneBackstageExchangeRateSell(
       param: requestTypes.UpdateOneBackstageExchangeRateSellParams,
   ) {
-    const res: Prisma.ExchangeRateSell | null = await prisma.exchangeRateSell.update({
+    const res = await prisma.exchangeRateSell.update({
       where: {
         id: param.pathId,
       },

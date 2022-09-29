@@ -401,7 +401,6 @@ export class TransactionService {
     if (!thisTransaciotn) {
       throw new errors.NotFindError('thisTransaciotn');
     }
-
     const {bos, userId, state, transactionRecive} = thisTransaciotn;
     /** check is auth user */
     if (!session.userInfo) {
