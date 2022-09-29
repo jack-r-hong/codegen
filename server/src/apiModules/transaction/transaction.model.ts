@@ -478,6 +478,47 @@ export class TransactionModel {
       return t;
     });
   }
+  async readRealtimeCountTransaction(
+      userId: string,
+  ) {
+    console.log(userId);
+
+    const res = await prisma.transaction.aggregate({
+      where: {
+        OR: [
+          {
+            transactionRecive: {
+              userId,
+            },
+
+          },
+          {
+            userId,
+          },
+        ],
+        state: 4,
+      },
+      _sum: {
+        totalDollars: true,
+        totalPoints: true,
+      },
+      _count: {
+        id: true,
+      },
+    }).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+
+    console.log(res);
+
+    return {
+      dollars: res._sum.totalDollars,
+      point: res._sum.totalPoints,
+      orderCount: res._count.id,
+    };
+  }
   async readTransactionQrcode(
       userId: string,
   ) {
@@ -516,6 +557,7 @@ export class TransactionModel {
       select: {
         userId: true,
         state: true,
+        bos: true,
         transactionRecive: {
           select: {
             userId: true,

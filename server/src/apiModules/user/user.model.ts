@@ -138,7 +138,7 @@ export class UserModel {
           }
           return false;
         });
-    const userStatus = isVerified? 1: 3;
+    const userStatus = isVerified? 1: 4;
     const userVerifyRes = await prisma.userVerify.update({
       where: {
         userId: param.pathId,

@@ -698,6 +698,10 @@ export class UserService {
       phone,
     };
 
+    getPhoneCheck(phonePrefix, phone, code ).then(()=>{
+
+    });
+
     // custom end phoneCheck
   }
   async getUserMyStatus(

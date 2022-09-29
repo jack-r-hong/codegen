@@ -401,6 +401,8 @@ export class TransactionService {
     if (!thisTransaciotn) {
       throw new errors.NotFindError('thisTransaciotn');
     }
+
+    const {bos, userId, state, transactionRecive} = thisTransaciotn;
     /** check is auth user */
     if (!session.userInfo) {
       throw new Error('userInfo not found');
@@ -410,34 +412,53 @@ export class TransactionService {
         break;
       case 1:
       case 2:
-        if (session.userInfo.isAgent &&
-          thisTransaciotn.userId !== session.userInfo.id &&
-          thisTransaciotn.state === 1
+        if (
+          session.userInfo.isAgent &&
+          userId !== session.userInfo.id &&
+          state === 1
         ) {
           break;
         }
       case 3:
-        if (
-          thisTransaciotn.userId === session.userInfo.id &&
-          thisTransaciotn.state === 2
-        ) {
-          break;
+        if (state === 2) {
+          if (
+            bos === 1 &&
+            userId === session.userInfo.id
+          ) {
+            break;
+          }
+          if (
+            bos === 2 &&
+            transactionRecive &&
+            transactionRecive.userId === session.userInfo.id
+          ) {
+            break;
+          }
         }
       case 4:
-        if (session.userInfo.isAgent &&
-          thisTransaciotn.transactionRecive &&
-          thisTransaciotn.transactionRecive.userId === session.userInfo.id &&
-          thisTransaciotn.state === 3
-        ) {
-          console.log('break');
-          break;
+        if (state === 3) {
+          if (
+            bos === 1 &&
+            session.userInfo.isAgent &&
+            transactionRecive &&
+            transactionRecive.userId === session.userInfo.id
+          ) {
+            break;
+          }
+          if (
+            bos === 2 &&
+            userId === session.userInfo.id
+          ) {
+            break;
+          }
         }
-      case 5:
-      case 6:
+        break;
       default:
+        /**
         throw new errors.AuthenticationFailedError('updateTransaction');
+         *
+       */
     }
-    /** */
     const res = await this.transactionModel.updateTransaction(
         param,
         {userId: session.userInfo?.id},
@@ -462,9 +483,6 @@ export class TransactionService {
       );
       await wSCTModel.pub(JSON.stringify(res));
       session.transaction.process = param.bodyState;
-    }
-    if (param.bodyState === 4) {
-      session.transaction = undefined;
     }
     return res;
 

@@ -2366,8 +2366,8 @@
           "userStatus" : {
             "type" : "integer",
             "format" : "int32",
-            "description" : "status map:\n * `1` - Verified\n * `2` - Unverified\n * `3` - WaitVerify\n * `4` - Locking\n * `9` - Test account \n * `10` - Agent \n * `11` - AgentLocking \n",
-            "enum" : [ 1, 2, 3, 4, 10, 11 ],
+            "description" : "status map:\n * `1` - Verified\n * `2` - Unverified\n * `3` - WaitVerify\n * `4` - Failed\n * `9` - Test account \n * `10` - Agent \n * `11` - AgentLocking \n",
+            "enum" : [ 1, 2, 3, 4 ],
             "default" : 2
           },    
           "isAgent" : {

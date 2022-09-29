@@ -188,6 +188,7 @@ export class BankAccountModel {
             },
           }),
       );
+
       if (e.bodyAccountResonId) {
         transactionArray.push(
             upsertQuery(e.bodyVerifyId, e.bodyAccountResonId, 'account'),

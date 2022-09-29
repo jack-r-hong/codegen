@@ -21,15 +21,21 @@ const getNewData = async (userId: string) => {
   const resFailed = await transactionModel.readRealtimeTransaction(
           userId as string, 'failed');
 
+  const {dollars, point, orderCount} =
+  await transactionModel.readRealtimeCountTransaction( userId as string);
+
   return {
-    dollars: 0,
-    point: 0,
-    orderCount: 0,
+    dollars,
+    point,
+    orderCount,
     pending: resPending,
     processing: resProcessing,
     failed: resFailed,
   };
 };
+transactionModel.readRealtimeCountTransaction('aed06ef7-136a-42c9-b7c8-494109bb2baf').then(() => {
+
+});
 
 @Service({id: WSToken, multiple: true})
 export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
