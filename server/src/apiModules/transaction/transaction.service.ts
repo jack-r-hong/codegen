@@ -395,6 +395,50 @@ export class TransactionService {
       session: Express.Request['session'],
   ) {
     // custom begin updateTransaction
+
+    const thisTransaciotn = await this.transactionModel.readCheckTransaction(
+        param.pathId,
+    );
+
+    if (!thisTransaciotn) {
+      throw new errors.NotFindError('thisTransaciotn');
+    }
+
+    /** check is auth user */
+    if (!session.userInfo) {
+      throw new Error('userInfo not found');
+    }
+    switch (param.bodyState) {
+      case 0:
+        break;
+      case 1:
+        break;
+      case 2:
+        if (session.userInfo.isAgent &&
+          thisTransaciotn.userId !== session.userInfo.id
+        ) {
+          break;
+        }
+      case 3:
+        if (thisTransaciotn.userId === session.userInfo.id
+        ) {
+          break;
+        }
+      case 4:
+        if (session.userInfo.isAgent &&
+          thisTransaciotn.transactionRecive &&
+          thisTransaciotn.transactionRecive.userId === session.userInfo.id
+        ) {
+          break;
+        }
+      case 5:
+        break;
+      case 6:
+        break;
+      default:
+        throw new errors.AuthenticationFailedError('updateTransaction');
+    }
+    /** */
     const res = await this.transactionModel.updateTransaction(
         param,
         {userId: session.userInfo?.id},

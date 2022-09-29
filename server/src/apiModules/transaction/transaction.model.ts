@@ -254,6 +254,10 @@ export class TransactionModel {
         bankCode: true,
         bankName: true,
         userId: true,
+        totalDollars: true,
+        totalPoints: true,
+        serviceFee: true,
+        handlingFee: true,
         user: {
           select: {
             gameUid: true,
@@ -482,6 +486,28 @@ export class TransactionModel {
     const res = await prisma.transaction.findUnique({
       where: {
         id,
+      },
+    }).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+    return res;
+  }
+  async readCheckTransaction(
+      id: string,
+  ) {
+    const res = await prisma.transaction.findUnique({
+      where: {
+        id,
+      },
+      select: {
+        userId: true,
+        transactionRecive: {
+          select: {
+            userId: true,
+          },
+        },
       },
     }).catch((e) => {
       throw e;

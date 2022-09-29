@@ -4086,7 +4086,19 @@
                 },   
                 "bankName" : {
                   "type" : "string"
-                },                        
+                }, 
+                "handlingFee" : {
+                  "type" : "integer"
+                },   
+                "serviceFee" : {
+                  "type" : "integer"
+                },
+                "totalDollars" : {
+                  "type" : "integer"
+                },
+                "totalPoints" : {
+                  "type" : "integer"
+                },                                       
                 "userId" : {
                   "$ref" : "#/components/schemas/User/properties/id"
                 },

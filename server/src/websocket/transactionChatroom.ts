@@ -109,7 +109,7 @@ export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
 
     const timer = setInterval(() => {
       event.eventName = 'bit';
-      // ws.send(event.msg('bit'));
+      ws.send(event.msg('bit'));
     }, 4000);
 
     ws.on('close', () => {
