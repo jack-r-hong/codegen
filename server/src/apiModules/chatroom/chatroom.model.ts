@@ -77,7 +77,7 @@ export class ChatroomModel {
       data: Buffer | undefined,
       role: number,
   ) {
-    const res = await prisma.transactionChatroom.create({
+    const res = await prisma.transactionChatroomMessange.create({
       data: {
         transactionId,
         userId,
@@ -97,10 +97,47 @@ export class ChatroomModel {
   async getTransactionMessages(
       transactionId: string,
   ) {
-    const res = await prisma.transactionChatroom.findMany({
+    const res = await prisma.transactionChatroomMessange.findMany({
       where: {
         transactionId,
       },
+      select: {
+        id: true,
+        transactionId: true,
+        name: true,
+        userId: true,
+        role: true,
+        text: true,
+        data: true,
+      },
+    }).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+    return res;
+  }
+  async upsertTransactionCursor(
+      transactionId: string,
+      userId: string,
+      cursor: number,
+  ) {
+    const res = await prisma.transactionChatroomCursor.upsert({
+      create: {
+        transactionId,
+        userId,
+        cursor,
+      },
+      update: {
+        cursor,
+      },
+      where: {
+        uniqueUserCursorId: {
+          transactionId,
+          userId,
+        },
+      },
+
     }).catch((e) => {
       throw e;
     }).finally(() => {
@@ -144,6 +181,5 @@ export class ChatroomModel {
     });
     return res;
   }
-
   // custom end model
 }

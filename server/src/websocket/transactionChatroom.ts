@@ -51,28 +51,34 @@ export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
       return;
     }
 
-    const {userId, userName, transactionId, isAgent} =
-     tokenV as {userId: string, userName: string,
+    const {userId, userId2, userName, transactionId, isAgent} =
+     tokenV as {userId: string, userId2: string, userName: string,
       transactionId: string, isAgent: boolean};
 
     const dataFormat = (data: any) => {
-      // console.log(data.userId, userId, userId === data.userId);
-
       return {
+        id: data.id,
+        userId: data.userId,
         data: data.type === 'image' && data.data?
           data.data.toString('base64'): data.text,
         type: data.type,
         time: data.createdAt,
         name: data.name,
         role: data.role,
-        isSelf: userId === data.userId,
+        read: false,
       };
+    };
+
+    const isSelf = (data: any) => {
+      const res = Object.assign(data, {isSelf: userId === data.userId});
+      delete res.userId;
+      return res;
     };
     const subscriber = await wSCIModel.sub(transactionId + 'chatroom',
         (message: any)=>{
           event.eventName = 'send';
           const data = JSON.parse(message);
-          ws.send(event.msg(data));
+          ws.send(event.msg(isSelf(data)));
         });
 
     ws.on('message', async function message(message: string) {
@@ -100,10 +106,12 @@ export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
     const res = await chatroomModel.getTransactionMessages(
         transactionId,
     );
+    console.log(res);
+
 
     ws.send(event.msg(
         res.map((e) => {
-          return dataFormat(e);
+          return isSelf(dataFormat(e));
         }),
     ));
 

@@ -463,6 +463,9 @@ export class TransactionModel {
           },
         },
       },
+      orderBy: {
+        createdAt: 'desc',
+      },
       take: 20,
     }).catch((e) => {
       throw e;
@@ -481,7 +484,12 @@ export class TransactionModel {
   async readRealtimeCountTransaction(
       userId: string,
   ) {
-    console.log(userId);
+    function addDays(date: Date, days: number) {
+      const result = new Date(date);
+      result.setDate(result.getDate() + days);
+      return result;
+    }
+
     const res = await prisma.transaction.aggregate({
       where: {
         OR: [
@@ -489,12 +497,17 @@ export class TransactionModel {
             transactionRecive: {
               userId,
             },
+
           },
           {
             userId,
           },
         ],
         state: 4,
+        createdAt: {
+          gt: new Date(new Date().toJSON().slice(0, 10).replace(/-/g, '/')),
+          lt: new Date(addDays(new Date(), 1).toJSON().slice(0, 10).replace(/-/g, '/')),
+        },
       },
       _sum: {
         totalDollars: true,
@@ -508,7 +521,7 @@ export class TransactionModel {
     }).finally(() => {
       prisma.$disconnect();
     });
-    console.log(res);
+
     return {
       dollars: res._sum.totalDollars,
       point: res._sum.totalPoints,

@@ -96,6 +96,7 @@ export class TransactionService {
       session: Express.Request['session'],
   ) {
     // custom begin createTransaction
+    console.log(session);
     const dbBankData = await bankAccountModel.readOneBankAccount(
         {pathId: param.bodyBankId},
     );
@@ -103,7 +104,11 @@ export class TransactionService {
         {},
         {userId: session.userInfo?.id!},
     );
-    if (!dbBankData || !dbUserData || dbUserData.userStatus !== 1) {
+    console.log(session);
+    
+    if (!dbUserData || dbUserData.userStatus !== 1) {
+      console.log(dbUserData);
+      
       /* todo throw error */
       throw new errors.AuthenticationFailedError();
     }
@@ -362,17 +367,22 @@ export class TransactionService {
     let gameUid = null;
     let receiveName = null;
     let receiveGameUid = null;
+
+    if ( !res.user) {
+      return;
+    }
+
     if (res.bos === 2) {
       name = res.user.name;
       gameUid = res.user.gameUid;
-      if (res.transactionRecive) {
+      if (res.transactionRecive && res.transactionRecive.user) {
         receiveName = res.transactionRecive.user.name;
         receiveGameUid = res.transactionRecive.user.gameUid;
       }
     } else {
       receiveName = res.user.name;
       receiveGameUid = res.user.gameUid;
-      if (res.transactionRecive) {
+      if (res.transactionRecive && res.transactionRecive.user) {
         name = res.transactionRecive.user.name;
         gameUid = res.transactionRecive.user.gameUid;
       }
@@ -383,8 +393,9 @@ export class TransactionService {
       receiveName,
       receiveGameUid,
     };
-    delete res.user;
-    delete res.transactionRecive;
+
+    delete (res as any).user;
+    delete (res as any).transactionRecive;
     return Object.assign(res, flatten);
 
     // custom end readOneTransaction2
@@ -453,10 +464,7 @@ export class TransactionService {
         }
         break;
       default:
-        /**
         throw new errors.AuthenticationFailedError('updateTransaction');
-         *
-       */
     }
     const res = await this.transactionModel.updateTransaction(
         param,

@@ -53,6 +53,7 @@ export class ChatroomService {
         userName: res.user.name?? '',
         userId: res.user.id,
         isAgent: res.user.isAgent,
+        userId2: res.transactionRecive?.user?.id,
       });
     }
     if (res.transactionRecive &&
@@ -64,6 +65,7 @@ export class ChatroomService {
         userName: res.transactionRecive.user.name?? '',
         userId: res.transactionRecive.user.id,
         isAgent: res.transactionRecive.user.isAgent,
+        userId2: res.user?.id,
       });
     }
     throw new errors.AuthenticationFailedError;

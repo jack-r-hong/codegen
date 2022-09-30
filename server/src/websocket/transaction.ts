@@ -51,10 +51,10 @@ export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
 
     let isAgent = false;
     const resUser = await userModel.getUserMyStatus({}, {userId})
-        .catch((e) => false);
+        .catch((e) => null);
     const resTran = await transactionModel
         .readOneTransaction({pathId: transactionId as string})
-        .catch((e) => false);
+        .catch((e) => null);
 
     if (!resTran || !resUser) {
       ws.send(event.msg({error: true, message: 'notAuth'}));
@@ -75,7 +75,7 @@ export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
             wSCIModel.subscriberQuit(subscriber).then(()=> {});
             setTimeout(() => {
               ws.close();
-            }, 5000);
+            }, 20000);
           }
         });
 

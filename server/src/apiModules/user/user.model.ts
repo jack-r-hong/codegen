@@ -21,6 +21,7 @@ export class UserModel {
         phone: true,
         phonePrefix: true,
         name: true,
+        gameUid: true,
       },
       orderBy: {
         [param.queryOrderByField]: param.queryOrderBy,
@@ -369,7 +370,7 @@ export class UserModel {
         userStatus: true,
         userTransaction: true,
         // custom begin readManyUserBackstage
-
+        gameUid: true,
         // custom end readManyUserBackstage
       },
       orderBy: {
@@ -628,6 +629,7 @@ export class UserModel {
       customParam: any,
   ) {
     // custom begin putRealVerify
+
     const res: any | null = await prisma.user.update({
       data: {
         name: param.bodyName,
@@ -803,6 +805,35 @@ export class UserModel {
       select: {
         id: true,
         name: true,
+      },
+    }).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+    return res;
+  }
+
+  async getUserVerify(
+      userId: string,
+  ) {
+    const res = await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+      select: {
+        name: true,
+        gameUid: true,
+        lineId: true,
+        birthdate: true,
+        country: true,
+        idCard: true,
+        idCardDate: true,
+        idCardPosiition: true,
+        idCardType: true,
+        city: true,
+        area: true,
+        address: true,
       },
     }).catch((e) => {
       throw e;
