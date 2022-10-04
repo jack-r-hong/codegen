@@ -50,6 +50,42 @@ export const ServiceTokenRequestConvert = (
     bodyUserId: body.userId,
   };
 };
+type TransactionServiceTokenReqBody = {
+  transactionId: string,
+}
+
+type TransactionServiceTokenReqQuery = {
+}
+
+type TransactionServiceTokenReqParams = {
+}
+
+type TransactionServiceTokenReqCookie = {
+}
+
+export interface TransactionServiceTokenRequest extends TypedRequest<
+  TransactionServiceTokenReqBody,
+  TransactionServiceTokenReqQuery,
+  TransactionServiceTokenReqParams,
+  TransactionServiceTokenReqCookie
+>{
+}
+
+export type TransactionServiceTokenParams = {
+bodyTransactionId: string,
+}
+
+
+export const TransactionServiceTokenRequestConvert = (
+    body: TransactionServiceTokenReqBody,
+    query: TransactionServiceTokenReqQuery,
+    path: TransactionServiceTokenReqParams,
+    cookie: TransactionServiceTokenReqCookie,
+): TransactionServiceTokenParams => {
+  return {
+    bodyTransactionId: body.transactionId,
+  };
+};
 type TransactionTokenReqBody = {
   transactionId: string,
 }

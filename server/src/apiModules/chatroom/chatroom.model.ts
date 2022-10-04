@@ -29,6 +29,14 @@ export class ChatroomModel {
 
     // custom end serviceToken
   }
+  async transactionServiceToken(
+      param: requestTypes.TransactionServiceTokenParams,
+      customParam: any,
+  ) {
+    // custom begin transactionServiceToken
+
+    // custom end transactionServiceToken
+  }
   async transactionToken(
       param: requestTypes.TransactionTokenParams,
       customParam: any,
@@ -117,6 +125,24 @@ export class ChatroomModel {
     });
     return res;
   }
+  async getTransactionCursor(
+      transactionId: string,
+      userId: string,
+  ) {
+    const res = await prisma.transactionChatroomCursor.findUnique({
+      where: {
+        uniqueUserCursorId: {
+          transactionId,
+          userId,
+        },
+      },
+    }).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+    return res;
+  }
   async upsertTransactionCursor(
       transactionId: string,
       userId: string,
@@ -137,7 +163,6 @@ export class ChatroomModel {
           userId,
         },
       },
-
     }).catch((e) => {
       throw e;
     }).finally(() => {
@@ -181,5 +206,6 @@ export class ChatroomModel {
     });
     return res;
   }
+
   // custom end model
 }

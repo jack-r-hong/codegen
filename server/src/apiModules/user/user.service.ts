@@ -693,12 +693,10 @@ export class UserService {
     const phonePrefix = '886';
     const phone = param.bodyPhone.replace(/^0/, '');
     session.userRegister = {
-      verify: code,
+      verify: '123456',
       phonePrefix,
       phone,
     };
-    getPhoneCheck(phonePrefix, phone, code ).then(()=>{
-    });
 
     // custom end phoneCheck
   }

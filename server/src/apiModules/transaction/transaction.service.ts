@@ -105,10 +105,8 @@ export class TransactionService {
         {userId: session.userInfo?.id!},
     );
     console.log(session);
-    
     if (!dbUserData || dbUserData.userStatus !== 1) {
       console.log(dbUserData);
-      
       /* todo throw error */
       throw new errors.AuthenticationFailedError();
     }
@@ -367,11 +365,9 @@ export class TransactionService {
     let gameUid = null;
     let receiveName = null;
     let receiveGameUid = null;
-
     if ( !res.user) {
       return;
     }
-
     if (res.bos === 2) {
       name = res.user.name;
       gameUid = res.user.gameUid;
@@ -393,7 +389,6 @@ export class TransactionService {
       receiveName,
       receiveGameUid,
     };
-
     delete (res as any).user;
     delete (res as any).transactionRecive;
     return Object.assign(res, flatten);
@@ -462,7 +457,6 @@ export class TransactionService {
             break;
           }
         }
-        break;
       default:
         throw new errors.AuthenticationFailedError('updateTransaction');
     }

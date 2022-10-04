@@ -371,6 +371,7 @@ export class UserModel {
         userTransaction: true,
         // custom begin readManyUserBackstage
         gameUid: true,
+
         // custom end readManyUserBackstage
       },
       orderBy: {
@@ -629,7 +630,6 @@ export class UserModel {
       customParam: any,
   ) {
     // custom begin putRealVerify
-
     const res: any | null = await prisma.user.update({
       data: {
         name: param.bodyName,
@@ -813,7 +813,6 @@ export class UserModel {
     });
     return res;
   }
-
   async getUserVerify(
       userId: string,
   ) {

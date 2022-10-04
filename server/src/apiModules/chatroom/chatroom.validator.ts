@@ -13,6 +13,12 @@ export const serviceTokenValidator: Schema = {
     isString: true,
   },
 };
+export const transactionServiceTokenValidator: Schema = {
+  'transactionId': {
+    in: 'body',
+    isString: true,
+  },
+};
 export const transactionTokenValidator: Schema = {
   'transactionId': {
     in: 'body',

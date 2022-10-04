@@ -160,6 +160,7 @@ model Transaction {
     // custom begin Transaction
   transactionChatroomMessange TransactionChatroomMessange[]
   transactionChatroomCursor TransactionChatroomCursor[]   
+
     // custom end Transaction
 }
 model TransactionRecive {
@@ -311,7 +312,6 @@ model ServiceChatroom {
   text String 
   data Bytes? @map("data") @db.Blob               
 }
-
 model TransactionChatroomMessange {
   createdAt  DateTime  @default(now()) @map("created_at")                 
   id  Int @id @default(autoincrement()) @map("id")                 
@@ -324,17 +324,14 @@ model TransactionChatroomMessange {
   transactionId String @map("transaction_id")
   transaction Transaction? @relation(fields: [transactionId], references: [id], onDelete: Cascade)
 }
-
 model TransactionChatroomCursor {
   id  Int @id @default(autoincrement()) @map("id")         
   transactionId String @map("transaction_id")
   userId  String @map("user_id")
   cursor Int 
   transactionChatroom Transaction? @relation(fields: [transactionId], references: [id], onDelete: Cascade)
-
   @@unique([transactionId, userId], name: "uniqueUserCursorId")
 }
-
 model TransactionQrcode {
   id  Int @id @default(autoincrement()) @map("id")                 
   userId  String  @map("user_id") @unique     

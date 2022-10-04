@@ -35,6 +35,20 @@ export class ChatroomService {
 
     // custom end serviceToken
   }
+  async transactionServiceToken(
+      param :requestTypes.TransactionServiceTokenParams,
+      session: Express.Request['session'],
+  ) {
+    // custom begin transactionServiceToken
+    return chatroomKey.generateAccessToken({
+      transactionId: param.bodyTransactionId,
+      userName: 'CS',
+      userId: 'CS',
+      isAgent: false,
+      isCS: true,
+    });
+    // custom end transactionServiceToken
+  }
   async transactionToken(
       param :requestTypes.TransactionTokenParams,
       session: Express.Request['session'],
@@ -53,7 +67,7 @@ export class ChatroomService {
         userName: res.user.name?? '',
         userId: res.user.id,
         isAgent: res.user.isAgent,
-        userId2: res.transactionRecive?.user?.id,
+        isCS: false,
       });
     }
     if (res.transactionRecive &&
@@ -65,7 +79,7 @@ export class ChatroomService {
         userName: res.transactionRecive.user.name?? '',
         userId: res.transactionRecive.user.id,
         isAgent: res.transactionRecive.user.isAgent,
-        userId2: res.user?.id,
+        isCS: false,
       });
     }
     throw new errors.AuthenticationFailedError;

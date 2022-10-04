@@ -83,6 +83,9 @@ export class ExpressApp {
     this.app.use(bodyParser.json());
     this.app.use('/api/api-docs'
         , swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+    // body size limit
+    this.app.use(express.json({limit: '50mb'}));
+    this.app.use(express.urlencoded({limit: '50mb'}));
   }
 
   private sessionRegister() {

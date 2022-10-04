@@ -49,6 +49,30 @@ export class ChatroomController implements Controller {
           next(e);
         });
   }
+  @Post('/chatroom/transaction/service/token')
+  @Validator(validSchemas.transactionServiceTokenValidator)
+  async transactionServiceToken(
+      req: chatroomParams.TransactionServiceTokenRequest,
+      res: Response,
+      next: NextFunction,
+  ) {
+    ChatroomController.service.transactionServiceToken(
+        chatroomParams.TransactionServiceTokenRequestConvert(
+            req.body,
+            req.query,
+            req.params,
+            req.cookies,
+        ),
+        req.session,
+    )
+        .then((result) =>{
+          // custom begin transactionServiceToken
+          res.json(result);
+          // custom end transactionServiceToken
+        }).catch((e) => {
+          next(e);
+        });
+  }
   @Post('/chatroom/transaction/token')
   @Validator(validSchemas.transactionTokenValidator)
   async transactionToken(

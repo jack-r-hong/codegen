@@ -2308,6 +2308,24 @@
         }
       }               
     },
+    "/chatroom/transaction/service/token" : {     
+      "post" : {
+        "tags" : [ "chatroom" ],
+        "summary" : "get token",
+        "operationId" : "transactionServiceToken",                            
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/GetTransactionChatToken"
+        },              
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/Token"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          }
+        }
+      }               
+    },    
     "/chatroom/service/token" : {     
       "post" : {
         "tags" : [ "chatroom" ],

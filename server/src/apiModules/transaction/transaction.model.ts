@@ -489,7 +489,6 @@ export class TransactionModel {
       result.setDate(result.getDate() + days);
       return result;
     }
-
     const res = await prisma.transaction.aggregate({
       where: {
         OR: [
@@ -497,7 +496,6 @@ export class TransactionModel {
             transactionRecive: {
               userId,
             },
-
           },
           {
             userId,
@@ -521,7 +519,6 @@ export class TransactionModel {
     }).finally(() => {
       prisma.$disconnect();
     });
-
     return {
       dollars: res._sum.totalDollars,
       point: res._sum.totalPoints,
