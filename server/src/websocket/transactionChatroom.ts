@@ -1,6 +1,8 @@
 import WebSocket from 'ws';
 import {WSToken, WSOnMessage, MyWebSocketServer, WSEvent} from './base';
-import {WSClientIdModel} from '../redisClient/models/webSocketModels';
+import {
+  WSClientTransactionModel,
+  WSClientServiceModel} from '../redisClient/models/webSocketModels';
 import {ChatroomModel}
   from '../apiModules/chatroom/chatroom.model';
 import {chatroomKey} from '../jwt';
@@ -9,8 +11,9 @@ import {IncomingMessage} from 'http';
 import qs from 'qs';
 
 const event = new WSEvent('transaction_chatroom');
-const wSCIModel = Container.get(WSClientIdModel);
+const wSCIModel = Container.get(WSClientTransactionModel);
 const chatroomModel = Container.get(ChatroomModel);
+const wSClientServiceModel = Container.get(WSClientServiceModel);
 
 @Service({id: WSToken, multiple: true})
 export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
@@ -30,6 +33,7 @@ export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
     transactionId: string;
   }[];
   ws?: WebSocket;
+  subscriber?: any;
 
   constructor() {
     super();
@@ -83,15 +87,7 @@ export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
     }
 
     const self = this;
-
-    const subscriber = await wSCIModel.sub(transactionId + 'chatroom',
-        (message: any)=>{
-          event.eventName = 'send';
-          const data = JSON.parse(message);
-          ws.send(event.msg(self.isSelf(data)));
-
-          self.sendNotify();
-        });
+    await this.createSubscriber();
 
     ws.on('message', async function message(message: string) {
       const data = event.parse(message).data;
@@ -105,24 +101,9 @@ export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
       }
     });
 
-    event.eventName = 'ready';
-    const res = await chatroomModel.getTransactionMessages(
-        transactionId,
-    );
+    await this.readySend();
 
-    ws.send(event.msg(
-        res.map((e) => {
-          return this.isSelf(this.dataFormat(e));
-        }),
-    ));
-
-    for (const e of res) {
-      e.data = null;
-    }
-
-    this.messageList = res;
-
-    this.sendNotify();
+    await this.sendNotify();
 
     const timer = setInterval(() => {
       event.eventName = 'bit';
@@ -130,7 +111,7 @@ export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
     }, 15000);
 
     ws.on('close', () => {
-      wSCIModel.subscriberQuit(subscriber).then(()=> {});
+      wSCIModel.subscriberQuit(self.subscriber).then(()=> {});
       clearInterval(timer);
     });
   };
@@ -145,50 +126,92 @@ export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
       time: data.createdAt,
       name: data.name,
       role: data.role,
-      read: false,
+      read: data.id < this.cursor || this.userId === data.userId,
     };
   };
 
-  /**
-   * 之後改用redis存
-   */
-  sendNotify() {
+  async readySend() {
+    event.eventName = 'ready';
+    const res = await chatroomModel.getTransactionMessages(
+        this.transactionId!,
+    );
+
+    this.ws!.send(event.msg(
+        res.map((e) => {
+          return this.isSelf(this.dataFormat(e));
+        }),
+    ));
+
+    for (const e of res) {
+      e.data = null;
+    }
+
+    if ((await wSCIModel.get()).length === 0) {
+      for (const e of res) {
+        await wSCIModel.push(JSON.stringify({
+          id: e.id,
+          userId: e.userId,
+        }));
+      }
+    }
+  }
+
+  async sendNotify() {
     event.eventName = 'notify';
-    this.ws!.send(event.msg({
-      unreadCouunt: this.messageList?.filter((e) => {
-        return e.id > this.cursor && this.userId !== e.userId;
-      }).length,
-    }));
+    const messageList = (await wSCIModel.get()).map((e) => JSON.parse(e));
+      this.ws!.send(event.msg({
+        unreadCouunt: messageList.filter((e: any) => {
+          return e.id > this.cursor && this.userId !== e.userId;
+        }).length,
+      }));
+      await wSClientServiceModel.pub('');
   }
 
   handleSendEvent(data: any) {
-    data.name = this.userName;
-    data.userId = this.userId;
-    chatroomModel.createTransactionMessage(
-        this.transactionId!,
-        this.userId!,
-        data.type,
-        data.name?? '',
-      data.type === 'text'? data.data: '',
-    data.type === 'image'? Buffer.from(data.data, 'base64'): undefined,
-    this.isAgent? 2: (this.isCS? 3: 1),
-    ).then((e) => {
-      this.messageList?.push(e);
-      wSCIModel.pub(
-          this.transactionId + 'chatroom',
-          JSON.stringify(this.dataFormat(e)),
-      );
-    }).catch((e) => console.log(e));
+    if (this.userId && this.transactionId) {
+      data.name = this.userName;
+      data.userId = this.userId;
+      chatroomModel.createTransactionMessage(
+          this.transactionId,
+          this.userId,
+          data.type,
+          data.name?? '',
+            data.type === 'text'? data.data: '',
+          data.type === 'image'? Buffer.from(data.data, 'base64'): undefined,
+          this.isAgent? 2: (this.isCS? 3: 1),
+      ).then((e) => {
+        wSCIModel.push(JSON.stringify({
+          id: e.id,
+          userId: e.userId,
+        }));
+        wSCIModel.pub(
+            JSON.stringify(this.dataFormat(e)),
+        );
+      }).catch((e) => console.log(e));
+    }
   }
 
   handleReadEvent(data: any) {
-    chatroomModel.upsertTransactionCursor(
-      this.transactionId!,
-      this.userId!,
-      data.cursor,
-    );
+    if (this.transactionId) {
+      chatroomModel.upsertTransactionCursor(
+          this.transactionId,
+            this.userId!,
+      );
 
-    this.sendNotify();
+      this.sendNotify().then();
+    }
+  }
+
+  async createSubscriber() {
+    const self = this;
+    this.subscriber = await wSCIModel.sub(
+        (message: any)=>{
+          event.eventName = 'send';
+          const data = JSON.parse(message);
+          self.ws!.send(event.msg(self.isSelf(data)));
+
+          self.sendNotify().then();
+        });
   }
 
   isSelf = (data: any) => {

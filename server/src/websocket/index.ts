@@ -12,6 +12,7 @@ import './transaction';
 import './transactionChatroom';
 import './serviceChatroom';
 import './realtimeTransaction';
+import './transactionServiceChatroom';
 
 
 export class WebsocketApp {

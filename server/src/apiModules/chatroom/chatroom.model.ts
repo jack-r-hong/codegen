@@ -143,11 +143,76 @@ export class ChatroomModel {
     });
     return res;
   }
+  async getManyTransactionServiceCursor(
+      userId: string,
+  ) {
+    const res = await prisma.transactionChatroomCursor.findMany({
+      where: {
+        userId,
+      },
+    }).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+    return res;
+  }
+  async getTransactionUnread(
+      cursorArray: {
+        transactionId: string,
+        cursor: number,
+      }[],
+  ) {
+    const res = await prisma.$transaction(cursorArray.map((e) => {
+      return prisma.transactionChatroomMessange.count({
+        where: {
+          transactionId: e.transactionId,
+          id: {
+            gt: e.cursor,
+          },
+        },
+      });
+    })).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+
+    return res;
+  }
+  async getManyTransactionRoomLastMessage(
+  ) {
+    const res = await prisma.transactionChatroomMessange.findMany({
+      distinct: ['transactionId'],
+      orderBy: {
+        id: 'desc',
+      },
+    }).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+    return res;
+  }
   async upsertTransactionCursor(
       transactionId: string,
       userId: string,
-      cursor: number,
   ) {
+    const findRes = await prisma.transactionChatroomMessange.findFirst({
+      where: {
+        transactionId,
+      },
+      orderBy: {
+        id: 'desc',
+      },
+    })
+        .catch((e) => {
+          throw e;
+        }).finally(() => {
+          prisma.$disconnect();
+        });
+    const cursor = findRes? findRes.id : 0;
+
     const res = await prisma.transactionChatroomCursor.upsert({
       create: {
         transactionId,

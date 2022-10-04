@@ -63,7 +63,9 @@ export class Queue implements ModelBase {
   }
 
   async subscriberQuit(subscriber: RedisClientType) {
-    await subscriber.unsubscribe();
-    await subscriber.quit();
+    if (subscriber) {
+      await subscriber.unsubscribe();
+      await subscriber.quit();
+    }
   }
 }
