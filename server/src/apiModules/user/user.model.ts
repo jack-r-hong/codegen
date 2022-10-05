@@ -495,6 +495,9 @@ export class UserModel {
               },
             },
           },
+          orderBy: {
+            order: 'asc',
+          },
         },
       },
     }).catch((e) => {
@@ -575,14 +578,36 @@ export class UserModel {
     if (res === null) {
       throw new errors.NotFindError;
     }
+
     const originalBank = await prisma.bankAccount.findMany({
       where: {
-        id: customParam.userId,
+        userId: customParam.userId,
       },
     });
 
     await prisma.$transaction(
         param.bodyBankAccounts.map((e, i) => {
+          let updateVerify :any = {update: {}};
+          let status :any = 1;
+
+          const bank = originalBank.find((bank) => bank.order - 1 === i);
+          if (bank) {
+            if (bank.account !== e.bodyAccount) {
+              updateVerify.update.account = 1;
+            }
+            if (bank.code !== e.bodyCode) {
+              updateVerify.update.code = 1;
+            }
+            if (bank.name !== e.bodyName) {
+              updateVerify.update.name = 1;
+            }
+          }
+
+          if (Object.keys(updateVerify.update).length <= 0) {
+            updateVerify = undefined;
+            status = undefined;
+          }
+
           return prisma.bankAccount.upsert({
             where: {
               uniqueOrder: {
@@ -594,14 +619,8 @@ export class UserModel {
               account: e.bodyAccount,
               code: e.bodyAccount,
               name: e.bodyName,
-              bankAccountVerify: {
-                update: {
-                  account: 1,
-                  code: 1,
-                  name: 1,
-                  photo: 1,
-                },
-              },
+              status,
+              bankAccountVerify: updateVerify,
             },
             create: {
               userId: customParam.userId,

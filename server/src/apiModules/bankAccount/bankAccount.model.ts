@@ -147,6 +147,8 @@ export class BankAccountModel {
     // custom begin putBackstageBankAccounts
     const transactionArray :any[] = [];
     console.log(param);
+
+
     const upsertQuery = (verifyId: number, resonId: number, field: string ) => {
       return prisma.bankAccountVerifyResonDes.upsert({
         where: {
@@ -174,7 +176,18 @@ export class BankAccountModel {
         },
       });
     };
+
+    let isAllPass = true;
     for (const e of param.bodyDataList) {
+      let status = 1;
+      if (e.bodyName === 2 &&
+        e.bodyAccount === 2 &&
+        e.bodyCode === 2 &&
+        e.bodyPhoto === 2) {
+        status = 2;
+      } else {
+        isAllPass = false;
+      }
       transactionArray.push(
           prisma.bankAccountVerify.update({
             where: {
@@ -185,6 +198,11 @@ export class BankAccountModel {
               code: e.bodyCode,
               account: e.bodyAccount,
               photo: e.bodyPhoto,
+              bankAccount: {
+                update: {
+                  status,
+                },
+              },
             },
           }),
       );
@@ -225,6 +243,19 @@ export class BankAccountModel {
         );
       }
     }
+
+    transactionArray.push(
+        prisma.user.update({
+          where: {
+            id: param.pathUserId,
+          },
+          data: {
+            userStatus: isAllPass? 1: 4,
+          },
+        }),
+    );
+
+    isAllPass;
     const res = await prisma.$transaction(transactionArray)
         .catch((e) => {
           throw e;
