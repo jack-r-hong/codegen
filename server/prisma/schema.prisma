@@ -148,6 +148,7 @@ model Transaction {
   id  String @id @default(uuid()) @map("id")                 
   payMethod  Int  @map("pay_method")                 
   point  Int  @map("point")                 
+  process  Int  @default(1)  @map("process")                 
   serviceFee  Int  @map("service_fee")                 
   state  Int  @default(1)  @map("state")                 
   totalDollars  Int  @map("total_dollars")                 
@@ -160,6 +161,9 @@ model Transaction {
     // custom begin Transaction
   transactionChatroomMessange TransactionChatroomMessange[]
   transactionChatroomCursor TransactionChatroomCursor[]   
+  pairedAt DateTime? @map("pair_at")
+  paidAt DateTime? @map("paid_at") 
+  completedAt DateTime? @map("completed_at") 
 
     // custom end Transaction
 }

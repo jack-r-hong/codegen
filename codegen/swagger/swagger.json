@@ -2662,20 +2662,8 @@
             "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
             "enum": [1,2,3],
             "default": 1
-          },           
-          "certificate" : {
-            "type" : "integer",
-            "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
-            "enum": [1,2,3],
-            "default": 1
-          },      
+          },             
           "selfie" : {
-            "type" : "integer",
-            "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
-            "enum": [1,2,3],
-            "default": 1
-          },  
-          "sign" : {
             "type" : "integer",
             "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
             "enum": [1,2,3],
@@ -2872,10 +2860,17 @@
           "state" : {
             "type" : "integer",
             "format" : "int32",
-            "description" : "status map:\n  * `0` - Failed\n * `1` - Pending\n * `2` - Pair Completed\n * `3` - Pay or recive Completed\n * `4` - Completed\n * `5` - TiimeOutCancel\n * `6` - 申訴\n",
+            "description" : "status map:\n  * `0` - Failed\n * `1` - Pending\n * `2` - Pair Completed\n * `3` - Pay or recive Completed\n * `4` - Completed\n",
             "enum" : [0, 1, 2, 3, 4, 5, 6],
             "default": 1
-          },                        
+          },   
+          "process" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "process map:\n * `1` - Normal\n * `2` -Timeout \n * `3` -appeal \n ",
+            "enum" : [1, 2, 3],
+            "default": 1
+          },                               
           "createdAt" : {
             "type" : "string",
             "format" : "date-time"
@@ -3333,17 +3328,7 @@
                   "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
                   "enum": [1,2,3]
                 },  
-                "certificate" : {
-                  "type" : "integer",
-                  "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
-                  "enum": [1,2,3]
-                },  
                 "selfie" : {
-                  "type" : "integer",
-                  "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
-                  "enum": [1,2,3]
-                },  
-                "sign" : {
                   "type" : "integer",
                   "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
                   "enum": [1,2,3]
@@ -3411,15 +3396,7 @@
                   "type" : "integer",
                   "nullable": true
                 },  
-                "certificateResonId" : {
-                  "type" : "integer",
-                  "nullable": true
-                },  
                 "selfieResonId" : {
-                  "type" : "integer",
-                  "nullable": true
-                },  
-                "signResonId" : {
                   "type" : "integer",
                   "nullable": true
                 },  
@@ -4245,7 +4222,10 @@
                       },
                       "recommod": {
                         "type" : "string"
-                      }
+                      },
+                      "counterpartyGameUid" : {
+                        "type" : "string"
+                      }    
                     }
                   }                  
                 }

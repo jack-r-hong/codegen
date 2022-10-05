@@ -45,9 +45,7 @@ const userVerifyResponeFormat = async (data: any) => {
     city: '',
     area: '',
     address: '',
-    certificate: '',
     selfie: '',
-    sign: '',
   };
   const photos = {
     idCard1: {
@@ -58,19 +56,7 @@ const userVerifyResponeFormat = async (data: any) => {
       data: '',
       name: '',
     },
-    certificate1: {
-      data: '',
-      name: '',
-    },
-    certificate2: {
-      data: '',
-      name: '',
-    },
     selfie: {
-      data: '',
-      name: '',
-    },
-    sign: {
       data: '',
       name: '',
     },
@@ -89,28 +75,16 @@ const userVerifyResponeFormat = async (data: any) => {
         photos.idCard2.data = data;
         photos.idCard2.name = `$dCard2`;
         break;
-      case 3:
-        photos.certificate1.data = data;
-        photos.certificate1.name = `certificate1`;
-        break;
-      case 4:
-        photos.certificate2.data = data;
-        photos.certificate2.name = `certificate2`;
-        break;
       case 5:
         photos.selfie.data = data;
         photos.selfie.name = `selfie`;
-        break;
-      case 6:
-        photos.sign.data = data;
-        photos.sign.name = `sign`;
         break;
     }
   }
   userVerify.userVerifyResonDes.forEach((element: {
   field: 'name' | 'lineId' | 'gameUid' | 'birthdate' | 'country' | 'idCard' |
   'idCardPhoto' | 'idCardDate' | 'idCardPosiition' | 'idCardType' |
-  'city' | 'area' | 'address' | 'certificate' | 'selfie' | 'sign',
+  'city' | 'area' | 'address' | 'selfie',
   userVerifyReson: {
     des: string
   }
@@ -187,27 +161,12 @@ const userVerifyResponeFormat = async (data: any) => {
       des: verifyDes.idCardPhoto,
       verify: userVerify.idCardPhoto,
     },
-    certificate: {
-      val: [
-        photos.certificate1,
-        photos.certificate2,
-      ],
-      des: verifyDes.certificate,
-      verify: userVerify.certificate,
-    },
     selfie: {
       val: [
         photos.selfie,
       ],
       des: verifyDes.selfie,
       verify: userVerify.selfie,
-    },
-    sign: {
-      val: [
-        photos.sign,
-      ],
-      des: verifyDes.sign,
-      verify: userVerify.sign,
     },
   };
 };
@@ -244,9 +203,7 @@ const userVerifyResponeFormat2 = async (data: any) => {
     city: userVerify.city,
     area: userVerify.area,
     address: userVerify.address,
-    certificate: userVerify.certificate,
     selfie: userVerify.selfie,
-    sign: userVerify.sign,
   };
   const verifyDes = {
     name: '',
@@ -262,17 +219,12 @@ const userVerifyResponeFormat2 = async (data: any) => {
     city: '',
     area: '',
     address: '',
-    certificate: '',
     selfie: '',
-    sign: '',
   };
   const photos = {
     idCard1: '',
     idCard2: '',
-    certificate1: '',
-    certificate2: '',
     selfie: '',
-    sign: '',
     bankAccounts: ['', '', ''],
   };
   for (const e of userVerifyPhoto) {
@@ -287,17 +239,8 @@ const userVerifyResponeFormat2 = async (data: any) => {
       case 2:
         photos.idCard2 = data;
         break;
-      case 3:
-        photos.certificate1 = data;
-        break;
-      case 4:
-        photos.certificate2 = data;
-        break;
       case 5:
         photos.selfie = data;
-        break;
-      case 6:
-        photos.sign = data;
         break;
       case 7:
         photos.bankAccounts[0] = data;
@@ -313,7 +256,7 @@ const userVerifyResponeFormat2 = async (data: any) => {
   userVerify.userVerifyResonDes.forEach((element: {
   field: 'name' | 'lineId' | 'gameUid' | 'birthdate' | 'country' | 'idCard' |
   'idCardPhoto' | 'idCardDate' | 'idCardPosiition' | 'idCardType' |
-  'city' | 'area' | 'address' | 'certificate' | 'selfie' | 'sign',
+  'city' | 'area' | 'address' | 'selfie',
   userVerifyReson: {
     des: string
   }
@@ -345,11 +288,14 @@ const userVerifyResponeFormat2 = async (data: any) => {
       name: '',
       photo: '',
     };
-    bankAccountVerify.bankAccountVerifyResonDes.forEach((e2) => {
-      const field = e2.field;
-      des[field as ('code' | 'account' | 'name' | 'photo')] =
+
+    if (bankAccountVerify && bankAccountVerify.bankAccountVerifyResonDes) {
+      bankAccountVerify.bankAccountVerifyResonDes.forEach((e2) => {
+        const field = e2.field;
+        des[field as ('code' | 'account' | 'name' | 'photo')] =
        e2.bankAccountVerifyReson.des;
-    });
+      });
+    }
     return {
       code: {
         val: e.code,
@@ -390,9 +336,7 @@ const userVerifyResponeFormat2 = async (data: any) => {
     verify,
     verifyDes,
     idCardPhoto: [photos.idCard1, photos.idCard2],
-    certificatePhoto: [photos.certificate1, photos.certificate2],
     selfiePhoto: photos.selfie,
-    signPhoto: photos.sign,
     bankAccounts,
   };
 };
@@ -554,7 +498,12 @@ export class UserService {
       session: Express.Request['session'],
   ) {
     // custom begin captcha
-    const captcha = svgCaptcha.create();
+    const captcha = svgCaptcha.create({
+      size: 7,
+      charPreset: '0123456789',
+      color: true,
+      noise: 4,
+    });
     session.captcha = captcha.text;
     return captcha.data;
 
@@ -697,6 +646,7 @@ export class UserService {
       phonePrefix,
       phone,
     };
+    // await getPhoneCheck(phonePrefix, phone, code);
 
     // custom end phoneCheck
   }

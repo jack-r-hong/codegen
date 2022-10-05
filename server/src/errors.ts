@@ -45,6 +45,17 @@ class CaptchaError extends Error {
   }
 }
 
+class CodeError extends Error {
+  status: number;
+  code: number;
+  constructor(message?: string, status?: number, code?: number) {
+    super(message);
+    this.name = 'CodeError';
+    this.status = status??500;
+    this.code = code??0;
+  }
+}
+
 export const errors = {
   WrongPasswordError,
   NotFindError,
@@ -95,13 +106,23 @@ export const errorHandle = (
         return httpErrors(409);
       case err instanceof Prisma.PrismaClientKnownRequestError:
         return prismaDBErrorHender(<Prisma.PrismaClientKnownRequestError> err);
+      case err instanceof CodeError:
+        if (err instanceof CodeError ) {
+          const e = httpErrors(err.status);
+          e.cause = err.code;
+          return e;
+        }
       default:
         return httpErrors(500);
     }
   })();
 
   res.status(error.statusCode);
-  res.send(`${error.statusCode} ${error.message}`);
+  res.send({
+    status: error.statusCode,
+    message: error.message,
+    code: error.cause,
+  });
 };
 
 const prismaDBErrorHender = (err: Prisma.PrismaClientKnownRequestError) => {

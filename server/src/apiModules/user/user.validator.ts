@@ -105,22 +105,6 @@ optional: {
   },
 },
   },
-  'certificate': {
-    in: 'body',
-    isInt: true,
-    matches: {
-      options: /^(1|2|3)/,
-    },
-  },
-  'certificateResonId': {
-    in: 'body',
-    isInt: true,
-optional: {
-  options: {
-    nullable: true,
-  },
-},
-  },
   'city': {
     in: 'body',
     isInt: true,
@@ -289,22 +273,6 @@ optional: {
     },
   },
   'selfieResonId': {
-    in: 'body',
-    isInt: true,
-optional: {
-  options: {
-    nullable: true,
-  },
-},
-  },
-  'sign': {
-    in: 'body',
-    isInt: true,
-    matches: {
-      options: /^(1|2|3)/,
-    },
-  },
-  'signResonId': {
     in: 'body',
     isInt: true,
 optional: {

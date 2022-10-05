@@ -177,7 +177,6 @@ export class ChatroomModel {
     }).finally(() => {
       prisma.$disconnect();
     });
-
     return res;
   }
   async getManyTransactionRoomLastMessage(
@@ -212,7 +211,6 @@ export class ChatroomModel {
           prisma.$disconnect();
         });
     const cursor = findRes? findRes.id : 0;
-
     const res = await prisma.transactionChatroomCursor.upsert({
       create: {
         transactionId,

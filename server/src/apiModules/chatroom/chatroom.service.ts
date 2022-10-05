@@ -47,6 +47,7 @@ export class ChatroomService {
       isAgent: false,
       isCS: true,
     });
+
     // custom end transactionServiceToken
   }
   async transactionToken(

@@ -119,7 +119,6 @@ export class UserModel {
       'bodyCity': 1,
       'bodyArea': 1,
       'bodyBirthdate': 1,
-      'bodyCertificate': 1,
       'bodyCountry': 1,
       'bodyLineId': 1,
       'bodyGameUid': 1,
@@ -130,7 +129,6 @@ export class UserModel {
       'bodyIdCardType': 1,
       'bodyName': 1,
       'bodySelfie': 1,
-      'bodySign': 1,
     };
     const isVerified = (Object.keys(fields) as ( keyof typeof fields)[] )
         .every((key) => {
@@ -149,7 +147,6 @@ export class UserModel {
         area: param.bodyArea,
         birthdate: param.bodyBirthdate,
         city: param.bodyCity,
-        certificate: param.bodyCertificate,
         country: param.bodyCountry,
         lineId: param.bodyLineId,
         gameUid: param.bodyGameUid,
@@ -160,7 +157,6 @@ export class UserModel {
         idCardType: param.bodyIdCardType,
         name: param.bodyName,
         selfie: param.bodySelfie,
-        sign: param.bodySign,
         user: {
           update: {
             userStatus,
@@ -171,7 +167,6 @@ export class UserModel {
         address: true,
         area: true,
         birthdate: true,
-        certificate: true,
         city: true,
         country: true,
         lineId: true,
@@ -183,7 +178,6 @@ export class UserModel {
         idCardType: true,
         name: true,
         selfie: true,
-        sign: true,
         id: true,
       },
     });
@@ -192,7 +186,6 @@ export class UserModel {
       bodyAreaResonId: 'area',
       bodyBirthdateResonId: 'birthdate',
       bodyCityResonId: 'city',
-      bodyCertificateResonId: 'certificate',
       bodyCountryResonId: 'country',
       bodyGameUidResonId: 'gameUid',
       bodyLineIdResonId: 'lineId',
@@ -203,7 +196,6 @@ export class UserModel {
       bodyIdCardTypeResonId: 'idCardType',
       bodyNameResonId: 'name',
       bodySelfieResonId: 'selfie',
-      bodySignResonId: 'sign',
     } as const;
     console.log(param);
     await prisma.$transaction(
@@ -283,8 +275,6 @@ export class UserModel {
             city: true,
             name: true,
             selfie: true,
-            certificate: true,
-            sign: true,
             userVerifyResonDes: {
               select: {
                 field: true,
@@ -432,7 +422,7 @@ export class UserModel {
       customParam: any,
   ) {
     // custom begin getRealVerify
-    const res: any | null = await prisma.user.findUnique({
+    const res = await prisma.user.findUnique({
       where: {
         id: customParam.userId,
       },
@@ -457,7 +447,6 @@ export class UserModel {
             area: true,
             city: true,
             birthdate: true,
-            certificate: true,
             country: true,
             gameUid: true,
             lineId: true,
@@ -469,7 +458,6 @@ export class UserModel {
             idCardType: true,
             name: true,
             selfie: true,
-            sign: true,
             userVerifyResonDes: {
               select: {
                 field: true,
@@ -526,40 +514,50 @@ export class UserModel {
       customParam: any,
   ) {
     // custom begin postRealVerify
-    const res: any | null = await prisma.user.update({
+    const originalUser = await prisma.user.findUnique({
+      where: {
+        id: customParam.userId,
+      },
+    });
+    enum FieldMap {
+      address = 'bodyAddress',
+      area ='bodyArea',
+      birthdate ='bodyBirthdate',
+      city ='bodyCity',
+      country ='bodyCountry',
+      gameUid ='bodyGameUid',
+      lineId ='bodyLineId',
+      idCard ='bodyIdCard',
+      idCardDate ='bodyIdCardDate',
+      idCardPosiition ='bodyIdCardPosiition',
+      idCardType ='bodyIdCardType',
+      name ='bodyName',
+    }
+    const updataVerifyData : any = {};
+    if (originalUser) {
+      for (const e of (Object.keys(FieldMap) as (keyof typeof FieldMap)[])) {
+        if (originalUser[e] !== param[FieldMap[e]]) {
+          updataVerifyData[e] = 1;
+        }
+      }
+    }
+    const res = await prisma.user.update({
       data: {
-        name: param.bodyName,
+        address: param.bodyAddress,
+        area: param.bodyArea,
         birthdate: param.bodyBirthdate,
+        city: param.bodyCity,
         country: param.bodyCountry,
+        gameUid: param.bodyGameUid,
+        lineId: param.bodyLineId,
         idCard: param.bodyIdCard,
         idCardDate: param.bodyIdCardDate,
         idCardPosiition: param.bodyIdCardPosiition,
         idCardType: param.bodyIdCardType,
-        city: param.bodyCity,
-        area: param.bodyArea,
-        address: param.bodyAddress,
-        gameUid: param.bodyGameUid,
-        lineId: param.bodyLineId,
+        name: param.bodyName,
         userStatus: 3,
         userVerify: {
-          update: {
-            address: 1,
-            area: 1,
-            birthdate: 1,
-            certificate: 1,
-            city: 1,
-            country: 1,
-            gameUid: 1,
-            lineId: 1,
-            idCard: 1,
-            idCardDate: 1,
-            idCardPhoto: 1,
-            idCardPosiition: 1,
-            idCardType: 1,
-            name: 1,
-            selfie: 1,
-            sign: 1,
-          },
+          update: updataVerifyData,
         },
       },
       where: {
@@ -577,6 +575,11 @@ export class UserModel {
     if (res === null) {
       throw new errors.NotFindError;
     }
+    const originalBank = await prisma.bankAccount.findMany({
+      where: {
+        id: customParam.userId,
+      },
+    });
     await prisma.$transaction(
         param.bodyBankAccounts.map((e, i) => {
           return prisma.bankAccount.upsert({
@@ -712,9 +715,7 @@ export class UserModel {
             idCardPosiition: 1,
             idCardType: 1,
             idCardPhoto: 1,
-            certificate: 1,
             selfie: 1,
-            sign: 1,
             address: 1,
           },
         },

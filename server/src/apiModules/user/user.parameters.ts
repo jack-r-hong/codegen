@@ -212,8 +212,6 @@ area: string,
 areaResonId: string|undefined,
 birthdate: string,
 birthdateResonId: string|undefined,
-certificate: string,
-certificateResonId: string|undefined,
 city: string,
 cityResonId: string|undefined,
 country: string,
@@ -236,8 +234,6 @@ name: string,
 nameResonId: string|undefined,
 selfie: string,
 selfieResonId: string|undefined,
-sign: string,
-signResonId: string|undefined,
 }
 
 type UpdateBackstageUserReqQuery = {
@@ -267,8 +263,6 @@ bodyArea: number,
 bodyAreaResonId: number|undefined,
 bodyBirthdate: number,
 bodyBirthdateResonId: number|undefined,
-bodyCertificate: number,
-bodyCertificateResonId: number|undefined,
 bodyCity: number,
 bodyCityResonId: number|undefined,
 bodyCountry: number,
@@ -291,8 +285,6 @@ bodyName: number,
 bodyNameResonId: number|undefined,
 bodySelfie: number,
 bodySelfieResonId: number|undefined,
-bodySign: number,
-bodySignResonId: number|undefined,
 }
 
 
@@ -310,8 +302,6 @@ export const UpdateBackstageUserRequestConvert = (
     bodyAreaResonId: typeof body.areaResonId === 'number' ? body.areaResonId : undefined,
     bodyBirthdate: parseInt(body.birthdate),
     bodyBirthdateResonId: typeof body.birthdateResonId === 'number' ? body.birthdateResonId : undefined,
-    bodyCertificate: parseInt(body.certificate),
-    bodyCertificateResonId: typeof body.certificateResonId === 'number' ? body.certificateResonId : undefined,
     bodyCity: parseInt(body.city),
     bodyCityResonId: typeof body.cityResonId === 'number' ? body.cityResonId : undefined,
     bodyCountry: parseInt(body.country),
@@ -334,8 +324,6 @@ export const UpdateBackstageUserRequestConvert = (
     bodyNameResonId: typeof body.nameResonId === 'number' ? body.nameResonId : undefined,
     bodySelfie: parseInt(body.selfie),
     bodySelfieResonId: typeof body.selfieResonId === 'number' ? body.selfieResonId : undefined,
-    bodySign: parseInt(body.sign),
-    bodySignResonId: typeof body.signResonId === 'number' ? body.signResonId : undefined,
   };
 };
 type ReadOneBackstageUserReqBody = {

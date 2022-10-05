@@ -66,6 +66,28 @@ export class UserVerifyPhotoModel {
       ownerId: string,
   ) {
     // custom begin uploadManyVerifyPhoto
+    const updateData :any = {};
+    for (const e of param.queryTypes) {
+      if (e === 1 || e === 2) {
+        updateData['idCardPhoto'] = 1;
+      }
+      if (e === 3 || e === 4) {
+        updateData['certificate'] = 1;
+      }
+      if (e === 5 ) {
+        updateData['selfie'] = 1;
+      }
+    }
+    await prisma.userVerify.update({
+      data: updateData,
+      where: {
+        userId: ownerId,
+      },
+    }).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
     const res = prisma.$transaction(
         files.map((e, i) => {
           return prisma.userVerifyPhoto.upsert({

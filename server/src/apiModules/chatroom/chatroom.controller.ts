@@ -68,6 +68,7 @@ export class ChatroomController implements Controller {
         .then((result) =>{
           // custom begin transactionServiceToken
           res.json(result);
+
           // custom end transactionServiceToken
         }).catch((e) => {
           next(e);

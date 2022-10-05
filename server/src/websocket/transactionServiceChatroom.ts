@@ -99,7 +99,7 @@ export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
       }
     });
 
-    await this.sendNewMessage('read');
+    await this.sendNewMessage('ready');
     await this.createSubscriberNewMessage();
 
     const timer = setInterval(() => {
@@ -143,7 +143,7 @@ export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
     };
   };
 
-  async sendNewMessage(eventName: 'read'| 'newMessage') {
+  async sendNewMessage(eventName: 'ready'| 'newMessage') {
     event.eventName = eventName;
     const cursorRes = await chatroomModel.getManyTransactionServiceCursor(
         this.userId!);
