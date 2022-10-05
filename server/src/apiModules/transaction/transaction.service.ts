@@ -108,7 +108,7 @@ export class TransactionService {
     if (!dbUserData || dbUserData.userStatus !== 1) {
       console.log(dbUserData);
       /* todo throw error */
-      throw new errors.AuthenticationFailedError();
+      throw new errors.CodeError('mesage', 403, -1);
     }
     const {
       twd,

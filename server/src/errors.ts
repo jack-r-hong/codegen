@@ -63,6 +63,7 @@ export const errors = {
   AuthenticationFailedError,
   LoginFailError,
   CaptchaError,
+  CodeError,
 };
 
 export const errorHandle = (
