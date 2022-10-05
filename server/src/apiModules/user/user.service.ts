@@ -189,7 +189,6 @@ const userVerifyResponeFormat2 = async (data: any) => {
     userVerifyPhoto,
     bankAccount,
   } = data;
-
   const verify = {
     name: userVerify.name,
     lineId: userVerify.lineId,
@@ -297,7 +296,6 @@ const userVerifyResponeFormat2 = async (data: any) => {
        e2.bankAccountVerifyReson.des;
       });
     }
-
     bankAccounts[e.order] = {
       code: {
         val: e.code,

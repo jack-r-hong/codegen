@@ -3173,6 +3173,10 @@
                   "items":{
                     "type": "object",
                     "properties": {
+                      "order": {
+                        "type": "integer",
+                        "enum": [1, 2, 3]
+                      },
                       "code": {
                         "type": "integer"
                       },

@@ -137,7 +137,6 @@ export class UserModel {
           }
           return false;
         });
-
     if (isVerified) {
       const userBank = await prisma.bankAccount.findMany({
         where: {
@@ -147,16 +146,13 @@ export class UserModel {
           status: true,
         },
       });
-
       userBank.forEach((e) => {
         if (e.status !== 2) {
           isVerified = false;
         }
       });
     }
-
     const userStatus = isVerified? 1: 4;
-
     const userVerifyRes = await prisma.userVerify.update({
       where: {
         userId: param.pathId,
@@ -216,7 +212,6 @@ export class UserModel {
       bodyNameResonId: 'name',
       bodySelfieResonId: 'selfie',
     } as const;
-    console.log(param);
     await prisma.$transaction(
         (Object.keys(resonMap) as (keyof typeof resonMap)[] )
             .map((key) => {
@@ -597,19 +592,16 @@ export class UserModel {
     if (res === null) {
       throw new errors.NotFindError;
     }
-
     const originalBank = await prisma.bankAccount.findMany({
       where: {
         userId: customParam.userId,
       },
     });
-
     await prisma.$transaction(
         param.bodyBankAccounts.map((e, i) => {
           let updateVerify :any = {update: {}};
           let status :any = 1;
-
-          const bank = originalBank.find((bank) => bank.order - 1 === i);
+          const bank = originalBank.find((bank) => bank.order === e.bodyOrder);
           if (bank) {
             if (bank.account !== e.bodyAccount) {
               updateVerify.update.account = 1;
@@ -621,17 +613,15 @@ export class UserModel {
               updateVerify.update.name = 1;
             }
           }
-
           if (Object.keys(updateVerify.update).length <= 0) {
             updateVerify = undefined;
             status = undefined;
           }
-
           return prisma.bankAccount.upsert({
             where: {
               uniqueOrder: {
                 userId: customParam.userId,
-                order: i + 1,
+                order: e.bodyOrder,
               },
             },
             update: {
@@ -643,7 +633,7 @@ export class UserModel {
             },
             create: {
               userId: customParam.userId,
-              order: i + 1,
+              order: e.bodyOrder,
               account: e.bodyAccount,
               code: e.bodyAccount,
               name: e.bodyName,

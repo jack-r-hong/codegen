@@ -400,6 +400,12 @@ export const postRealVerifyValidator: Schema = {
   'bankAccounts.*.name': {
     isString: true,
   },
+  'bankAccounts.*.order': {
+    isInt: true,
+    matches: {
+      options: /^(1|2|3)/,
+    },
+  },
   'birthdate': {
     in: 'body',
     isString: true,
