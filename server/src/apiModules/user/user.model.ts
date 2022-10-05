@@ -130,14 +130,33 @@ export class UserModel {
       'bodyName': 1,
       'bodySelfie': 1,
     };
-    const isVerified = (Object.keys(fields) as ( keyof typeof fields)[] )
+    let isVerified = (Object.keys(fields) as ( keyof typeof fields)[] )
         .every((key) => {
           if (param[key] === 2) {
             return true;
           }
           return false;
         });
+
+    if (isVerified) {
+      const userBank = await prisma.bankAccount.findMany({
+        where: {
+          userId: param.pathId,
+        },
+        select: {
+          status: true,
+        },
+      });
+
+      userBank.forEach((e) => {
+        if (e.status !== 2) {
+          isVerified = false;
+        }
+      });
+    }
+
     const userStatus = isVerified? 1: 4;
+
     const userVerifyRes = await prisma.userVerify.update({
       where: {
         userId: param.pathId,

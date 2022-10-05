@@ -146,8 +146,6 @@ export class BankAccountModel {
   ) {
     // custom begin putBackstageBankAccounts
     const transactionArray :any[] = [];
-    console.log(param);
-
 
     const upsertQuery = (verifyId: number, resonId: number, field: string ) => {
       return prisma.bankAccountVerifyResonDes.upsert({
@@ -243,6 +241,37 @@ export class BankAccountModel {
         );
       }
     }
+
+    const verify = await prisma.userVerify.findUnique({
+      where: {
+        userId: param.pathUserId,
+      },
+      select: {
+        'name': true,
+        'gameUid': true,
+        'lineId': true,
+        'birthdate': true,
+        'country': true,
+        'idCardPhoto': true,
+        'idCardDate': true,
+        'idCardPosiition': true,
+        'idCardType': true,
+        'city': true,
+        'area': true,
+        'address': true,
+      },
+    });
+
+    if (isAllPass && verify) {
+      isAllPass = (Object.keys(verify) as (keyof typeof verify)[]
+      ).every((e) => {
+        if (verify[e] === 2) {
+          return true;
+        }
+        return false;
+      });
+    }
+    console.log(isAllPass);
 
     transactionArray.push(
         prisma.user.update({
