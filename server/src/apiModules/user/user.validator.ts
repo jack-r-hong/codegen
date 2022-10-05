@@ -445,7 +445,7 @@ export const postRealVerifyValidator: Schema = {
     isLength: {
       options: {
         max: 30,
-        min: 3,
+        min: 1,
       },
 
     },

@@ -288,7 +288,6 @@ const userVerifyResponeFormat2 = async (data: any) => {
       name: '',
       photo: '',
     };
-
     if (bankAccountVerify && bankAccountVerify.bankAccountVerifyResonDes) {
       bankAccountVerify.bankAccountVerifyResonDes.forEach((e2) => {
         const field = e2.field;
@@ -646,7 +645,6 @@ export class UserService {
       phonePrefix,
       phone,
     };
-    // await getPhoneCheck(phonePrefix, phone, code);
 
     // custom end phoneCheck
   }

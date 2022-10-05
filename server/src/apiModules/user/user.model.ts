@@ -580,6 +580,7 @@ export class UserModel {
         id: customParam.userId,
       },
     });
+
     await prisma.$transaction(
         param.bodyBankAccounts.map((e, i) => {
           return prisma.bankAccount.upsert({
