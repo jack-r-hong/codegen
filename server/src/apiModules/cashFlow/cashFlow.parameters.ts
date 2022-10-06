@@ -15,7 +15,14 @@ interface TypedRequest<
 
 
 type NotifyPaidReqBody = {
-  }
+  Account: string,
+Amount: string,
+Bank: string,
+MemberOrderNo: string,
+OrderNo: string,
+Sign: string,
+Status: string,
+}
 
 type NotifyPaidReqQuery = {
 }
@@ -35,6 +42,13 @@ export interface NotifyPaidRequest extends TypedRequest<
 }
 
 export type NotifyPaidParams = {
+bodyAccount: string,
+bodyAmount: string,
+bodyBank: string,
+bodyMemberOrderNo: string,
+bodyOrderNo: string,
+bodySign: string,
+bodyStatus: string,
 }
 
 
@@ -45,10 +59,25 @@ export const NotifyPaidRequestConvert = (
     cookie: NotifyPaidReqCookie,
 ): NotifyPaidParams => {
   return {
+    bodyAccount: body.Account,
+    bodyAmount: body.Amount,
+    bodyBank: body.Bank,
+    bodyMemberOrderNo: body.MemberOrderNo,
+    bodyOrderNo: body.OrderNo,
+    bodySign: body.Sign,
+    bodyStatus: body.Status,
   };
 };
 type NotifyTakeNumberReqBody = {
-  }
+  Amount: string,
+BankName: string,
+DueTime: string,
+MemberOrderNo: string,
+OrderNo: string,
+PaymentInfo: string,
+Sign: string,
+Status: string,
+}
 
 type NotifyTakeNumberReqQuery = {
 }
@@ -68,6 +97,14 @@ export interface NotifyTakeNumberRequest extends TypedRequest<
 }
 
 export type NotifyTakeNumberParams = {
+bodyAmount: string,
+bodyBankName: string,
+bodyDueTime: string,
+bodyMemberOrderNo: string,
+bodyOrderNo: string,
+bodyPaymentInfo: string,
+bodySign: string,
+bodyStatus: string,
 }
 
 
@@ -78,6 +115,14 @@ export const NotifyTakeNumberRequestConvert = (
     cookie: NotifyTakeNumberReqCookie,
 ): NotifyTakeNumberParams => {
   return {
+    bodyAmount: body.Amount,
+    bodyBankName: body.BankName,
+    bodyDueTime: body.DueTime,
+    bodyMemberOrderNo: body.MemberOrderNo,
+    bodyOrderNo: body.OrderNo,
+    bodyPaymentInfo: body.PaymentInfo,
+    bodySign: body.Sign,
+    bodyStatus: body.Status,
   };
 };
 

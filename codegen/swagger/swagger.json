@@ -2383,7 +2383,25 @@
           }
         }
       }               
-    }            
+    },
+    "/cashFlow/notify/grant" : {     
+      "post" : {
+        "tags" : [ "cashFlow" ],
+        "summary" : "get token",
+        "operationId" : "notifyPaid",    
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/NotifyGrant"
+        },                                             
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/Token"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          }
+        }
+      }               
+    }       
     
     
   },
@@ -3951,7 +3969,7 @@
                   "Status": {
                     "type": "string"
                   },
-                  "Bank:": {
+                  "Bank": {
                     "type": "string"
                   },
                   "Account": {
@@ -3966,7 +3984,38 @@
         },
         "description" : "List of user object",
         "required" : true
-      }                                                  
+      },   
+      "NotifyGrant" : {
+        "content" : {
+          "application/json" : {
+            "schema" : {
+                "type" : "object",
+                "properties" : {              
+                  "Amount": {
+                    "type": "string"
+                  },
+                  "MemberOrderNo": {
+                    "type": "string"
+                  },
+                  "OrderNo": {
+                    "type": "string"
+                  },
+                  "Status": {
+                    "type": "string"
+                  },
+                  "Fee": {
+                    "type": "string"
+                  },
+                  "Sign": {
+                    "type": "string"
+                  }
+                }
+            }
+          }
+        },
+        "description" : "List of user object",
+        "required" : true
+      }                                                   
     },
     "parameters" : {
       "createdAt" : {

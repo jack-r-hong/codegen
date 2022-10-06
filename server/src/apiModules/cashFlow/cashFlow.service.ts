@@ -25,7 +25,7 @@ export class CashFlowService {
       session: Express.Request['session'],
   ) {
     // custom begin notifyTakeNumber
-
+    param.bodyMemberOrderNo
     // custom end notifyTakeNumber
   }
 }

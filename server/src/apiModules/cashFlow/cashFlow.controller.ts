@@ -31,8 +31,6 @@ export class CashFlowController implements Controller {
       res: Response,
       next: NextFunction,
   ) {
-    console.log('paid', req.body);
-
     CashFlowController.service.notifyPaid(
         cashFlowParams.NotifyPaidRequestConvert(
             req.body,
@@ -58,8 +56,6 @@ export class CashFlowController implements Controller {
       res: Response,
       next: NextFunction,
   ) {
-    console.log('take_number', req.body);
-    
     CashFlowController.service.notifyTakeNumber(
         cashFlowParams.NotifyTakeNumberRequestConvert(
             req.body,
@@ -72,6 +68,7 @@ export class CashFlowController implements Controller {
         .then((result) =>{
           // custom begin notifyTakeNumber
           res.json();
+
           // custom end notifyTakeNumber
         }).catch((e) => {
           next(e);

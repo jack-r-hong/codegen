@@ -499,7 +499,7 @@ export class UserService {
   ) {
     // custom begin captcha
     const captcha = svgCaptcha.create({
-      size: 7,
+      size: 6,
       charPreset: '0123456789',
       color: true,
       noise: 4,

@@ -141,7 +141,6 @@ export class UserVerifyPhotoModel {
         });
       }
     }
-
     await prisma.userVerify.update({
       data: updateData,
       where: {

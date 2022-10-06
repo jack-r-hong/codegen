@@ -15,16 +15,16 @@ export class Queue implements ModelBase {
     return this.key;
   }
 
-  async push(data: string) {
-    return await this.client.lPush(this.getKey(), data);
+  async push(data: string, key? :string) {
+    return await this.client.lPush(this.getKey() + `${key??'t'}`, data);
   }
 
-  async rPush(data: string) {
-    return await this.client.rPush(this.getKey(), data);
+  async rPush(data: string, key? :string) {
+    return await this.client.rPush(this.getKey() + `${key??'t'}`, data);
   }
 
-  async get(count = -1) {
-    return await this.client.lRange(this.key, 0, count);
+  async get(count = -1, key? :string) {
+    return await this.client.lRange(this.getKey() + `${key??'t'}`, 0, count);
   }
 
   async move(newQueueKey: string, count: number) {
@@ -38,18 +38,18 @@ export class Queue implements ModelBase {
     return res;
   }
 
-  async sub( cb: any) {
+  async sub( cb: any, key?: string) {
     const subscriber = this.client.duplicate();
 
     await subscriber.connect();
 
-    await subscriber.subscribe(this.key + 'Sub', cb);
+    await subscriber.subscribe(this.key + 'Sub' + `${key??'t'}`, cb);
 
     return subscriber;
   }
 
-  async pub(data: string) {
-    const result = await this.client.publish(this.key + 'Sub', data);
+  async pub(data: string, key?: string) {
+    const result = await this.client.publish(this.key + 'Sub'+ `${key??'t'}`, data);
 
     return {result};
   }
