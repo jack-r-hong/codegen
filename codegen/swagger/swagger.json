@@ -62,7 +62,11 @@
     {
       "name" : "chatroom",
       "description" : "Operations about chatroom"
-    }       
+    },
+    {
+      "name" : "cashFlow",
+      "description" : "Operations about cashFlow"
+    }         
   ],
   "paths" : {
     "/captcha" : {
@@ -2343,7 +2347,45 @@
           }
         }
       }               
-    }                
+    }, 
+    "/cashFlow/notify/take_number" : {     
+      "post" : {
+        "tags" : [ "cashFlow" ],
+        "summary" : "get token",
+        "operationId" : "notifyTakeNumber",   
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/NotifyTakeNumber"
+        },                                              
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/Token"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          }
+        }
+      }               
+    },
+    "/cashFlow/notify/paid" : {     
+      "post" : {
+        "tags" : [ "cashFlow" ],
+        "summary" : "get token",
+        "operationId" : "notifyPaid",    
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/NotifyPaid"
+        },                                             
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/Token"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          }
+        }
+      }               
+    }            
+    
+    
   },
   "externalDocs" : {
     "description" : "Find out more about Swagger",
@@ -3853,7 +3895,78 @@
         },
         "description" : "List of user object",
         "required" : true
-      }                                 
+      },
+      "NotifyTakeNumber" : {
+        "content" : {
+          "application/json" : {
+            "schema" : {
+                "type" : "object",
+                "properties" : {              
+                  "Amount": {
+                    "type": "string"
+                  },
+                  "MemberOrderNo": {
+                    "type": "string"
+                  },
+                  "OrderNo": {
+                    "type": "string"
+                  },
+                  "Status": {
+                    "type": "string"
+                  },
+                  "DueTime": {
+                    "type": "string"
+                  },
+                  "BankName": {
+                    "type": "string"
+                  },
+                  "PaymentInfo": {
+                    "type": "string"
+                  },
+                  "Sign": {
+                    "type": "string"
+                  }
+                }
+            }
+          }
+        },
+        "description" : "List of user object",
+        "required" : true
+      },
+      "NotifyPaid" : {
+        "content" : {
+          "application/json" : {
+            "schema" : {
+                "type" : "object",
+                "properties" : {              
+                  "Amount": {
+                    "type": "string"
+                  },
+                  "MemberOrderNo": {
+                    "type": "string"
+                  },
+                  "OrderNo": {
+                    "type": "string"
+                  },
+                  "Status": {
+                    "type": "string"
+                  },
+                  "Bank:": {
+                    "type": "string"
+                  },
+                  "Account": {
+                    "type": "string"
+                  },
+                  "Sign": {
+                    "type": "string"
+                  }
+                }
+            }
+          }
+        },
+        "description" : "List of user object",
+        "required" : true
+      }                                                  
     },
     "parameters" : {
       "createdAt" : {

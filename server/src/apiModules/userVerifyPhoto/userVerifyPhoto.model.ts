@@ -77,7 +77,71 @@ export class UserVerifyPhotoModel {
       if (e === 5 ) {
         updateData['selfie'] = 1;
       }
+      if (e === 7 ) {
+        await prisma.bankAccount.update({
+          data: {
+            bankAccountVerify: {
+              update: {
+                photo: 1,
+              },
+            },
+          },
+          where: {
+            uniqueOrder: {
+              userId: ownerId,
+              order: 1,
+            },
+          },
+        }).catch((e) => {
+          throw e;
+        }).finally(() => {
+          prisma.$disconnect();
+        });
+      }
+      if (e === 8 ) {
+        await prisma.bankAccount.update({
+          data: {
+            bankAccountVerify: {
+              update: {
+                photo: 1,
+              },
+            },
+          },
+          where: {
+            uniqueOrder: {
+              userId: ownerId,
+              order: 2,
+            },
+          },
+        }).catch((e) => {
+          throw e;
+        }).finally(() => {
+          prisma.$disconnect();
+        });
+      }
+      if (e === 9 ) {
+        await prisma.bankAccount.update({
+          data: {
+            bankAccountVerify: {
+              update: {
+                photo: 1,
+              },
+            },
+          },
+          where: {
+            uniqueOrder: {
+              userId: ownerId,
+              order: 3,
+            },
+          },
+        }).catch((e) => {
+          throw e;
+        }).finally(() => {
+          prisma.$disconnect();
+        });
+      }
     }
+
     await prisma.userVerify.update({
       data: updateData,
       where: {

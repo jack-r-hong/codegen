@@ -536,6 +536,9 @@ export class UserService {
         };
       }
     }
+    if (res === null) {
+      throw new errors.LoginFailError;
+    }
     throw new errors.LoginFailError;
 
     // custom end loginUser

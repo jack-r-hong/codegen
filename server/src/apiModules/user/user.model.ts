@@ -424,9 +424,6 @@ export class UserModel {
     }).finally(() => {
       prisma.$disconnect();
     });
-    if (res === null) {
-      throw new errors.NotFindError;
-    }
     return res;
 
     // custom end loginUser

@@ -28,9 +28,18 @@ const getNewData = async (userId: string) => {
     dollars,
     point,
     orderCount,
-    pending: resPending,
-    processing: resProcessing,
-    failed: resFailed,
+    pending: resPending.map((e) => {
+      const res = e;
+      return Object.assign(res, {remark: 'remark'});
+    }),
+    processing: resProcessing.map((e) => {
+      const res = e;
+      return Object.assign(res, {remark: 'remark'});
+    }),
+    failed: resFailed.map((e) => {
+      const res = e;
+      return Object.assign(res, {remark: 'remark'});
+    }),
   };
 };
 // transactionModel.readRealtimeCountTransaction('aed06ef7-136a-42c9-b7c8-494109bb2baf').then(() => {

@@ -475,7 +475,7 @@ export class TransactionModel {
     return res.map((e) => {
       let t = e;
       t = Object.assign(t, {
-        name: t.user?.gameUid,
+        name: t.user?.name,
         gameUid: t.user?.gameUid,
       });
       return t;
