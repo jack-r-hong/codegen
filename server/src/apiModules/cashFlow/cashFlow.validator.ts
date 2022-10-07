@@ -12,11 +12,11 @@ export const customPageValidator: Schema = {
 export const notifyGrantValidator: Schema = {
   'Amount': {
     in: 'body',
-    isString: true,
+    isInt: true,
   },
   'Fee': {
     in: 'body',
-    isString: true,
+    isInt: true,
   },
   'MemberOrderNo': {
     in: 'body',

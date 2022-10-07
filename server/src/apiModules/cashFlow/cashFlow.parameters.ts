@@ -74,8 +74,8 @@ export interface NotifyGrantRequest extends TypedRequest<
 }
 
 export type NotifyGrantParams = {
-bodyAmount: string,
-bodyFee: string,
+bodyAmount: number,
+bodyFee: number,
 bodyMemberOrderNo: string,
 bodyOrderNo: string,
 bodySign: string,
@@ -90,8 +90,8 @@ export const NotifyGrantRequestConvert = (
     cookie: NotifyGrantReqCookie,
 ): NotifyGrantParams => {
   return {
-    bodyAmount: body.Amount,
-    bodyFee: body.Fee,
+    bodyAmount: parseInt(body.Amount),
+    bodyFee: parseInt(body.Fee),
     bodyMemberOrderNo: body.MemberOrderNo,
     bodyOrderNo: body.OrderNo,
     bodySign: body.Sign,

@@ -5,11 +5,9 @@ import {errors} from '../../errors';
 // custom begin import
 import {Container} from 'typedi';
 import {WSClientIdModel} from '../../redisClient/models/webSocketModels';
-import {TransactionModel} from '../transaction//transaction.model';
+import {TransactionModel} from '../transaction/transaction.model';
 const wSCIModel = Container.get(WSClientIdModel);
-
 const transactionModel = Container.get(TransactionModel);
-
 
 // custom end import
 
@@ -43,16 +41,28 @@ export class CashFlowService {
       session: Express.Request['session'],
   ) {
     // custom begin notifyPaid
-    
-    const res = await transactionModel.updateTransaction({
-      bodyState: 3,
+    if (param.bodyStatus !== 'settled') {
+      return;
+    }
+    const tranRes = await transactionModel.readOneTransaction({
       pathId: param.bodyMemberOrderNo,
-    }, {});
-    await wSCIModel.pub(param.bodyMemberOrderNo,
-        JSON.stringify({
-          state: res.state,
-        }),
-    );
+    });
+    if (tranRes.bos === 1) {
+      if (tranRes.state !== 2) {
+        return;
+      }
+      const res = await transactionModel.updateTransaction({
+        bodyState: 3,
+        pathId: param.bodyMemberOrderNo,
+      }, {});
+      await wSCIModel.pub(param.bodyMemberOrderNo,
+          JSON.stringify({
+            state: res.state,
+          }),
+      );
+    } else if (tranRes.bos === 2) {
+      /** 目前不用做 */
+    }
 
     // custom end notifyPaid
   }

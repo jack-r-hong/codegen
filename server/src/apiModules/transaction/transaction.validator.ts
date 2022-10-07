@@ -78,7 +78,7 @@ optional: {
   },
 },
     matches: {
-      options: /^(0|1|2|3|4|5|6)/,
+      options: /^(1|2|3|4|99)/,
     },
   },
   'JSESSIONID': {
@@ -322,7 +322,7 @@ optional: {
   },
 },
     matches: {
-      options: /^(0|1|2|3|4|5|6)/,
+      options: /^(1|2|3|4|99)/,
     },
   },
   'JSESSIONID': {
