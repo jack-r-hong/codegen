@@ -186,18 +186,16 @@ export const getExchangeRateSellValidator: Schema = {
   },
 };
 export const postGSPayDepositValidator: Schema = {
+  'transactionId': {
+    in: 'body',
+    isString: true,
+  },
   'type': {
-    in: 'query',
+    in: 'body',
     isInt: true,
-    notEmpty: true,
     matches: {
       options: /^(3|4)/,
     },
-  },
-  'transactionId': {
-    in: 'query',
-    isString: true,
-    notEmpty: true,
   },
   'JSESSIONID': {
     in: 'cookies',

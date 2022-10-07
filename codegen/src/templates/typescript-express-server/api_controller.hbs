@@ -37,6 +37,9 @@ export class {{fpc tag}}Controller implements Controller {
       res: Response,
       next: NextFunction,
   ) {
+    // custom begin {{data.operationId}}Check
+{{{lookup ../../custom  (add data.operationId "Check")}}}
+    // custom end {{data.operationId}}Check
     {{fpc ../../tag}}Controller.service.{{data.operationId}}(
         {{../../tag}}Params.{{fpc data.operationId}}RequestConvert(
             req.body,

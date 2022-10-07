@@ -31,6 +31,9 @@ export class BankAccountController implements Controller {
       res: Response,
       next: NextFunction,
   ) {
+    // custom begin getBackstageBankAccountResonCheck
+
+    // custom end getBackstageBankAccountResonCheck
     BankAccountController.service.getBackstageBankAccountReson(
         bankAccountParams.GetBackstageBankAccountResonRequestConvert(
             req.body,
@@ -56,6 +59,9 @@ export class BankAccountController implements Controller {
       res: Response,
       next: NextFunction,
   ) {
+    // custom begin createBackstageBankAccountsResonCheck
+
+    // custom end createBackstageBankAccountsResonCheck
     BankAccountController.service.createBackstageBankAccountsReson(
         bankAccountParams.CreateBackstageBankAccountsResonRequestConvert(
             req.body,
@@ -81,6 +87,9 @@ export class BankAccountController implements Controller {
       res: Response,
       next: NextFunction,
   ) {
+    // custom begin deleteBackstageBankAccountResonCheck
+
+    // custom end deleteBackstageBankAccountResonCheck
     BankAccountController.service.deleteBackstageBankAccountReson(
         bankAccountParams.DeleteBackstageBankAccountResonRequestConvert(
             req.body,
@@ -106,6 +115,9 @@ export class BankAccountController implements Controller {
       res: Response,
       next: NextFunction,
   ) {
+    // custom begin updateBackstageBankAccountResonCheck
+
+    // custom end updateBackstageBankAccountResonCheck
     BankAccountController.service.updateBackstageBankAccountReson(
         bankAccountParams.UpdateBackstageBankAccountResonRequestConvert(
             req.body,
@@ -131,6 +143,9 @@ export class BankAccountController implements Controller {
       res: Response,
       next: NextFunction,
   ) {
+    // custom begin getBackstageBankAccountsCheck
+
+    // custom end getBackstageBankAccountsCheck
     BankAccountController.service.getBackstageBankAccounts(
         bankAccountParams.GetBackstageBankAccountsRequestConvert(
             req.body,
@@ -156,6 +171,9 @@ export class BankAccountController implements Controller {
       res: Response,
       next: NextFunction,
   ) {
+    // custom begin putBackstageBankAccountsCheck
+
+    // custom end putBackstageBankAccountsCheck
     BankAccountController.service.putBackstageBankAccounts(
         bankAccountParams.PutBackstageBankAccountsRequestConvert(
             req.body,
@@ -181,6 +199,9 @@ export class BankAccountController implements Controller {
       res: Response,
       next: NextFunction,
   ) {
+    // custom begin createBankAccountsCheck
+
+    // custom end createBankAccountsCheck
     BankAccountController.service.createBankAccounts(
         bankAccountParams.CreateBankAccountsRequestConvert(
             req.body,
@@ -206,6 +227,9 @@ export class BankAccountController implements Controller {
       res: Response,
       next: NextFunction,
   ) {
+    // custom begin getMyBankAccountsCheck
+
+    // custom end getMyBankAccountsCheck
     BankAccountController.service.getMyBankAccounts(
         bankAccountParams.GetMyBankAccountsRequestConvert(
             req.body,
@@ -231,6 +255,9 @@ export class BankAccountController implements Controller {
       res: Response,
       next: NextFunction,
   ) {
+    // custom begin readOneBankAccountCheck
+
+    // custom end readOneBankAccountCheck
     BankAccountController.service.readOneBankAccount(
         bankAccountParams.ReadOneBankAccountRequestConvert(
             req.body,

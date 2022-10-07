@@ -31,6 +31,9 @@ export class UserController implements Controller {
       res: Response,
       next: NextFunction,
   ) {
+    // custom begin getUserBackstageAgentsCheck
+
+    // custom end getUserBackstageAgentsCheck
     UserController.service.getUserBackstageAgents(
         userParams.GetUserBackstageAgentsRequestConvert(
             req.body,
@@ -56,6 +59,9 @@ export class UserController implements Controller {
       res: Response,
       next: NextFunction,
   ) {
+    // custom begin readBackstageUserResonCheck
+
+    // custom end readBackstageUserResonCheck
     UserController.service.readBackstageUserReson(
         userParams.ReadBackstageUserResonRequestConvert(
             req.body,
@@ -81,6 +87,9 @@ export class UserController implements Controller {
       res: Response,
       next: NextFunction,
   ) {
+    // custom begin createBackstageUserResonCheck
+
+    // custom end createBackstageUserResonCheck
     UserController.service.createBackstageUserReson(
         userParams.CreateBackstageUserResonRequestConvert(
             req.body,
@@ -106,6 +115,9 @@ export class UserController implements Controller {
       res: Response,
       next: NextFunction,
   ) {
+    // custom begin deleteBackstageUserResonCheck
+
+    // custom end deleteBackstageUserResonCheck
     UserController.service.deleteBackstageUserReson(
         userParams.DeleteBackstageUserResonRequestConvert(
             req.body,
@@ -131,6 +143,9 @@ export class UserController implements Controller {
       res: Response,
       next: NextFunction,
   ) {
+    // custom begin updateBackstageUserResonCheck
+
+    // custom end updateBackstageUserResonCheck
     UserController.service.updateBackstageUserReson(
         userParams.UpdateBackstageUserResonRequestConvert(
             req.body,
@@ -156,6 +171,9 @@ export class UserController implements Controller {
       res: Response,
       next: NextFunction,
   ) {
+    // custom begin updateBackstageUserCheck
+
+    // custom end updateBackstageUserCheck
     UserController.service.updateBackstageUser(
         userParams.UpdateBackstageUserRequestConvert(
             req.body,
@@ -181,6 +199,9 @@ export class UserController implements Controller {
       res: Response,
       next: NextFunction,
   ) {
+    // custom begin readOneBackstageUserCheck
+
+    // custom end readOneBackstageUserCheck
     UserController.service.readOneBackstageUser(
         userParams.ReadOneBackstageUserRequestConvert(
             req.body,
@@ -203,6 +224,9 @@ export class UserController implements Controller {
       res: Response,
       next: NextFunction,
   ) {
+    // custom begin readBackstageUserTransactionCheck
+
+    // custom end readBackstageUserTransactionCheck
     UserController.service.readBackstageUserTransaction(
         userParams.ReadBackstageUserTransactionRequestConvert(
             req.body,
@@ -228,6 +252,9 @@ export class UserController implements Controller {
       res: Response,
       next: NextFunction,
   ) {
+    // custom begin readManyUserBackstageCheck
+
+    // custom end readManyUserBackstageCheck
     UserController.service.readManyUserBackstage(
         userParams.ReadManyUserBackstageRequestConvert(
             req.body,
@@ -250,6 +277,9 @@ export class UserController implements Controller {
       res: Response,
       next: NextFunction,
   ) {
+    // custom begin captchaCheck
+
+    // custom end captchaCheck
     UserController.service.captcha(
         userParams.CaptchaRequestConvert(
             req.body,
@@ -276,6 +306,9 @@ export class UserController implements Controller {
       res: Response,
       next: NextFunction,
   ) {
+    // custom begin loginUserCheck
+
+    // custom end loginUserCheck
     UserController.service.loginUser(
         userParams.LoginUserRequestConvert(
             req.body,
@@ -301,6 +334,9 @@ export class UserController implements Controller {
       res: Response,
       next: NextFunction,
   ) {
+    // custom begin getRealVerifyCheck
+
+    // custom end getRealVerifyCheck
     UserController.service.getRealVerify(
         userParams.GetRealVerifyRequestConvert(
             req.body,
@@ -326,6 +362,9 @@ export class UserController implements Controller {
       res: Response,
       next: NextFunction,
   ) {
+    // custom begin postRealVerifyCheck
+
+    // custom end postRealVerifyCheck
     UserController.service.postRealVerify(
         userParams.PostRealVerifyRequestConvert(
             req.body,
@@ -351,6 +390,9 @@ export class UserController implements Controller {
       res: Response,
       next: NextFunction,
   ) {
+    // custom begin putRealVerifyCheck
+
+    // custom end putRealVerifyCheck
     UserController.service.putRealVerify(
         userParams.PutRealVerifyRequestConvert(
             req.body,
@@ -376,6 +418,9 @@ export class UserController implements Controller {
       res: Response,
       next: NextFunction,
   ) {
+    // custom begin registerUserCheck
+
+    // custom end registerUserCheck
     UserController.service.registerUser(
         userParams.RegisterUserRequestConvert(
             req.body,
@@ -401,6 +446,9 @@ export class UserController implements Controller {
       res: Response,
       next: NextFunction,
   ) {
+    // custom begin phoneCheckCheck
+
+    // custom end phoneCheckCheck
     UserController.service.phoneCheck(
         userParams.PhoneCheckRequestConvert(
             req.body,
@@ -426,6 +474,9 @@ export class UserController implements Controller {
       res: Response,
       next: NextFunction,
   ) {
+    // custom begin getUserMyStatusCheck
+
+    // custom end getUserMyStatusCheck
     UserController.service.getUserMyStatus(
         userParams.GetUserMyStatusRequestConvert(
             req.body,
@@ -451,6 +502,9 @@ export class UserController implements Controller {
       res: Response,
       next: NextFunction,
   ) {
+    // custom begin updateOneyUserCheck
+
+    // custom end updateOneyUserCheck
     UserController.service.updateOneyUser(
         userParams.UpdateOneyUserRequestConvert(
             req.body,

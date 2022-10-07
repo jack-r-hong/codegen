@@ -31,6 +31,9 @@ export class BackstageAdminController implements Controller {
       res: Response,
       next: NextFunction,
   ) {
+    // custom begin getAdminFromIdCheck
+
+    // custom end getAdminFromIdCheck
     BackstageAdminController.service.getAdminFromId(
         backstageAdminParams.GetAdminFromIdRequestConvert(
             req.body,
@@ -56,6 +59,9 @@ export class BackstageAdminController implements Controller {
       res: Response,
       next: NextFunction,
   ) {
+    // custom begin adminLoginCheck
+
+    // custom end adminLoginCheck
     BackstageAdminController.service.adminLogin(
         backstageAdminParams.AdminLoginRequestConvert(
             req.body,
@@ -81,6 +87,9 @@ export class BackstageAdminController implements Controller {
       res: Response,
       next: NextFunction,
   ) {
+    // custom begin adminRegisterCheck
+
+    // custom end adminRegisterCheck
     BackstageAdminController.service.adminRegister(
         backstageAdminParams.AdminRegisterRequestConvert(
             req.body,

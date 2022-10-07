@@ -262,11 +262,11 @@ export const GetExchangeRateSellRequestConvert = (
   };
 };
 type PostGSPayDepositReqBody = {
-  }
+  transactionId: string,
+type: string,
+}
 
 type PostGSPayDepositReqQuery = {
-      type: string
-      transactionId: string
 }
 
 type PostGSPayDepositReqParams = {
@@ -284,8 +284,8 @@ export interface PostGSPayDepositRequest extends TypedRequest<
 }
 
 export type PostGSPayDepositParams = {
-      queryType: number
-      queryTransactionId: string
+bodyTransactionId: string,
+bodyType: number,
 }
 
 
@@ -296,8 +296,8 @@ export const PostGSPayDepositRequestConvert = (
     cookie: PostGSPayDepositReqCookie,
 ): PostGSPayDepositParams => {
   return {
-          queryType: parseInt(query.type),
-            queryTransactionId: query.transactionId,
+    bodyTransactionId: body.transactionId,
+    bodyType: parseInt(body.type),
   };
 };
 type ReadMyTransactionReqBody = {

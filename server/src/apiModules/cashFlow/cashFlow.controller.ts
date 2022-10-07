@@ -31,6 +31,9 @@ export class CashFlowController implements Controller {
       res: Response,
       next: NextFunction,
   ) {
+    // custom begin customPageCheck
+
+    // custom end customPageCheck
     CashFlowController.service.customPage(
         cashFlowParams.CustomPageRequestConvert(
             req.body,
@@ -56,6 +59,9 @@ export class CashFlowController implements Controller {
       res: Response,
       next: NextFunction,
   ) {
+    // custom begin notifyGrantCheck
+
+    // custom end notifyGrantCheck
     CashFlowController.service.notifyGrant(
         cashFlowParams.NotifyGrantRequestConvert(
             req.body,
@@ -81,6 +87,9 @@ export class CashFlowController implements Controller {
       res: Response,
       next: NextFunction,
   ) {
+    // custom begin notifyPaidCheck
+
+    // custom end notifyPaidCheck
     CashFlowController.service.notifyPaid(
         cashFlowParams.NotifyPaidRequestConvert(
             req.body,
@@ -106,6 +115,9 @@ export class CashFlowController implements Controller {
       res: Response,
       next: NextFunction,
   ) {
+    // custom begin notifyTakeNumberCheck
+
+    // custom end notifyTakeNumberCheck
     CashFlowController.service.notifyTakeNumber(
         cashFlowParams.NotifyTakeNumberRequestConvert(
             req.body,
@@ -131,6 +143,9 @@ export class CashFlowController implements Controller {
       res: Response,
       next: NextFunction,
   ) {
+    // custom begin takeNumberSuccessCheck
+
+    // custom end takeNumberSuccessCheck
     CashFlowController.service.takeNumberSuccess(
         cashFlowParams.TakeNumberSuccessRequestConvert(
             req.body,

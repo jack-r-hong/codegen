@@ -31,6 +31,9 @@ export class ExchangeRateSellController implements Controller {
       res: Response,
       next: NextFunction,
   ) {
+    // custom begin readManyBackstageExchangeRateSellCheck
+
+    // custom end readManyBackstageExchangeRateSellCheck
     ExchangeRateSellController.service.readManyBackstageExchangeRateSell(
         exchangeRateSellParams.ReadManyBackstageExchangeRateSellRequestConvert(
             req.body,
@@ -53,6 +56,9 @@ export class ExchangeRateSellController implements Controller {
       res: Response,
       next: NextFunction,
   ) {
+    // custom begin createOneBackstageExchangeRateSellCheck
+
+    // custom end createOneBackstageExchangeRateSellCheck
     ExchangeRateSellController.service.createOneBackstageExchangeRateSell(
         exchangeRateSellParams.CreateOneBackstageExchangeRateSellRequestConvert(
             req.body,
@@ -75,6 +81,9 @@ export class ExchangeRateSellController implements Controller {
       res: Response,
       next: NextFunction,
   ) {
+    // custom begin deleteOneBackstageExchangeRateSellCheck
+
+    // custom end deleteOneBackstageExchangeRateSellCheck
     ExchangeRateSellController.service.deleteOneBackstageExchangeRateSell(
         exchangeRateSellParams.DeleteOneBackstageExchangeRateSellRequestConvert(
             req.body,
@@ -97,6 +106,9 @@ export class ExchangeRateSellController implements Controller {
       res: Response,
       next: NextFunction,
   ) {
+    // custom begin updateOneBackstageExchangeRateSellCheck
+
+    // custom end updateOneBackstageExchangeRateSellCheck
     ExchangeRateSellController.service.updateOneBackstageExchangeRateSell(
         exchangeRateSellParams.UpdateOneBackstageExchangeRateSellRequestConvert(
             req.body,

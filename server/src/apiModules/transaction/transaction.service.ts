@@ -14,6 +14,10 @@ import {BankAccountModel} from '../bankAccount/bankAccount.model';
 import {UserModel} from '../user/user.model';
 import {ExchangeRateBuyModel} from '../exchangeRateBuy/exchangeRateBuy.model';
 import {ExchangeRateSellModel} from '../exchangeRateSell/exchangeRateSell.model';
+import {
+  getGSPayDeposit,
+  getGSPayQuery,
+} from '../../utils/axiosGSPay';
 const transactionModel = new TransactionModel();
 const bankAccountModel = new BankAccountModel();
 const userModel = new UserModel();
@@ -270,6 +274,45 @@ export class TransactionService {
       session: Express.Request['session'],
   ) {
     // custom begin postGSPayDeposit
+    const gsPayQuery = await getGSPayQuery({
+      memberOrderNo: param.bodyTransactionId,
+    }).catch((err) => {
+      return err.response.data.code;
+    });
+
+    if (gsPayQuery !== 4021 && gsPayQuery.data) {
+      const res = {
+        'orderNo': gsPayQuery.data.data.OrderNo,
+        'memberOrderNo': gsPayQuery.data.data.MemberOrderNo,
+        'amount': gsPayQuery.data.data.Amount,
+        'status': gsPayQuery.data.data.Status,
+        'bankName': gsPayQuery.data.data.BankName,
+        'paymentInfo': gsPayQuery.data.data.PaymentInfo,
+      };
+
+      return res;
+    }
+
+    const db = await this.transactionModel.postGSPayDeposit(param, {});
+    if (db) {
+      const res = await getGSPayDeposit({
+        amount: db.totalDollars.toString(),
+        clinetAccount: db.user!.phonePrefix! + db.user!.phone!,
+        dueTime: '1',
+        memberOrderNo: param.bodyTransactionId,
+        memo: '我是memo要顯示什麼?',
+        productName: `${db.point} 大頭家幣`,
+      })
+          .catch((err) => {
+            throw new errors.CodeError(
+                err.response.data.msg,
+                err.response.data.code,
+                -2);
+          });
+
+      return res.data;
+    }
+    throw new errors.CodeError('post gspay: order not found', 404, -101);
 
     // custom end postGSPayDeposit
   }

@@ -31,6 +31,9 @@ export class ChatroomController implements Controller {
       res: Response,
       next: NextFunction,
   ) {
+    // custom begin serviceTokenCheck
+
+    // custom end serviceTokenCheck
     ChatroomController.service.serviceToken(
         chatroomParams.ServiceTokenRequestConvert(
             req.body,
@@ -56,6 +59,9 @@ export class ChatroomController implements Controller {
       res: Response,
       next: NextFunction,
   ) {
+    // custom begin transactionServiceTokenCheck
+
+    // custom end transactionServiceTokenCheck
     ChatroomController.service.transactionServiceToken(
         chatroomParams.TransactionServiceTokenRequestConvert(
             req.body,
@@ -81,6 +87,9 @@ export class ChatroomController implements Controller {
       res: Response,
       next: NextFunction,
   ) {
+    // custom begin transactionTokenCheck
+
+    // custom end transactionTokenCheck
     ChatroomController.service.transactionToken(
         chatroomParams.TransactionTokenRequestConvert(
             req.body,

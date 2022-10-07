@@ -88,7 +88,10 @@ export const errorHandle = (
             msg === 'AuthenticationFailed' &&
             location === 'cookies'
           ) {
-            return httpErrors(403);
+            const e = httpErrors(403);
+            e.cause = -2001;
+            e.message = 'cookies expired';
+            return e;
           }
         }
 
@@ -111,6 +114,7 @@ export const errorHandle = (
         if (err instanceof CodeError ) {
           const e = httpErrors(err.status);
           e.cause = err.code;
+          e.message = err.message;
           return e;
         }
       default:

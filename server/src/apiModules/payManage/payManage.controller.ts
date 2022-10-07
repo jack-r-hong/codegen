@@ -31,6 +31,9 @@ export class PayManageController implements Controller {
       res: Response,
       next: NextFunction,
   ) {
+    // custom begin readManyBackstagePayManageCheck
+
+    // custom end readManyBackstagePayManageCheck
     PayManageController.service.readManyBackstagePayManage(
         payManageParams.ReadManyBackstagePayManageRequestConvert(
             req.body,
@@ -53,6 +56,9 @@ export class PayManageController implements Controller {
       res: Response,
       next: NextFunction,
   ) {
+    // custom begin careateBackstagePayManageCheck
+
+    // custom end careateBackstagePayManageCheck
     PayManageController.service.careateBackstagePayManage(
         payManageParams.CareateBackstagePayManageRequestConvert(
             req.body,
@@ -78,6 +84,9 @@ export class PayManageController implements Controller {
       res: Response,
       next: NextFunction,
   ) {
+    // custom begin deleteQrCodeCheck
+
+    // custom end deleteQrCodeCheck
     PayManageController.service.deleteQrCode(
         payManageParams.DeleteQrCodeRequestConvert(
             req.body,
@@ -104,6 +113,9 @@ export class PayManageController implements Controller {
       res: Response,
       next: NextFunction,
   ) {
+    // custom begin uploadManyQrCodeCheck
+
+    // custom end uploadManyQrCodeCheck
     PayManageController.service.uploadManyQrCode(
         payManageParams.UploadManyQrCodeRequestConvert(
             req.body,
@@ -127,6 +139,9 @@ export class PayManageController implements Controller {
       res: Response,
       next: NextFunction,
   ) {
+    // custom begin deleteOneBackstagePayManageCheck
+
+    // custom end deleteOneBackstagePayManageCheck
     PayManageController.service.deleteOneBackstagePayManage(
         payManageParams.DeleteOneBackstagePayManageRequestConvert(
             req.body,
@@ -149,6 +164,9 @@ export class PayManageController implements Controller {
       res: Response,
       next: NextFunction,
   ) {
+    // custom begin updateBackstagePayManageCheck
+
+    // custom end updateBackstagePayManageCheck
     PayManageController.service.updateBackstagePayManage(
         payManageParams.UpdateBackstagePayManageRequestConvert(
             req.body,

@@ -31,6 +31,9 @@ export class TransactionController implements Controller {
       res: Response,
       next: NextFunction,
   ) {
+    // custom begin createTransactionCheck
+
+    // custom end createTransactionCheck
     TransactionController.service.createTransaction(
         transactionParams.CreateTransactionRequestConvert(
             req.body,
@@ -56,6 +59,9 @@ export class TransactionController implements Controller {
       res: Response,
       next: NextFunction,
   ) {
+    // custom begin updateTransactionStateCheck
+
+    // custom end updateTransactionStateCheck
     TransactionController.service.updateTransactionState(
         transactionParams.UpdateTransactionStateRequestConvert(
             req.body,
@@ -81,6 +87,9 @@ export class TransactionController implements Controller {
       res: Response,
       next: NextFunction,
   ) {
+    // custom begin readPendingTransactionCheck
+
+    // custom end readPendingTransactionCheck
     TransactionController.service.readPendingTransaction(
         transactionParams.ReadPendingTransactionRequestConvert(
             req.body,
@@ -106,6 +115,9 @@ export class TransactionController implements Controller {
       res: Response,
       next: NextFunction,
   ) {
+    // custom begin getTransactionCalculationCheck
+
+    // custom end getTransactionCalculationCheck
     TransactionController.service.getTransactionCalculation(
         transactionParams.GetTransactionCalculationRequestConvert(
             req.body,
@@ -131,6 +143,9 @@ export class TransactionController implements Controller {
       res: Response,
       next: NextFunction,
   ) {
+    // custom begin getExchangeRateBuyCheck
+
+    // custom end getExchangeRateBuyCheck
     TransactionController.service.getExchangeRateBuy(
         transactionParams.GetExchangeRateBuyRequestConvert(
             req.body,
@@ -156,6 +171,9 @@ export class TransactionController implements Controller {
       res: Response,
       next: NextFunction,
   ) {
+    // custom begin getExchangeRateSellCheck
+
+    // custom end getExchangeRateSellCheck
     TransactionController.service.getExchangeRateSell(
         transactionParams.GetExchangeRateSellRequestConvert(
             req.body,
@@ -181,6 +199,9 @@ export class TransactionController implements Controller {
       res: Response,
       next: NextFunction,
   ) {
+    // custom begin postGSPayDepositCheck
+
+    // custom end postGSPayDepositCheck
     TransactionController.service.postGSPayDeposit(
         transactionParams.PostGSPayDepositRequestConvert(
             req.body,
@@ -192,6 +213,7 @@ export class TransactionController implements Controller {
     )
         .then((result) =>{
           // custom begin postGSPayDeposit
+          res.json(result);
 
           // custom end postGSPayDeposit
         }).catch((e) => {
@@ -205,6 +227,9 @@ export class TransactionController implements Controller {
       res: Response,
       next: NextFunction,
   ) {
+    // custom begin readMyTransactionCheck
+
+    // custom end readMyTransactionCheck
     TransactionController.service.readMyTransaction(
         transactionParams.ReadMyTransactionRequestConvert(
             req.body,
@@ -230,6 +255,9 @@ export class TransactionController implements Controller {
       res: Response,
       next: NextFunction,
   ) {
+    // custom begin getPayPhotoCheck
+
+    // custom end getPayPhotoCheck
     TransactionController.service.getPayPhoto(
         transactionParams.GetPayPhotoRequestConvert(
             req.body,
@@ -255,6 +283,9 @@ export class TransactionController implements Controller {
       res: Response,
       next: NextFunction,
   ) {
+    // custom begin readOneTransactionCheck
+
+    // custom end readOneTransactionCheck
     TransactionController.service.readOneTransaction(
         transactionParams.ReadOneTransactionRequestConvert(
             req.body,
@@ -277,6 +308,9 @@ export class TransactionController implements Controller {
       res: Response,
       next: NextFunction,
   ) {
+    // custom begin updateTransactionCheck
+
+    // custom end updateTransactionCheck
     TransactionController.service.updateTransaction(
         transactionParams.UpdateTransactionRequestConvert(
             req.body,

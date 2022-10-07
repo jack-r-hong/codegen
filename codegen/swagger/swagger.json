@@ -1477,30 +1477,23 @@
         "tags" : [ "transaction" ],
         "summary" : "Get transaction by id",
         "operationId" : "postGSPayDeposit",   
-        "parameters" : [ 
-          {
-            "name" : "type",
-            "in" : "query",
-            "required" : true,
-            "description": "status map:\n * `3` - 超商儲值 \n * `4` - ATM\n",
-            "schema" : {
-              "type" : "integer",
-              "enum": [3, 4]
-            }
-          },
-          {
-            "name" : "transactionId",
-            "in" : "query",
-            "required" : true,
-            "schema" : {
-              "type" : "string",
-              "format": "uuid"
-            }
-          }
-        ],         
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/PostGSPayDeposit"
+        },         
         "responses" : {
           "200" : {
-            "$ref" : "#/components/responses/Transaction"
+            "description" : "Ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "properties" : {
+                    "result": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
           },
           "400" : {
             "$ref" : "#/components/responses/BadRequest"
@@ -3992,6 +3985,26 @@
         "description" : "List of user object",
         "required" : true
       },
+      "PostGSPayDeposit" : {
+        "content" : {
+          "application/json" : {
+            "schema" : {
+                "type" : "object",
+                "properties" : {              
+                  "type": {
+                    "type" : "integer",
+                    "enum": [3, 4]
+                  },
+                  "transactionId": {
+                    "type" : "string"
+                  }                  
+                }
+            }
+          }
+        },
+        "description" : "List of user object",
+        "required" : true
+      },      
       "NotifyTakeNumber" : {
         "content" : {
           "application/json" : {

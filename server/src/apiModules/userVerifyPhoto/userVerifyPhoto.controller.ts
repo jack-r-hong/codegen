@@ -31,6 +31,9 @@ export class UserVerifyPhotoController implements Controller {
       res: Response,
       next: NextFunction,
   ) {
+    // custom begin getBackstageUserVerifyPhotoCheck
+
+    // custom end getBackstageUserVerifyPhotoCheck
     UserVerifyPhotoController.service.getBackstageUserVerifyPhoto(
         userVerifyPhotoParams.GetBackstageUserVerifyPhotoRequestConvert(
             req.body,
@@ -56,6 +59,9 @@ export class UserVerifyPhotoController implements Controller {
       res: Response,
       next: NextFunction,
   ) {
+    // custom begin getUserVerifyPhotoCheck
+
+    // custom end getUserVerifyPhotoCheck
     UserVerifyPhotoController.service.getUserVerifyPhoto(
         userVerifyPhotoParams.GetUserVerifyPhotoRequestConvert(
             req.body,
@@ -82,6 +88,9 @@ export class UserVerifyPhotoController implements Controller {
       res: Response,
       next: NextFunction,
   ) {
+    // custom begin uploadManyVerifyPhotoCheck
+
+    // custom end uploadManyVerifyPhotoCheck
     UserVerifyPhotoController.service.uploadManyVerifyPhoto(
         userVerifyPhotoParams.UploadManyVerifyPhotoRequestConvert(
             req.body,

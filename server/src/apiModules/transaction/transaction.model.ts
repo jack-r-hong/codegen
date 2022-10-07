@@ -198,6 +198,25 @@ export class TransactionModel {
       customParam: any,
   ) {
     // custom begin postGSPayDeposit
+    const res = await prisma.transaction.findUnique({
+      where: {
+        id: param.bodyTransactionId,
+      },
+      select: {
+        twd: true,
+        totalDollars: true,
+        point: true,
+        user: {
+          select: {
+            phone: true,
+            phonePrefix: true,
+          },
+        },
+      },
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+    return res;
 
     // custom end postGSPayDeposit
   }
