@@ -645,10 +645,11 @@ export class UserService {
     const phonePrefix = '886';
     const phone = param.bodyPhone.replace(/^0/, '');
     session.userRegister = {
-      verify: '123456',
+      verify: code,
       phonePrefix,
       phone,
     };
+    await getPhoneCheck(phonePrefix, phone, code);
 
     // custom end phoneCheck
   }

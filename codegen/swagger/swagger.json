@@ -1471,7 +1471,55 @@
           "cookieAuth" : [ ]
         } ]
       }
-    },     
+    },   
+    "/transaction/gs_pay/deposit" : {
+      "post" : {
+        "tags" : [ "transaction" ],
+        "summary" : "Get transaction by id",
+        "operationId" : "postGSPayDeposit",   
+        "parameters" : [ 
+          {
+            "name" : "type",
+            "in" : "query",
+            "required" : true,
+            "description": "status map:\n * `3` - 超商儲值 \n * `4` - ATM\n",
+            "schema" : {
+              "type" : "integer",
+              "enum": [3, 4]
+            }
+          },
+          {
+            "name" : "transactionId",
+            "in" : "query",
+            "required" : true,
+            "schema" : {
+              "type" : "string",
+              "format": "uuid"
+            }
+          }
+        ],         
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/Transaction"
+          },
+          "400" : {
+            "$ref" : "#/components/responses/BadRequest"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/Unauthorized"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          },
+          "404" : {
+            "$ref" : "#/components/responses/NotFound"
+          }
+        },
+        "security" : [ {
+          "cookieAuth" : [ ]
+        } ]
+      }
+    },          
     "/transaction/{id}" : {
       "get" : {
         "tags" : [ "transaction" ],
@@ -2388,7 +2436,7 @@
       "post" : {
         "tags" : [ "cashFlow" ],
         "summary" : "get token",
-        "operationId" : "notifyPaid",    
+        "operationId" : "notifyGrant",    
         "requestBody" : {
           "$ref" : "#/components/requestBodies/NotifyGrant"
         },                                             
@@ -2401,7 +2449,37 @@
           }
         }
       }               
-    }       
+    },
+    "/cashFlow/custom/page" : {     
+      "post" : {
+        "tags" : [ "cashFlow" ],
+        "summary" : "get token",
+        "operationId" : "customPage",                                    
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/Token"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          }
+        }
+      }               
+    },    
+    "/cashFlow/take_number_success" : {     
+      "get" : {
+        "tags" : [ "cashFlow" ],
+        "summary" : "get token",
+        "operationId" : "takeNumberSuccess",                     
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/Token"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          }
+        }
+      }               
+    }
     
     
   },

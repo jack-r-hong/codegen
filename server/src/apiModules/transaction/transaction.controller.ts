@@ -174,6 +174,30 @@ export class TransactionController implements Controller {
           next(e);
         });
   }
+  @Post('/transaction/gs_pay/deposit')
+  @Validator(validSchemas.postGSPayDepositValidator)
+  async postGSPayDeposit(
+      req: transactionParams.PostGSPayDepositRequest,
+      res: Response,
+      next: NextFunction,
+  ) {
+    TransactionController.service.postGSPayDeposit(
+        transactionParams.PostGSPayDepositRequestConvert(
+            req.body,
+            req.query,
+            req.params,
+            req.cookies,
+        ),
+        req.session,
+    )
+        .then((result) =>{
+          // custom begin postGSPayDeposit
+
+          // custom end postGSPayDeposit
+        }).catch((e) => {
+          next(e);
+        });
+  }
   @Get('/transaction/my')
   @Validator(validSchemas.readMyTransactionValidator)
   async readMyTransaction(

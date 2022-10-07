@@ -185,6 +185,30 @@ export const getExchangeRateSellValidator: Schema = {
     },
   },
 };
+export const postGSPayDepositValidator: Schema = {
+  'type': {
+    in: 'query',
+    isInt: true,
+    notEmpty: true,
+    matches: {
+      options: /^(3|4)/,
+    },
+  },
+  'transactionId': {
+    in: 'query',
+    isString: true,
+    notEmpty: true,
+  },
+  'JSESSIONID': {
+    in: 'cookies',
+    custom: {
+      options: (value, {req, location, path}) => {
+        sessions.cookieAuthSessionVerify(req['session']);
+        return true;
+      },
+    },
+  },
+};
 export const readMyTransactionValidator: Schema = {
   'orderBy': {
     in: 'query',

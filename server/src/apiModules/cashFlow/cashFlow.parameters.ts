@@ -14,6 +14,90 @@ interface TypedRequest<
 }
 
 
+type CustomPageReqBody = {
+  }
+
+type CustomPageReqQuery = {
+}
+
+type CustomPageReqParams = {
+}
+
+type CustomPageReqCookie = {
+}
+
+export interface CustomPageRequest extends TypedRequest<
+  CustomPageReqBody,
+  CustomPageReqQuery,
+  CustomPageReqParams,
+  CustomPageReqCookie
+>{
+}
+
+export type CustomPageParams = {
+}
+
+
+export const CustomPageRequestConvert = (
+    body: CustomPageReqBody,
+    query: CustomPageReqQuery,
+    path: CustomPageReqParams,
+    cookie: CustomPageReqCookie,
+): CustomPageParams => {
+  return {
+  };
+};
+type NotifyGrantReqBody = {
+  Amount: string,
+Fee: string,
+MemberOrderNo: string,
+OrderNo: string,
+Sign: string,
+Status: string,
+}
+
+type NotifyGrantReqQuery = {
+}
+
+type NotifyGrantReqParams = {
+}
+
+type NotifyGrantReqCookie = {
+}
+
+export interface NotifyGrantRequest extends TypedRequest<
+  NotifyGrantReqBody,
+  NotifyGrantReqQuery,
+  NotifyGrantReqParams,
+  NotifyGrantReqCookie
+>{
+}
+
+export type NotifyGrantParams = {
+bodyAmount: string,
+bodyFee: string,
+bodyMemberOrderNo: string,
+bodyOrderNo: string,
+bodySign: string,
+bodyStatus: string,
+}
+
+
+export const NotifyGrantRequestConvert = (
+    body: NotifyGrantReqBody,
+    query: NotifyGrantReqQuery,
+    path: NotifyGrantReqParams,
+    cookie: NotifyGrantReqCookie,
+): NotifyGrantParams => {
+  return {
+    bodyAmount: body.Amount,
+    bodyFee: body.Fee,
+    bodyMemberOrderNo: body.MemberOrderNo,
+    bodyOrderNo: body.OrderNo,
+    bodySign: body.Sign,
+    bodyStatus: body.Status,
+  };
+};
 type NotifyPaidReqBody = {
   Account: string,
 Amount: string,
@@ -123,6 +207,39 @@ export const NotifyTakeNumberRequestConvert = (
     bodyPaymentInfo: body.PaymentInfo,
     bodySign: body.Sign,
     bodyStatus: body.Status,
+  };
+};
+type TakeNumberSuccessReqBody = {
+  }
+
+type TakeNumberSuccessReqQuery = {
+}
+
+type TakeNumberSuccessReqParams = {
+}
+
+type TakeNumberSuccessReqCookie = {
+}
+
+export interface TakeNumberSuccessRequest extends TypedRequest<
+  TakeNumberSuccessReqBody,
+  TakeNumberSuccessReqQuery,
+  TakeNumberSuccessReqParams,
+  TakeNumberSuccessReqCookie
+>{
+}
+
+export type TakeNumberSuccessParams = {
+}
+
+
+export const TakeNumberSuccessRequestConvert = (
+    body: TakeNumberSuccessReqBody,
+    query: TakeNumberSuccessReqQuery,
+    path: TakeNumberSuccessReqParams,
+    cookie: TakeNumberSuccessReqCookie,
+): TakeNumberSuccessParams => {
+  return {
   };
 };
 

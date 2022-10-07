@@ -13,9 +13,9 @@ import rateLimit from 'express-rate-limit';
 import RedisStore from 'rate-limit-redis';
 import {redisLimiterClient as redisClient} from './redisClient';
 import {errorHandle} from './errors';
+import ejs from 'ejs';
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('../other/swagger.json');
-
 export class ExpressApp {
   public app: Application = express();
 
@@ -69,7 +69,8 @@ export class ExpressApp {
       preflightContinue: true,
       // preflightContinue: false,
     };
-
+    this.app.set('view engine', 'ejs');
+    this.app.engine('html', require('ejs').renderFile);
 
     this.app.use(helmet());
     this.app.use(cors(corsOptions));

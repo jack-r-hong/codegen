@@ -261,6 +261,45 @@ export const GetExchangeRateSellRequestConvert = (
   return {
   };
 };
+type PostGSPayDepositReqBody = {
+  }
+
+type PostGSPayDepositReqQuery = {
+      type: string
+      transactionId: string
+}
+
+type PostGSPayDepositReqParams = {
+}
+
+type PostGSPayDepositReqCookie = {
+}
+
+export interface PostGSPayDepositRequest extends TypedRequest<
+  PostGSPayDepositReqBody,
+  PostGSPayDepositReqQuery,
+  PostGSPayDepositReqParams,
+  PostGSPayDepositReqCookie
+>{
+}
+
+export type PostGSPayDepositParams = {
+      queryType: number
+      queryTransactionId: string
+}
+
+
+export const PostGSPayDepositRequestConvert = (
+    body: PostGSPayDepositReqBody,
+    query: PostGSPayDepositReqQuery,
+    path: PostGSPayDepositReqParams,
+    cookie: PostGSPayDepositReqCookie,
+): PostGSPayDepositParams => {
+  return {
+          queryType: parseInt(query.type),
+            queryTransactionId: query.transactionId,
+  };
+};
 type ReadMyTransactionReqBody = {
   }
 

@@ -7,6 +7,34 @@ import * as sessions from '../../sessions';
 
 
 
+export const customPageValidator: Schema = {
+};
+export const notifyGrantValidator: Schema = {
+  'Amount': {
+    in: 'body',
+    isString: true,
+  },
+  'Fee': {
+    in: 'body',
+    isString: true,
+  },
+  'MemberOrderNo': {
+    in: 'body',
+    isString: true,
+  },
+  'OrderNo': {
+    in: 'body',
+    isString: true,
+  },
+  'Sign': {
+    in: 'body',
+    isString: true,
+  },
+  'Status': {
+    in: 'body',
+    isString: true,
+  },
+};
 export const notifyPaidValidator: Schema = {
   'Account': {
     in: 'body',
@@ -70,4 +98,6 @@ export const notifyTakeNumberValidator: Schema = {
     in: 'body',
     isString: true,
   },
+};
+export const takeNumberSuccessValidator: Schema = {
 };

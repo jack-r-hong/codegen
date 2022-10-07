@@ -193,6 +193,14 @@ export class TransactionModel {
 
     // custom end getExchangeRateSell
   }
+  async postGSPayDeposit(
+      param: requestTypes.PostGSPayDepositParams,
+      customParam: any,
+  ) {
+    // custom begin postGSPayDeposit
+
+    // custom end postGSPayDeposit
+  }
   async readMyTransaction(
       param: requestTypes.ReadMyTransactionParams,
       customParam: any,

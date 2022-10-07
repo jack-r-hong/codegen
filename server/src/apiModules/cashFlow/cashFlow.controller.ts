@@ -24,6 +24,56 @@ export class CashFlowController implements Controller {
   @Inject('app.use')
     appUse!: AppUse;
 
+  @Post('/cashFlow/custom/page')
+  @Validator(validSchemas.customPageValidator)
+  async customPage(
+      req: cashFlowParams.CustomPageRequest,
+      res: Response,
+      next: NextFunction,
+  ) {
+    CashFlowController.service.customPage(
+        cashFlowParams.CustomPageRequestConvert(
+            req.body,
+            req.query,
+            req.params,
+            req.cookies,
+        ),
+        req.session,
+    )
+        .then((result) =>{
+          // custom begin customPage
+          res.json()
+
+          // custom end customPage
+        }).catch((e) => {
+          next(e);
+        });
+  }
+  @Post('/cashFlow/notify/grant')
+  @Validator(validSchemas.notifyGrantValidator)
+  async notifyGrant(
+      req: cashFlowParams.NotifyGrantRequest,
+      res: Response,
+      next: NextFunction,
+  ) {
+    CashFlowController.service.notifyGrant(
+        cashFlowParams.NotifyGrantRequestConvert(
+            req.body,
+            req.query,
+            req.params,
+            req.cookies,
+        ),
+        req.session,
+    )
+        .then((result) =>{
+          // custom begin notifyGrant
+          res.json()
+
+          // custom end notifyGrant
+        }).catch((e) => {
+          next(e);
+        });
+  }
   @Post('/cashFlow/notify/paid')
   @Validator(validSchemas.notifyPaidValidator)
   async notifyPaid(
@@ -70,6 +120,30 @@ export class CashFlowController implements Controller {
           res.json();
 
           // custom end notifyTakeNumber
+        }).catch((e) => {
+          next(e);
+        });
+  }
+  @Get('/cashFlow/take_number_success')
+  @Validator(validSchemas.takeNumberSuccessValidator)
+  async takeNumberSuccess(
+      req: cashFlowParams.TakeNumberSuccessRequest,
+      res: Response,
+      next: NextFunction,
+  ) {
+    CashFlowController.service.takeNumberSuccess(
+        cashFlowParams.TakeNumberSuccessRequestConvert(
+            req.body,
+            req.query,
+            req.params,
+            req.cookies,
+        ),
+        req.session,
+    )
+        .then((result) =>{
+          // custom begin takeNumberSuccess
+
+          // custom end takeNumberSuccess
         }).catch((e) => {
           next(e);
         });

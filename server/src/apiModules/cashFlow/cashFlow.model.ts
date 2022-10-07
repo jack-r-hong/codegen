@@ -7,6 +7,22 @@ const prisma = new Prisma.PrismaClient();
 
 @Service()
 export class CashFlowModel {
+  async customPage(
+      param: requestTypes.CustomPageParams,
+      customParam: any,
+  ) {
+    // custom begin customPage
+
+    // custom end customPage
+  }
+  async notifyGrant(
+      param: requestTypes.NotifyGrantParams,
+      customParam: any,
+  ) {
+    // custom begin notifyGrant
+
+    // custom end notifyGrant
+  }
   async notifyPaid(
       param: requestTypes.NotifyPaidParams,
       customParam: any,
@@ -22,6 +38,14 @@ export class CashFlowModel {
     // custom begin notifyTakeNumber
 
     // custom end notifyTakeNumber
+  }
+  async takeNumberSuccess(
+      param: requestTypes.TakeNumberSuccessParams,
+      customParam: any,
+  ) {
+    // custom begin takeNumberSuccess
+
+    // custom end takeNumberSuccess
   }
   // custom begin model
 

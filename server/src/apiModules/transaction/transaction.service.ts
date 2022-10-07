@@ -265,6 +265,14 @@ export class TransactionService {
 
     // custom end getExchangeRateSell
   }
+  async postGSPayDeposit(
+      param :requestTypes.PostGSPayDepositParams,
+      session: Express.Request['session'],
+  ) {
+    // custom begin postGSPayDeposit
+
+    // custom end postGSPayDeposit
+  }
   async readMyTransaction(
       param :requestTypes.ReadMyTransactionParams,
       session: Express.Request['session'],
