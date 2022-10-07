@@ -12,6 +12,9 @@ import {chatroomKey} from '../../jwt';
 export class ChatroomService {
   @Inject()
   private chatroomModel!: ChatroomModel;
+  // custom begin Inject
+
+  // custom end Inject
 
   async serviceToken(
       param :requestTypes.ServiceTokenParams,

@@ -55,6 +55,10 @@ export async function getGSPayQuery(param : {
   });
 }
 
+const checkSign = () => {
+
+};
+
 
 const makeHash = async (data: any, apiKey: string) => {
   const newData: any = {};

@@ -32,6 +32,7 @@ export class CashFlowController implements Controller {
       next: NextFunction,
   ) {
     // custom begin customPageCheck
+    console.log(req.body);
 
     // custom end customPageCheck
     CashFlowController.service.customPage(
@@ -60,6 +61,7 @@ export class CashFlowController implements Controller {
       next: NextFunction,
   ) {
     // custom begin notifyGrantCheck
+    console.log(req.body);
 
     // custom end notifyGrantCheck
     CashFlowController.service.notifyGrant(
@@ -88,6 +90,7 @@ export class CashFlowController implements Controller {
       next: NextFunction,
   ) {
     // custom begin notifyPaidCheck
+    console.log(req.body);
 
     // custom end notifyPaidCheck
     CashFlowController.service.notifyPaid(
@@ -116,6 +119,7 @@ export class CashFlowController implements Controller {
       next: NextFunction,
   ) {
     // custom begin notifyTakeNumberCheck
+    console.log(req.body);
 
     // custom end notifyTakeNumberCheck
     CashFlowController.service.notifyTakeNumber(

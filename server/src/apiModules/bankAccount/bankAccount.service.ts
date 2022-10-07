@@ -12,6 +12,9 @@ import {promises as fs} from 'fs';
 export class BankAccountService {
   @Inject()
   private bankAccountModel!: BankAccountModel;
+  // custom begin Inject
+
+  // custom end Inject
 
   async getBackstageBankAccountReson(
       param :requestTypes.GetBackstageBankAccountResonParams,

@@ -3,6 +3,13 @@ import {CashFlowModel} from './cashFlow.model';
 import * as requestTypes from './cashFlow.parameters';
 import {errors} from '../../errors';
 // custom begin import
+import {Container} from 'typedi';
+import {WSClientIdModel} from '../../redisClient/models/webSocketModels';
+import {TransactionModel} from '../transaction//transaction.model';
+const wSCIModel = Container.get(WSClientIdModel);
+
+const transactionModel = Container.get(TransactionModel);
+
 
 // custom end import
 
@@ -11,6 +18,9 @@ import {errors} from '../../errors';
 export class CashFlowService {
   @Inject()
   private cashFlowModel!: CashFlowModel;
+  // custom begin Inject
+
+  // custom end Inject
 
   async customPage(
       param :requestTypes.CustomPageParams,
@@ -33,6 +43,16 @@ export class CashFlowService {
       session: Express.Request['session'],
   ) {
     // custom begin notifyPaid
+    
+    const res = await transactionModel.updateTransaction({
+      bodyState: 3,
+      pathId: param.bodyMemberOrderNo,
+    }, {});
+    await wSCIModel.pub(param.bodyMemberOrderNo,
+        JSON.stringify({
+          state: res.state,
+        }),
+    );
 
     // custom end notifyPaid
   }

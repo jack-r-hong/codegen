@@ -2473,8 +2473,6 @@
         }
       }               
     }
-    
-    
   },
   "externalDocs" : {
     "description" : "Find out more about Swagger",
@@ -3824,7 +3822,8 @@
                   "$ref" : "#/components/schemas/Transaction/properties/payMethod"
                 },
                 "bankId" : {
-                  "$ref" : "#/components/schemas/BankAccount/properties/id"
+                  "type": "integer",
+                  "nullable": true
                 },  
                 "image" : {
                   "type": "string",

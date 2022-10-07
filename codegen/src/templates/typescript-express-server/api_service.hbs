@@ -13,6 +13,9 @@ import {errors} from '../../errors';
 export class {{fpc tag}}Service {
   @Inject()
   private {{tag}}Model!: {{fpc tag}}Model;
+  // custom begin Inject
+{{{lookup ../../custom "Inject" }}}
+  // custom end Inject
 
 {{#each data.paths as |path|}}
   {{#each path as |d|}}

@@ -348,6 +348,9 @@ const userVerifyResponeFormat2 = async (data: any) => {
 export class UserService {
   @Inject()
   private userModel!: UserModel;
+  // custom begin Inject
+
+  // custom end Inject
 
   async getUserBackstageAgents(
       param :requestTypes.GetUserBackstageAgentsParams,

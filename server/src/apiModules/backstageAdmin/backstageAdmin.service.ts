@@ -12,6 +12,9 @@ import bcrypt from 'bcrypt';
 export class BackstageAdminService {
   @Inject()
   private backstageAdminModel!: BackstageAdminModel;
+  // custom begin Inject
+
+  // custom end Inject
 
   async getAdminFromId(
       param :requestTypes.GetAdminFromIdParams,

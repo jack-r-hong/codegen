@@ -12,6 +12,9 @@ import {promises as fs} from 'fs';
 export class UserVerifyPhotoService {
   @Inject()
   private userVerifyPhotoModel!: UserVerifyPhotoModel;
+  // custom begin Inject
+
+  // custom end Inject
 
   async getBackstageUserVerifyPhoto(
       param :requestTypes.GetBackstageUserVerifyPhotoParams,

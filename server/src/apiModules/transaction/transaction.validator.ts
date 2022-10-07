@@ -11,6 +11,11 @@ export const createTransactionValidator: Schema = {
   'bankId': {
     in: 'body',
     isInt: true,
+optional: {
+  options: {
+    nullable: true,
+  },
+},
   },
   'bos': {
     in: 'body',

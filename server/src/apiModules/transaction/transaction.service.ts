@@ -94,25 +94,42 @@ async function calculationTransation(
 export class TransactionService {
   @Inject()
   private transactionModel!: TransactionModel;
+  // custom begin Inject
+
+  // custom end Inject
 
   async createTransaction(
       param :requestTypes.CreateTransactionParams,
       session: Express.Request['session'],
   ) {
     // custom begin createTransaction
-    console.log(session);
-    const dbBankData = await bankAccountModel.readOneBankAccount(
-        {pathId: param.bodyBankId},
-    );
+    let bankData: any = {
+      name: '',
+      account: 0,
+      code: 0,
+    };
+    if (param.bodyPayMethod !== 1 && param.bodyPayMethod !== 2) {
+      if (param.bodyBankId) {
+        const dbBankData = await bankAccountModel.readOneBankAccount(
+            {pathId: param.bodyBankId},
+        );
+        bankData = {
+          name: dbBankData.name,
+          account: dbBankData.account,
+          code: dbBankData.code,
+        };
+      } else {
+        throw new errors.CodeError('bankId not found', 400, -3001);
+      }
+    }
     const dbUserData = await userModel.getUserMyStatus(
         {},
         {userId: session.userInfo?.id!},
     );
-    console.log(session);
     if (!dbUserData || dbUserData.userStatus !== 1) {
       console.log(dbUserData);
       /* todo throw error */
-      throw new errors.CodeError('mesage', 403, -1);
+      throw new errors.CodeError('user no auth', 403, -3002);
     }
     const {
       twd,
@@ -138,9 +155,9 @@ export class TransactionService {
         param,
         {
           userId: session.userInfo?.id!,
-          bankName: dbBankData.name,
-          bankAccount: dbBankData.account,
-          bankCode: dbBankData.code,
+          bankName: bankData.name,
+          bankAccount: bankData.account,
+          bankCode: bankData.code,
           twd,
           point,
           bonusPoint: bonusPoint + firstBonusPoint,
@@ -279,7 +296,6 @@ export class TransactionService {
     }).catch((err) => {
       return err.response.data.code;
     });
-
     if (gsPayQuery !== 4021 && gsPayQuery.data) {
       const res = {
         'orderNo': gsPayQuery.data.data.OrderNo,
@@ -289,10 +305,8 @@ export class TransactionService {
         'bankName': gsPayQuery.data.data.BankName,
         'paymentInfo': gsPayQuery.data.data.PaymentInfo,
       };
-
       return res;
     }
-
     const db = await this.transactionModel.postGSPayDeposit(param, {});
     if (db) {
       const res = await getGSPayDeposit({
@@ -307,12 +321,11 @@ export class TransactionService {
             throw new errors.CodeError(
                 err.response.data.msg,
                 err.response.data.code,
-                -2);
+                -3003);
           });
-
       return res.data;
     }
-    throw new errors.CodeError('post gspay: order not found', 404, -101);
+    throw new errors.CodeError('post gspay: order not found', 404, -3004);
 
     // custom end postGSPayDeposit
   }

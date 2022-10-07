@@ -404,7 +404,7 @@ export class TransactionModel {
       customParam: any,
   ) {
     // custom begin updateTransaction
-    let res: any | null = await prisma.transaction.update({
+    let res = await prisma.transaction.update({
       where: {
         id: param.pathId,
       },

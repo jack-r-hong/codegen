@@ -12,6 +12,9 @@ import {promises as fs} from 'fs';
 export class PayManageService {
   @Inject()
   private payManageModel!: PayManageModel;
+  // custom begin Inject
+
+  // custom end Inject
 
   async readManyBackstagePayManage(
       param :requestTypes.ReadManyBackstagePayManageParams,

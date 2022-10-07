@@ -15,7 +15,7 @@ interface TypedRequest<
 
 
 type CreateTransactionReqBody = {
-  bankId: string,
+  bankId: string|undefined,
 bos: string,
 buyOptionId: string|undefined,
 image: string|undefined,
@@ -41,7 +41,7 @@ export interface CreateTransactionRequest extends TypedRequest<
 }
 
 export type CreateTransactionParams = {
-bodyBankId: number,
+bodyBankId: number|undefined,
 bodyBos: number,
 bodyBuyOptionId: number|undefined,
 bodyImage: string|undefined,
@@ -57,7 +57,7 @@ export const CreateTransactionRequestConvert = (
     cookie: CreateTransactionReqCookie,
 ): CreateTransactionParams => {
   return {
-    bodyBankId: parseInt(body.bankId),
+    bodyBankId: typeof body.bankId === 'number' ? body.bankId : undefined,
     bodyBos: parseInt(body.bos),
     bodyBuyOptionId: typeof body.buyOptionId === 'number' ? body.buyOptionId : undefined,
     bodyImage: body.image,

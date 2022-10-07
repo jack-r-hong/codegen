@@ -11,6 +11,9 @@ import {errors} from '../../errors';
 export class ExchangeRateBuyService {
   @Inject()
   private exchangeRateBuyModel!: ExchangeRateBuyModel;
+  // custom begin Inject
+
+  // custom end Inject
 
   async readManyBackstageExchangeRateBuy(
       param :requestTypes.ReadManyBackstageExchangeRateBuyParams,

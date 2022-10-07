@@ -623,7 +623,7 @@ export class UserModel {
             },
             update: {
               account: e.bodyAccount,
-              code: e.bodyAccount,
+              code: e.bodyCode,
               name: e.bodyName,
               status,
               bankAccountVerify: updateVerify,
@@ -632,7 +632,7 @@ export class UserModel {
               userId: customParam.userId,
               order: e.bodyOrder,
               account: e.bodyAccount,
-              code: e.bodyAccount,
+              code: e.bodyCode,
               name: e.bodyName,
               bankAccountVerify: {
                 create: {
