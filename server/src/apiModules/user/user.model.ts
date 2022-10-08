@@ -774,7 +774,23 @@ export class UserModel {
       customParam: any,
   ) {
     // custom begin phoneCheck
-
+    const res = await prisma.user.findUnique({
+      where: {
+        phone_all: {
+          phone: param.bodyPhone,
+          phonePrefix: '886',
+        },
+      },
+      select: {
+        phone: true,
+        phonePrefix: true,
+      },
+    }).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+    return res;
     // custom end phoneCheck
   }
   async getUserMyStatus(

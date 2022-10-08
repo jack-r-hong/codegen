@@ -45,6 +45,11 @@ const getNewData = async (userId: string) => {
   };
 };
 
+// (async () => {
+//   console.log(await getNewData('2f556fc1-1888-4123-844c-3344ef535235'));
+// })();
+
+
 @Service({id: WSToken, multiple: true})
 export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
   wsPath: string = `/${event.eventName}`;

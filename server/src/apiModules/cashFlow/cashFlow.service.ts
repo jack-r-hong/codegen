@@ -54,6 +54,10 @@ export class CashFlowService {
       bodyState: 3,
       pathId: param.bodyMemberOrderNo,
     }, {});
+
+    if (res === 'bodyState error') {
+      return;
+    }
     await wSCIModel.pub(param.bodyMemberOrderNo,
         JSON.stringify({
           state: res.state,

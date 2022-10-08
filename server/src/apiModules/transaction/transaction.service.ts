@@ -350,12 +350,18 @@ export class TransactionService {
     ).catch((e) =>{
       throw e;
     });
+    const res2 = await this.transactionModel.readMyCountTransaction(
+        session.userInfo?.id!,
+        param.queryStartTime,
+        param.queryEndTime,
+    );
+
     return {
       'total': {
-        'point': 2000,
-        'bonusPoint': 1000,
-        'totalPoint': 3000,
-        'twd': 4000,
+        'point': res2.point,
+        'bonusPoint': res2.bonusPoint,
+        'totalPoint': res2.totalPoints,
+        'twd': res2.dollars,
       },
       'dataList': res.map((e) => {
         const res = e;
@@ -493,8 +499,6 @@ export class TransactionService {
       throw new Error('userInfo not found');
     }
     switch (param.bodyState) {
-      case 0:
-        break;
       case 1:
       case 2:
         if (
@@ -537,6 +541,8 @@ export class TransactionService {
             break;
           }
         }
+      case 99:
+        break;
       default:
         throw new errors.CodeError('updateTransaction', 403, -3005);
     }
@@ -546,6 +552,11 @@ export class TransactionService {
     ).catch((e) =>{
       throw e;
     });
+
+    if (res === 'bodyState error') {
+      throw new errors.CodeError('updateTransaction', 403, -3005);
+    }
+
     if (!session.transaction) {
       session.transaction = {
         id: param.pathId,

@@ -193,7 +193,7 @@ export class TransactionModel {
       bos1 = param.queryBos;
     }
     if (param.queryState === 'failed') {
-      state = 0;
+      state = 99;
     } else if (param.queryState === 'pending') {
       state = 1;
     } else if (param.queryState === 'processing') {
@@ -389,8 +389,12 @@ export class TransactionModel {
         completedAt: new Date(),
         state: param.bodyState,
       };
+    } else if (param.bodyState === 99) {
+      data = {
+        state: param.bodyState,
+      };
     } else {
-      throw new Error('bodyState error');
+      return 'bodyState error';
     }
     const res = await prisma.transaction.update({
       where: {
@@ -415,6 +419,8 @@ export class TransactionModel {
     if (state === 'pending') {
       where = {
         state: 1,
+        timeout: false,
+        appeal: false,
       };
     } else if (state === 'processing') {
       where = {
@@ -422,6 +428,8 @@ export class TransactionModel {
           gt: 1,
           lt: 4,
         },
+        timeout: false,
+        appeal: false,
         transactionRecive: {
           userId,
         },
@@ -510,7 +518,8 @@ export class TransactionModel {
         state: 4,
         createdAt: {
           gt: new Date(new Date().toJSON().slice(0, 10).replace(/-/g, '/')),
-          lt: new Date(addDays(new Date(), 1).toJSON().slice(0, 10).replace(/-/g, '/')),
+          lt: new Date(addDays(new Date(), 1)
+              .toJSON().slice(0, 10).replace(/-/g, '/')),
         },
       },
       _sum: {
@@ -529,6 +538,52 @@ export class TransactionModel {
       dollars: res._sum.totalDollars,
       point: res._sum.totalPoints,
       orderCount: res._count.id,
+    };
+  }
+  async readMyCountTransaction(
+      userId: string,
+      queryStartTime: string,
+      queryEndTime: string,
+  ) {
+    const res = await prisma.transaction.aggregate({
+      where: {
+        OR: [
+          {
+            transactionRecive: {
+              userId,
+            },
+          },
+          {
+            userId,
+          },
+        ],
+        state: 4,
+        createdAt: {
+          gt: queryStartTime,
+          lt: queryEndTime,
+        },
+      },
+      _sum: {
+        point: true,
+        totalDollars: true,
+        totalPoints: true,
+        bonusPoint: true,
+      },
+      _count: {
+        id: true,
+      },
+    }).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+
+    return {
+      dollars: res._sum.totalDollars??0,
+      point: res._sum.point??0,
+      totalPoints: res._sum.totalPoints??0,
+      orderCount: res._count.id??0,
+      bonusPoint: res._sum.bonusPoint??0,
     };
   }
   async readTransactionQrcode(
