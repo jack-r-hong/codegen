@@ -65,6 +65,10 @@ export const updateBackstagePayManageValidator: Schema = {
     isInt: true,
     notEmpty: true,
   },
+  'code': {
+    in: 'body',
+    isString: true,
+  },
   'remark': {
     in: 'body',
     isString: true,

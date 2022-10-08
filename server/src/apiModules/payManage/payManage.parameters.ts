@@ -210,7 +210,8 @@ export const DeleteOneBackstagePayManageRequestConvert = (
   };
 };
 type UpdateBackstagePayManageReqBody = {
-  remark: string,
+  code: string,
+remark: string,
 status: string|undefined,
 }
 
@@ -235,6 +236,7 @@ export interface UpdateBackstagePayManageRequest extends TypedRequest<
 
 export type UpdateBackstagePayManageParams = {
       pathId: number
+bodyCode: string,
 bodyRemark: string,
 bodyStatus: number|undefined,
 }
@@ -248,6 +250,7 @@ export const UpdateBackstagePayManageRequestConvert = (
 ): UpdateBackstagePayManageParams => {
   return {
     pathId: parseInt(path.id),
+    bodyCode: body.code,
     bodyRemark: body.remark,
     bodyStatus: typeof body.status === 'number' ? body.status : undefined,
   };

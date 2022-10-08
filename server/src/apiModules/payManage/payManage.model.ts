@@ -16,6 +16,7 @@ export class PayManageModel {
     userId: param.queryUserId,
       },
       select: {
+        code: true,
         id: true,
         qrCode: true,
         remark: true,
@@ -45,6 +46,7 @@ export class PayManageModel {
         userId: param.bodyUserId,
         qrCode: '',
         remark: '',
+        code: '',
       },
     }).catch((e) => {
       throw e;
@@ -135,6 +137,7 @@ export class PayManageModel {
       data: {
         remark: param.bodyRemark,
         status: param.bodyStatus,
+        code: param.bodyCode,
       },
     }).catch((e) => {
       throw e;

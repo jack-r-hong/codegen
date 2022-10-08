@@ -101,6 +101,7 @@ model ExchangeRateSell {
     // custom end ExchangeRateSell
 }
 model PayManage {
+  code  String  @map("code")                 
   createdAt  DateTime  @default(now()) @map("created_at")                 
   id  Int @id @default(autoincrement()) @map("id")                 
   qrCode  String  @map("qr_code")                 
@@ -339,6 +340,7 @@ model TransactionQrcode {
   id  Int @id @default(autoincrement()) @map("id")                 
   userId  String  @map("user_id") @unique     
   data Bytes? @map("data") @db.MediumBlob
+  code String @default("")
   @@map("transactionQrcode")
 }
 model TransactionSetting {

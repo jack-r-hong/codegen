@@ -3009,6 +3009,10 @@
             "type" : "string",
             "default": ""
           },  
+          "code" : {
+            "type" : "string",
+            "default": ""
+          },           
           "remark" : {
             "type" : "string",
             "default": ""
@@ -3758,7 +3762,11 @@
                 "image" : {
                   "type": "string",
                   "nullable": true
-                }                
+                },
+                "code" : {
+                  "type": "string",
+                  "nullable": true
+                }                               
               }
             }
           }
@@ -3831,12 +3839,15 @@
             "schema" : {
               "type" : "object",
               "properties" : {
+                "code" : {
+                  "$ref" : "#/components/schemas/PayManage/properties/code"
+                },
                 "remark" : {
                   "$ref" : "#/components/schemas/PayManage/properties/remark"
                 },
                 "status" : {
                   "$ref" : "#/components/schemas/PayManage/properties/status"
-                }                
+                }              
               }
             }
           }
@@ -4673,6 +4684,9 @@
                     "type" : "string",
                     "default": ""
                   },     
+                  "code" : {
+                    "$ref" : "#/components/schemas/PayManage/properties/code"
+                  },
                   "status" : {
                     "type" : "integer",
                     "default": 1,

@@ -55,9 +55,11 @@ export class TransactionModel {
         create: {
           userId: customParam.userId,
           data: Buffer.from(param.bodyImage?? '', 'base64'),
+          code: param.bodyCode?? '',
         },
         update: {
           data: Buffer.from(param.bodyImage?? '', 'base64'),
+          code: param.bodyCode?? '',
         },
         where: {
           userId: customParam.userId,
@@ -370,8 +372,12 @@ export class TransactionModel {
     if (param.bodyState === 2) {
       data = {
         pairedAt: new Date(),
-        completedAt: new Date(),
         state: param.bodyState,
+        transactionRecive: {
+          create: {
+            userId: customParam.userId,
+          },
+        },
       };
     } else if (param.bodyState === 3) {
       data = {
@@ -430,7 +436,7 @@ export class TransactionModel {
             appeal: true,
           },
           {
-            timeOut: true,
+            timeout: true,
           },
         ],
         transactionRecive: {

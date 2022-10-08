@@ -91,8 +91,8 @@ async function calculationTransation(
  * 過期訂單
  */
 const expiredTranId = 'expiredTranId';
-const peddingTimeout = 5;
-const payTimeout = 60;
+const peddingTimeout = 5 * 60;
+const payTimeout = 65 * 60;
 const subscribeExpiredeModel = Container.get(SubscribeExpiredeModel);
 subscribeExpiredeModel.sub((key) => {
   if (key.match(/^expiredTranId/) ) {
@@ -404,7 +404,10 @@ export class TransactionService {
       });
       if (res && res.qrCode) {
         const photo = await fs.readFile( res.qrCode, 'base64');
-        return photo;
+        return {
+          photo,
+          code: res.code,
+        };
       }
     } else {
       const res = await this.transactionModel.readTransactionQrcode(
@@ -413,7 +416,10 @@ export class TransactionService {
         throw e;
       });
       if (res) {
-        return res.data?.toString('base64');
+        return {
+          photo: res.data?.toString('base64'),
+          code: res.code,
+        };
       }
     }
     throw new errors.NotFindError;

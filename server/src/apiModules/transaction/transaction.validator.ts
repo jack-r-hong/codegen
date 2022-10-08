@@ -33,6 +33,15 @@ optional: {
   },
 },
   },
+  'code': {
+    in: 'body',
+    isString: true,
+optional: {
+  options: {
+    nullable: true,
+  },
+},
+  },
   'image': {
     in: 'body',
     isString: true,
