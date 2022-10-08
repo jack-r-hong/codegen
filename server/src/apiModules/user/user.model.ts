@@ -403,7 +403,7 @@ export class UserModel {
       customParam: any,
   ) {
     // custom begin loginUser
-    const res: any | null = await prisma.user.findUnique({
+    const res = await prisma.user.findUnique({
       where: {
         phone_all: {
           phone: param.bodyPhone,
@@ -788,6 +788,7 @@ export class UserModel {
         id: customParam.userId,
       },
       select: {
+        id: true,
         userStatus: true,
         isAgent: true,
         phone: true,

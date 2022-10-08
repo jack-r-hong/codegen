@@ -2993,13 +2993,14 @@
             "enum" : [1, 2, 3, 4, 99],
             "default": 1
           },   
-          "process" : {
-            "type" : "integer",
-            "format" : "int32",
-            "description" : "process map:\n * `1` - Normal\n * `2` -Timeout \n * `3` -appeal \n ",
-            "enum" : [1, 2, 3],
-            "default": 1
-          },                               
+          "timeout": {
+            "type" : "boolean",
+            "default": "false"
+          },
+          "appeal": {
+            "type" : "boolean",
+            "default": "false"
+          },                                        
           "createdAt" : {
             "type" : "string",
             "format" : "date-time"

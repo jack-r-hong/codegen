@@ -647,5 +647,21 @@ export class TransactionModel {
     return res;
   }
 
+  async updateTransactionProcess(id: string, process: number) {
+    const res = await prisma.transaction.update({
+      where: {
+        id,
+      },
+      data: {
+        process,
+      },
+    }).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+    return res;
+  }
+
   // custom end model
 }

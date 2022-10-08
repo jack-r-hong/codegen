@@ -4,10 +4,11 @@ import * as requestTypes from './transaction.parameters';
 import {errors} from '../../errors';
 // custom begin import
 import {promises as fs} from 'fs';
-import * as Prisma from '@prisma/client';
 import {Container} from 'typedi';
-import {WSClientIdModel,
-  WSClientTransactionModel} from '../../redisClient/models/webSocketModels';
+import {
+  WSClientIdModel,
+  WSClientTransactionModel,
+  SubscribeExpiredeModel} from '../../redisClient/models/webSocketModels';
 const wSCIModel = Container.get(WSClientIdModel);
 const wSCTModel = Container.get(WSClientTransactionModel);
 import {BankAccountModel} from '../bankAccount/bankAccount.model';
@@ -86,6 +87,36 @@ async function calculationTransation(
   }
   return res;
 }
+/**
+ * 過期訂單
+ */
+const expiredTranId = 'expiredTranId';
+const peddingTimeout = 5;
+const payTimeout = 60;
+
+enum Process{
+  normal = 1,
+  timeout = 2,
+  appeal = 3
+}
+
+const subscribeExpiredeModel = Container.get(SubscribeExpiredeModel);
+subscribeExpiredeModel.sub((key) => {
+  console.log(key);
+  if (key.match(/^expiredTranId/) ) {
+    wSCTModel.pub(JSON.stringify({}));
+    transactionModel.updateTransactionProcess(
+        key.substring(expiredTranId.length),
+        Process.timeout,
+    )
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+  }
+});
 
 // custom end import
 
@@ -170,7 +201,10 @@ export class TransactionService {
     ).catch((e) =>{
       throw e;
     });
+
     await wSCTModel.pub(JSON.stringify({}));
+    await subscribeExpiredeModel.setExpirKey(
+        `${expiredTranId}${res.id}`, peddingTimeout);
     return res;
 
     // custom end createTransaction
@@ -539,6 +573,7 @@ export class TransactionService {
         bos: res.bos,
       };
     }
+
     if (typeof param.bodyState === 'number') {
       await wSCIModel.pub(
           param.pathId,
@@ -548,6 +583,13 @@ export class TransactionService {
       );
       await wSCTModel.pub(JSON.stringify(res));
       session.transaction.process = param.bodyState;
+      if (res.state === 2) {
+        await subscribeExpiredeModel.setExpirKey(
+            `${expiredTranId}${res.id}`, payTimeout);
+      }
+      if (res.state === 3 || res.state === 99) {
+        await subscribeExpiredeModel.del(res.id);
+      }
     }
     return res;
 

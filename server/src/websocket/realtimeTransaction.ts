@@ -1,6 +1,7 @@
 import WebSocket from 'ws';
 import {WSToken, WSOnMessage, MyWebSocketServer, WSEvent} from './base';
-import {WSClientTransactionModel} from '../redisClient/models/webSocketModels';
+import {
+  WSClientTransactionModel} from '../redisClient/models/webSocketModels';
 import {UserModel} from '../apiModules/user/user.model';
 import {TransactionModel} from '../apiModules/transaction/transaction.model';
 import {Service, Container} from 'typedi';
@@ -11,6 +12,7 @@ const event = new WSEvent('realtime_transaction');
 const wSCIModel = Container.get(WSClientTransactionModel);
 const userModel = Container.get(UserModel);
 const transactionModel = Container.get(TransactionModel);
+
 
 const getNewData = async (userId: string) => {
   const resPending = await transactionModel.readRealtimeTransaction(
@@ -42,8 +44,6 @@ const getNewData = async (userId: string) => {
     }),
   };
 };
-// transactionModel.readRealtimeCountTransaction('aed06ef7-136a-42c9-b7c8-494109bb2baf').then(() => {
-// });
 
 @Service({id: WSToken, multiple: true})
 export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {

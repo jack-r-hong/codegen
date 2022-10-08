@@ -8,11 +8,15 @@ import svgCaptcha from 'svg-captcha';
 import {promises as fs} from 'fs';
 import {getPhoneCheck} from '../../utils/axios';
 import {query} from 'express-validator';
-type UserField = {
-  val: string,
-  verify: number,
-  des: string,
+
+type LoginStatus = {
+  id: string;
+  gameUid: string | null;
+  isAgent: boolean;
+  phone: string;
+  userStatus: number;
 }
+
 const userVerifyResponeFormat = async (data: any) => {
   const {
     userStatus,
@@ -523,7 +527,7 @@ export class UserService {
           throw e;
         });
     if (res !== null) {
-      const {id, userStatus, password, isAgent, phone} = res;
+      const {id, userStatus, password, isAgent, phone, gameUid} = res;
       const match = await bcrypt.compare(param.bodyPassword, password);
       if (match) {
         session.userInfo = {
@@ -531,12 +535,14 @@ export class UserService {
           userStatus,
           isAgent,
         };
-        return {
-          id,
-          userStatus,
+        const result : LoginStatus = {
           isAgent,
+          userStatus,
           phone,
+          gameUid,
+          id,
         };
+        return result;
       }
     }
     if (res === null) {
@@ -675,7 +681,8 @@ export class UserService {
       userStatus: res.userStatus,
       isAgent: res.isAgent,
     };
-    return res;
+    const result : LoginStatus= res;
+    return result;
 
     // custom end getUserMyStatus
   }

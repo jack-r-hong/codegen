@@ -1,9 +1,10 @@
 import {RedisClient} from '../index';
 import {ModelBase} from './index';
-import {Service} from 'typedi';
+import {Service, Container} from 'typedi';
 import {UserId} from './userId';
 import {Mixin} from 'ts-mixer';
 import {Queue} from './queue';
+import {SubscribeExpired} from './subscribeExpired';
 
 class WebSocketBase extends RedisClient {
 
@@ -45,4 +46,13 @@ export class WSClientServiceModel extends
   }
 
   override key: string = super.setKey('wscts');
+}
+
+@Service()
+export class SubscribeExpiredeModel extends
+  Mixin(SubscribeExpired, WebSocketBase) {
+  constructor() {
+    super();
+    this.client.configSet('notify-keyspace-events', 'Ex');
+  }
 }
