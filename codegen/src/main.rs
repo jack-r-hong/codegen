@@ -29,7 +29,7 @@ struct Data {
 }
 
 fn swagger_loader() -> Json{
-    let path = "./swagger/swagger.json";
+    let path = "../server/other/swagger.json";
     let data = fs::read_to_string(path).expect("Unable to read file");
     let mut res: serde_json::Value = serde_json::from_str(&data).expect("Unable to parse");
 

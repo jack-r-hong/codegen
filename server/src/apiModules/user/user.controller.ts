@@ -352,6 +352,33 @@ export class UserController implements Controller {
           next(e);
         });
   }
+  @Post('/logout')
+  @Validator(validSchemas.logoutUserValidator)
+  async logoutUser(
+      req: userParams.LogoutUserRequest,
+      res: Response,
+      next: NextFunction,
+  ) {
+    // custom begin logoutUserCheck
+
+    // custom end logoutUserCheck
+    UserController.service.logoutUser(
+        userParams.LogoutUserRequestConvert(
+            req.body,
+            req.query,
+            req.params,
+            req.cookies,
+        ),
+        req.session,
+    )
+        .then((result) =>{
+          // custom begin logoutUser
+
+          // custom end logoutUser
+        }).catch((e) => {
+          next(e);
+        });
+  }
   @Get('/real_verify')
   @Validator(validSchemas.getRealVerifyValidator)
   async getRealVerify(

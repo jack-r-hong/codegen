@@ -392,6 +392,8 @@ export const loginUserValidator: Schema = {
     isString: true,
   },
 };
+export const logoutUserValidator: Schema = {
+};
 export const getRealVerifyValidator: Schema = {
   'JSESSIONID': {
     in: 'cookies',

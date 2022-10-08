@@ -446,6 +446,14 @@ export class UserModel {
 
     // custom end loginUser
   }
+  async logoutUser(
+      param: requestTypes.LogoutUserParams,
+      customParam: any,
+  ) {
+    // custom begin logoutUser
+
+    // custom end logoutUser
+  }
   async getRealVerify(
       param: requestTypes.GetRealVerifyParams,
       customParam: any,

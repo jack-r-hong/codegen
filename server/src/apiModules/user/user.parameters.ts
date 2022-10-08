@@ -581,6 +581,39 @@ export const LoginUserRequestConvert = (
     bodyPhonePrefix: body.phonePrefix,
   };
 };
+type LogoutUserReqBody = {
+  }
+
+type LogoutUserReqQuery = {
+}
+
+type LogoutUserReqParams = {
+}
+
+type LogoutUserReqCookie = {
+}
+
+export interface LogoutUserRequest extends TypedRequest<
+  LogoutUserReqBody,
+  LogoutUserReqQuery,
+  LogoutUserReqParams,
+  LogoutUserReqCookie
+>{
+}
+
+export type LogoutUserParams = {
+}
+
+
+export const LogoutUserRequestConvert = (
+    body: LogoutUserReqBody,
+    query: LogoutUserReqQuery,
+    path: LogoutUserReqParams,
+    cookie: LogoutUserReqCookie,
+): LogoutUserParams => {
+  return {
+  };
+};
 type GetRealVerifyReqBody = {
   }
 

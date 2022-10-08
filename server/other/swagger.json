@@ -42,7 +42,35 @@
     {
       "name" : "userVerifyPhoto",
       "description" : "Operations about user"
-    }    
+    },
+    {
+      "name" : "exchangeRateBuy",
+      "description" : "Operations about user"
+    },
+    {
+      "name" : "exchangeRateSell",
+      "description" : "Operations about user"
+    },    
+    {
+      "name" : "payManage",
+      "description" : "Operations about user"
+    },
+    {
+      "name" : "backstageAdmin",
+      "description" : "Operations about backstageAdmin"
+    },
+    {
+      "name" : "chatroom",
+      "description" : "Operations about chatroom"
+    },
+    {
+      "name" : "cashFlow",
+      "description" : "Operations about cashFlow"
+    },
+    {
+      "name" : "userLevel",
+      "description" : "Operations about cashFlow"
+    }           
   ],
   "paths" : {
     "/captcha" : {
@@ -53,17 +81,19 @@
         "responses" : {
           "200" : {
             "description" : "Ok",
-            "content" : {
-              "image/svg" : {
+            "headers" : {
+              "Set-Cookie" : {
+                "description" : "jwt cookie",
                 "schema" : {
-                  "type" : "array",
-                  "items" : {
-                    "type" : "object",
-                    "properties" : {
-
-                    }                    
-                  }
+                  "type" : "string",
+                  "format" : "jwt"
                 }
+                
+              }
+            },               
+            "content" : {
+              "image/svg+xml": {
+                
               }
             }
           },
@@ -126,43 +156,7 @@
         }
       }
     },
-    "/register/phone_check" : {
-      "get" : {
-        "tags" : [ "user" ],
-        "summary" : "send verify code to phone",
-        "description" : "send verify code to phone.",
-        "operationId" : "sendPhoneCheck",
-        "responses" : {
-          "200" : {
-            "description" : "Ok",
-            "headers" : {
-              "Set-Cookie" : {
-                "description" : "jwt cookie",
-                "schema" : {
-                  "type" : "string",
-                  "format" : "jwt"
-                }
-              }
-            },            
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/User"
-                }
-              }
-            }
-          },
-          "400" : {
-            "$ref" : "#/components/responses/BadRequest"
-          },
-          "401" : {
-            "$ref" : "#/components/responses/Unauthorized"
-          },
-          "409" : {
-            "description": "已有電話"
-          }
-        }
-      },      
+    "/register/phone_check" : {  
       "post" : {
         "tags" : [ "user" ],
         "summary" : "phone check",
@@ -290,7 +284,47 @@
         }
       }
     },
+    "/logout" : {
+      "post" : {
+        "tags" : [ "user" ],
+        "summary" : "Logs user into the system",
+        "operationId" : "logoutUser",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation"
+          },
+          "400" : {
+            "$ref" : "#/components/responses/BadRequest"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },      
     "/real_verify": {
+      "get" : {
+        "tags" : [ "user" ],
+        "summary" : "Logs user into the system",
+        "operationId" : "getRealVerify",
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/RealVerify"
+          },
+          "400" : {
+            "$ref" : "#/components/responses/BadRequest"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/Unauthorized"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          }        
+        },
+        "security" : [ {
+          "cookieAuth" : [ ]
+        } ]
+      },      
       "post" : {
         "tags" : [ "user" ],
         "summary" : "Logs user into the system",
@@ -343,10 +377,7 @@
           },
           "403" : {
             "$ref" : "#/components/responses/Forbidden"
-          },          
-          "409" : {
-            "description": "bank account duplicate"
-          }          
+          }        
         },
         "security" : [ {
           "cookieAuth" : [ ]
@@ -414,6 +445,149 @@
         } ]
       }      
     },      
+    "/real_verify/photo": {
+      "get" : {
+        "tags" : [ "userVerifyPhoto" ],
+        "summary" : "Logs user into the system",
+        "operationId" : "getUserVerifyPhoto",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "result": {
+                      "type" : "object",
+                      "properties" : {
+                        "id" : {
+                          "type" : "integer"
+                        }                        
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/BadRequest"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/Unauthorized"
+          }
+        }
+      },      
+      "post" : {
+        "tags" : [ "userVerifyPhoto" ],
+        "summary" : "Logs user into the system",
+        "operationId" : "uploadManyVerifyPhoto",
+        "parameters" : [ {
+          "name" : "types",
+          "in" : "query",
+          "required" : true,
+          "schema" : {
+            "type" : "array",
+            "items":{
+              "type": "integer",
+              "enum": [1,2,3,4,5,6,7,8,9]
+            }
+          }
+        } ],        
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/UserVerifyUploadPhoto"
+        },
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "headers" : {
+              "X-Rate-Limit" : {
+                "description" : "calls per hour allowed by the user",
+                "schema" : {
+                  "type" : "integer",
+                  "format" : "int32"
+                }
+              },
+              "X-Expires-After" : {
+                "description" : "date in UTC when token expires",
+                "schema" : {
+                  "type" : "string",
+                  "format" : "date-time"
+                }
+              },
+              "Set-Cookie" : {
+                "description" : "date in UTC when token expires",
+                "schema" : {
+                  "type" : "string",
+                  "format" : "jwt"
+                }
+              }
+            },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "result": {
+                      "type" : "object",
+                      "properties" : {
+                        "id" : {
+                          "type" : "integer"
+                        }                        
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/BadRequest"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },   
+    "/backstage/real_verify/photo/{userId}": {
+      "get" : {
+        "tags" : [ "userVerifyPhoto" ],
+        "summary" : "Logs user into the system",
+        "operationId" : "getBackstageUserVerifyPhoto",
+        "parameters" : [ 
+          {
+            "name" : "userId",
+            "in" : "path",
+            "schema" : {
+              "type" : "string",
+              "format": "uuid"
+            },
+            "required": true
+          },
+          {
+            "name" : "type",
+            "in" : "query",
+            "schema" : {
+              "type" : "integer"
+            },
+            "required": true
+          }                              
+        ],          
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/RealVerify"
+          },
+          "400" : {
+            "$ref" : "#/components/responses/BadRequest"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },    
     "/backstage/users": {
       "get" : {
         "tags" : [ "user" ],
@@ -474,6 +648,66 @@
         }
       } 
     },   
+    "/backstage/agents": {
+      "get" : {
+        "tags" : [ "user" ],
+        "summary" : "backstage",
+        "operationId" : "getUserBackstageAgents",
+        "parameters" : [ 
+          {
+            "name" : "orderBy",
+            "in" : "query",
+            "description" : "The name that needs to be fetched. Use user1 for testing.",
+            "schema" : {
+              "type" : "string",
+              "default": "desc"
+            }
+          },
+          {
+            "name" : "orderByField",
+            "in" : "query",
+            "description" : "The name that needs to be fetched. Use user1 for testing.",
+            "schema" : {
+              "type" : "string",
+              "default": "createdAt"
+            }
+          },
+          {
+            "name" : "page",
+            "in" : "query",
+            "schema" : {
+              "type" : "integer",
+              "default": 0
+            }            
+          },
+          {
+            "name" : "take",
+            "in" : "query",
+            "schema" : {
+              "type" : "integer",
+              "default": 10
+            }    
+          }                   
+        ],            
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/BackstageUserArray"
+          },
+          "400" : {
+            "$ref" : "#/components/responses/BadRequest"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/Unauthorized"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          },          
+          "409" : {
+            "description": "bank account duplicate"
+          }          
+        }
+      } 
+    },       
     "/backstage/user/{id}": {
       "get" : {
         "tags" : [ "user" ],
@@ -507,11 +741,14 @@
             "description": "bank account duplicate"
           }          
         }
-      },      
+      },
       "put" : {
         "tags" : [ "user" ],
         "summary" : "Logs user into the system",
         "operationId" : "updateOneBackstageUser", 
+        "requestBody": {
+          "$ref": "#/components/requestBodies/UpdateUserStatusOrRemark"
+        },           
         "parameters" : [ 
           {
             "name" : "id",
@@ -523,6 +760,259 @@
             "required": true
           }                   
         ],                     
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/BackstageUser"
+          },          
+          "400" : {
+            "$ref" : "#/components/responses/BadRequest"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/Unauthorized"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          },          
+          "409" : {
+            "description": "bank account duplicate"
+          }          
+        }
+      }      
+    },   
+    "/backstage/user/level": {
+      "get" : {
+        "tags" : [ "userLevel" ],
+        "summary" : "Logs user into the system",
+        "operationId" : "readManyBackstageUserLevel",                 
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/BackstageUserManyLevel"
+          },          
+          "400" : {
+            "$ref" : "#/components/responses/BadRequest"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/Unauthorized"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          },          
+          "409" : {
+            "description": "bank account duplicate"
+          }          
+        }
+      },
+      "post" : {
+        "tags" : [ "userLevel" ],
+        "summary" : "Logs user into the system",
+        "operationId" : "createOneBackstageUserLevel", 
+        "parameters" : [ 
+          {
+            "name" : "id",
+            "in" : "path",
+            "schema" : {
+              "type" : "integer"
+            },
+            "required": true
+          }                   
+        ],          
+        "requestBody": {
+          "$ref": "#/components/requestBodies/UpdateUserLevel"
+        },                   
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/BackstageUserLevel"
+          },          
+          "400" : {
+            "$ref" : "#/components/responses/BadRequest"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/Unauthorized"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          },          
+          "409" : {
+            "description": "bank account duplicate"
+          }          
+        }
+      }          
+    },     
+    "/backstage/user/level/{id}": {
+      "put" : {
+        "tags" : [ "userLevel" ],
+        "summary" : "Logs user into the system",
+        "operationId" : "updateOneBackstageUserLevel", 
+        "requestBody": {
+          "$ref": "#/components/requestBodies/UpdateUserLevel"
+        },           
+        "parameters" : [ 
+          {
+            "name" : "id",
+            "in" : "path",
+            "schema" : {
+              "type" : "integer"
+            },
+            "required": true
+          }                   
+        ],                     
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/BackstageUser"
+          },          
+          "400" : {
+            "$ref" : "#/components/responses/BadRequest"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/Unauthorized"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          },          
+          "409" : {
+            "description": "bank account duplicate"
+          }          
+        }
+      },
+      "delete" : {
+        "tags" : [ "userLevel" ],
+        "summary" : "Logs user into the system",
+        "operationId" : "deleteOneBackstageUserLevel", 
+        "parameters" : [ 
+          {
+            "name" : "id",
+            "in" : "path",
+            "schema" : {
+              "type" : "integer"
+            },
+            "required": true
+          }                   
+        ],                     
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/BackstageUser"
+          },          
+          "400" : {
+            "$ref" : "#/components/responses/BadRequest"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/Unauthorized"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          },          
+          "409" : {
+            "description": "bank account duplicate"
+          }          
+        }
+      }          
+    },    
+    "/backstage/user/{id}/transaction": {
+      "get" : {
+        "tags" : [ "user" ],
+        "summary" : "Logs user into the system",
+        "operationId" : "readBackstageUserTransaction", 
+        "parameters" : [ 
+          {
+            "name" : "id",
+            "in" : "path",
+            "schema" : {
+              "type" : "string",
+              "format": "uuid"
+            },
+            "required": true
+          },
+          {
+            "name" : "orderBy",
+            "in" : "query",
+            "description" : "The name that needs to be fetched. Use user1 for testing.",
+            "schema" : {
+              "type" : "string",
+              "default": "desc"
+            }
+          },
+          {
+            "name" : "orderByField",
+            "in" : "query",
+            "description" : "The name that needs to be fetched. Use user1 for testing.",
+            "schema" : {
+              "type" : "string",
+              "default": "createdAt"
+            }
+          },
+          {
+            "name" : "page",
+            "in" : "query",
+            "schema" : {
+              "type" : "integer",
+              "default": 0
+            }            
+          },
+          {
+            "name" : "take",
+            "in" : "query",
+            "schema" : {
+              "type" : "integer",
+              "default": 10
+            }    
+          },          
+          {
+            "name" : "start_time",
+            "in" : "query",
+            "schema" : {
+              "type" : "string",
+              "format" : "date-time",
+              "default": "2022-09-13T02:26:29.050Z"
+            }    
+          },
+          {
+            "name" : "end_time",
+            "in" : "query",
+            "schema" : {
+              "type" : "string",
+              "format" : "date-time",
+              "default": "2022-09-12T02:26:29.050Z"
+            }    
+          }                 
+        ],                     
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/BackstageUserTransaction"
+          },          
+          "400" : {
+            "$ref" : "#/components/responses/BadRequest"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/Unauthorized"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          },          
+          "409" : {
+            "description": "bank account duplicate"
+          }          
+        }
+      }
+    },        
+    "/backstage/user/verify/{id}": {   
+      "put" : {
+        "tags" : [ "user" ],
+        "summary" : "Logs user into the system",
+        "operationId" : "updateBackstageUser", 
+        "parameters" : [ 
+          {
+            "name" : "id",
+            "in" : "path",
+            "schema" : {
+              "type" : "string",
+              "format": "uuid"
+            },
+            "required": true
+          }                   
+        ],        
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/BackstageUserVerifyUpdate"
+        },                     
         "responses" : {
           "200" : {
             "description" : "successful operation",
@@ -556,6 +1046,26 @@
                       }
                     }
                   }
+                },
+                "example": {
+                  "result": {
+                        "address": 1,
+                        "birthdate": 1,
+                        "certificate": 1,
+                        "country": 1,
+                        "gameUid": 1,
+                        "lineId": 1,
+                        "id": 9,
+                        "idCardDate": 1,
+                        "idCardPhoto": 1,
+                        "idCardPosiition": 1,
+                        "idCardType": 1,
+                        "name": 2,
+                        "selfie": 1,
+                        "sign": 1,
+                        "updatedAt": "2022-09-12T11:23:15.496Z",
+                        "userId": "040c02b9-dd39-4662-97ec-477f8965c059"
+                    }
                 }
               }
             }
@@ -572,12 +1082,149 @@
           "409" : {
             "description": "bank account duplicate"
           }          
-        },
-        "security" : [{
-          "cookieAuth" : []
-        }]
+        }
       }     
-    },     
+    }, 
+    "/backstage/user/verify/reson": {   
+      "get" : {
+        "tags" : [ "user" ],
+        "summary" : "Logs user into the system",
+        "operationId" : "readBackstageUserReson", 
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/ResonDes"
+          },          
+          "400" : {
+            "$ref" : "#/components/responses/BadRequest"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/Unauthorized"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          },          
+          "409" : {
+            "description": "bank account duplicate"
+          }          
+        }
+      },  
+      "post" : {
+        "tags" : [ "user" ],
+        "summary" : "Logs user into the system",
+        "operationId" : "createBackstageUserReson",
+        "requestBody":{
+          "content": {
+            "application/json" : {
+              "schema" : {
+                "type": "object",
+                "properties": {
+                  "des": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },           
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/ResonDes"
+          },          
+          "400" : {
+            "$ref" : "#/components/responses/BadRequest"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/Unauthorized"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          },          
+          "409" : {
+            "description": "bank account duplicate"
+          }          
+        }
+      }                    
+    },   
+    "/backstage/user/verify/reson/{resonId}": {   
+      "put" : {
+        "tags" : [ "user" ],
+        "summary" : "Logs user into the system",
+        "operationId" : "updateBackstageUserReson", 
+        "parameters" : [ 
+          {
+            "name" : "resonId",
+            "in" : "path",
+            "schema" : {
+              "type" : "integer"
+            },
+            "required": true
+          }                   
+        ],    
+        "requestBody":{
+          "content": {
+            "application/json" : {
+              "schema" : {
+                "type": "object",
+                "properties": {
+                  "des": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },     
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/ResonDes"
+          },          
+          "400" : {
+            "$ref" : "#/components/responses/BadRequest"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/Unauthorized"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          },          
+          "409" : {
+            "description": "bank account duplicate"
+          }          
+        }
+      },  
+      "delete" : {
+        "tags" : [ "user" ],
+        "summary" : "Logs user into the system",
+        "operationId" : "deleteBackstageUserReson", 
+        "parameters" : [ 
+          {
+            "name" : "resonId",
+            "in" : "path",
+            "schema" : {
+              "type" : "integer"
+            },
+            "required": true
+          }                   
+        ],           
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/ResonDes"
+          },          
+          "400" : {
+            "$ref" : "#/components/responses/BadRequest"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/Unauthorized"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          },          
+          "409" : {
+            "description": "bank account duplicate"
+          }          
+        }
+      }                     
+    },                   
     "/user/{id}": {
       "put" : {
         "tags" : [ "user" ],
@@ -649,77 +1296,15 @@
         }]
       }     
     }, 
-    "/real_verify/photo": {
+    "/user/my/status": {
       "get" : {
-        "tags" : [ "userVerifyPhoto" ],
-        "summary" : "Logs user into the system",
-        "operationId" : "getUserVerifyPhoto",
-        "responses" : {
-          "200" : {
-            "description" : "successful operation",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "type" : "object",
-                  "properties" : {
-                    "result": {
-                      "type" : "object",
-                      "properties" : {
-                        "id" : {
-                          "type" : "integer"
-                        }                        
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "400" : {
-            "$ref" : "#/components/responses/BadRequest"
-          },
-          "401" : {
-            "$ref" : "#/components/responses/Unauthorized"
-          }
-        }
-      },      
-      "post" : {
-        "tags" : [ "userVerifyPhoto" ],
-        "summary" : "Logs user into the system",
-        "operationId" : "uploadManyVerifyPhoto",
-        "parameters" : [ {
-          "name" : "types",
-          "in" : "query",
-          "required" : true,
-          "schema" : {
-            "type" : "array",
-            "items":{
-              "type": "integer",
-              "enum": [1,2,3,4,5,6,7]
-            }
-          }
-        } ],        
-        "requestBody" : {
-          "$ref" : "#/components/requestBodies/UserVerifyUploadPhoto"
-        },
+        "tags" : [ "user" ],
+        "summary" : "getUserMyStatus",
+        "operationId" : "getUserMyStatus",                  
         "responses" : {
           "200" : {
             "description" : "successful operation",
             "headers" : {
-              "X-Rate-Limit" : {
-                "description" : "calls per hour allowed by the user",
-                "schema" : {
-                  "type" : "integer",
-                  "format" : "int32"
-                }
-              },
-              "X-Expires-After" : {
-                "description" : "date in UTC when token expires",
-                "schema" : {
-                  "type" : "string",
-                  "format" : "date-time"
-                }
-              },
               "Set-Cookie" : {
                 "description" : "date in UTC when token expires",
                 "schema" : {
@@ -737,7 +1322,10 @@
                       "type" : "object",
                       "properties" : {
                         "id" : {
-                          "type" : "integer"
+                          "$ref": "#/components/schemas/User/properties/id"
+                        },
+                        "userStatus" : {
+                          "$ref": "#/components/schemas/User/properties/userStatus"
                         }                        
                       }
                     }
@@ -746,15 +1334,18 @@
               }
             }
           },
-          "400" : {
-            "$ref" : "#/components/responses/BadRequest"
-          },
           "401" : {
             "$ref" : "#/components/responses/Unauthorized"
-          }
-        }
-      }
-    },    
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          }        
+        },
+        "security" : [{
+          "cookieAuth" : []
+        }]
+      }     
+    },   
     "/transaction" : {     
       "post" : {
         "tags" : [ "transaction" ],
@@ -780,7 +1371,6 @@
             "$ref" : "#/components/responses/NotFound"
           }
         },
-
         "security" : [ {
           "cookieAuth" : [ ]
         } ]
@@ -818,6 +1408,36 @@
         } ]
       }
     },
+    "/transaction/calculation" : {     
+      "post" : {
+        "tags" : [ "transaction" ],
+        "summary" : "post transaction by id",
+        "operationId" : "getTransactionCalculation",    
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/GetTransactionCalculation"
+        },           
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/GetTransactionCalculation"
+          },
+          "400" : {
+            "$ref" : "#/components/responses/BadRequest"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/Unauthorized"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          },
+          "404" : {
+            "$ref" : "#/components/responses/NotFound"
+          }
+        },
+        "security" : [ {
+          "cookieAuth" : [ ]
+        } ]
+      }
+    },    
     "/transaction/my" : {
       "get" : {
         "tags" : [ "transaction" ],
@@ -857,11 +1477,49 @@
               "type" : "integer",
               "default": 10
             }    
-          }                   
+          },
+          {
+            "name" : "start_time",
+            "in" : "query",
+            "schema" : {
+              "type" : "string",
+              "format" : "date-time",
+              "default": "2022-09-13T02:26:29.050Z"
+            }    
+          },
+          {
+            "name" : "end_time",
+            "in" : "query",
+            "schema" : {
+              "type" : "string",
+              "format" : "date-time",
+              "default": "2022-09-12T02:26:29.050Z"
+            }    
+          },
+          {
+            "name" : "state",
+            "in" : "query",
+            "schema" : {
+              "type" : "string",
+              "format" : "int32",
+              "description" : "status map:\n  * `failed` - Failed\n * `all` - All\n * `pending` - Pending\n * `processing` - Processing\n",
+              "enum" : ["failed", "all", "pending", "processing", "completed"]     
+            }    
+          },
+          {
+            "name" : "bos",
+            "in" : "query",
+            "description" : "status map:\n * `3` - All \n * `1` - Buy\n * `2` - Sell\n",
+            "schema" : {
+              "type" : "integer",
+              "format" : "int32",
+              "enum" : [ 1, 2, 3 ]
+            }
+          }                                                  
         ],        
         "responses" : {
           "200" : {
-            "$ref" : "#/components/responses/Transaction"
+            "$ref" : "#/components/responses/MyTransaction"
           },
           "400" : {
             "$ref" : "#/components/responses/BadRequest"
@@ -881,47 +1539,32 @@
         } ]
       }
     },    
-    "/transaction/pending" : {
+    "/transaction/pay_photo" : {
       "get" : {
         "tags" : [ "transaction" ],
         "summary" : "Get transaction by id",
-        "operationId" : "readPendingTransaction",
+        "operationId" : "getPayPhoto",   
         "parameters" : [ 
           {
-            "name" : "orderBy",
+            "name" : "type",
             "in" : "query",
-            "description" : "The name that needs to be fetched. Use user1 for testing.",
+            "required" : true,
+            "description": "status map:\n * `1` - line pay\n * `2` - 街口支付\n",
             "schema" : {
-              "type" : "string",
-              "default": "desc"
+              "type" : "integer",
+              "enum": [1, 2]
             }
           },
           {
-            "name" : "orderByField",
+            "name" : "transactionId",
             "in" : "query",
-            "description" : "The name that needs to be fetched. Use user1 for testing.",
+            "required" : true,
             "schema" : {
               "type" : "string",
-              "default": "createdAt"
+              "format": "uuid"
             }
-          },
-          {
-            "name" : "page",
-            "in" : "query",
-            "schema" : {
-              "type" : "integer",
-              "default": 0
-            }            
-          },
-          {
-            "name" : "take",
-            "in" : "query",
-            "schema" : {
-              "type" : "integer",
-              "default": 10
-            }    
-          }                   
-        ],        
+          }
+        ],         
         "responses" : {
           "200" : {
             "$ref" : "#/components/responses/Transaction"
@@ -943,7 +1586,48 @@
           "cookieAuth" : [ ]
         } ]
       }
-    },        
+    },   
+    "/transaction/gs_pay/deposit" : {
+      "post" : {
+        "tags" : [ "transaction" ],
+        "summary" : "Get transaction by id",
+        "operationId" : "postGSPayDeposit",   
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/PostGSPayDeposit"
+        },         
+        "responses" : {
+          "200" : {
+            "description" : "Ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "properties" : {
+                    "result": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/BadRequest"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/Unauthorized"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          },
+          "404" : {
+            "$ref" : "#/components/responses/NotFound"
+          }
+        },
+        "security" : [ {
+          "cookieAuth" : [ ]
+        } ]
+      }
+    },          
     "/transaction/{id}" : {
       "get" : {
         "tags" : [ "transaction" ],
@@ -979,46 +1663,322 @@
         "security" : [ {
           "cookieAuth" : [ ]
         } ]
-      }
+      },
+      "put" : {
+        "tags" : [ "transaction" ],
+        "summary" : "Update transaction by id",
+        "operationId" : "updateTransaction",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "The name that needs to be fetched. Use user1 for testing.",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "format": "uuid"
+          }
+          
+        } ],
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/UpdateTransaction"
+        },        
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/Transaction"
+          },
+          "400" : {
+            "$ref" : "#/components/responses/BadRequest"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/Unauthorized"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          },
+          "404" : {
+            "$ref" : "#/components/responses/NotFound"
+          }
+        },
+        "security" : [ {
+          "cookieAuth" : [ ]
+        } ]
+      }      
     },
-    "/transaction/exchange_rate" : {     
+    "/transaction/exchange_rate/buy" : {     
       "get" : {
         "tags" : [ "transaction" ],
         "summary" : "get exchang rate",
-        "operationId" : "getExchangeRate",            
+        "operationId" : "getExchangeRateBuy",      
         "responses" : {
           "200" : {
-            "description" : "Ok",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "type" : "object",
-                  "properties" : {
-                    "result":{
-                      "type": "object"
-                    }
-                  }
-                },
-                "example": {
-                  "result": {
-                      "0": {
-                          "range": 0,
-                          "rate": 120
-                      },
-                      "1": {
-                          "range": 150000,
-                          "rate": 130
-                      },
-                      "2": {
-                          "range": 500000,
-                          "rate": 140
-                      }
-                  }
-                }          
-              }
-
+            "$ref" : "#/components/responses/BackstageExchangeRateArrayBuy"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          }
+        },
+        "security" : [ {
+          "cookieAuth" : [ ]
+        } ]
+      }
+    },   
+    "/transaction/exchange_rate/sell" : {     
+      "get" : {
+        "tags" : [ "transaction" ],
+        "summary" : "get exchang rate",
+        "operationId" : "getExchangeRateSell",         
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/BackstageExchangeRateArraySell"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          }
+        },
+        "security" : [ {
+          "cookieAuth" : [ ]
+        } ]
+      }
+    },       
+    "/backstage/exchange_rate/buy" : {     
+      "get" : {
+        "tags" : [ "exchangeRateBuy" ],
+        "summary" : "get exchang rate",
+        "operationId" : "readManyBackstageExchangeRateBuy",       
+        "parameters" : [ 
+          {
+            "name" : "orderBy",
+            "in" : "query",
+            "description" : "The name that needs to be fetched. Use user1 for testing.",
+            "schema" : {
+              "type" : "string",
+              "default": "desc"
             }
-            
+          },
+          {
+            "name" : "orderByField",
+            "in" : "query",
+            "description" : "The name that needs to be fetched. Use user1 for testing.",
+            "schema" : {
+              "type" : "string",
+              "default": "createdAt"
+            }
+          },
+          {
+            "name" : "page",
+            "in" : "query",
+            "schema" : {
+              "type" : "integer",
+              "default": 0
+            }            
+          },
+          {
+            "name" : "take",
+            "in" : "query",
+            "schema" : {
+              "type" : "integer",
+              "default": 10
+            }    
+          }      
+        ],                   
+        "responses" : {
+          "200" : {
+            "$ref":  "#/components/responses/BackstageExchangeRateArrayBuy"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "exchangeRateBuy" ],
+        "summary" : "cteate exchang rate",
+        "operationId" : "createOneBackstageExchangeRateBuy",   
+        "requestBody": {
+          "$ref": "#/components/requestBodies/CreateExchangeRateBuy"
+        },                 
+        "responses" : {
+          "200" : {
+            "$ref":  "#/components/responses/BackstageExchangeRateArrayBuy"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          }
+        }
+      }      
+    }, 
+    "/backstage/exchange_rate/buy/{id}" : {     
+      "put" : {
+        "tags" : [ "exchangeRateBuy" ],
+        "summary" : "get exchang rate",
+        "operationId" : "updateOneBackstageExchangeRateBuy",            
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],       
+        "requestBody": {
+          "$ref": "#/components/requestBodies/UpdateExchangeRateBuy"
+        },
+        "responses" : {
+          "200" : {
+            "$ref":  "#/components/responses/BackstageExchangeRateArrayBuy"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "exchangeRateBuy" ],
+        "summary" : "get exchang rate",
+        "operationId" : "deleteOneBackstageExchangeRateBuy",            
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],        
+        "responses" : {
+          "200" : {
+            "$ref":  "#/components/responses/BackstageExchangeRateArrayBuy"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          }
+        }
+      }      
+    },  
+    "/backstage/exchange_rate/sell" : {     
+      "get" : {
+        "tags" : [ "exchangeRateSell" ],
+        "summary" : "get exchang rate",
+        "operationId" : "readManyBackstageExchangeRateSell",       
+        "parameters" : [ 
+          {
+            "name" : "orderBy",
+            "in" : "query",
+            "description" : "The name that needs to be fetched. Use user1 for testing.",
+            "schema" : {
+              "type" : "string",
+              "default": "desc"
+            }
+          },
+          {
+            "name" : "orderByField",
+            "in" : "query",
+            "description" : "The name that needs to be fetched. Use user1 for testing.",
+            "schema" : {
+              "type" : "string",
+              "default": "createdAt"
+            }
+          },
+          {
+            "name" : "page",
+            "in" : "query",
+            "schema" : {
+              "type" : "integer",
+              "default": 0
+            }            
+          },
+          {
+            "name" : "take",
+            "in" : "query",
+            "schema" : {
+              "type" : "integer",
+              "default": 10
+            }    
+          }       
+        ],                   
+        "responses" : {
+          "200" : {
+            "$ref":  "#/components/responses/BackstageExchangeRateArraySell"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "exchangeRateSell" ],
+        "summary" : "cteate exchang rate",
+        "operationId" : "createOneBackstageExchangeRateSell",   
+        "requestBody": {
+          "$ref": "#/components/requestBodies/CreateExchangeRateSell"
+        },                 
+        "responses" : {
+          "200" : {
+            "$ref":  "#/components/responses/BackstageExchangeRateArraySell"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          }
+        }
+      }      
+    },     
+    "/backstage/exchange_rate/sell/{id}" : {     
+      "put" : {
+        "tags" : [ "exchangeRateSell" ],
+        "summary" : "get exchang rate",
+        "operationId" : "updateOneBackstageExchangeRateSell",            
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],       
+        "requestBody": {
+          "$ref": "#/components/requestBodies/UpdateExchangeRateSell"
+        },
+        "responses" : {
+          "200" : {
+            "$ref":  "#/components/responses/BackstageExchangeRateArraySell"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "exchangeRateSell" ],
+        "summary" : "get exchang rate",
+        "operationId" : "deleteOneBackstageExchangeRateSell",            
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],        
+        "responses" : {
+          "200" : {
+            "$ref":  "#/components/responses/BackstageExchangeRateArraySell"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          }
+        }
+      }      
+    },        
+    "/bank" : {     
+      "post" : {
+        "tags" : [ "bankAccount" ],
+        "summary" : "get account",
+        "operationId" : "createBankAccounts",   
+        "requestBody": {
+          "$ref": "#/components/requestBodies/BankAccountCreate"
+        },
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/BankAccountFromId"
           },
           "403" : {
             "$ref" : "#/components/responses/Forbidden"
@@ -1029,12 +1989,42 @@
         } ]
       }
 
-    },
-    "/bank/my/account" : {     
+    },        
+    "/bank/{id}" : {     
       "get" : {
         "tags" : [ "bankAccount" ],
         "summary" : "get account",
-        "operationId" : "getBankAccount",      
+        "operationId" : "readOneBankAccount",      
+        "parameters" : [ 
+          {
+            "name" : "id",
+            "in" : "path",
+            "description" : "The name that needs to be fetched. Use user1 for testing.",
+            "required" : true,
+            "schema" : {
+              "type" : "integer"
+            }
+          }
+        ],               
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/BankAccountFromId"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          }
+        },
+        "security" : [ {
+          "cookieAuth" : [ ]
+        } ]
+      }
+
+    },    
+    "/bank/my/accounts" : {     
+      "get" : {
+        "tags" : [ "bankAccount" ],
+        "summary" : "get account",
+        "operationId" : "getMyBankAccounts",      
         "parameters" : [ 
           {   
             "name" : "status",
@@ -1043,7 +2033,8 @@
               "type" : "integer",
               "enum": [1,2],
               "default": 1,
-              "description" : "status map:\n * `1` - 未驗證\n * `2` - 已驗證\n"
+              "description" : "status map:\n * `1` - 未驗證\n * `2` - 已驗證\n",
+              "nullable": true
             }
           }
         ],               
@@ -1060,7 +2051,543 @@
         } ]
       }
 
-    }         
+    },
+    "/backstage/banks/verify/{userId}" : {     
+      "get" : {
+        "tags" : [ "bankAccount" ],
+        "summary" : "get account",
+        "operationId" : "getBackstageBankAccounts",             
+        "parameters" : [ 
+          {
+            "name" : "userId",
+            "in" : "path",
+            "description" : "User id",
+            "required" : true,
+            "schema" : {
+              "type" : "string",
+              "format": "uuid"
+            }
+          }
+        ],           
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/BackstageBankAccountArray"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "bankAccount" ],
+        "summary" : "get account",
+        "operationId" : "putBackstageBankAccounts",                       
+        "parameters" : [ 
+          {
+            "name" : "userId",
+            "in" : "path",
+            "description" : "User id",
+            "required" : true,
+            "schema" : {
+              "type" : "string",
+              "format": "uuid"
+            }
+          }
+        ],          
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/BackstageBankAccountVerifyUpdate"
+        },              
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/BackstageBankAccountArray"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          }
+        }
+      }      
+    },
+    "/backstage/banks/verify/reson" : {     
+      "get" : {
+        "tags" : [ "bankAccount" ],
+        "summary" : "get account",
+        "operationId" : "getBackstageBankAccountReson",                   
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/ResonDes"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "bankAccount" ],
+        "summary" : "get account",
+        "operationId" : "createBackstageBankAccountsReson",                            
+        "requestBody":{
+          "content": {
+            "application/json" : {
+              "schema" : {
+                "type": "object",
+                "properties": {
+                  "des": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },        
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/ResonDes"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          }
+        }
+      }      
+    },  
+    "/backstage/banks/verify/reson/{resonId}" : {     
+      "put" : {
+        "tags" : [ "bankAccount" ],
+        "summary" : "get account",
+        "operationId" : "updateBackstageBankAccountReson",             
+        "parameters" : [ 
+          {
+            "name" : "resonId",
+            "in" : "path",
+            "required" : true,
+            "schema" : {
+              "type" : "integer"
+            }
+          }
+        ],           
+        "requestBody":{
+          "content": {
+            "application/json" : {
+              "schema" : {
+                "type": "object",
+                "properties": {
+                  "des": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },           
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/ResonDes"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "bankAccount" ],
+        "summary" : "get account",
+        "operationId" : "deleteBackstageBankAccountReson",                       
+        "parameters" : [ 
+          {
+            "name" : "resonId",
+            "in" : "path",
+            "required" : true,
+            "schema" : {
+              "type" : "integer"
+            }
+          }
+        ],          
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/ResonDes"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          }
+        }
+      }      
+
+    },         
+    "/backstage/pay_manage" : {     
+      "get" : {
+        "tags" : [ "payManage" ],
+        "summary" : "get account",
+        "operationId" : "readManyBackstagePayManage",   
+        "parameters" : [ 
+          {
+            "name" : "page",
+            "in" : "query",
+            "required" : true,
+            "schema" : {
+              "type" : "integer"
+            }
+          },
+          {
+            "name" : "take",
+            "in" : "query",
+            "required" : true,
+            "schema" : {
+              "type" : "integer"
+            }
+          },
+          {
+            "name" : "type",
+            "in" : "query",
+            "required" : true,
+            "schema" : {
+              "type" : "integer"
+            }
+          },  
+          {
+            "name" : "userId",
+            "in" : "query",
+            "schema" : {
+              "type" : "string"
+            }
+          }                                    
+        ],                             
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/ReadManyPayManage"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "payManage" ],
+        "summary" : "get account",
+        "operationId" : "careateBackstagePayManage",                              
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/CreatePayManage"
+        },              
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/BackstageBankAccountArray"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          }
+        }
+      }      
+    },
+    "/backstage/pay_manage/{id}" : {     
+      "put" : {
+        "tags" : [ "payManage" ],
+        "summary" : "get account",
+        "operationId" : "updateBackstagePayManage",                       
+        "parameters" : [ 
+          {
+            "name" : "id",
+            "in" : "path",
+            "description" : "id",
+            "required" : true,
+            "schema" : {
+              "type" : "integer"
+            }
+          }
+        ],          
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/UpdatePayManage"
+        },              
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/BackstageBankAccountArray"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "payManage" ],
+        "summary" : "get account",
+        "operationId" : "deleteOneBackstagePayManage",                       
+        "parameters" : [ 
+          {
+            "name" : "id",
+            "in" : "path",
+            "description" : "User id",
+            "required" : true,
+            "schema" : {
+              "type" : "integer"
+            }
+          }
+        ],            
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/BackstageBankAccountArray"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          }
+        }
+      }              
+    },    
+    "/backstage/pay_manage/photo/{id}" : {     
+      "post" : {
+        "tags" : [ "payManage" ],
+        "summary" : "get account",
+        "operationId" : "uploadManyQrCode",                       
+        "parameters" : [ 
+          {
+            "name" : "id",
+            "in" : "path",
+            "description" : "id",
+            "required" : true,
+            "schema" : {
+              "type" : "integer"
+            }
+          }
+        ],          
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/UploadPhotoQRCode"
+        },              
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/BackstageBankAccountArray"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "payManage" ],
+        "summary" : "get account",
+        "operationId" : "deleteQrCode",                       
+        "parameters" : [ 
+          {
+            "name" : "id",
+            "in" : "path",
+            "description" : "User id",
+            "required" : true,
+            "schema" : {
+              "type" : "integer"
+            }
+          }
+        ],                       
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/BackstageBankAccountArray"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          }
+        }
+      }                
+    },
+    "/backstage/admin" : {     
+      "post" : {
+        "tags" : [ "backstageAdmin" ],
+        "summary" : "get account",
+        "operationId" : "getAdminFromId",                              
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                  "type" : "object",
+                  "properties" : {              
+                    "id": {
+                      "type": "string",
+                      "format": "uuid"
+                    }
+                  }
+              }
+            }
+          },
+          "description" : "List of user object",
+          "required" : true
+        },              
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/AdminDetail"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          }
+        }
+      }               
+    },    
+    "/backstage/admin/register" : {     
+      "post" : {
+        "tags" : [ "backstageAdmin" ],
+        "summary" : "get account",
+        "operationId" : "adminRegister",                            
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/AdminLogin"
+        },              
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/AdminDetail"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          }
+        }
+      }               
+    },      
+    "/backstage/admin/login" : {     
+      "post" : {
+        "tags" : [ "backstageAdmin" ],
+        "summary" : "get account",
+        "operationId" : "adminLogin",                            
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/AdminLogin"
+        },              
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/AdminDetail"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          }
+        }
+      }               
+    },
+    "/chatroom/transaction/token" : {     
+      "post" : {
+        "tags" : [ "chatroom" ],
+        "summary" : "get token",
+        "operationId" : "transactionToken",                            
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/GetTransactionChatToken"
+        },              
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/Token"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          }
+        }
+      }               
+    },
+    "/chatroom/transaction/service/token" : {     
+      "post" : {
+        "tags" : [ "chatroom" ],
+        "summary" : "get token",
+        "operationId" : "transactionServiceToken",                            
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/GetTransactionChatToken"
+        },              
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/Token"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          }
+        }
+      }               
+    },    
+    "/chatroom/service/token" : {     
+      "post" : {
+        "tags" : [ "chatroom" ],
+        "summary" : "get token",
+        "operationId" : "serviceToken",                            
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/GetServiceChatToken"
+        },              
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/Token"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          }
+        }
+      }               
+    }, 
+    "/cashFlow/notify/take_number" : {     
+      "post" : {
+        "tags" : [ "cashFlow" ],
+        "summary" : "get token",
+        "operationId" : "notifyTakeNumber",   
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/NotifyTakeNumber"
+        },                                              
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/Token"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          }
+        }
+      }               
+    },
+    "/cashFlow/notify/paid" : {     
+      "post" : {
+        "tags" : [ "cashFlow" ],
+        "summary" : "get token",
+        "operationId" : "notifyPaid",    
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/NotifyPaid"
+        },                                             
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/Token"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          }
+        }
+      }               
+    },
+    "/cashFlow/notify/grant" : {     
+      "post" : {
+        "tags" : [ "cashFlow" ],
+        "summary" : "get token",
+        "operationId" : "notifyGrant",    
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/NotifyGrant"
+        },                                             
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/Token"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          }
+        }
+      }               
+    },
+    "/cashFlow/custom/page" : {     
+      "post" : {
+        "tags" : [ "cashFlow" ],
+        "summary" : "get token",
+        "operationId" : "customPage",                                    
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/Token"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          }
+        }
+      }               
+    },    
+    "/cashFlow/take_number_success" : {     
+      "get" : {
+        "tags" : [ "cashFlow" ],
+        "summary" : "get token",
+        "operationId" : "takeNumberSuccess",                     
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/Token"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          }
+        }
+      }               
+    }
   },
   "externalDocs" : {
     "description" : "Find out more about Swagger",
@@ -1078,7 +2605,7 @@
           },
           "name" : {
             "type" : "string",
-            "minLength" : 3,
+            "minLength" : 1,
             "maxLength" : 30,
             "nullable" : true
           },
@@ -1095,18 +2622,25 @@
             "type" : "string",
             "minLength" : 8,
             "maxLength" : 30,
-            "example": "ffE22sq^wjb&w"
+            "example": "ffE22sqwjbw"
           },
           "userStatus" : {
             "type" : "integer",
             "format" : "int32",
-            "description" : "status map:\n * `1` - Verified\n * `2` - Unverified\n * `3` - WaitVerify\n * `4` - Locking\n * `9` - Test account \n * `10` - Agent \n * `11` - AgentLocking \n",
-            "enum" : [ 1, 2, 3, 4, 10, 11 ],
+            "description" : "status map:\n * `1` - Verified\n * `2` - Unverified\n * `3` - WaitVerify\n * `4` - Failed\n * `9` - Test account \n * `10` - Agent \n * `11` - AgentLocking \n",
+            "enum" : [ 1, 2, 3, 4 ],
             "default" : 2
           },    
-          "email" : {
+          "isAgent" : {
+            "type" : "boolean",
+            "default": "false"
+          },      
+          "gameUid" : {
             "type" : "string",
-            "format" : "email",
+            "nullable" : true
+          },      
+          "lineId" : {
+            "type" : "string",
             "nullable" : true
           },          
           "birthdate" : {
@@ -1151,7 +2685,7 @@
             "description": "residence address",
             "type" : "string",
             "nullable" : true
-          },           
+          },                   
           "createdAt" : {
             "type" : "string",
             "format" : "date-time"
@@ -1159,16 +2693,59 @@
           "updatedAt" : {
             "type" : "string",
             "format" : "date-time"
-          },           
+          },        
           "level" : {
             "$ref" : "#/components/schemas/UserLevel/properties/level"
           },
           "userLevel" : {
             "$ref" : "#/components/schemas/UserLevel",
             "default": 2
-          }  
+          },
+          "firstBonus" : {
+            "type": "boolean",
+            "default": true
+          },
+          "remark": {
+            "type" : "string",
+            "nullable": true
+          }
         }
       },
+      "Referral" : {
+        "type" : "object",
+        "description" : "database",
+        "properties" : {
+          "id" : {
+            "type" : "integer"
+          },
+          "userId": {
+            "$ref" : "#/components/schemas/User/properties/id",
+            "unique": true
+          },  
+          "rebate" : {
+            "type" : "number",
+            "format" : "decimal",
+            "pattern": "^\\d{2}.\\d{2}$",
+            "precision": 4,
+            "scale": 2
+          }
+        }
+      },   
+      "ReferralMap" : {
+        "type" : "object",
+        "description" : "database",
+        "properties" : {
+          "id" : {
+            "type" : "integer"
+          },
+          "referralId": {
+            "$ref" : "#/components/schemas/Referral/properties/id"
+          },        
+          "userId": {
+            "$ref" : "#/components/schemas/User/properties/id"
+          }           
+        }
+      },                 
       "UserLevel" : {
         "type" : "object",
         "description" : "database",
@@ -1178,11 +2755,13 @@
           },
           "level" : {
             "type" : "integer",
-            "description": "* `1` - 一般\n * `2` - 白金\n * `3` - 金金\n",
-            "enum": [1,2,3],
             "uniqueItems": true,
             "default": 1
-          }
+          },
+          "des" : {
+            "type" : "string",
+            "nullable": true
+          }          
         }
       },
       "UserTransaction" : {
@@ -1204,6 +2783,11 @@
             "type" : "integer",
             "description": "累積交易筆數"
           },          
+          "rebate" : {
+            "type" : "integer",
+            "description": "回扣",
+            "nullable": true
+          },             
           "limit" : {
             "type" : "integer",
             "description": "交易額度"
@@ -1250,67 +2834,91 @@
           "name" : {
             "type" : "integer",
             "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
-            "enum": [1,2,3]
+            "enum": [1,2,3],
+            "default": 1
           },
-          "email" : {
+          "lineId" : {
             "type" : "integer",
             "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
-            "enum": [1,2,3]
-          },          
+            "enum": [1,2,3],
+            "default": 1
+          },     
+          "gameUid" : {
+            "type" : "integer",
+            "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
+            "enum": [1,2,3],
+            "default": 1
+          },                  
           "birthdate" : {
             "type" : "integer",
             "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
-            "enum": [1,2,3]
+            "enum": [1,2,3],
+            "default": 1
           },   
           "country" : {
             "type" : "integer",
             "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
-            "enum": [1,2,3]
+            "enum": [1,2,3],
+            "default": 1
           },     
+          "address" : {
+            "type" : "integer",
+            "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
+            "enum": [1,2,3],
+            "default": 1
+          },
+          "city" : {
+            "type" : "integer",
+            "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
+            "enum": [1,2,3],
+            "default": 1
+          },
+          "area" : {
+            "type" : "integer",
+            "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
+            "enum": [1,2,3],
+            "default": 1
+          },                    
+          "updatedAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          },       
+          "idCard" : {
+            "type" : "integer",
+            "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
+            "enum": [1,2,3],
+            "default": 1
+          },                
           "idCardDate" : {
             "type" : "integer",
             "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
-            "enum": [1,2,3]
+            "enum": [1,2,3],
+            "default": 1
           },       
           "idCardPosiition" : {
             "type" : "integer",
             "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
-            "enum": [1,2,3]
+            "enum": [1,2,3],
+            "default": 1
           },   
           "idCardType" : {
             "type" : "integer",
             "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
-            "enum": [1,2,3]
+            "enum": [1,2,3],
+            "default": 1
           },   
           "idCardPhoto" : {
             "type" : "integer",
             "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
-            "enum": [1,2,3]
-          },           
-          "certificate" : {
-            "type" : "integer",
-            "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
-            "enum": [1,2,3]
-          },      
+            "enum": [1,2,3],
+            "default": 1
+          },             
           "selfie" : {
             "type" : "integer",
             "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
-            "enum": [1,2,3]
-          },  
-          "sign" : {
-            "type" : "integer",
-            "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
-            "enum": [1,2,3]
+            "enum": [1,2,3],
+            "default": 1
           },                                                                  
-          "address" : {
-            "type" : "integer",
-            "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
-            "enum": [1,2,3]
-          },
-          "updatedAt" : {
-            "type" : "string",
-            "format" : "date-time"
-          },           
           "userId" : {
             "$ref" : "#/components/schemas/User/properties/id",
             "unique": true
@@ -1336,7 +2944,8 @@
               "name", 
               "phonePrefix", 
               "phone", 
-              "email", 
+              "lineId",
+              "gameUid",
               "birthdate",
               "country", 
               "idCardDate", 
@@ -1405,6 +3014,70 @@
           }                        
         }
       },
+      "BankAccountVerify" : {
+        "type" : "object",
+        "description" : "database",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "name" : {
+            "type" : "integer"
+          },
+          "code" : {
+            "type" : "integer"
+          },         
+          "account" : {
+            "type" : "integer"
+          }, 
+          "photo" : {
+            "type" : "integer"
+          },                       
+          "bankId" : {
+            "$ref" : "#/components/schemas/BankAccount/properties/id",
+            "unique": true
+          }
+        }
+      },    
+      "BankAccountVerifyResonDes" : {
+        "type" : "object",
+        "description" : "database",
+        "properties" : {
+          "id" : {
+            "type" : "integer"
+          },  
+          "bankAccountVerifyId" : {
+            "$ref" : "#/components/schemas/BankAccountVerify/properties/id"
+          },    
+          "field":{
+            "type": "string",
+            "enum": [
+              "name", 
+              "code", 
+              "account"
+            ]
+          },     
+          "bankAccountVerifyResonId" : {
+            "$ref" : "#/components/schemas/BankAccountVerifyReson/properties/id"
+          },
+          "bankAccountVerifyReson" : {
+            "$ref" : "#/components/schemas/BankAccountVerifyReson"
+          }        
+        }
+      },          
+      "BankAccountVerifyReson" : {
+        "type" : "object",
+        "description" : "database",
+        "properties" : {
+          "id" : {
+            "type" : "integer"
+          },
+          "des" : {
+            "type" : "string"
+          }          
+        }
+      },        
       "Transaction" : {
         "type" : "object",
         "description" : "database",
@@ -1427,14 +3100,28 @@
           },                
           "twd" : {
             "type" : "integer"
-          },   
+          },      
+          "payMethod" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "status map:\n  * `1` - linePay\n * `2` - 街口支付\n * `3` -超商\n * `4` - ATM\n",
+            "enum" : [1, 2, 3, 4, 5]
+          },                   
           "state" : {
             "type" : "integer",
             "format" : "int32",
-            "description" : "status map:\n  * `0` - Failed\n * `1` - Pending\n * `2` - Pair Completed\n * `3` - Pay or recive Completed\n * `4` - Completed\n",
-            "enum" : [0, 1, 2, 3, 4],
+            "description" : "status map:\n  * `99` - Failed\n * `1` - Pending\n * `2` - Pair Completed\n * `3` - Pay or recive Completed\n * `4` - Completed\n",
+            "enum" : [1, 2, 3, 4, 99],
             "default": 1
-          },                        
+          },   
+          "timeout": {
+            "type" : "boolean",
+            "default": "false"
+          },
+          "appeal": {
+            "type" : "boolean",
+            "default": "false"
+          },                                        
           "createdAt" : {
             "type" : "string",
             "format" : "date-time"
@@ -1445,7 +3132,7 @@
           "userId" : {
             "$ref" : "#/components/schemas/User/properties/id"
           },
-          "banName" : {
+          "bankName" : {
             "type" : "string"
           },          
           "bankCode" : {
@@ -1456,7 +3143,19 @@
           },           
           "user" : {
             "$ref" : "#/components/schemas/User"
-          }     
+          },
+          "handlingFee" : {
+            "type" : "integer"
+          },   
+          "serviceFee" : {
+            "type" : "integer"
+          },
+          "totalDollars" : {
+            "type" : "integer"
+          },
+          "totalPoints" : {
+            "type" : "integer"
+          }
         }
       },
       "TransactionRecive" : {
@@ -1472,7 +3171,8 @@
             "format" : "date-time"
           }, 
           "transactionId" : {
-            "$ref" : "#/components/schemas/Transaction/properties/id"
+            "$ref" : "#/components/schemas/Transaction/properties/id",
+            "unique": true
           },
           "transaction" : {
             "$ref" : "#/components/schemas/Transaction"
@@ -1484,7 +3184,145 @@
             "$ref" : "#/components/schemas/User"
           }         
         }
-      }      
+      },
+      "PayManage" : {
+        "type" : "object",
+        "description" : "database",
+        "properties" : {
+          "id" : {
+            "type" : "integer"
+          },  
+          "type" : {
+            "type" : "integer",
+            "description": "status map:\n * `1` - line pay\n * `2` - 街口支付\n",
+            "enum": [1, 2]
+          },            
+          "qrCode" : {
+            "type" : "string",
+            "default": ""
+          },  
+          "code" : {
+            "type" : "string",
+            "default": ""
+          },           
+          "remark" : {
+            "type" : "string",
+            "default": ""
+          },     
+          "status" : {
+            "type" : "integer",
+            "default": 1,
+            "description" : "status map:\n * `1` - 未設定\n * `2` - 目前使用\n * `3` - 停用\n"
+          },     
+          "userId" : {
+            "$ref" : "#/components/schemas/User/properties/id"
+          },                            
+          "createdAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          }       
+        }
+      },
+      "BackstageAdmin" : {
+        "type" : "object",
+        "description" : "database",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "name" : {
+            "type" : "string",
+            "minLength" : 8,
+            "maxLength" : 30,
+            "nullable" : true
+          },    
+          "account" : {
+            "type" : "string",
+            "uniqueItems": true
+          },  
+          "password" : {
+            "type" : "string"
+          },     
+          "status" : {
+            "type" : "integer",
+            "default": 1,
+            "description" : "status map:\n * `1` - 未設定\n * `2` - 目前使用\n * `3` - 停用\n"
+          },                         
+          "createdAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          }       
+        }
+      },        
+      "ExchangeRateSell" : {
+        "type" : "object",
+        "description" : "database",
+        "properties" : {
+          "id" : {
+            "type" : "integer"
+          },            
+          "type" : {
+            "type" : "integer",
+            "description" : "type map:\n * `1` - 大頭家幣:台幣\n * `2` - 大頭家幣:美金\n",
+            "enum" : [ 1, 2 ]               
+          },     
+          "des" : {
+            "type" : "string",
+            "description": "描述"
+          },  
+          "rate" : {
+            "type" : "integer",
+            "description": "匯率"
+          },                       
+          "rangeUpper" : {
+            "type" : "integer",
+            "description": "上限"
+          },  
+          "rangeLower" : {
+            "type" : "integer",
+            "description": "下限"
+          },                                                                   
+          "updatedAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          }   
+        }
+      },
+      "ExchangeRateBuy" : {
+        "type" : "object",
+        "description" : "database",
+        "properties" : {
+          "id" : {
+            "type" : "integer"
+          },             
+          "type" : {
+            "type" : "integer",
+            "description" : "type map:\n * `1` - 大頭家幣:台幣\n * `2` - 大頭家幣:美金\n",
+            "enum" : [ 1, 2 ]               
+          },     
+          "des" : {
+            "type" : "string",
+            "description": "描述"
+          },    
+          "bouns" : {
+            "type" : "integer",
+            "description": "贈送點數"
+          },  
+          "point": {
+            "type" : "integer",
+            "description": "點數ˋ"
+          },           
+          "dollars": {
+            "type" : "integer",
+            "description": "金額"
+          },                                                                                  
+          "updatedAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          }   
+        }
+      }        
     },
     "requestBodies" : {
       "UserRegister" : {
@@ -1495,33 +3333,76 @@
               "properties" : {
                 "phone" : {
                   "$ref" : "#/components/schemas/User/properties/phone"
-                },        
-                "phonePrefix" : {
-                  "$ref" : "#/components/schemas/User/properties/phonePrefix"
-                },                                  
+                },                                      
                 "password" : {
                   "$ref" : "#/components/schemas/User/properties/password"
                 },
                 "passwordCheck" : {
                   "$ref" : "#/components/schemas/User/properties/password"
-                },                
+                }, 
+                "phoneCaptcha" : {
+                  "type": "string"
+                },                    
                 "captcha" : {
                   "type": "string"
-                }
+                },
+                "promoteCode" : {
+                  "type": "string"
+                }                
               }
             }
           }
         },
         "description" : "List of user object",
         "required" : true
-      },     
+      },   
+      "UpdateUserStatusOrRemark" : {
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "level" : {
+                  "type": "integer",
+                  "nullable": true
+                },                                      
+                "remark" : {
+                  "type": "string",
+                  "nullable": true
+                }           
+              }
+            }
+          }
+        },
+        "description" : "List of user object",
+        "required" : true
+      },
+      "UpdateUserLevel" : {
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "level" : {
+                  "type": "integer"
+                },                                      
+                "des" : {
+                  "type": "string"
+                }           
+              }
+            }
+          }
+        },
+        "description" : "List of user object",
+        "required" : true
+      },                        
       "UserRegisterPhoneCheck" : {
         "content" : {
           "application/json" : {
             "schema" : {
               "type" : "object",
               "properties" : {
-                "verify" : {
+                "phone" : {
                   "type": "string"
                 }
               }
@@ -1539,17 +3420,19 @@
               "properties" : {
                 "name" : {
                   "type" : "string",
-                  "minLength" : 3,
+                  "minLength" : 1,
                   "maxLength" : 30
-                },
-                "email" : {
-                  "type" : "string",
-                  "format" : "email"
-                },                                       
+                },                                  
                 "birthdate" : {
                   "type" : "string",
                   "format" : "date"
                 },  
+                "gameUid" : {
+                  "type" : "string"
+                },      
+                "lineId" : {
+                  "type" : "string"
+                }, 
                 "country" : {
                   "description": "residence country",
                   "type" : "string"
@@ -1585,6 +3468,10 @@
                   "items":{
                     "type": "object",
                     "properties": {
+                      "order": {
+                        "type": "integer",
+                        "enum": [1, 2, 3]
+                      },
                       "code": {
                         "type": "integer"
                       },
@@ -1615,10 +3502,14 @@
                   "minLength" : 3,
                   "maxLength" : 30
                 },
-                "email" : {
+                "gameUid" : {
                   "type" : "string",
-                  "format" : "email"
-                },                                       
+                  "nullable" : true
+                },      
+                "lineId" : {
+                  "type" : "string",
+                  "nullable" : true
+                },                                    
                 "birthdate" : {
                   "type" : "string",
                   "format" : "date"
@@ -1679,7 +3570,204 @@
         },
         "description" : "List of user object",
         "required" : true
-      },            
+      },   
+      "BackstageUserVerifyUpdate" : {
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "name" : {
+                  "type" : "integer",
+                  "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
+                  "enum": [1,2,3]
+                },        
+                "lineId" : {
+                  "type" : "integer",
+                  "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
+                  "enum": [1,2,3]
+                },         
+                "gameUid" : {
+                  "type" : "integer",
+                  "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
+                  "enum": [1,2,3]
+                },                             
+                "birthdate" : {
+                  "type" : "integer",
+                  "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
+                  "enum": [1,2,3]
+                },
+                "country" : {
+                  "type" : "integer",
+                  "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
+                  "enum": [1,2,3]
+                },  
+                "idCard" : {
+                  "type" : "integer",
+                  "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
+                  "enum": [1,2,3]
+                },                               
+                "idCardDate" : {
+                  "type" : "integer",
+                  "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
+                  "enum": [1,2,3]
+                },  
+                "idCardPosiition" : {
+                  "type" : "integer",
+                  "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
+                  "enum": [1,2,3]
+                },  
+                "idCardType" : {
+                  "type" : "integer",
+                  "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
+                  "enum": [1,2,3]
+                },  
+                "idCardPhoto" : {
+                  "type" : "integer",
+                  "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
+                  "enum": [1,2,3]
+                },  
+                "selfie" : {
+                  "type" : "integer",
+                  "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
+                  "enum": [1,2,3]
+                },  
+                "address" : {
+                  "type" : "integer",
+                  "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
+                  "enum": [1,2,3]
+                },
+                "city" : {
+                  "type" : "integer",
+                  "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
+                  "enum": [1,2,3]
+                },
+                "area" : {
+                  "type" : "integer",
+                  "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
+                  "enum": [1,2,3]
+                },                                
+                "nameResonId" : {
+                  "type" : "integer",
+                  "nullable": true
+                },        
+                "gameUidResonId" : {
+                  "type" : "integer",
+                  "nullable": true
+                },        
+                "lineIdResonId" : {
+                  "type" : "integer",
+                  "nullable": true
+                },                                 
+                "birthdateResonId" : {
+                  "type" : "integer",
+                  "nullable": true
+                },
+                "areaResonId" : {
+                  "type" : "integer",
+                  "nullable": true
+                },                      
+                "cityResonId" : {
+                  "type" : "integer",
+                  "nullable": true
+                },                   
+                "countryResonId" : {
+                  "type" : "integer",
+                  "nullable": true
+                },             
+                "idCardResonId" : {
+                  "type" : "integer",
+                  "nullable": true
+                },     
+                "idCardDateResonId" : {
+                  "type" : "integer",
+                  "nullable": true
+                },  
+                "idCardPosiitionResonId" : {
+                  "type" : "integer",
+                  "nullable": true
+                },  
+                "idCardTypeResonId" : {
+                  "type" : "integer",
+                  "nullable": true
+                },  
+                "idCardPhotoResonId" : {
+                  "type" : "integer",
+                  "nullable": true
+                },  
+                "selfieResonId" : {
+                  "type" : "integer",
+                  "nullable": true
+                },  
+                "addressResonId" : {
+                  "type" : "integer",
+                  "nullable": true
+                }                                                      
+              }
+            }
+          }
+        },
+        "required" : true
+      },    
+      "BackstageBankAccountVerifyUpdate" : {
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type": "object",
+              "properties": {
+                "dataList": {
+                  "type": "array",
+                  "items":{
+                    "type" : "object",
+                    "properties" : {
+                      "verifyId" : {
+                        "type" : "integer"
+                      },                           
+                      "name" : {
+                        "type" : "integer",
+                        "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
+                        "enum": [1,2,3]
+                      },        
+                      "code" : {
+                        "type" : "integer",
+                        "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
+                        "enum": [1,2,3]
+                      },                                  
+                      "account" : {
+                        "type" : "integer",
+                        "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
+                        "enum": [1,2,3]
+                      },
+                      "photo" : {
+                        "type" : "integer",
+                        "description": "* `1` - 審核中\n * `2` - 通過驗證\n * `3` - 驗證失敗\n",
+                        "enum": [1,2,3]
+                      },   
+                      "nameResonId" : {
+                        "type" : "integer",
+                        "nullable": true
+                      },
+                      "codeResonId" : {
+                        "type" : "integer",
+                        "nullable": true
+                      },
+                      "accountResonId" : {
+                        "type" : "integer",
+                        "nullable": true
+                      },   
+                      "photoResonId" : {
+                        "type" : "integer",
+                        "nullable": true
+                      }                                                                                                             
+                    }                
+                  }                  
+                }
+              }
+            }
+          }
+        },
+        "required" : true
+      },    
       "User" : {
         "content" : {
           "application/json" : {
@@ -1688,9 +3776,6 @@
               "properties" : {
                 "name" : {
                   "$ref" : "#/components/schemas/User/properties/name"
-                },
-                "email" : {
-                  "$ref" : "#/components/schemas/User/properties/email"
                 },
                 "password" : {
                   "$ref" : "#/components/schemas/User/properties/password"
@@ -1713,28 +3798,29 @@
         "content" : {
           "application/json" : {
             "schema" : {
-              "type" : "object",
+              "type": "object",
               "properties" : {
-                "dataList": {
-                "type" : "array",
-                "items" : {
-                  "type" : "object",
-                  "properties" : {
-                    "name" : {
-                      "$ref" : "#/components/schemas/BankAccount/properties/name"
-                    },
-                    "code" : {
-                      "$ref" : "#/components/schemas/BankAccount/properties/code"
-                    },
-                    "account" : {
-                      "$ref" : "#/components/schemas/BankAccount/properties/account"
+                "data" : {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties" : {
+                      "name" : {
+                        "$ref" : "#/components/schemas/BankAccount/properties/name"
+                      },
+                      "code" : {
+                        "$ref" : "#/components/schemas/BankAccount/properties/code"
+                      },
+                      "account" : {
+                        "$ref" : "#/components/schemas/BankAccount/properties/account"
+                      },
+                      "order" : {
+                        "$ref" : "#/components/schemas/BankAccount/properties/order"
+                      }                    
                     }
                   }
-                }                  
-                }
-
-              }
-
+                }                
+              }              
             }
           }
         },
@@ -1753,9 +3839,6 @@
                   "properties" : {
                     "name" : {
                       "$ref" : "#/components/schemas/User/properties/name"
-                    },
-                    "email" : {
-                      "$ref" : "#/components/schemas/User/properties/email"
                     },
                     "password" : {
                       "$ref" : "#/components/schemas/User/properties/password"
@@ -1778,6 +3861,112 @@
         "description" : "List of user object",
         "required" : true
       },
+      "CreateExchangeRateBuy" : {
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type" : "object",
+              "properties" : {  
+                "type" : {
+                  "$ref" : "#/components/schemas/ExchangeRateBuy/properties/type"
+                },  
+                "des" : {
+                  "$ref" : "#/components/schemas/ExchangeRateBuy/properties/des"
+                },                                        
+                "bouns" : {
+                  "$ref" : "#/components/schemas/ExchangeRateBuy/properties/bouns"
+                },  
+                "point" : {
+                  "$ref" : "#/components/schemas/ExchangeRateBuy/properties/point"
+                },       
+                "dollars" : {
+                  "$ref" : "#/components/schemas/ExchangeRateBuy/properties/dollars"
+                }
+              }
+            }
+          }
+        },
+        "description" : "List of user object",
+        "required" : true
+      },        
+      "CreateExchangeRateSell" : {
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type" : "object",
+              "properties" : { 
+                "type" : {
+                  "$ref" : "#/components/schemas/ExchangeRateSell/properties/type"
+                },  
+                "des" : {
+                  "$ref" : "#/components/schemas/ExchangeRateSell/properties/des"
+                },                                       
+                "rate" : {
+                  "$ref" : "#/components/schemas/ExchangeRateSell/properties/rate"
+                },  
+                "rangeUpper" : {
+                  "$ref" : "#/components/schemas/ExchangeRateSell/properties/rangeUpper"
+                },       
+                "rangeLower" : {
+                  "$ref" : "#/components/schemas/ExchangeRateSell/properties/rangeLower"
+                }
+              }
+            }
+          }
+        },
+        "description" : "List of user object",
+        "required" : true
+      },           
+      "UpdateExchangeRateBuy" : {
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "des" : {
+                  "$ref" : "#/components/schemas/ExchangeRateBuy/properties/des"
+                },                                       
+                "dollars" : {
+                  "$ref" : "#/components/schemas/ExchangeRateBuy/properties/dollars"
+                },  
+                "bouns" : {
+                  "$ref" : "#/components/schemas/ExchangeRateBuy/properties/bouns"
+                },  
+                "point" : {
+                  "$ref" : "#/components/schemas/ExchangeRateBuy/properties/point"
+                }
+              }
+            }
+          }
+        },
+        "description" : "List of user object",
+        "required" : true
+      },       
+      "UpdateExchangeRateSell" : {
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "des" : {
+                  "$ref" : "#/components/schemas/ExchangeRateSell/properties/des"
+                },                                       
+                "rate" : {
+                  "$ref" : "#/components/schemas/ExchangeRateSell/properties/rate"
+                },  
+                "rangeUpper" : {
+                  "$ref" : "#/components/schemas/ExchangeRateSell/properties/rangeUpper"
+                },       
+                "rangeLower" : {
+                  "$ref" : "#/components/schemas/ExchangeRateSell/properties/rangeLower"
+                }
+              }
+            }
+          }
+        },
+        "description" : "List of user object",
+        "required" : true
+      },            
       "CreateTransaction" : {
         "content" : {
           "application/json" : {
@@ -1786,25 +3975,62 @@
               "properties" : {
                 "bos" : {
                   "$ref" : "#/components/schemas/Transaction/properties/bos"
-                },      
+                },    
+                "buyOptionId" : {
+                  "type": "integer",
+                  "nullable": true
+                },    
                 "point" : {
-                  "$ref" : "#/components/schemas/Transaction/properties/point"
-                },  
-                "twd" : {
-                  "$ref" : "#/components/schemas/Transaction/properties/twd"
-                },  
-                "account" : {
-                  "$ref" : "#/components/schemas/Transaction/properties/account"
-                },  
+                  "type": "integer",
+                  "nullable": true
+                }, 
+                "payMethod": {
+                  "$ref" : "#/components/schemas/Transaction/properties/payMethod"
+                },
                 "bankId" : {
-                  "$ref" : "#/components/schemas/BankAccount/properties/id"
-                }
+                  "type": "integer",
+                  "nullable": true
+                },  
+                "image" : {
+                  "type": "string",
+                  "nullable": true
+                },
+                "code" : {
+                  "type": "string",
+                  "nullable": true
+                }                               
               }
             }
           }
         },
         "required" : true
       },
+      "GetTransactionCalculation" : {
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "bos" : {
+                  "$ref" : "#/components/schemas/Transaction/properties/bos"
+                },    
+                "buyOptionId" : {
+                  "type": "integer",
+                  "nullable": true
+                },    
+                "point" : {
+                  "type": "integer",
+                  "nullable": true
+                }, 
+                "payMethod": {
+                  "$ref" : "#/components/schemas/Transaction/properties/payMethod"
+                }
+              }
+            }
+          }
+        },
+        "required" : true
+      },      
       "UpdateTransaction" : {
         "content" : {
           "application/json" : {
@@ -1819,7 +4045,240 @@
           }
         },
         "required" : true
-      }         
+      },
+      "CreatePayManage" : {
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "type" : {
+                  "type": "integer"
+                },
+                "userId" : {
+                  "type": "string",
+                  "format": "uuid"
+                }            
+              }
+            }
+          }
+        },
+        "required" : true
+      },
+      "UpdatePayManage" : {
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "code" : {
+                  "$ref" : "#/components/schemas/PayManage/properties/code"
+                },
+                "remark" : {
+                  "$ref" : "#/components/schemas/PayManage/properties/remark"
+                },
+                "status" : {
+                  "$ref" : "#/components/schemas/PayManage/properties/status"
+                }              
+              }
+            }
+          }
+        },
+        "required" : true
+      },      
+      "UploadPhotoQRCode" : {
+        "content" : {
+          "multipart/form-data" : {
+            "schema" : {
+                "type" : "object",
+                "properties" : {              
+                  "files" : {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "binary"
+                    }
+                  }              
+              }
+            }
+          }
+        },
+        "description" : "List of user object",
+        "required" : true
+      },
+      "AdminLogin" : {
+        "content" : {
+          "application/json" : {
+            "schema" : {
+                "type" : "object",
+                "properties" : {              
+                  "account": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                }
+            }
+          }
+        },
+        "description" : "List of user object",
+        "required" : true
+      }, 
+      "GetTransactionChatToken" : {
+        "content" : {
+          "application/json" : {
+            "schema" : {
+                "type" : "object",
+                "properties" : {              
+                  "transactionId": {
+                    "type": "string"
+                  }
+                }
+            }
+          }
+        },
+        "description" : "List of user object",
+        "required" : true
+      },
+      "GetServiceChatToken" : {
+        "content" : {
+          "application/json" : {
+            "schema" : {
+                "type" : "object",
+                "properties" : {              
+                  "userId": {
+                    "type": "string"
+                  }
+                }
+            }
+          }
+        },
+        "description" : "List of user object",
+        "required" : true
+      },
+      "PostGSPayDeposit" : {
+        "content" : {
+          "application/json" : {
+            "schema" : {
+                "type" : "object",
+                "properties" : {              
+                  "type": {
+                    "type" : "integer",
+                    "enum": [3, 4]
+                  },
+                  "transactionId": {
+                    "type" : "string"
+                  }                  
+                }
+            }
+          }
+        },
+        "description" : "List of user object",
+        "required" : true
+      },      
+      "NotifyTakeNumber" : {
+        "content" : {
+          "application/json" : {
+            "schema" : {
+                "type" : "object",
+                "properties" : {              
+                  "Amount": {
+                    "type": "string"
+                  },
+                  "MemberOrderNo": {
+                    "type": "string"
+                  },
+                  "OrderNo": {
+                    "type": "string"
+                  },
+                  "Status": {
+                    "type": "string"
+                  },
+                  "DueTime": {
+                    "type": "string"
+                  },
+                  "BankName": {
+                    "type": "string"
+                  },
+                  "PaymentInfo": {
+                    "type": "string"
+                  },
+                  "Sign": {
+                    "type": "string"
+                  }
+                }
+            }
+          }
+        },
+        "description" : "List of user object",
+        "required" : true
+      },
+      "NotifyPaid" : {
+        "content" : {
+          "application/json" : {
+            "schema" : {
+                "type" : "object",
+                "properties" : {              
+                  "Amount": {
+                    "type": "string"
+                  },
+                  "MemberOrderNo": {
+                    "type": "string"
+                  },
+                  "OrderNo": {
+                    "type": "string"
+                  },
+                  "Status": {
+                    "type": "string"
+                  },
+                  "Bank": {
+                    "type": "string"
+                  },
+                  "Account": {
+                    "type": "string"
+                  },
+                  "Sign": {
+                    "type": "string"
+                  }
+                }
+            }
+          }
+        },
+        "description" : "List of user object",
+        "required" : true
+      },   
+      "NotifyGrant" : {
+        "content" : {
+          "application/json" : {
+            "schema" : {
+                "type" : "object",
+                "properties" : {              
+                  "Amount": {
+                    "type": "integer"
+                  },
+                  "MemberOrderNo": {
+                    "type": "string"
+                  },
+                  "OrderNo": {
+                    "type": "string"
+                  },
+                  "Status": {
+                    "type": "string"
+                  },
+                  "Fee": {
+                    "type": "integer"
+                  },
+                  "Sign": {
+                    "type": "string"
+                  }
+                }
+            }
+          }
+        },
+        "description" : "List of user object",
+        "required" : true
+      }                                                   
     },
     "parameters" : {
       "createdAt" : {
@@ -1858,10 +4317,6 @@
                 "name" : {
                   "type" : "string"
                 },
-                "email" : {
-                  "type" : "string",
-                  "format" : "email"
-                },
                 "phone" : {
                   "type" : "string",
                   "format" : "phone",
@@ -1893,10 +4348,6 @@
                 },
                 "name" : {
                   "type" : "string"
-                },
-                "email" : {
-                  "type" : "string",
-                  "format" : "email"
                 },
                 "birthdate" : {
                   "type" : "string",
@@ -1941,6 +4392,12 @@
                   "type" : "string",
                   "nullable" : true
                 },
+                "lineId" : {
+                  "type" : "string"
+                },
+                "gameUid" : {
+                  "type" : "string"
+                },                                
                 "userVerifyPhoto": {
                   "type" : "array",
                   "items":{ 
@@ -1954,7 +4411,52 @@
             }
           }
         }
-      },      
+      },   
+      "BackstageUserManyLevel" : {
+        "description" : "Ok",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type": "array",
+              "items": {
+                "type" : "object",
+                "properties" : {
+                  "id" : {
+                    "type" : "integer"
+                  },                
+                  "level" : {
+                    "type" : "integer"
+                  },
+                  "des" : {
+                    "type" : "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },          
+      "BackstageUserLevel" : {
+        "description" : "Ok",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "id" : {
+                  "type" : "integer"
+                },                
+                "level" : {
+                  "type" : "integer"
+                },
+                "des" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        }
+      },            
       "BackstageUserArray" : {
         "content" : {
           "application/json" : {
@@ -1963,6 +4465,9 @@
               "items" : {
                 "type" : "object",
                 "properties" : {
+                  "id" : {
+                    "$ref" : "#/components/schemas/User/properties/id"
+                  },                   
                   "phone" : {
                     "$ref" : "#/components/schemas/User/properties/phone"
                   },                  
@@ -1985,6 +4490,33 @@
         },
         "description" : "List of user object"
       },      
+      "BackstageAgentArray" : {
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "type" : "object",
+                "properties" : {
+                  "id" : {
+                    "$ref" : "#/components/schemas/User/properties/id"
+                  },                   
+                  "phone" : {
+                    "$ref" : "#/components/schemas/User/properties/phone"
+                  },                  
+                  "phonePrefix" : {
+                    "$ref" : "#/components/schemas/User/properties/phonePrefix"
+                  },
+                  "name" : {
+                    "$ref" : "#/components/schemas/User/properties/name"
+                  }                                        
+                }
+              }          
+            }
+          }
+        },
+        "description" : "List of user object"
+      },       
       "Transaction" : {
         "description" : "Ok",
         "content" : {
@@ -2012,11 +4544,7 @@
                   "type" : "integer"
                 },   
                 "state" : {
-                  "type" : "integer",
-                  "format" : "int32",
-                  "description" : "status map:\n * `1` - Pendding\n * `2` - Completed\n * `3` - Failed\n",
-                  "enum" : [ 1, 2, 3 ],
-                  "default": 1
+                  "type" : "integer"
                 },                        
                 "createdAt" : {
                   "type" : "string",
@@ -2024,7 +4552,31 @@
                 }, 
                 "account" : {
                   "type" : "string"
-                },      
+                },   
+                "payMethod" : {
+                  "type" : "integer"
+                },                     
+                "bankAccount" : {
+                  "type" : "integer"
+                },   
+                "bankCode" : {
+                  "type" : "integer"
+                },   
+                "bankName" : {
+                  "type" : "string"
+                }, 
+                "handlingFee" : {
+                  "type" : "integer"
+                },   
+                "serviceFee" : {
+                  "type" : "integer"
+                },
+                "totalDollars" : {
+                  "type" : "integer"
+                },
+                "totalPoints" : {
+                  "type" : "integer"
+                },                                       
                 "userId" : {
                   "$ref" : "#/components/schemas/User/properties/id"
                 },
@@ -2035,7 +4587,133 @@
             }
           }
         }
-      },      
+      },        
+      "GetTransactionCalculation" : {
+        "description" : "Ok",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "totalPoints": {
+                  "type": "number"
+                },
+                "point": {
+                  "type": "number"
+                },
+                "bonusPoint": {
+                  "type": "number"
+                }, 
+                "firstBonusPoint": {
+                  "type": "number"
+                },                 
+                "totalDollars": {
+                  "type": "number"
+                },
+                "dollars":{
+                  "type": "number"
+                },
+                "handlingFee":{
+                  "type": "number"
+                },
+                "serviceFee":{
+                  "type": "number"
+                }                
+              }              
+            }
+          }
+        }
+      },          
+      "MyTransaction" : {
+        "description" : "Ok",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "totalPoint": {
+                  "type": "integer"
+                },
+                "totalBonusPoint": {
+                  "type": "integer"
+                },
+                "totalTWD": {
+                  "type": "integer"
+                },
+                "dataList": {
+                  "type": "array",
+                  "items": {
+                    "type" : "object",
+                    "properties" : {
+                      "id" : {
+                          "type" : "string"
+                      },
+                      "manufacturer": {
+                        "type" : "string"
+                      },
+                      "serviceCharge": {
+                        "type" : "integer"
+                      },
+                      "bos" : {
+                        "type" : "integer",
+                        "format" : "int32",
+                        "description" : "status map:\n * `1` - Buy\n * `2` - Sell\n",
+                        "enum" : [ 1, 2 ]            
+                      },
+                      "bonusPoint" : {
+                        "type" : "integer"
+                      },  
+                      "point" : {
+                        "type" : "integer"
+                      },                
+                      "twd" : {
+                        "type" : "integer"
+                      },   
+                      "state" : {
+                        "type" : "integer"
+                      },                        
+                      "createdAt" : {
+                        "type" : "string",
+                        "format" : "date-time"
+                      }, 
+                      "account" : {
+                        "type" : "string"
+                      },   
+                      "payMethod" : {
+                        "type" : "integer"
+                      },                     
+                      "bankAccount" : {
+                        "type" : "integer"
+                      },   
+                      "bankCode" : {
+                        "type" : "integer"
+                      },   
+                      "bankName" : {
+                        "type" : "string"
+                      },
+                      "gameUid" : {
+                        "type" : "string"
+                      },
+                      "recommod": {
+                        "type" : "string"
+                      },
+                      "counterpartyGameUid" : {
+                        "type" : "string"
+                      },
+                      "appeal" : {
+                        "type" : "boolean"
+                      },
+                      "timeout" : {
+                        "type" : "boolean"
+                      }
+                    }
+                  }                  
+                }
+              }              
+            }
+          }
+        }
+      },          
       "BankAccount" : {
         "description" : "Ok",
         "content" : {
@@ -2091,7 +4769,405 @@
             }
           }
         }
-      },        
+      },   
+      "BankAccountFromId" : {
+        "description" : "Ok",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "id" : {
+                  "type" : "integer"
+                },                
+                "name" : {
+                  "type" : "string"
+                },
+                "code" : {
+                  "type" : "integer"
+                },         
+                "account" : {
+                  "type" : "integer"
+                },
+                "status" : {
+                  "type" : "integer"
+                },
+                "userId" : {
+                  "type" : "string"
+                }                                       
+              }
+            }
+          }
+        }
+      },       
+      "BackstageBankAccountArray" : {
+        "description" : "Ok",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type": "object",
+              "properties": {
+                "result" : {
+                  "type": "array",
+                  "items": {
+                    "type" : "object",
+                    "properties" : {
+                      "id" : {
+                        "type" : "integer",
+                        "description": "bankId"
+                      },
+                      "name" : {
+                        "type" : "string"
+                      },
+                      "code" : {
+                        "type" : "integer"
+                      },         
+                      "account" : {
+                        "type" : "integer"
+                      },   
+                      "verifyDes" : {
+                        "type": "object",
+                        "properties": {
+                          "account": {
+                            "type": "string"
+                          },
+                          "code": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "photo": {
+                            "type": "string"
+                          }                   
+                        }
+                      },                                   
+                      "verify": {
+                        "type": "object",
+                        "properties": {
+                          "account": {
+                            "type": "integer"
+                          },
+                          "code": {
+                            "type": "integer"
+                          },
+                          "name": {
+                            "type": "integer"
+                          },
+                          "photo": {
+                            "type": "integer"
+                          }
+                        }
+
+                      }  
+                    }                
+                  }                  
+                }
+              }
+            }
+          }
+        }
+      },      
+      "BackstageExchangeRateArrayBuy" : {
+        "description" : "Ok",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type": "array",
+              "items": {
+                "type" : "object",
+                "properties" : {
+                  "id" : {
+                    "$ref" : "#/components/schemas/ExchangeRateBuy/properties/id"
+                  },               
+                  "type" : {
+                    "$ref" : "#/components/schemas/ExchangeRateBuy/properties/type"
+                  },  
+                  "des" : {
+                    "$ref" : "#/components/schemas/ExchangeRateBuy/properties/des"
+                  },                                       
+                  "bouns" : {
+                    "$ref" : "#/components/schemas/ExchangeRateBuy/properties/bouns"
+                  },  
+                  "point" : {
+                    "$ref" : "#/components/schemas/ExchangeRateBuy/properties/point"
+                  },       
+                  "dollars" : {
+                    "$ref" : "#/components/schemas/ExchangeRateBuy/properties/dollars"
+                  }                                      
+                }                
+              }
+
+
+            }
+          }
+        }
+      },
+      "BackstageExchangeRateArraySell" : {
+        "description" : "Ok",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type": "array",
+              "items": {
+                "type" : "object",
+                "properties" : {
+                  "id" : {
+                    "$ref" : "#/components/schemas/ExchangeRateSell/properties/id"
+                  },               
+                  "type" : {
+                    "$ref" : "#/components/schemas/ExchangeRateSell/properties/type"
+                  },  
+                  "des" : {
+                    "$ref" : "#/components/schemas/ExchangeRateSell/properties/des"
+                  },                                       
+                  "rate" : {
+                    "$ref" : "#/components/schemas/ExchangeRateSell/properties/rate"
+                  },  
+                  "rangeUpper" : {
+                    "$ref" : "#/components/schemas/ExchangeRateSell/properties/rangeUpper"
+                  },       
+                  "rangeLower" : {
+                    "$ref" : "#/components/schemas/ExchangeRateSell/properties/rangeLower"
+                  }                                      
+                }                
+              }
+            }
+          }
+        }
+      },      
+      "ReadManyPayManage" : {
+        "description" : "Ok",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type": "array",
+              "items": {
+                "type" : "object",
+                "properties" : {
+                  "id" : {
+                    "type" : "integer"
+                  },                    
+                  "type" : {
+                    "type" : "integer",
+                    "description": "status map:\n * `1` - line pay\n * `2` - 街口支付\n",
+                    "enum": [1, 2]
+                  },            
+                  "qrCode" : {
+                    "type" : "string",
+                    "default": ""
+                  },  
+                  "remark" : {
+                    "type" : "string",
+                    "default": ""
+                  },     
+                  "code" : {
+                    "$ref" : "#/components/schemas/PayManage/properties/code"
+                  },
+                  "status" : {
+                    "type" : "integer",
+                    "default": 1,
+                    "description" : "status map:\n * `1` - 未設定\n * `2` - 目前使用\n * `3` - 停用\n"
+                  }
+                }                
+              }                  
+            }
+          }
+        }
+      },   
+      "RealVerify" :{
+        "description" : "Ok",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type": "array",
+              "items": {
+                "type" : "object",
+                "properties" : {
+                  "userStatus" : {
+                    "type" : "integer"
+                  },   
+                  "name" : {
+                    "type" : "string"
+                  },         
+                  "gameUid" : {
+                    "type" : "string",
+                    "nullable" : true
+                  },      
+                  "lineId" : {
+                    "type" : "string",
+                    "nullable" : true
+                  },         
+                  "birthdate" : {
+                    "type" : "string"
+                  },     
+                  "country" : {
+                    "type" : "string"
+                  },       
+                  "idCard" : {
+                    "type" : "string"
+                  },        
+                  "idCardDate" : {
+                    "type" : "string"
+                  },             
+                  "idCardPosiition" : {
+                    "type" : "string"
+                  },             
+                  "idCardType" : {
+                    "type" : "string"
+                  },             
+                  "city" : {
+                    "type" : "string"
+                  },             
+                  "area" : {
+                    "type" : "string"
+                  },                                        
+                  "address" : {
+                    "type" : "string"
+                  },               
+                  "verify":{
+                    "type": "object",
+                    "properties": {
+                      "name" : {
+                        "type" : "integer"
+                      },         
+                      "gameUid" : {
+                        "type" : "integer"
+                      },      
+                      "lineId" : {
+                        "type" : "integer"
+                      },         
+                      "birthdate" : {
+                        "type" : "integer"
+                      },     
+                      "country" : {
+                        "type" : "integer"
+                      },       
+                      "idCardPhoto" : {
+                        "type" : "integer"
+                      },        
+                      "idCardDate" : {
+                        "type" : "integer"
+                      },             
+                      "idCardPosiition" : {
+                        "type" : "integer"
+                      },             
+                      "idCardType" : {
+                        "type" : "integer"
+                      },             
+                      "city" : {
+                        "type" : "integer"
+                      },             
+                      "area" : {
+                        "type" : "integer"
+                      },                                        
+                      "address" : {
+                        "type" : "integer"
+                      }      
+                    }
+                  }, 
+                  "verifyDes":{
+                    "type": "object",
+                    "properties": {
+                      "name" : {
+                        "type" : "string"
+                      },         
+                      "gameUid" : {
+                        "type" : "string"
+                      },      
+                      "lineId" : {
+                        "type" : "string"
+                      },               
+                      "birthdate" : {
+                        "type" : "string"
+                      },     
+                      "country" : {
+                        "type" : "string"
+                      },       
+                      "idCardPhoto" : {
+                        "type" : "string"
+                      },        
+                      "idCardDate" : {
+                        "type" : "string"
+                      },             
+                      "idCardPosiition" : {
+                        "type" : "string"
+                      },             
+                      "idCardType" : {
+                        "type" : "string"
+                      },             
+                      "city" : {
+                        "type" : "string"
+                      },             
+                      "area" : {
+                        "type" : "string"
+                      },                                        
+                      "address" : {
+                        "type" : "string"
+                      }      
+                    }
+                  }
+                }                
+              }                  
+            }
+          }
+        }   
+      },
+      "ResonDes" : {
+        "description" : "Ok",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type": "array",
+              "items": {
+                "type" : "object",
+                "properties" : {
+                  "id" : {
+                    "type" : "integer"
+                  },     
+                  "des" : {
+                    "type" : "string"
+                  }
+                }                
+              }                  
+            }
+          }
+        }
+      },   
+      "AdminDetail" : {
+        "description" : "Ok",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "id" : {
+                  "type" : "string",
+                  "format": "uuid"
+                },     
+                "status" : {
+                  "type" : "integer"
+                }
+              }                    
+            }
+          }
+        }
+      }, 
+      "Token" : {
+        "description" : "Ok",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "token" : {
+                  "type" : "string"
+                }
+              }                    
+            }
+          }
+        }
+      },                                
       "BadRequest" : {
         "description" : "Bad request"
       },
@@ -2106,7 +5182,29 @@
       },
       "Conflict" : {
         "description" : "Conflict"
+      },
+      "BackstageUserTransaction" : {
+        "description" : "Ok",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type": "array",
+              "items": {
+                "type" : "object",
+                "properties" : {
+                  "userStatus" : {
+                    "type" : "integer"
+                  },   
+                  "name" : {
+                    "type" : "string"
+                  }
+                }                
+              }                  
+            }
+          }
+        }   
       }
+      
     },
     "securitySchemes" : {
       "cookieAuth" : {

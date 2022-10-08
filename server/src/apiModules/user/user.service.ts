@@ -569,6 +569,22 @@ export class UserService {
 
     // custom end loginUser
   }
+  async logoutUser(
+      param :requestTypes.LogoutUserParams,
+      session: Express.Request['session'],
+  ) {
+    // custom begin logoutUser
+    return new Promise<void>((resolve, reject) => {
+      session.destroy((err) => {
+        if (err) {
+          reject(err);
+        }
+        resolve();
+      });
+    });
+
+    // custom end logoutUser
+  }
   async getRealVerify(
       param :requestTypes.GetRealVerifyParams,
       session: Express.Request['session'],
