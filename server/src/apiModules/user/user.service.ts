@@ -533,6 +533,75 @@ export class UserService {
 
     // custom end captcha
   }
+  async forgetPasswordPhoneCheck(
+      param :requestTypes.ForgetPasswordPhoneCheckParams,
+      session: Express.Request['session'],
+  ) {
+    // custom begin forgetPasswordPhoneCheck
+    const res = await this.userModel.phoneCheck(param, {});
+    if (!res) {
+      throw new errors.CodeError('Phone not fount', 404, -1002);
+    }
+    const code = Math.random().toFixed(6).substring(2);
+    const phonePrefix = '886';
+    const phone = param.bodyPhone.replace(/^0/, '');
+    session.userPasswordReset = {
+      verify: code,
+      phonePrefix,
+      phone,
+    };
+    await getPhoneCheck(phonePrefix, phone, code);
+
+    // custom end forgetPasswordPhoneCheck
+  }
+  async forgetPasswordPhoneCheckVerify(
+      param :requestTypes.ForgetPasswordPhoneCheckVerifyParams,
+      session: Express.Request['session'],
+  ) {
+    // custom begin forgetPasswordPhoneCheckVerify
+    if (session.userPasswordReset &&
+      session.userPasswordReset.verify === param.bodyVerify) {
+      return {success: true};
+    }
+    throw new errors.CodeError('Verify code error', 403, -1005);
+    // custom end forgetPasswordPhoneCheckVerify
+  }
+  async forgetPasswordReset(
+      param :requestTypes.ForgetPasswordResetParams,
+      session: Express.Request['session'],
+  ) {
+    // custom begin forgetPasswordReset
+    if (session.userPasswordReset &&
+      session.userPasswordReset.verify === param.bodyVerify
+    ) {
+      if (param.bodyPassword !== param.bodyPasswordCheck) {
+        throw new errors.CodeError('check password error', 403, -1006);
+      }
+      const saltRounds = 10;
+      const myPlaintextPassword = param.bodyPassword;
+      const {hash, salt} = await new Promise<{hash: string, salt: string}>(
+          (resolve, reject) => {
+            bcrypt.genSalt(saltRounds, function(err, salt) {
+              if (err) throw err;
+              bcrypt.hash(myPlaintextPassword, salt, function(err, hash) {
+                if (err) throw err;
+                resolve({hash, salt});
+              });
+            });
+          },
+      );
+      const res = this.userModel.forgetPasswordReset(param, {
+        phone: session.userPasswordReset.phone,
+        phonePrefix: '886',
+        password: hash,
+      });
+      return {success: true};
+    }
+
+    throw new errors.CodeError('Verify code error', 403, -1005);
+
+    // custom end forgetPasswordReset
+  }
   async loginUser(
       param :requestTypes.LoginUserParams,
       session: Express.Request['session'],

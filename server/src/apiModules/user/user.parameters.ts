@@ -539,6 +539,123 @@ export const CaptchaRequestConvert = (
   return {
   };
 };
+type ForgetPasswordPhoneCheckReqBody = {
+  phone: string,
+phonePrefix: string,
+}
+
+type ForgetPasswordPhoneCheckReqQuery = {
+}
+
+type ForgetPasswordPhoneCheckReqParams = {
+}
+
+type ForgetPasswordPhoneCheckReqCookie = {
+}
+
+export interface ForgetPasswordPhoneCheckRequest extends TypedRequest<
+  ForgetPasswordPhoneCheckReqBody,
+  ForgetPasswordPhoneCheckReqQuery,
+  ForgetPasswordPhoneCheckReqParams,
+  ForgetPasswordPhoneCheckReqCookie
+>{
+}
+
+export type ForgetPasswordPhoneCheckParams = {
+bodyPhone: string,
+bodyPhonePrefix: string,
+}
+
+
+export const ForgetPasswordPhoneCheckRequestConvert = (
+    body: ForgetPasswordPhoneCheckReqBody,
+    query: ForgetPasswordPhoneCheckReqQuery,
+    path: ForgetPasswordPhoneCheckReqParams,
+    cookie: ForgetPasswordPhoneCheckReqCookie,
+): ForgetPasswordPhoneCheckParams => {
+  return {
+    bodyPhone: body.phone,
+    bodyPhonePrefix: body.phonePrefix,
+  };
+};
+type ForgetPasswordPhoneCheckVerifyReqBody = {
+  verify: string,
+}
+
+type ForgetPasswordPhoneCheckVerifyReqQuery = {
+}
+
+type ForgetPasswordPhoneCheckVerifyReqParams = {
+}
+
+type ForgetPasswordPhoneCheckVerifyReqCookie = {
+}
+
+export interface ForgetPasswordPhoneCheckVerifyRequest extends TypedRequest<
+  ForgetPasswordPhoneCheckVerifyReqBody,
+  ForgetPasswordPhoneCheckVerifyReqQuery,
+  ForgetPasswordPhoneCheckVerifyReqParams,
+  ForgetPasswordPhoneCheckVerifyReqCookie
+>{
+}
+
+export type ForgetPasswordPhoneCheckVerifyParams = {
+bodyVerify: string,
+}
+
+
+export const ForgetPasswordPhoneCheckVerifyRequestConvert = (
+    body: ForgetPasswordPhoneCheckVerifyReqBody,
+    query: ForgetPasswordPhoneCheckVerifyReqQuery,
+    path: ForgetPasswordPhoneCheckVerifyReqParams,
+    cookie: ForgetPasswordPhoneCheckVerifyReqCookie,
+): ForgetPasswordPhoneCheckVerifyParams => {
+  return {
+    bodyVerify: body.verify,
+  };
+};
+type ForgetPasswordResetReqBody = {
+  password: string,
+passwordCheck: string,
+verify: string,
+}
+
+type ForgetPasswordResetReqQuery = {
+}
+
+type ForgetPasswordResetReqParams = {
+}
+
+type ForgetPasswordResetReqCookie = {
+}
+
+export interface ForgetPasswordResetRequest extends TypedRequest<
+  ForgetPasswordResetReqBody,
+  ForgetPasswordResetReqQuery,
+  ForgetPasswordResetReqParams,
+  ForgetPasswordResetReqCookie
+>{
+}
+
+export type ForgetPasswordResetParams = {
+bodyPassword: string,
+bodyPasswordCheck: string,
+bodyVerify: string,
+}
+
+
+export const ForgetPasswordResetRequestConvert = (
+    body: ForgetPasswordResetReqBody,
+    query: ForgetPasswordResetReqQuery,
+    path: ForgetPasswordResetReqParams,
+    cookie: ForgetPasswordResetReqCookie,
+): ForgetPasswordResetParams => {
+  return {
+    bodyPassword: body.password,
+    bodyPasswordCheck: body.passwordCheck,
+    bodyVerify: body.verify,
+  };
+};
 type LoginUserReqBody = {
   password: string,
 phone: string,

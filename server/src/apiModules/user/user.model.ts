@@ -416,6 +416,45 @@ export class UserModel {
 
     // custom end captcha
   }
+  async forgetPasswordPhoneCheck(
+      param: requestTypes.ForgetPasswordPhoneCheckParams,
+      customParam: any,
+  ) {
+    // custom begin forgetPasswordPhoneCheck
+
+    // custom end forgetPasswordPhoneCheck
+  }
+  async forgetPasswordPhoneCheckVerify(
+      param: requestTypes.ForgetPasswordPhoneCheckVerifyParams,
+      customParam: any,
+  ) {
+    // custom begin forgetPasswordPhoneCheckVerify
+
+    // custom end forgetPasswordPhoneCheckVerify
+  }
+  async forgetPasswordReset(
+      param: requestTypes.ForgetPasswordResetParams,
+      customParam: any,
+  ) {
+    // custom begin forgetPasswordReset
+    const res = await prisma.user.update({
+      where: {
+        phone_all: {
+          phone: customParam.phone,
+          phonePrefix: customParam.phonePrefix,
+        },
+      },
+      data: {
+        password: customParam.password,
+      },
+    }).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+    return res;
+    // custom end forgetPasswordReset
+  }
   async loginUser(
       param: requestTypes.LoginUserParams,
       customParam: any,

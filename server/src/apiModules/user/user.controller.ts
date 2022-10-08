@@ -324,6 +324,87 @@ export class UserController implements Controller {
           next(e);
         });
   }
+  @Post('/forget_password/phone_check')
+  @Validator(validSchemas.forgetPasswordPhoneCheckValidator)
+  async forgetPasswordPhoneCheck(
+      req: userParams.ForgetPasswordPhoneCheckRequest,
+      res: Response,
+      next: NextFunction,
+  ) {
+    // custom begin forgetPasswordPhoneCheckCheck
+
+    // custom end forgetPasswordPhoneCheckCheck
+    UserController.service.forgetPasswordPhoneCheck(
+        userParams.ForgetPasswordPhoneCheckRequestConvert(
+            req.body,
+            req.query,
+            req.params,
+            req.cookies,
+        ),
+        req.session,
+    )
+        .then((result) =>{
+          // custom begin forgetPasswordPhoneCheck
+
+          // custom end forgetPasswordPhoneCheck
+        }).catch((e) => {
+          next(e);
+        });
+  }
+  @Post('/forget_password/phone_check/verify')
+  @Validator(validSchemas.forgetPasswordPhoneCheckVerifyValidator)
+  async forgetPasswordPhoneCheckVerify(
+      req: userParams.ForgetPasswordPhoneCheckVerifyRequest,
+      res: Response,
+      next: NextFunction,
+  ) {
+    // custom begin forgetPasswordPhoneCheckVerifyCheck
+
+    // custom end forgetPasswordPhoneCheckVerifyCheck
+    UserController.service.forgetPasswordPhoneCheckVerify(
+        userParams.ForgetPasswordPhoneCheckVerifyRequestConvert(
+            req.body,
+            req.query,
+            req.params,
+            req.cookies,
+        ),
+        req.session,
+    )
+        .then((result) =>{
+          // custom begin forgetPasswordPhoneCheckVerify
+
+          // custom end forgetPasswordPhoneCheckVerify
+        }).catch((e) => {
+          next(e);
+        });
+  }
+  @Post('/forget_password/reset')
+  @Validator(validSchemas.forgetPasswordResetValidator)
+  async forgetPasswordReset(
+      req: userParams.ForgetPasswordResetRequest,
+      res: Response,
+      next: NextFunction,
+  ) {
+    // custom begin forgetPasswordResetCheck
+
+    // custom end forgetPasswordResetCheck
+    UserController.service.forgetPasswordReset(
+        userParams.ForgetPasswordResetRequestConvert(
+            req.body,
+            req.query,
+            req.params,
+            req.cookies,
+        ),
+        req.session,
+    )
+        .then((result) =>{
+          // custom begin forgetPasswordReset
+
+          // custom end forgetPasswordReset
+        }).catch((e) => {
+          next(e);
+        });
+  }
   @Post('/login')
   @Validator(validSchemas.loginUserValidator)
   async loginUser(

@@ -17,6 +17,12 @@ type UserRegister = {
   verify: string
 }
 
+type UserPasswordReset = {
+  phonePrefix: string
+  phone: string
+  verify: string
+}
+
 type Transaction = {
   id: string
   process: number
@@ -32,6 +38,7 @@ declare module 'express-session' {
     captcha?: String
     userRegister?: UserRegister
     transaction?: Transaction
+    userPasswordReset?: UserPasswordReset
   }
 }
 

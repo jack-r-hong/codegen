@@ -371,6 +371,50 @@ export const readManyUserBackstageValidator: Schema = {
 };
 export const captchaValidator: Schema = {
 };
+export const forgetPasswordPhoneCheckValidator: Schema = {
+  'phone': {
+    in: 'body',
+    isString: true,
+  },
+  'phonePrefix': {
+    in: 'body',
+    isString: true,
+  },
+};
+export const forgetPasswordPhoneCheckVerifyValidator: Schema = {
+  'verify': {
+    in: 'body',
+    isString: true,
+  },
+};
+export const forgetPasswordResetValidator: Schema = {
+  'password': {
+    in: 'body',
+    isString: true,
+    isLength: {
+      options: {
+        max: 30,
+        min: 8,
+      },
+
+    },
+  },
+  'passwordCheck': {
+    in: 'body',
+    isString: true,
+    isLength: {
+      options: {
+        max: 30,
+        min: 8,
+      },
+
+    },
+  },
+  'verify': {
+    in: 'body',
+    isString: true,
+  },
+};
 export const loginUserValidator: Schema = {
   'password': {
     in: 'body',
