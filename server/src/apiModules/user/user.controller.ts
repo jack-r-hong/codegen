@@ -217,6 +217,31 @@ export class UserController implements Controller {
           next(e);
         });
   }
+  @Put('/backstage/user/:id')
+  @Validator(validSchemas.updateOneBackstageUserValidator)
+  async updateOneBackstageUser(
+      req: userParams.UpdateOneBackstageUserRequest,
+      res: Response,
+      next: NextFunction,
+  ) {
+    // custom begin updateOneBackstageUserCheck
+
+    // custom end updateOneBackstageUserCheck
+    UserController.service.updateOneBackstageUser(
+        userParams.UpdateOneBackstageUserRequestConvert(
+            req.body,
+            req.query,
+            req.params,
+            req.cookies,
+        ),
+        req.session,
+    )
+        .then((result) =>{
+          res.json(result);
+        }).catch((e) => {
+          next(e);
+        });
+  }
   @Get('/backstage/user/:id/transaction')
   @Validator(validSchemas.readBackstageUserTransactionValidator)
   async readBackstageUserTransaction(

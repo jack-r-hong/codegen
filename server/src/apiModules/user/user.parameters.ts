@@ -363,6 +363,49 @@ export const ReadOneBackstageUserRequestConvert = (
             pathId: path.id,
   };
 };
+type UpdateOneBackstageUserReqBody = {
+  level: string|undefined,
+remark: string|undefined,
+}
+
+type UpdateOneBackstageUserReqQuery = {
+}
+
+type UpdateOneBackstageUserReqParams = {
+      id: string
+,
+}
+
+type UpdateOneBackstageUserReqCookie = {
+}
+
+export interface UpdateOneBackstageUserRequest extends TypedRequest<
+  UpdateOneBackstageUserReqBody,
+  UpdateOneBackstageUserReqQuery,
+  UpdateOneBackstageUserReqParams,
+  UpdateOneBackstageUserReqCookie
+>{
+}
+
+export type UpdateOneBackstageUserParams = {
+      pathId: string
+bodyLevel: number|undefined,
+bodyRemark: string|undefined,
+}
+
+
+export const UpdateOneBackstageUserRequestConvert = (
+    body: UpdateOneBackstageUserReqBody,
+    query: UpdateOneBackstageUserReqQuery,
+    path: UpdateOneBackstageUserReqParams,
+    cookie: UpdateOneBackstageUserReqCookie,
+): UpdateOneBackstageUserParams => {
+  return {
+      pathId: path.id,
+    bodyLevel: typeof body.level === 'number' ? body.level : undefined,
+    bodyRemark: body.remark,
+  };
+};
 type ReadBackstageUserTransactionReqBody = {
   }
 

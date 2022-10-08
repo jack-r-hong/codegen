@@ -54,7 +54,6 @@ export class CashFlowService {
       bodyState: 3,
       pathId: param.bodyMemberOrderNo,
     }, {});
-
     if (res === 'bodyState error') {
       return;
     }

@@ -201,6 +201,7 @@ model User {
   password  String  @map("password")                 
   phone  String  @map("phone")                 
   phonePrefix  String  @map("phone_prefix")                 
+  remark  String?   @map("remark")                 
   updatedAt  DateTime   @default(now()) @updatedAt @map("updated_at")                 
   userStatus  Int  @default(2)  @map("user_status")                 
   bankAccount BankAccount[]
@@ -221,6 +222,7 @@ model User {
     // custom end User
 }
 model UserLevel {
+  des  String?   @map("des")                 
   id  Int @id @default(autoincrement()) @map("id")                 
   level  Int  @unique  @default(1)  @map("level")                 
   user User[]

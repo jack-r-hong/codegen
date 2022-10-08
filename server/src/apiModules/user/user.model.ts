@@ -315,6 +315,24 @@ export class UserModel {
     }
     return res;
   }
+  async updateOneBackstageUser(
+      param: requestTypes.UpdateOneBackstageUserParams,
+  ) {
+    const res = await prisma.user.update({
+      where: {
+        id: param.pathId,
+      },
+      data: {
+        level: param.bodyLevel,
+        remark: param.bodyRemark,
+      },
+    }).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+    return res;
+  }
   async readBackstageUserTransaction(
       param: requestTypes.ReadBackstageUserTransactionParams,
       customParam: any,
@@ -791,6 +809,7 @@ export class UserModel {
       prisma.$disconnect();
     });
     return res;
+
     // custom end phoneCheck
   }
   async getUserMyStatus(

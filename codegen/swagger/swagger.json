@@ -66,7 +66,11 @@
     {
       "name" : "cashFlow",
       "description" : "Operations about cashFlow"
-    }         
+    },
+    {
+      "name" : "userLevel",
+      "description" : "Operations about cashFlow"
+    }           
   ],
   "paths" : {
     "/captcha" : {
@@ -719,7 +723,171 @@
             "description": "bank account duplicate"
           }          
         }
-      }
+      },
+      "put" : {
+        "tags" : [ "user" ],
+        "summary" : "Logs user into the system",
+        "operationId" : "updateOneBackstageUser", 
+        "requestBody": {
+          "$ref": "#/components/requestBodies/UpdateUserStatusOrRemark"
+        },           
+        "parameters" : [ 
+          {
+            "name" : "id",
+            "in" : "path",
+            "schema" : {
+              "type" : "string",
+              "format": "uuid"
+            },
+            "required": true
+          }                   
+        ],                     
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/BackstageUser"
+          },          
+          "400" : {
+            "$ref" : "#/components/responses/BadRequest"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/Unauthorized"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          },          
+          "409" : {
+            "description": "bank account duplicate"
+          }          
+        }
+      }      
+    },   
+    "/backstage/user/level": {
+      "get" : {
+        "tags" : [ "userLevel" ],
+        "summary" : "Logs user into the system",
+        "operationId" : "readManyBackstageUserLevel",                 
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/BackstageUserManyLevel"
+          },          
+          "400" : {
+            "$ref" : "#/components/responses/BadRequest"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/Unauthorized"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          },          
+          "409" : {
+            "description": "bank account duplicate"
+          }          
+        }
+      },
+      "post" : {
+        "tags" : [ "userLevel" ],
+        "summary" : "Logs user into the system",
+        "operationId" : "createOneBackstageUserLevel", 
+        "parameters" : [ 
+          {
+            "name" : "id",
+            "in" : "path",
+            "schema" : {
+              "type" : "integer"
+            },
+            "required": true
+          }                   
+        ],          
+        "requestBody": {
+          "$ref": "#/components/requestBodies/UpdateUserLevel"
+        },                   
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/BackstageUserLevel"
+          },          
+          "400" : {
+            "$ref" : "#/components/responses/BadRequest"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/Unauthorized"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          },          
+          "409" : {
+            "description": "bank account duplicate"
+          }          
+        }
+      }          
+    },     
+    "/backstage/user/level/{id}": {
+      "put" : {
+        "tags" : [ "userLevel" ],
+        "summary" : "Logs user into the system",
+        "operationId" : "updateOneBackstageUserLevel", 
+        "requestBody": {
+          "$ref": "#/components/requestBodies/UpdateUserLevel"
+        },           
+        "parameters" : [ 
+          {
+            "name" : "id",
+            "in" : "path",
+            "schema" : {
+              "type" : "integer"
+            },
+            "required": true
+          }                   
+        ],                     
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/BackstageUser"
+          },          
+          "400" : {
+            "$ref" : "#/components/responses/BadRequest"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/Unauthorized"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          },          
+          "409" : {
+            "description": "bank account duplicate"
+          }          
+        }
+      },
+      "delete" : {
+        "tags" : [ "userLevel" ],
+        "summary" : "Logs user into the system",
+        "operationId" : "deleteOneBackstageUserLevel", 
+        "parameters" : [ 
+          {
+            "name" : "id",
+            "in" : "path",
+            "schema" : {
+              "type" : "integer"
+            },
+            "required": true
+          }                   
+        ],                     
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/BackstageUser"
+          },          
+          "400" : {
+            "$ref" : "#/components/responses/BadRequest"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/Unauthorized"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          },          
+          "409" : {
+            "description": "bank account duplicate"
+          }          
+        }
+      }          
     },    
     "/backstage/user/{id}/transaction": {
       "get" : {
@@ -1038,7 +1206,7 @@
           }          
         }
       }                     
-    },                 
+    },                   
     "/user/{id}": {
       "put" : {
         "tags" : [ "user" ],
@@ -2518,7 +2686,11 @@
           "firstBonus" : {
             "type": "boolean",
             "default": true
-          }       
+          },
+          "remark": {
+            "type" : "string",
+            "nullable": true
+          }
         }
       },
       "Referral" : {
@@ -2565,11 +2737,13 @@
           },
           "level" : {
             "type" : "integer",
-            "description": "* `1` - 一般\n * `2` - 白金\n * `3` - 金金\n",
-            "enum": [1,2,3],
             "uniqueItems": true,
             "default": 1
-          }
+          },
+          "des" : {
+            "type" : "string",
+            "nullable": true
+          }          
         }
       },
       "UserTransaction" : {
@@ -3163,7 +3337,47 @@
         },
         "description" : "List of user object",
         "required" : true
-      },     
+      },   
+      "UpdateUserStatusOrRemark" : {
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "level" : {
+                  "type": "integer",
+                  "nullable": true
+                },                                      
+                "remark" : {
+                  "type": "string",
+                  "nullable": true
+                }           
+              }
+            }
+          }
+        },
+        "description" : "List of user object",
+        "required" : true
+      },
+      "UpdateUserLevel" : {
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "level" : {
+                  "type": "integer"
+                },                                      
+                "des" : {
+                  "type": "string"
+                }           
+              }
+            }
+          }
+        },
+        "description" : "List of user object",
+        "required" : true
+      },                        
       "UserRegisterPhoneCheck" : {
         "content" : {
           "application/json" : {
@@ -4179,7 +4393,52 @@
             }
           }
         }
-      },      
+      },   
+      "BackstageUserManyLevel" : {
+        "description" : "Ok",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type": "array",
+              "items": {
+                "type" : "object",
+                "properties" : {
+                  "id" : {
+                    "type" : "integer"
+                  },                
+                  "level" : {
+                    "type" : "integer"
+                  },
+                  "des" : {
+                    "type" : "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },          
+      "BackstageUserLevel" : {
+        "description" : "Ok",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "id" : {
+                  "type" : "integer"
+                },                
+                "level" : {
+                  "type" : "integer"
+                },
+                "des" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        }
+      },            
       "BackstageUserArray" : {
         "content" : {
           "application/json" : {

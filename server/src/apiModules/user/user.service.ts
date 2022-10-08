@@ -464,6 +464,25 @@ export class UserService {
     // custom end readOneBackstageUser2
     return res;
   }
+  async updateOneBackstageUser(
+      param :requestTypes.UpdateOneBackstageUserParams,
+      session: Express.Request['session'],
+  ) {
+    // custom begin updateOneBackstageUser
+
+    // custom end updateOneBackstageUser
+
+    const res = await this.userModel.updateOneBackstageUser(
+        param,
+    ).catch((e) =>{
+      throw e;
+    });
+
+    // custom begin updateOneBackstageUser2
+
+    // custom end updateOneBackstageUser2
+    return res;
+  }
   async readBackstageUserTransaction(
       param :requestTypes.ReadBackstageUserTransactionParams,
       session: Express.Request['session'],
@@ -649,11 +668,9 @@ export class UserService {
     // custom begin phoneCheck
     /** todo: send phone message api */
     const res = await this.userModel.phoneCheck(param, {});
-
     if (res) {
       throw new errors.CodeError('phone is confilct', 409, -1001);
     }
-
     const code = Math.random().toFixed(6).substring(2);
     const phonePrefix = '886';
     const phone = param.bodyPhone.replace(/^0/, '');

@@ -577,7 +577,6 @@ export class TransactionModel {
     }).finally(() => {
       prisma.$disconnect();
     });
-
     return {
       dollars: res._sum.totalDollars??0,
       point: res._sum.point??0,

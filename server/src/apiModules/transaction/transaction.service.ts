@@ -355,7 +355,6 @@ export class TransactionService {
         param.queryStartTime,
         param.queryEndTime,
     );
-
     return {
       'total': {
         'point': res2.point,
@@ -552,11 +551,9 @@ export class TransactionService {
     ).catch((e) =>{
       throw e;
     });
-
     if (res === 'bodyState error') {
       throw new errors.CodeError('updateTransaction', 403, -3005);
     }
-
     if (!session.transaction) {
       session.transaction = {
         id: param.pathId,

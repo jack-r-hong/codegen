@@ -289,6 +289,31 @@ export const readOneBackstageUserValidator: Schema = {
     notEmpty: true,
   },
 };
+export const updateOneBackstageUserValidator: Schema = {
+  'id': {
+    in: 'params',
+    isString: true,
+    notEmpty: true,
+  },
+  'level': {
+    in: 'body',
+    isInt: true,
+optional: {
+  options: {
+    nullable: true,
+  },
+},
+  },
+  'remark': {
+    in: 'body',
+    isString: true,
+optional: {
+  options: {
+    nullable: true,
+  },
+},
+  },
+};
 export const readBackstageUserTransactionValidator: Schema = {
   'id': {
     in: 'params',

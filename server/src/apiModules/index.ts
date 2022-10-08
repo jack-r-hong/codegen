@@ -9,6 +9,7 @@ import './payManage/payManage.controller';
 import './backstageAdmin/backstageAdmin.controller';
 import './chatroom/chatroom.controller';
 import './cashFlow/cashFlow.controller';
+import './userLevel/userLevel.controller';
 import path from 'path';
 import fs from 'fs';
 
