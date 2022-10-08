@@ -46,7 +46,7 @@ export class CashFlowController implements Controller {
     )
         .then((result) =>{
           // custom begin customPage
-          res.json()
+          res.json();
 
           // custom end customPage
         }).catch((e) => {
@@ -75,7 +75,7 @@ export class CashFlowController implements Controller {
     )
         .then((result) =>{
           // custom begin notifyGrant
-          res.json()
+          res.json();
 
           // custom end notifyGrant
         }).catch((e) => {

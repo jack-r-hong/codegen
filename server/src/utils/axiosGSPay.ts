@@ -55,12 +55,51 @@ export async function getGSPayQuery(param : {
   });
 }
 
+export async function getGSPayWithdraw(param? : {
+    Amount: string,
+    MemberOrderNo: string,
+    BankCode: string,
+    BankBranch: string,
+    BankAccount: string,
+    BankHolder: string,
+    Remarks: string,
+    ClinetAccount: string,
+  }[]) {
+  const data = {
+    Account: gsPayAccount,
+    Data: sortItem(
+        [
+          {
+            Amount: '111',
+            MemberOrderNo: 'test222asdasdasddd',
+            BankCode: '700',
+            BankBranch: '1111',
+            BankAccount: '123145123',
+            BankHolder: 'dasda',
+            Remarks: '',
+            ClinetAccount: '',
+          },
+        ],
+    ),
+  };
+
+  const Sign = await makeHash(data, apiKey);
+  const hashData = Object.assign(data, {Sign});
+  return await axios({
+    method: 'post',
+    url: `${prefixUrl}/api/pay/withdraw`,
+    data: hashData,
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+}
+
 const checkSign = () => {
 
 };
 
-
-const makeHash = async (data: any, apiKey: string) => {
+const sortItem = (data: any) => {
   const newData: any = {};
 
   Object.keys(data).sort()
@@ -68,8 +107,20 @@ const makeHash = async (data: any, apiKey: string) => {
         return newData[v] = data[v];
       });
 
-  const checkString = JSON.stringify(newData);
+  return JSON.stringify(newData);
+};
+
+
+const makeHash = async (data: any, apiKey: string) => {
+  const checkString = sortItem(data);
 
   const hash = await md5(`${checkString}${apiKey}`);
   return hash;
 };
+
+
+// (async () => {
+//   const res = await getGSPayWithdraw().catch((e) => console.log(e),
+//   );
+//   console.log(res);
+// })();

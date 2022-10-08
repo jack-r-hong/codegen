@@ -47,22 +47,18 @@ export class CashFlowService {
     const tranRes = await transactionModel.readOneTransaction({
       pathId: param.bodyMemberOrderNo,
     });
-    if (tranRes.bos === 1) {
-      if (tranRes.state !== 2) {
-        return;
-      }
-      const res = await transactionModel.updateTransaction({
-        bodyState: 3,
-        pathId: param.bodyMemberOrderNo,
-      }, {});
-      await wSCIModel.pub(param.bodyMemberOrderNo,
-          JSON.stringify({
-            state: res.state,
-          }),
-      );
-    } else if (tranRes.bos === 2) {
-      /** 目前不用做 */
+    if (tranRes.state !== 2) {
+      return;
     }
+    const res = await transactionModel.updateTransaction({
+      bodyState: 3,
+      pathId: param.bodyMemberOrderNo,
+    }, {});
+    await wSCIModel.pub(param.bodyMemberOrderNo,
+        JSON.stringify({
+          state: res.state,
+        }),
+    );
 
     // custom end notifyPaid
   }
