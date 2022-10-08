@@ -1353,77 +1353,6 @@
         } ]
       }
     },    
-    "/transaction/agent/{agentShow}" : {
-      "get" : {
-        "tags" : [ "transaction" ],
-        "summary" : "Get transaction by id",
-        "operationId" : "readPendingTransaction",
-        "parameters" : [ 
-          {
-            "name" : "orderBy",
-            "in" : "query",
-            "description" : "The name that needs to be fetched. Use user1 for testing.",
-            "schema" : {
-              "type" : "string",
-              "default": "desc"
-            }
-          },
-          {
-            "name" : "orderByField",
-            "in" : "query",
-            "description" : "The name that needs to be fetched. Use user1 for testing.",
-            "schema" : {
-              "type" : "string",
-              "default": "createdAt"
-            }
-          },
-          {
-            "name" : "page",
-            "in" : "query",
-            "schema" : {
-              "type" : "integer",
-              "default": 0
-            }            
-          },
-          {
-            "name" : "take",
-            "in" : "query",
-            "schema" : {
-              "type" : "integer",
-              "default": 10
-            }    
-          },
-          {
-            "name" : "agentShow",
-            "in" : "path",
-            "schema" : {
-              "type" : "string",
-              "enum": ["pending", "processing"]
-            }            
-          }                             
-        ],        
-        "responses" : {
-          "200" : {
-            "$ref" : "#/components/responses/Transaction"
-          },
-          "400" : {
-            "$ref" : "#/components/responses/BadRequest"
-          },
-          "401" : {
-            "$ref" : "#/components/responses/Unauthorized"
-          },
-          "403" : {
-            "$ref" : "#/components/responses/Forbidden"
-          },
-          "404" : {
-            "$ref" : "#/components/responses/NotFound"
-          }
-        },
-        "security" : [ {
-          "cookieAuth" : [ ]
-        } ]
-      }
-    },  
     "/transaction/pay_photo" : {
       "get" : {
         "tags" : [ "transaction" ],
@@ -4482,7 +4411,13 @@
                       },
                       "counterpartyGameUid" : {
                         "type" : "string"
-                      }    
+                      },
+                      "appeal" : {
+                        "type" : "boolean"
+                      },
+                      "timeout" : {
+                        "type" : "boolean"
+                      }
                     }
                   }                  
                 }

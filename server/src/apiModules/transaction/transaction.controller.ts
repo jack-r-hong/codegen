@@ -80,34 +80,6 @@ export class TransactionController implements Controller {
           next(e);
         });
   }
-  @Get('/transaction/agent/:agentShow')
-  @Validator(validSchemas.readPendingTransactionValidator)
-  async readPendingTransaction(
-      req: transactionParams.ReadPendingTransactionRequest,
-      res: Response,
-      next: NextFunction,
-  ) {
-    // custom begin readPendingTransactionCheck
-
-    // custom end readPendingTransactionCheck
-    TransactionController.service.readPendingTransaction(
-        transactionParams.ReadPendingTransactionRequestConvert(
-            req.body,
-            req.query,
-            req.params,
-            req.cookies,
-        ),
-        req.session,
-    )
-        .then((result) =>{
-          // custom begin readPendingTransaction
-          res.json({result});
-
-          // custom end readPendingTransaction
-        }).catch((e) => {
-          next(e);
-        });
-  }
   @Post('/transaction/calculation')
   @Validator(validSchemas.getTransactionCalculationValidator)
   async getTransactionCalculation(

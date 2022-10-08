@@ -93,21 +93,13 @@ async function calculationTransation(
 const expiredTranId = 'expiredTranId';
 const peddingTimeout = 5;
 const payTimeout = 60;
-
-enum Process{
-  normal = 1,
-  timeout = 2,
-  appeal = 3
-}
-
 const subscribeExpiredeModel = Container.get(SubscribeExpiredeModel);
 subscribeExpiredeModel.sub((key) => {
-  console.log(key);
   if (key.match(/^expiredTranId/) ) {
     wSCTModel.pub(JSON.stringify({}));
-    transactionModel.updateTransactionProcess(
+    transactionModel.updateTransactionTimeout(
         key.substring(expiredTranId.length),
-        Process.timeout,
+        true,
     )
         .then((res) => {
           console.log(res);
@@ -201,7 +193,6 @@ export class TransactionService {
     ).catch((e) =>{
       throw e;
     });
-
     await wSCTModel.pub(JSON.stringify({}));
     await subscribeExpiredeModel.setExpirKey(
         `${expiredTranId}${res.id}`, peddingTimeout);
@@ -241,21 +232,6 @@ export class TransactionService {
     return res;
 
     // custom end updateTransactionState
-  }
-  async readPendingTransaction(
-      param :requestTypes.ReadPendingTransactionParams,
-      session: Express.Request['session'],
-  ) {
-    // custom begin readPendingTransaction
-    const res = await this.transactionModel.readPendingTransaction(
-        param,
-        {},
-    ).catch((e) =>{
-      throw e;
-    });
-    return res;
-
-    // custom end readPendingTransaction
   }
   async getTransactionCalculation(
       param :requestTypes.GetTransactionCalculationParams,
@@ -556,7 +532,7 @@ export class TransactionService {
           }
         }
       default:
-        throw new errors.AuthenticationFailedError('updateTransaction');
+        throw new errors.CodeError('updateTransaction', 403, -3005);
     }
     const res = await this.transactionModel.updateTransaction(
         param,
@@ -573,7 +549,6 @@ export class TransactionService {
         bos: res.bos,
       };
     }
-
     if (typeof param.bodyState === 'number') {
       await wSCIModel.pub(
           param.pathId,

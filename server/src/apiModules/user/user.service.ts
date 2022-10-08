@@ -8,7 +8,6 @@ import svgCaptcha from 'svg-captcha';
 import {promises as fs} from 'fs';
 import {getPhoneCheck} from '../../utils/axios';
 import {query} from 'express-validator';
-
 type LoginStatus = {
   id: string;
   gameUid: string | null;
@@ -16,7 +15,6 @@ type LoginStatus = {
   phone: string;
   userStatus: number;
 }
-
 const userVerifyResponeFormat = async (data: any) => {
   const {
     userStatus,

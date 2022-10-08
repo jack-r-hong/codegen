@@ -138,6 +138,7 @@ model ReferralMap {
 }
 model Transaction {
   account  String  @map("account")                 
+  appeal  Boolean  @default(false)  @map("appeal")                 
   bankAccount  Int  @map("bank_account")                 
   bankCode  Int  @map("bank_code")                 
   bankName  String  @map("bank_name")                 
@@ -148,9 +149,9 @@ model Transaction {
   id  String @id @default(uuid()) @map("id")                 
   payMethod  Int  @map("pay_method")                 
   point  Int  @map("point")                 
-  process  Int  @default(1)  @map("process")                 
   serviceFee  Int  @map("service_fee")                 
   state  Int  @default(1)  @map("state")                 
+  timeout  Boolean  @default(false)  @map("timeout")                 
   totalDollars  Int  @map("total_dollars")                 
   totalPoints  Int  @map("total_points")                 
   twd  Int  @map("twd")                 

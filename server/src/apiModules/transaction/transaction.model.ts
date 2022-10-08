@@ -105,56 +105,6 @@ export class TransactionModel {
 
     // custom end updateTransactionState
   }
-  async readPendingTransaction(
-      param: requestTypes.ReadPendingTransactionParams,
-      customParam: any,
-  ) {
-    // custom begin readPendingTransaction
-    let where: {state: 1} | { state: {
-      gt: number,
-      lt: number,
-    }, } = {
-      state: 1,
-    };
-    if (param.pathAgentShow === 'processing' ) {
-      where = {
-        state: {
-          gt: 1,
-          lt: 4,
-        },
-      };
-    }
-    const res: any[] | null = await prisma.transaction.findMany({
-      where,
-      select: {
-        id: true,
-        point: true,
-        state: true,
-        twd: true,
-        bos: true,
-        bonusPoint: true,
-        account: true,
-        payMethod: true,
-        createdAt: true,
-        totalDollars: true,
-        totalPoints: true,
-        serviceFee: true,
-        handlingFee: true,
-      },
-      orderBy: {
-        [param.queryOrderByField]: param.queryOrderBy,
-      },
-      skip: param.queryPage * param.queryTake,
-      take: param.queryTake,
-    }).catch((e) => {
-      throw e;
-    }).finally(() => {
-      prisma.$disconnect();
-    });
-    return res;
-
-    // custom end readPendingTransaction
-  }
   async getTransactionCalculation(
       param: requestTypes.GetTransactionCalculationParams,
       customParam: any,
@@ -289,6 +239,8 @@ export class TransactionModel {
         totalPoints: true,
         serviceFee: true,
         handlingFee: true,
+        appeal: true,
+        timeout: true,
         user: {
           select: {
             gameUid: true,
@@ -404,37 +356,46 @@ export class TransactionModel {
       customParam: any,
   ) {
     // custom begin updateTransaction
-    let res = await prisma.transaction.update({
+    let data : { pairedAt: Date;} |
+    {completedAt: Date;} |
+    {state: number;} |
+    {
+      paidAt: Date,
+      transactionRecive: {
+        create: {
+          userId: string,
+        },
+      },
+    };
+    if (param.bodyState === 2) {
+      data = {
+        pairedAt: new Date(),
+        completedAt: new Date(),
+        state: param.bodyState,
+      };
+    } else if (param.bodyState === 3) {
+      data = {
+        pairedAt: new Date(),
+        state: param.bodyState,
+      };
+    } else if (param.bodyState === 4) {
+      data = {
+        completedAt: new Date(),
+        state: param.bodyState,
+      };
+    } else {
+      throw new Error('bodyState error');
+    }
+    const res = await prisma.transaction.update({
       where: {
         id: param.pathId,
       },
-      data: {
-        state: param.bodyState,
-      },
+      data,
     }).catch((e) => {
       throw e;
     }).finally(() => {
       prisma.$disconnect();
     });
-    if (param.bodyState === 2) {
-      res = await prisma.transaction.update({
-        where: {
-          id: param.pathId,
-        },
-        data: {
-          state: param.bodyState,
-          transactionRecive: {
-            create: {
-              userId: customParam.userId,
-            },
-          },
-        },
-      }).catch((e) => {
-        throw e;
-      }).finally(() => {
-        prisma.$disconnect();
-      });
-    }
     return res;
 
     // custom end updateTransaction
@@ -461,7 +422,17 @@ export class TransactionModel {
       };
     } else {
       where = {
-        state: 0,
+        OR: [
+          {
+            state: 99,
+          },
+          {
+            appeal: true,
+          },
+          {
+            timeOut: true,
+          },
+        ],
         transactionRecive: {
           userId,
         },
@@ -483,6 +454,8 @@ export class TransactionModel {
         totalPoints: true,
         serviceFee: true,
         handlingFee: true,
+        appeal: true,
+        timeout: true,
         user: {
           select: {
             name: true,
@@ -646,14 +619,13 @@ export class TransactionModel {
     });
     return res;
   }
-
-  async updateTransactionProcess(id: string, process: number) {
+  async updateTransactionTimeout(id: string, timeout: boolean) {
     const res = await prisma.transaction.update({
       where: {
         id,
       },
       data: {
-        process,
+        timeout,
       },
     }).catch((e) => {
       throw e;
