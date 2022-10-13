@@ -14,7 +14,8 @@ const wSCTModel = Container.get(WSClientTransactionModel);
 import {BankAccountModel} from '../bankAccount/bankAccount.model';
 import {UserModel} from '../user/user.model';
 import {ExchangeRateBuyModel} from '../exchangeRateBuy/exchangeRateBuy.model';
-import {ExchangeRateSellModel} from '../exchangeRateSell/exchangeRateSell.model';
+import {ExchangeRateSellModel}
+  from '../exchangeRateSell/exchangeRateSell.model';
 import {
   getGSPayDeposit,
   getGSPayQuery,
@@ -42,38 +43,30 @@ async function calculationTransation(
     point: 0,
     bonusPoint: 0,
     firstBonusPoint: 0,
-    accumulatedReward: 0,
     handlingFee: 0,
     serviceFee: 0,
     totalPoints: 0,
     totalDollars: 0,
   };
   const transactionSetting = await transactionModel.readTransactionSetting();
-  let accumulatedRewardLevel = 0;
   if (transactionSetting) {
     transactionSetting.forEach((e) => {
       switch (e.key) {
         case 'FirstReward':
-          res.firstBonusPoint = parseInt(e.val);
-          break;
-        case 'AccumulatedReward':
-          res.accumulatedReward = parseInt(e.val);
-          break;
-        case 'AccumulatedRewardLevel':
-          accumulatedRewardLevel = parseInt(e.val);
+          res.firstBonusPoint = e.val;
           break;
         case 'AtmHandlingFee':
           if (payMethod === 4) {
-            res.handlingFee = parseInt(e.val);
+            res.handlingFee = e.val;
           }
           break;
         case 'BarCodeHandlingFee':
           if (payMethod === 3) {
-            res.handlingFee = parseInt(e.val);
+            res.handlingFee = e.val;
           }
           break;
         case 'ServiceFee':
-          res.serviceFee = parseInt(e.val);
+          res.serviceFee = e.val;
           break;
       }
     });
@@ -88,18 +81,13 @@ async function calculationTransation(
       throw new Error('bodyBuyOptionId not found');
     }
     const dbData = await transactionModel.
-        readUserFirstBonusAndAccumulatedAmount(userId);
-    if (!dbData || !dbData.firstBonus) {
+        readUserFirstBonus(userId);
+    if (!dbData || !dbData.firstBonus || !dbData.firstBonusTemp) {
       res.firstBonusPoint = 0;
-    }
-    if (!dbData ||
-      dbData.accumulateTaken||
-      accumulatedRewardLevel > dbData.accumulatedAmount + setting.dollars) {
-      res.accumulatedReward = 0;
     }
     res.twd = setting.dollars;
     res.point = setting.point;
-    res.bonusPoint = setting.bouns + res.accumulatedReward;
+    res.bonusPoint = setting.bouns;
     res.totalPoints = res.point + res.bonusPoint + res.firstBonusPoint;
     res.totalDollars = res.twd + res.handlingFee + res.serviceFee;
   }
@@ -182,8 +170,6 @@ export class TransactionService {
         {userId: session.userInfo?.id!},
     );
     if (!dbUserData || dbUserData.userStatus !== 1) {
-      console.log(dbUserData);
-      /* todo throw error */
       throw new errors.CodeError('user no auth', 403, -3002);
     }
     const {
@@ -195,7 +181,6 @@ export class TransactionService {
       serviceFee,
       totalDollars,
       totalPoints,
-      accumulatedReward,
     } = await calculationTransation(
         param.bodyBos,
         param.bodyBuyOptionId,
@@ -203,11 +188,11 @@ export class TransactionService {
         session.userInfo!.id,
         param.bodyPayMethod,
     );
-    if (firstBonusPoint !== 0 || accumulatedReward > 0) {
+    if (firstBonusPoint !== 0) {
       await this.transactionModel.updateUserFirstBonus(
         session.userInfo?.id!,
-        false,
-        accumulatedReward > 0);
+        true,
+        false);
     }
     const res = await this.transactionModel.createTransaction(
         param,
@@ -249,7 +234,6 @@ export class TransactionService {
       firstBonusPoint,
       handlingFee,
       serviceFee,
-      accumulatedReward,
     } = await calculationTransation(
         param.bodyBos,
         param.bodyBuyOptionId,
@@ -257,8 +241,8 @@ export class TransactionService {
         session.userInfo!.id,
         param.bodyPayMethod,
     );
+    
     return {
-      accumulatedReward,
       totalPoints,
       point,
       bonusPoint,
@@ -525,53 +509,43 @@ export class TransactionService {
     if (!session.userInfo) {
       throw new Error('userInfo not found');
     }
-    switch (param.bodyState) {
-      case 1:
-      case 2:
-        if (
+
+    if (
+      param.bodyState === 2 &&
+      session.userInfo.isAgent &&
+      userId !== session.userInfo.id &&
+      state === 1
+    ) {} else if (
+      param.bodyState === 3 &&
+      state === 2 &&
+      (
+        (
+          bos === 1 &&
+          userId === session.userInfo.id
+        ) || (
+          bos === 2 &&
+          transactionRecive &&
+          transactionRecive.userId === session.userInfo.id
+        )
+      )
+    ) {} else if (
+      param.bodyState === 4 &&
+      state === 3 &&
+      (
+        (
+          bos === 1 &&
           session.userInfo.isAgent &&
-          userId !== session.userInfo.id &&
-          state === 1
-        ) {
-          break;
-        }
-      case 3:
-        if (state === 2) {
-          if (
-            bos === 1 &&
-            userId === session.userInfo.id
-          ) {
-            break;
-          }
-          if (
-            bos === 2 &&
-            transactionRecive &&
-            transactionRecive.userId === session.userInfo.id
-          ) {
-            break;
-          }
-        }
-      case 4:
-        if (state === 3) {
-          if (
-            bos === 1 &&
-            session.userInfo.isAgent &&
-            transactionRecive &&
-            transactionRecive.userId === session.userInfo.id
-          ) {
-            break;
-          }
-          if (
-            bos === 2 &&
-            userId === session.userInfo.id
-          ) {
-            break;
-          }
-        }
-      case 99:
-        break;
-      default:
-        throw new errors.CodeError('updateTransaction', 403, -3005);
+          transactionRecive &&
+          transactionRecive.userId === session.userInfo.id
+        ) || (
+          bos === 2 &&
+          userId === session.userInfo.id
+        )
+      )
+    ) {} else if (
+      param.bodyState === 99
+    ) {} else {
+      throw new errors.CodeError('updateTransaction', 403, -3005);
     }
     const res = await this.transactionModel.updateTransaction(
         param,
@@ -607,8 +581,15 @@ export class TransactionService {
       if (res.state === 3 || res.state === 99) {
         await subscribeExpiredeModel.del(res.id);
       }
+      if (res.state === 99) {
+        await this.transactionModel.updateUserFirstBonusCancel(res.userId);
+      }
       if (res.state === 4) {
         await this.transactionModel.updateUserAccumulation(res.userId, res.twd);
+        await this.transactionModel.updateUserFirstBonus(
+          session.userInfo?.id!,
+          false,
+          false);
       }
     }
     return res;

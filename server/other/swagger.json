@@ -2093,7 +2093,6 @@
           "cookieAuth" : [ ]
         } ]
       }
-
     },        
     "/bank/{id}" : {     
       "get" : {
@@ -2810,20 +2809,16 @@
             "type": "boolean",
             "default": true
           },
-          "accumulatedAmount": {
-            "type": "integer",
-            "default": "0"
-          },
-          "accumulateTaken": {
+          "firstBonusTemp" : {
             "type": "boolean",
-            "default": "false"
-          },          
+            "default": true
+          },                
           "remark": {
             "type" : "string",
             "nullable": true
           }
         }
-      },
+      }, 
       "Referral" : {
         "type" : "object",
         "description" : "database",
@@ -3852,9 +3847,6 @@
                 "firstReward" : {
                   "type": "integer"
                 },  
-                "accumulatedReward" : {
-                  "type": "integer"
-                },  
                 "atmHandlingFee" : {
                   "type": "integer"
                 }, 
@@ -4587,7 +4579,10 @@
                   },
                   "gameUid" : {
                     "$ref" : "#/components/schemas/User/properties/gameUid"
-                  }                                            
+                  },
+                  "remark" : {
+                    "$ref" : "#/components/schemas/User/properties/remark"
+                  }                                                         
                 }
               }          
             }
@@ -4612,9 +4607,18 @@
                   "phonePrefix" : {
                     "$ref" : "#/components/schemas/User/properties/phonePrefix"
                   },
-                  "name" : {
-                    "$ref" : "#/components/schemas/User/properties/name"
-                  }                                        
+                  "userStatus" : {
+                    "$ref" : "#/components/schemas/User/properties/userStatus"
+                  },
+                  "level" : {
+                    "$ref" : "#/components/schemas/User/properties/level"
+                  },
+                  "gameUid" : {
+                    "$ref" : "#/components/schemas/User/properties/gameUid"
+                  },
+                  "remark" : {
+                    "$ref" : "#/components/schemas/User/properties/remark"
+                  }                                         
                 }
               }          
             }
@@ -5049,9 +5053,6 @@
               "type" : "object",
               "properties" : {
                 "firstReward" : {
-                  "type": "integer"
-                },  
-                "accumulatedReward" : {
                   "type": "integer"
                 },  
                 "atmHandlingFee" : {

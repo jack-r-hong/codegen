@@ -22,7 +22,7 @@ export class TransactionSettingService {
     // custom begin getAllSetting
     const res = await this.transactionSettingModel.getAllSetting(param, {});
     return res.reduce((a, v) => ({...a, [v.key.replace(v.key[0]!, v.key[0]!.toLocaleLowerCase())]:
-       parseInt(v.val)}), {});
+       v.val}), {});
 
     // custom end getAllSetting
   }
@@ -33,7 +33,7 @@ export class TransactionSettingService {
     // custom begin updateSetting
     const res = await this.transactionSettingModel.updateSetting(param, {});
     return res.reduce((a, v) => ({...a, [v.key.replace(v.key[0]!, v.key[0]!.toLocaleLowerCase())]:
-      parseInt(v.val)}), {});
+      v.val}), {});
 
     // custom end updateSetting
   }

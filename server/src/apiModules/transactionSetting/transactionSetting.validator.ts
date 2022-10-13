@@ -10,10 +10,6 @@ import * as sessions from '../../sessions';
 export const getAllSettingValidator: Schema = {
 };
 export const updateSettingValidator: Schema = {
-  'accumulatedReward': {
-    in: 'body',
-    isInt: true,
-  },
   'atmHandlingFee': {
     in: 'body',
     isInt: true,

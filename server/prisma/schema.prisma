@@ -182,8 +182,6 @@ model TransactionRecive {
     // custom end TransactionRecive
 }
 model User {
-  accumulateTaken  Boolean  @default(false)  @map("accumulate_taken")                 
-  accumulatedAmount  Int  @default(0)  @map("accumulated_amount")                 
   address  String?   @map("address")                 
   area  String?   @map("area")                 
   birthdate  String?   @map("birthdate")                 
@@ -191,6 +189,7 @@ model User {
   country  String?   @map("country")                 
   createdAt  DateTime  @default(now()) @map("created_at")                 
   firstBonus  Boolean  @default(true)  @map("first_bonus")                 
+  firstBonusTemp  Boolean  @default(true)  @map("first_bonus_temp")                 
   gameUid  String?   @map("game_uid")                 
   id  String @id @default(uuid()) @map("id")                 
   idCard  String?   @map("id_card")                 
@@ -218,6 +217,7 @@ model User {
   userVerifyPhoto UserVerifyPhoto[]
   
     // custom begin User
+  userAccumulatedReward UserAccumulatedReward[]
   @@unique([phone, phonePrefix], name: "phone_all")
 
     // custom end User
@@ -333,13 +333,26 @@ model TransactionQrcode {
 }
 model TransactionSetting {
   key TransactionSettingKey @unique
-  val String
+  val Int
   @@map("transactionSetting")
+}
+model AccumulatedReward {
+  reward Int @default(0)
+  amount Int @default(0) @unique
+  @@map("accumulated_reward")
+}
+model UserAccumulatedReward {
+  id  Int @id @default(autoincrement()) @map("id")   
+  userId  String @map("user_id")
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+  amount Int 
+  startDate DateTime
+  endDate DateTime
+  @@unique([startDate, endDate, userId], name: "uniqueReward")
+  @@map("user_accumulated_reward")
 }
 enum TransactionSettingKey {
   FirstReward
-  AccumulatedReward
-  AccumulatedRewardLevel
   AtmHandlingFee
   BarCodeHandlingFee
   ServiceFee

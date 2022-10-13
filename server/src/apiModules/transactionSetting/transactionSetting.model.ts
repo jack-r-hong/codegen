@@ -28,7 +28,6 @@ export class TransactionSettingModel {
   ) {
     // custom begin updateSetting
     enum ParamMap{
-      AccumulatedReward = 'bodyAccumulatedReward',
       FirstReward = 'bodyFirstReward',
       AtmHandlingFee = 'bodyAtmHandlingFee',
       BarCodeHandlingFee = 'bodyBarCodeHandlingFee',
@@ -38,7 +37,7 @@ export class TransactionSettingModel {
         (Object.keys(ParamMap) as (keyof typeof ParamMap)[]).map((key) => {
           return prisma.transactionSetting.update({
             data: {
-              val: param[ParamMap[key]].toString(),
+              val: param[ParamMap[key]],
             },
             where: {
               key,

@@ -48,8 +48,7 @@ export const GetAllSettingRequestConvert = (
   };
 };
 type UpdateSettingReqBody = {
-  accumulatedReward: string,
-atmHandlingFee: string,
+  atmHandlingFee: string,
 barCodeHandlingFee: string,
 firstReward: string,
 serviceFee: string,
@@ -73,7 +72,6 @@ export interface UpdateSettingRequest extends TypedRequest<
 }
 
 export type UpdateSettingParams = {
-bodyAccumulatedReward: number,
 bodyAtmHandlingFee: number,
 bodyBarCodeHandlingFee: number,
 bodyFirstReward: number,
@@ -88,7 +86,6 @@ export const UpdateSettingRequestConvert = (
     cookie: UpdateSettingReqCookie,
 ): UpdateSettingParams => {
   return {
-    bodyAccumulatedReward: parseInt(body.accumulatedReward),
     bodyAtmHandlingFee: parseInt(body.atmHandlingFee),
     bodyBarCodeHandlingFee: parseInt(body.barCodeHandlingFee),
     bodyFirstReward: parseInt(body.firstReward),

@@ -615,15 +615,19 @@ export class TransactionModel {
     });
     return res;
   }
-  async readUserFirstBonusAndAccumulatedAmount(id: string) {
+  async readUserFirstBonus(id: string) {
     const res = await prisma.user.findUnique({
       where: {
         id,
       },
       select: {
         firstBonus: true,
-        accumulatedAmount: true,
-        accumulateTaken: true,
+        firstBonusTemp: true,
+        userAccumulatedReward: {
+          where: {
+
+          },
+        },
       },
     }).catch((e) => {
       throw e;
@@ -635,7 +639,7 @@ export class TransactionModel {
   async updateUserFirstBonus(
       id: string,
       firstBonus: boolean,
-      accumulateTaken: boolean,
+      firstBonusTemp: boolean,
   ) {
     const res = await prisma.user.update({
       where: {
@@ -643,7 +647,25 @@ export class TransactionModel {
       },
       data: {
         firstBonus,
-        accumulateTaken,
+        firstBonusTemp,
+      },
+    }).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+    return res;
+  }
+  async updateUserFirstBonusCancel(
+      id: string,
+  ) {
+    const res = await prisma.user.updateMany({
+      where: {
+        id,
+        firstBonus: true,
+      },
+      data: {
+        firstBonusTemp: true,
       },
     }).catch((e) => {
       throw e;
@@ -653,12 +675,25 @@ export class TransactionModel {
     return res;
   }
   async updateUserAccumulation(id: string, amount: number) {
-    const res = await prisma.user.update({
+    const now = new Date();
+    const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+    const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+    const res = await prisma.userAccumulatedReward.upsert({
       where: {
-        id,
+        uniqueReward: {
+          startDate: monthStart,
+          endDate: monthEnd,
+          userId: id,
+        },
       },
-      data: {
-        accumulatedAmount: {
+      create: {
+        startDate: monthStart,
+        endDate: monthEnd,
+        userId: id,
+        amount,
+      },
+      update: {
+        amount: {
           increment: amount,
         },
       },

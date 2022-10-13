@@ -22,6 +22,7 @@ export class UserModel {
         phonePrefix: true,
         name: true,
         gameUid: true,
+        remark: true,
       },
       orderBy: {
         [param.queryOrderByField]: param.queryOrderBy,
@@ -390,6 +391,7 @@ export class UserModel {
         level: true,
         phone: true,
         phonePrefix: true,
+        remark: true,
         userStatus: true,
         // custom begin readManyUserBackstage
         referral: {
