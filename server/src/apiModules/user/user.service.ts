@@ -13,6 +13,7 @@ type LoginStatus = {
   isAgent: boolean;
   phone: string;
   userStatus: number;
+  referralCode: string;
 }
 const userVerifyResponeFormat = async (data: any) => {
   const {
@@ -595,7 +596,7 @@ export class UserService {
       phonePrefix,
       phone,
     };
-    // await getPhoneCheck(phonePrefix, phone, code);
+    await getPhoneCheck(phonePrefix, phone, code);
     return {success: true};
 
     // custom end forgetPasswordPhoneCheck
@@ -658,7 +659,7 @@ export class UserService {
           throw e;
         });
     if (res !== null) {
-      const {id, userStatus, password, isAgent, phone, gameUid} = res;
+      const {id, userStatus, password, isAgent, phone, gameUid, referral} = res;
       const match = await bcrypt.compare(param.bodyPassword, password);
       if (match) {
         session.userInfo = {
@@ -672,14 +673,15 @@ export class UserService {
           phone,
           gameUid,
           id,
+          referralCode: getReferralCodde(referral!.id),
         };
         return result;
       }
     }
     if (res === null) {
-      throw new errors.LoginFailError;
+      throw new errors.CodeError('Login failed', 403, -1008);
     }
-    throw new errors.LoginFailError;
+    throw new errors.CodeError('Login failed', 403, -1008);
 
     // custom end loginUser
   }
@@ -784,7 +786,8 @@ export class UserService {
       throw e;
     });
     if ((res as {success: boolean}).success === false) {
-      return res;
+      throw new errors.CodeError('referral code no map to the user',
+          404, -1007 );
     }
     session.destroy(() => {});
     return {success: true};
@@ -809,8 +812,9 @@ export class UserService {
       phonePrefix,
       phone,
     };
-    // await getPhoneCheck(phonePrefix, phone, code);
 
+    await getPhoneCheck(phonePrefix, phone, code);
+    return {success: true};
     // custom end phoneCheck
   }
   async getUserMyStatus(
@@ -832,7 +836,9 @@ export class UserService {
       userStatus: res.userStatus,
       isAgent: res.isAgent,
     };
-    const result : LoginStatus= res;
+    const result : LoginStatus= Object.assign(res, {
+      referralCode: getReferralCodde(res.referral!.id),
+    });
     return result;
 
     // custom end getUserMyStatus

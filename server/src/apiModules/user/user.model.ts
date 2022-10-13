@@ -278,7 +278,7 @@ export class UserModel {
     const res = await prisma.user.findUnique({
       where: {
         id: param.pathId,
-        
+
       },
       select: {
         address: true,
@@ -535,6 +535,11 @@ export class UserModel {
         userStatus: true,
         isAgent: true,
         gameUid: true,
+        referral: {
+          select: {
+            id: true,
+          },
+        },
       },
     }).catch((e) => {
       throw e;
@@ -851,12 +856,11 @@ export class UserModel {
           id: referralId,
         },
       }).catch((e) => {
-        throw new Error('referral code no map to the user');
+        throw new errors.CodeError('referral code no map to the user' );
       }).finally(() => {
         prisma.$disconnect();
       });
       if (!checkCode) {
-        console.log('checkCode');
         throw new Error('referral code no map to the user');
       }
       referralMap = {
@@ -948,6 +952,11 @@ export class UserModel {
         isAgent: true,
         phone: true,
         gameUid: true,
+        referral: {
+          select: {
+            id: true,
+          },
+        },
       },
     }).catch((e) => {
       throw e;
