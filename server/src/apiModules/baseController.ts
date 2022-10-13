@@ -10,6 +10,7 @@ import fs from 'fs';
 import rateLimit from 'express-rate-limit';
 import RedisStore from 'rate-limit-redis';
 import {redisLimiterClient as redisClient} from '../redisClient';
+import {errors} from '../errors';
 
 const subRouter = Router();
 
@@ -134,6 +135,10 @@ class MiddlewareDecorator {
       store: new RedisStore({
         sendCommand: (...args: string[]) => redisClient.sendCommand(args),
       }),
+      message: () => {
+        return new errors.CodeError('Too many requests, please try again later.'
+            , 429, -1001);
+      },
     });
     return this._decoratorHander.middlewareDecoratorFactory(
         'limiter', limit,

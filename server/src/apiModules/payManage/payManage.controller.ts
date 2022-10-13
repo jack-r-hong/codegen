@@ -26,6 +26,9 @@ export class PayManageController implements Controller {
 
   @Get('/backstage/pay_manage')
   @Validator(validSchemas.readManyBackstagePayManageValidator)
+  // custom begin readManyBackstagePayManageDecorator
+
+  // custom end readManyBackstagePayManageDecorator
   async readManyBackstagePayManage(
       req: payManageParams.ReadManyBackstagePayManageRequest,
       res: Response,
@@ -51,6 +54,9 @@ export class PayManageController implements Controller {
   }
   @Post('/backstage/pay_manage')
   @Validator(validSchemas.careateBackstagePayManageValidator)
+  // custom begin careateBackstagePayManageDecorator
+
+  // custom end careateBackstagePayManageDecorator
   async careateBackstagePayManage(
       req: payManageParams.CareateBackstagePayManageRequest,
       res: Response,
@@ -79,6 +85,9 @@ export class PayManageController implements Controller {
   }
   @Delete('/backstage/pay_manage/photo/:id')
   @Validator(validSchemas.deleteQrCodeValidator)
+  // custom begin deleteQrCodeDecorator
+
+  // custom end deleteQrCodeDecorator
   async deleteQrCode(
       req: payManageParams.DeleteQrCodeRequest,
       res: Response,
@@ -108,6 +117,9 @@ export class PayManageController implements Controller {
   @Post('/backstage/pay_manage/photo/:id')
   @Validator(validSchemas.uploadManyQrCodeValidator)
   @FormData()
+  // custom begin uploadManyQrCodeDecorator
+
+  // custom end uploadManyQrCodeDecorator
   async uploadManyQrCode(
       req: payManageParams.UploadManyQrCodeRequest,
       res: Response,
@@ -134,6 +146,9 @@ export class PayManageController implements Controller {
   }
   @Delete('/backstage/pay_manage/:id')
   @Validator(validSchemas.deleteOneBackstagePayManageValidator)
+  // custom begin deleteOneBackstagePayManageDecorator
+
+  // custom end deleteOneBackstagePayManageDecorator
   async deleteOneBackstagePayManage(
       req: payManageParams.DeleteOneBackstagePayManageRequest,
       res: Response,
@@ -159,6 +174,9 @@ export class PayManageController implements Controller {
   }
   @Put('/backstage/pay_manage/:id')
   @Validator(validSchemas.updateBackstagePayManageValidator)
+  // custom begin updateBackstagePayManageDecorator
+
+  // custom end updateBackstagePayManageDecorator
   async updateBackstagePayManage(
       req: payManageParams.UpdateBackstagePayManageRequest,
       res: Response,

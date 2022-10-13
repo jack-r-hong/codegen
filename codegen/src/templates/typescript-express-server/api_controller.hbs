@@ -32,6 +32,9 @@ export class {{fpc tag}}Controller implements Controller {
   {{#if (equal (model_type data.operationId) "uploadMany")  }}
   @FormData()
   {{/if}}
+  // custom begin {{data.operationId}}Decorator
+{{{lookup ../../custom (add data.operationId "Decorator" )}}}
+  // custom end {{data.operationId}}Decorator
   async {{data.operationId}}(
       req: {{../../tag}}Params.{{fpc data.operationId}}Request,
       res: Response,

@@ -595,7 +595,7 @@ export class UserService {
       phonePrefix,
       phone,
     };
-    await getPhoneCheck(phonePrefix, phone, code);
+    // await getPhoneCheck(phonePrefix, phone, code);
     return {success: true};
 
     // custom end forgetPasswordPhoneCheck
@@ -809,7 +809,7 @@ export class UserService {
       phonePrefix,
       phone,
     };
-    await getPhoneCheck(phonePrefix, phone, code);
+    // await getPhoneCheck(phonePrefix, phone, code);
 
     // custom end phoneCheck
   }

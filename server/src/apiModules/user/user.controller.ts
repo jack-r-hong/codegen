@@ -26,6 +26,9 @@ export class UserController implements Controller {
 
   @Get('/backstage/agents')
   @Validator(validSchemas.getUserBackstageAgentsValidator)
+  // custom begin getUserBackstageAgentsDecorator
+
+  // custom end getUserBackstageAgentsDecorator
   async getUserBackstageAgents(
       req: userParams.GetUserBackstageAgentsRequest,
       res: Response,
@@ -54,6 +57,9 @@ export class UserController implements Controller {
   }
   @Get('/backstage/user/verify/reson')
   @Validator(validSchemas.readBackstageUserResonValidator)
+  // custom begin readBackstageUserResonDecorator
+
+  // custom end readBackstageUserResonDecorator
   async readBackstageUserReson(
       req: userParams.ReadBackstageUserResonRequest,
       res: Response,
@@ -82,6 +88,9 @@ export class UserController implements Controller {
   }
   @Post('/backstage/user/verify/reson')
   @Validator(validSchemas.createBackstageUserResonValidator)
+  // custom begin createBackstageUserResonDecorator
+
+  // custom end createBackstageUserResonDecorator
   async createBackstageUserReson(
       req: userParams.CreateBackstageUserResonRequest,
       res: Response,
@@ -110,6 +119,9 @@ export class UserController implements Controller {
   }
   @Delete('/backstage/user/verify/reson/:resonId')
   @Validator(validSchemas.deleteBackstageUserResonValidator)
+  // custom begin deleteBackstageUserResonDecorator
+
+  // custom end deleteBackstageUserResonDecorator
   async deleteBackstageUserReson(
       req: userParams.DeleteBackstageUserResonRequest,
       res: Response,
@@ -138,6 +150,9 @@ export class UserController implements Controller {
   }
   @Put('/backstage/user/verify/reson/:resonId')
   @Validator(validSchemas.updateBackstageUserResonValidator)
+  // custom begin updateBackstageUserResonDecorator
+
+  // custom end updateBackstageUserResonDecorator
   async updateBackstageUserReson(
       req: userParams.UpdateBackstageUserResonRequest,
       res: Response,
@@ -166,6 +181,9 @@ export class UserController implements Controller {
   }
   @Put('/backstage/user/verify/:id')
   @Validator(validSchemas.updateBackstageUserValidator)
+  // custom begin updateBackstageUserDecorator
+
+  // custom end updateBackstageUserDecorator
   async updateBackstageUser(
       req: userParams.UpdateBackstageUserRequest,
       res: Response,
@@ -194,6 +212,9 @@ export class UserController implements Controller {
   }
   @Get('/backstage/user/:id')
   @Validator(validSchemas.readOneBackstageUserValidator)
+  // custom begin readOneBackstageUserDecorator
+
+  // custom end readOneBackstageUserDecorator
   async readOneBackstageUser(
       req: userParams.ReadOneBackstageUserRequest,
       res: Response,
@@ -219,6 +240,9 @@ export class UserController implements Controller {
   }
   @Put('/backstage/user/:id')
   @Validator(validSchemas.updateOneBackstageUserValidator)
+  // custom begin updateOneBackstageUserDecorator
+
+  // custom end updateOneBackstageUserDecorator
   async updateOneBackstageUser(
       req: userParams.UpdateOneBackstageUserRequest,
       res: Response,
@@ -244,6 +268,9 @@ export class UserController implements Controller {
   }
   @Get('/backstage/user/:id/transaction')
   @Validator(validSchemas.readBackstageUserTransactionValidator)
+  // custom begin readBackstageUserTransactionDecorator
+
+  // custom end readBackstageUserTransactionDecorator
   async readBackstageUserTransaction(
       req: userParams.ReadBackstageUserTransactionRequest,
       res: Response,
@@ -272,6 +299,9 @@ export class UserController implements Controller {
   }
   @Get('/backstage/users')
   @Validator(validSchemas.readManyUserBackstageValidator)
+  // custom begin readManyUserBackstageDecorator
+
+  // custom end readManyUserBackstageDecorator
   async readManyUserBackstage(
       req: userParams.ReadManyUserBackstageRequest,
       res: Response,
@@ -297,6 +327,9 @@ export class UserController implements Controller {
   }
   @Get('/captcha')
   @Validator(validSchemas.captchaValidator)
+  // custom begin captchaDecorator
+
+  // custom end captchaDecorator
   async captcha(
       req: userParams.CaptchaRequest,
       res: Response,
@@ -326,6 +359,9 @@ export class UserController implements Controller {
   }
   @Post('/forget_password/phone_check')
   @Validator(validSchemas.forgetPasswordPhoneCheckValidator)
+  // custom begin forgetPasswordPhoneCheckDecorator
+  @limiter(2, 1)
+  // custom end forgetPasswordPhoneCheckDecorator
   async forgetPasswordPhoneCheck(
       req: userParams.ForgetPasswordPhoneCheckRequest,
       res: Response,
@@ -354,6 +390,9 @@ export class UserController implements Controller {
   }
   @Post('/forget_password/phone_check/verify')
   @Validator(validSchemas.forgetPasswordPhoneCheckVerifyValidator)
+  // custom begin forgetPasswordPhoneCheckVerifyDecorator
+
+  // custom end forgetPasswordPhoneCheckVerifyDecorator
   async forgetPasswordPhoneCheckVerify(
       req: userParams.ForgetPasswordPhoneCheckVerifyRequest,
       res: Response,
@@ -382,6 +421,9 @@ export class UserController implements Controller {
   }
   @Post('/forget_password/reset')
   @Validator(validSchemas.forgetPasswordResetValidator)
+  // custom begin forgetPasswordResetDecorator
+
+  // custom end forgetPasswordResetDecorator
   async forgetPasswordReset(
       req: userParams.ForgetPasswordResetRequest,
       res: Response,
@@ -410,6 +452,9 @@ export class UserController implements Controller {
   }
   @Post('/login')
   @Validator(validSchemas.loginUserValidator)
+  // custom begin loginUserDecorator
+
+  // custom end loginUserDecorator
   async loginUser(
       req: userParams.LoginUserRequest,
       res: Response,
@@ -438,6 +483,9 @@ export class UserController implements Controller {
   }
   @Post('/logout')
   @Validator(validSchemas.logoutUserValidator)
+  // custom begin logoutUserDecorator
+
+  // custom end logoutUserDecorator
   async logoutUser(
       req: userParams.LogoutUserRequest,
       res: Response,
@@ -465,6 +513,9 @@ export class UserController implements Controller {
   }
   @Get('/real_verify')
   @Validator(validSchemas.getRealVerifyValidator)
+  // custom begin getRealVerifyDecorator
+
+  // custom end getRealVerifyDecorator
   async getRealVerify(
       req: userParams.GetRealVerifyRequest,
       res: Response,
@@ -493,6 +544,9 @@ export class UserController implements Controller {
   }
   @Post('/real_verify')
   @Validator(validSchemas.postRealVerifyValidator)
+  // custom begin postRealVerifyDecorator
+
+  // custom end postRealVerifyDecorator
   async postRealVerify(
       req: userParams.PostRealVerifyRequest,
       res: Response,
@@ -521,6 +575,9 @@ export class UserController implements Controller {
   }
   @Put('/real_verify')
   @Validator(validSchemas.putRealVerifyValidator)
+  // custom begin putRealVerifyDecorator
+
+  // custom end putRealVerifyDecorator
   async putRealVerify(
       req: userParams.PutRealVerifyRequest,
       res: Response,
@@ -549,6 +606,9 @@ export class UserController implements Controller {
   }
   @Post('/register')
   @Validator(validSchemas.registerUserValidator)
+  // custom begin registerUserDecorator
+
+  // custom end registerUserDecorator
   async registerUser(
       req: userParams.RegisterUserRequest,
       res: Response,
@@ -577,6 +637,9 @@ export class UserController implements Controller {
   }
   @Post('/register/phone_check')
   @Validator(validSchemas.phoneCheckValidator)
+  // custom begin phoneCheckDecorator
+  @limiter(2, 4)
+  // custom end phoneCheckDecorator
   async phoneCheck(
       req: userParams.PhoneCheckRequest,
       res: Response,
@@ -605,6 +668,9 @@ export class UserController implements Controller {
   }
   @Get('/user/my/status')
   @Validator(validSchemas.getUserMyStatusValidator)
+  // custom begin getUserMyStatusDecorator
+
+  // custom end getUserMyStatusDecorator
   async getUserMyStatus(
       req: userParams.GetUserMyStatusRequest,
       res: Response,
@@ -633,6 +699,9 @@ export class UserController implements Controller {
   }
   @Put('/user/:id')
   @Validator(validSchemas.updateOneyUserValidator)
+  // custom begin updateOneyUserDecorator
+
+  // custom end updateOneyUserDecorator
   async updateOneyUser(
       req: userParams.UpdateOneyUserRequest,
       res: Response,

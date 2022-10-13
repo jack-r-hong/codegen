@@ -26,6 +26,9 @@ export class ChatroomController implements Controller {
 
   @Post('/chatroom/service/token')
   @Validator(validSchemas.serviceTokenValidator)
+  // custom begin serviceTokenDecorator
+
+  // custom end serviceTokenDecorator
   async serviceToken(
       req: chatroomParams.ServiceTokenRequest,
       res: Response,
@@ -54,6 +57,9 @@ export class ChatroomController implements Controller {
   }
   @Post('/chatroom/transaction/service/token')
   @Validator(validSchemas.transactionServiceTokenValidator)
+  // custom begin transactionServiceTokenDecorator
+
+  // custom end transactionServiceTokenDecorator
   async transactionServiceToken(
       req: chatroomParams.TransactionServiceTokenRequest,
       res: Response,
@@ -82,6 +88,9 @@ export class ChatroomController implements Controller {
   }
   @Post('/chatroom/transaction/token')
   @Validator(validSchemas.transactionTokenValidator)
+  // custom begin transactionTokenDecorator
+
+  // custom end transactionTokenDecorator
   async transactionToken(
       req: chatroomParams.TransactionTokenRequest,
       res: Response,

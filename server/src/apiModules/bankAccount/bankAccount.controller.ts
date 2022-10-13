@@ -26,6 +26,9 @@ export class BankAccountController implements Controller {
 
   @Get('/backstage/banks/verify/reson')
   @Validator(validSchemas.getBackstageBankAccountResonValidator)
+  // custom begin getBackstageBankAccountResonDecorator
+
+  // custom end getBackstageBankAccountResonDecorator
   async getBackstageBankAccountReson(
       req: bankAccountParams.GetBackstageBankAccountResonRequest,
       res: Response,
@@ -54,6 +57,9 @@ export class BankAccountController implements Controller {
   }
   @Post('/backstage/banks/verify/reson')
   @Validator(validSchemas.createBackstageBankAccountsResonValidator)
+  // custom begin createBackstageBankAccountsResonDecorator
+
+  // custom end createBackstageBankAccountsResonDecorator
   async createBackstageBankAccountsReson(
       req: bankAccountParams.CreateBackstageBankAccountsResonRequest,
       res: Response,
@@ -82,6 +88,9 @@ export class BankAccountController implements Controller {
   }
   @Delete('/backstage/banks/verify/reson/:resonId')
   @Validator(validSchemas.deleteBackstageBankAccountResonValidator)
+  // custom begin deleteBackstageBankAccountResonDecorator
+
+  // custom end deleteBackstageBankAccountResonDecorator
   async deleteBackstageBankAccountReson(
       req: bankAccountParams.DeleteBackstageBankAccountResonRequest,
       res: Response,
@@ -110,6 +119,9 @@ export class BankAccountController implements Controller {
   }
   @Put('/backstage/banks/verify/reson/:resonId')
   @Validator(validSchemas.updateBackstageBankAccountResonValidator)
+  // custom begin updateBackstageBankAccountResonDecorator
+
+  // custom end updateBackstageBankAccountResonDecorator
   async updateBackstageBankAccountReson(
       req: bankAccountParams.UpdateBackstageBankAccountResonRequest,
       res: Response,
@@ -138,6 +150,9 @@ export class BankAccountController implements Controller {
   }
   @Get('/backstage/banks/verify/:userId')
   @Validator(validSchemas.getBackstageBankAccountsValidator)
+  // custom begin getBackstageBankAccountsDecorator
+
+  // custom end getBackstageBankAccountsDecorator
   async getBackstageBankAccounts(
       req: bankAccountParams.GetBackstageBankAccountsRequest,
       res: Response,
@@ -166,6 +181,9 @@ export class BankAccountController implements Controller {
   }
   @Put('/backstage/banks/verify/:userId')
   @Validator(validSchemas.putBackstageBankAccountsValidator)
+  // custom begin putBackstageBankAccountsDecorator
+
+  // custom end putBackstageBankAccountsDecorator
   async putBackstageBankAccounts(
       req: bankAccountParams.PutBackstageBankAccountsRequest,
       res: Response,
@@ -194,6 +212,9 @@ export class BankAccountController implements Controller {
   }
   @Post('/bank')
   @Validator(validSchemas.createBankAccountsValidator)
+  // custom begin createBankAccountsDecorator
+
+  // custom end createBankAccountsDecorator
   async createBankAccounts(
       req: bankAccountParams.CreateBankAccountsRequest,
       res: Response,
@@ -222,6 +243,9 @@ export class BankAccountController implements Controller {
   }
   @Get('/bank/my/accounts')
   @Validator(validSchemas.getMyBankAccountsValidator)
+  // custom begin getMyBankAccountsDecorator
+
+  // custom end getMyBankAccountsDecorator
   async getMyBankAccounts(
       req: bankAccountParams.GetMyBankAccountsRequest,
       res: Response,
@@ -250,6 +274,9 @@ export class BankAccountController implements Controller {
   }
   @Get('/bank/:id')
   @Validator(validSchemas.readOneBankAccountValidator)
+  // custom begin readOneBankAccountDecorator
+
+  // custom end readOneBankAccountDecorator
   async readOneBankAccount(
       req: bankAccountParams.ReadOneBankAccountRequest,
       res: Response,

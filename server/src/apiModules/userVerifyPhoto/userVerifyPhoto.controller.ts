@@ -26,6 +26,9 @@ export class UserVerifyPhotoController implements Controller {
 
   @Get('/backstage/real_verify/photo/:userId')
   @Validator(validSchemas.getBackstageUserVerifyPhotoValidator)
+  // custom begin getBackstageUserVerifyPhotoDecorator
+
+  // custom end getBackstageUserVerifyPhotoDecorator
   async getBackstageUserVerifyPhoto(
       req: userVerifyPhotoParams.GetBackstageUserVerifyPhotoRequest,
       res: Response,
@@ -54,6 +57,9 @@ export class UserVerifyPhotoController implements Controller {
   }
   @Get('/real_verify/photo')
   @Validator(validSchemas.getUserVerifyPhotoValidator)
+  // custom begin getUserVerifyPhotoDecorator
+
+  // custom end getUserVerifyPhotoDecorator
   async getUserVerifyPhoto(
       req: userVerifyPhotoParams.GetUserVerifyPhotoRequest,
       res: Response,
@@ -83,6 +89,9 @@ export class UserVerifyPhotoController implements Controller {
   @Post('/real_verify/photo')
   @Validator(validSchemas.uploadManyVerifyPhotoValidator)
   @FormData()
+  // custom begin uploadManyVerifyPhotoDecorator
+
+  // custom end uploadManyVerifyPhotoDecorator
   async uploadManyVerifyPhoto(
       req: userVerifyPhotoParams.UploadManyVerifyPhotoRequest,
       res: Response,

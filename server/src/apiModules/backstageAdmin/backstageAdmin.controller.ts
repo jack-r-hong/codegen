@@ -26,6 +26,9 @@ export class BackstageAdminController implements Controller {
 
   @Post('/backstage/admin')
   @Validator(validSchemas.getAdminFromIdValidator)
+  // custom begin getAdminFromIdDecorator
+
+  // custom end getAdminFromIdDecorator
   async getAdminFromId(
       req: backstageAdminParams.GetAdminFromIdRequest,
       res: Response,
@@ -54,6 +57,9 @@ export class BackstageAdminController implements Controller {
   }
   @Post('/backstage/admin/login')
   @Validator(validSchemas.adminLoginValidator)
+  // custom begin adminLoginDecorator
+
+  // custom end adminLoginDecorator
   async adminLogin(
       req: backstageAdminParams.AdminLoginRequest,
       res: Response,
@@ -82,6 +88,9 @@ export class BackstageAdminController implements Controller {
   }
   @Post('/backstage/admin/register')
   @Validator(validSchemas.adminRegisterValidator)
+  // custom begin adminRegisterDecorator
+
+  // custom end adminRegisterDecorator
   async adminRegister(
       req: backstageAdminParams.AdminRegisterRequest,
       res: Response,

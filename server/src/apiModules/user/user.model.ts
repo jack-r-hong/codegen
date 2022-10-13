@@ -278,7 +278,7 @@ export class UserModel {
     const res = await prisma.user.findUnique({
       where: {
         id: param.pathId,
-
+        
       },
       select: {
         address: true,
@@ -411,12 +411,14 @@ export class UserModel {
       param: requestTypes.ReadManyUserBackstageParams,
       // custom begin readManyUserBackstageParam
       isAgent?: boolean,
+
       // custom end readManyUserBackstageParam
   ) {
     const res = await prisma.user.findMany({
       where: {
       // custom begin readManyUserBackstageWhere
         isAgent,
+
       // custom end readManyUserBackstageWhere
       },
       select: {
@@ -443,7 +445,6 @@ export class UserModel {
       },
       skip: param.queryPage * param.queryTake,
       take: param.queryTake,
-
     }).catch((e) => {
       throw e;
     }).finally(() => {

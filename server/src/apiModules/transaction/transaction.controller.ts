@@ -26,6 +26,9 @@ export class TransactionController implements Controller {
 
   @Post('/transaction')
   @Validator(validSchemas.createTransactionValidator)
+  // custom begin createTransactionDecorator
+
+  // custom end createTransactionDecorator
   async createTransaction(
       req: transactionParams.CreateTransactionRequest,
       res: Response,
@@ -54,6 +57,9 @@ export class TransactionController implements Controller {
   }
   @Post('/transaction/calculation')
   @Validator(validSchemas.getTransactionCalculationValidator)
+  // custom begin getTransactionCalculationDecorator
+
+  // custom end getTransactionCalculationDecorator
   async getTransactionCalculation(
       req: transactionParams.GetTransactionCalculationRequest,
       res: Response,
@@ -82,6 +88,9 @@ export class TransactionController implements Controller {
   }
   @Get('/transaction/exchange_rate/buy')
   @Validator(validSchemas.getExchangeRateBuyValidator)
+  // custom begin getExchangeRateBuyDecorator
+
+  // custom end getExchangeRateBuyDecorator
   async getExchangeRateBuy(
       req: transactionParams.GetExchangeRateBuyRequest,
       res: Response,
@@ -110,6 +119,9 @@ export class TransactionController implements Controller {
   }
   @Get('/transaction/exchange_rate/sell')
   @Validator(validSchemas.getExchangeRateSellValidator)
+  // custom begin getExchangeRateSellDecorator
+
+  // custom end getExchangeRateSellDecorator
   async getExchangeRateSell(
       req: transactionParams.GetExchangeRateSellRequest,
       res: Response,
@@ -138,6 +150,9 @@ export class TransactionController implements Controller {
   }
   @Post('/transaction/gs_pay/deposit')
   @Validator(validSchemas.postGSPayDepositValidator)
+  // custom begin postGSPayDepositDecorator
+
+  // custom end postGSPayDepositDecorator
   async postGSPayDeposit(
       req: transactionParams.PostGSPayDepositRequest,
       res: Response,
@@ -166,6 +181,9 @@ export class TransactionController implements Controller {
   }
   @Get('/transaction/my')
   @Validator(validSchemas.readMyTransactionValidator)
+  // custom begin readMyTransactionDecorator
+
+  // custom end readMyTransactionDecorator
   async readMyTransaction(
       req: transactionParams.ReadMyTransactionRequest,
       res: Response,
@@ -194,6 +212,9 @@ export class TransactionController implements Controller {
   }
   @Get('/transaction/pay_photo')
   @Validator(validSchemas.getPayPhotoValidator)
+  // custom begin getPayPhotoDecorator
+
+  // custom end getPayPhotoDecorator
   async getPayPhoto(
       req: transactionParams.GetPayPhotoRequest,
       res: Response,
@@ -222,6 +243,9 @@ export class TransactionController implements Controller {
   }
   @Get('/transaction/:id')
   @Validator(validSchemas.readOneTransactionValidator)
+  // custom begin readOneTransactionDecorator
+
+  // custom end readOneTransactionDecorator
   async readOneTransaction(
       req: transactionParams.ReadOneTransactionRequest,
       res: Response,
@@ -247,6 +271,9 @@ export class TransactionController implements Controller {
   }
   @Put('/transaction/:id')
   @Validator(validSchemas.updateTransactionValidator)
+  // custom begin updateTransactionDecorator
+
+  // custom end updateTransactionDecorator
   async updateTransaction(
       req: transactionParams.UpdateTransactionRequest,
       res: Response,

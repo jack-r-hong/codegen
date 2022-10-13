@@ -26,6 +26,9 @@ export class UserLevelController implements Controller {
 
   @Get('/backstage/user/level')
   @Validator(validSchemas.readManyBackstageUserLevelValidator)
+  // custom begin readManyBackstageUserLevelDecorator
+
+  // custom end readManyBackstageUserLevelDecorator
   async readManyBackstageUserLevel(
       req: userLevelParams.ReadManyBackstageUserLevelRequest,
       res: Response,
@@ -51,6 +54,9 @@ export class UserLevelController implements Controller {
   }
   @Post('/backstage/user/level')
   @Validator(validSchemas.createOneBackstageUserLevelValidator)
+  // custom begin createOneBackstageUserLevelDecorator
+
+  // custom end createOneBackstageUserLevelDecorator
   async createOneBackstageUserLevel(
       req: userLevelParams.CreateOneBackstageUserLevelRequest,
       res: Response,
@@ -76,6 +82,9 @@ export class UserLevelController implements Controller {
   }
   @Delete('/backstage/user/level/:id')
   @Validator(validSchemas.deleteOneBackstageUserLevelValidator)
+  // custom begin deleteOneBackstageUserLevelDecorator
+
+  // custom end deleteOneBackstageUserLevelDecorator
   async deleteOneBackstageUserLevel(
       req: userLevelParams.DeleteOneBackstageUserLevelRequest,
       res: Response,
@@ -101,6 +110,9 @@ export class UserLevelController implements Controller {
   }
   @Put('/backstage/user/level/:id')
   @Validator(validSchemas.updateOneBackstageUserLevelValidator)
+  // custom begin updateOneBackstageUserLevelDecorator
+
+  // custom end updateOneBackstageUserLevelDecorator
   async updateOneBackstageUserLevel(
       req: userLevelParams.UpdateOneBackstageUserLevelRequest,
       res: Response,

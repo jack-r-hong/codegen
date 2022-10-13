@@ -26,6 +26,9 @@ export class ExchangeRateSellController implements Controller {
 
   @Get('/backstage/exchange_rate/sell')
   @Validator(validSchemas.readManyBackstageExchangeRateSellValidator)
+  // custom begin readManyBackstageExchangeRateSellDecorator
+
+  // custom end readManyBackstageExchangeRateSellDecorator
   async readManyBackstageExchangeRateSell(
       req: exchangeRateSellParams.ReadManyBackstageExchangeRateSellRequest,
       res: Response,
@@ -51,6 +54,9 @@ export class ExchangeRateSellController implements Controller {
   }
   @Post('/backstage/exchange_rate/sell')
   @Validator(validSchemas.createOneBackstageExchangeRateSellValidator)
+  // custom begin createOneBackstageExchangeRateSellDecorator
+
+  // custom end createOneBackstageExchangeRateSellDecorator
   async createOneBackstageExchangeRateSell(
       req: exchangeRateSellParams.CreateOneBackstageExchangeRateSellRequest,
       res: Response,
@@ -76,6 +82,9 @@ export class ExchangeRateSellController implements Controller {
   }
   @Delete('/backstage/exchange_rate/sell/:id')
   @Validator(validSchemas.deleteOneBackstageExchangeRateSellValidator)
+  // custom begin deleteOneBackstageExchangeRateSellDecorator
+
+  // custom end deleteOneBackstageExchangeRateSellDecorator
   async deleteOneBackstageExchangeRateSell(
       req: exchangeRateSellParams.DeleteOneBackstageExchangeRateSellRequest,
       res: Response,
@@ -101,6 +110,9 @@ export class ExchangeRateSellController implements Controller {
   }
   @Put('/backstage/exchange_rate/sell/:id')
   @Validator(validSchemas.updateOneBackstageExchangeRateSellValidator)
+  // custom begin updateOneBackstageExchangeRateSellDecorator
+
+  // custom end updateOneBackstageExchangeRateSellDecorator
   async updateOneBackstageExchangeRateSell(
       req: exchangeRateSellParams.UpdateOneBackstageExchangeRateSellRequest,
       res: Response,

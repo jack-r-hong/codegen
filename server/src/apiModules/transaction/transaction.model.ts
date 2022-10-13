@@ -309,6 +309,7 @@ export class TransactionModel {
     const res = await prisma.transaction.findUnique({
       where: {
         id: param.pathId,
+        
       },
       select: {
         account: true,

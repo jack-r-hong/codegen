@@ -26,6 +26,9 @@ export class CashFlowController implements Controller {
 
   @Post('/cashFlow/custom/page')
   @Validator(validSchemas.customPageValidator)
+  // custom begin customPageDecorator
+
+  // custom end customPageDecorator
   async customPage(
       req: cashFlowParams.CustomPageRequest,
       res: Response,
@@ -55,6 +58,9 @@ export class CashFlowController implements Controller {
   }
   @Post('/cashFlow/notify/grant')
   @Validator(validSchemas.notifyGrantValidator)
+  // custom begin notifyGrantDecorator
+
+  // custom end notifyGrantDecorator
   async notifyGrant(
       req: cashFlowParams.NotifyGrantRequest,
       res: Response,
@@ -84,6 +90,9 @@ export class CashFlowController implements Controller {
   }
   @Post('/cashFlow/notify/paid')
   @Validator(validSchemas.notifyPaidValidator)
+  // custom begin notifyPaidDecorator
+
+  // custom end notifyPaidDecorator
   async notifyPaid(
       req: cashFlowParams.NotifyPaidRequest,
       res: Response,
@@ -113,6 +122,9 @@ export class CashFlowController implements Controller {
   }
   @Post('/cashFlow/notify/take_number')
   @Validator(validSchemas.notifyTakeNumberValidator)
+  // custom begin notifyTakeNumberDecorator
+
+  // custom end notifyTakeNumberDecorator
   async notifyTakeNumber(
       req: cashFlowParams.NotifyTakeNumberRequest,
       res: Response,
@@ -142,6 +154,9 @@ export class CashFlowController implements Controller {
   }
   @Get('/cashFlow/take_number_success')
   @Validator(validSchemas.takeNumberSuccessValidator)
+  // custom begin takeNumberSuccessDecorator
+
+  // custom end takeNumberSuccessDecorator
   async takeNumberSuccess(
       req: cashFlowParams.TakeNumberSuccessRequest,
       res: Response,

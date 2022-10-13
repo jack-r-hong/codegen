@@ -26,6 +26,9 @@ export class TransactionSettingController implements Controller {
 
   @Get('/backstage/transaction/setting')
   @Validator(validSchemas.getAllSettingValidator)
+  // custom begin getAllSettingDecorator
+
+  // custom end getAllSettingDecorator
   async getAllSetting(
       req: transactionSettingParams.GetAllSettingRequest,
       res: Response,
@@ -54,6 +57,9 @@ export class TransactionSettingController implements Controller {
   }
   @Put('/backstage/transaction/setting')
   @Validator(validSchemas.updateSettingValidator)
+  // custom begin updateSettingDecorator
+
+  // custom end updateSettingDecorator
   async updateSetting(
       req: transactionSettingParams.UpdateSettingRequest,
       res: Response,
