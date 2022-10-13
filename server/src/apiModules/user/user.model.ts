@@ -385,14 +385,19 @@ export class UserModel {
       where: {
       },
       select: {
+        gameUid: true,
         id: true,
         level: true,
         phone: true,
         phonePrefix: true,
         userStatus: true,
-        userTransaction: true,
         // custom begin readManyUserBackstage
-        gameUid: true,
+        referral: {
+          select: {
+            id: true,
+            rebate: true,
+          },
+        },
 
         // custom end readManyUserBackstage
       },
@@ -453,6 +458,7 @@ export class UserModel {
       prisma.$disconnect();
     });
     return res;
+
     // custom end forgetPasswordReset
   }
   async loginUser(
@@ -810,14 +816,6 @@ export class UserModel {
             address: 1,
           },
         },
-        userTransaction: {
-          create: {
-            atcbw: 0,
-            cta: 0,
-            cnot: 0,
-            limit: 0,
-          },
-        },
         referral: {
           create: {
             rebate: 0,
@@ -943,6 +941,28 @@ export class UserModel {
         city: true,
         area: true,
         address: true,
+      },
+    }).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+    return res;
+  }
+  async readManyUserSumBackstage(
+      userIdList: string[],
+  ) {
+    const res = await prisma.transaction.groupBy({
+      by: ['userId'],
+      _sum: {
+        twd: true,
+      },
+      _count: true,
+      where: {
+        state: 4,
+        userId: {
+          in: userIdList,
+        },
       },
     }).catch((e) => {
       throw e;

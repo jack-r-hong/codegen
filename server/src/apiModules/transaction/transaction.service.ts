@@ -35,22 +35,48 @@ async function calculationTransation(
     buyOptionId: number | undefined,
     sellPoint: number | undefined,
     userId: string,
+    payMethod: number,
 ) {
   const res = {
     twd: 0,
     point: 0,
     bonusPoint: 0,
     firstBonusPoint: 0,
+    accumulatedReward: 0,
     handlingFee: 0,
     serviceFee: 0,
     totalPoints: 0,
     totalDollars: 0,
   };
   const transactionSetting = await transactionModel.readTransactionSetting();
+  let accumulatedRewardLevel = 0;
   if (transactionSetting) {
-    res.firstBonusPoint = transactionSetting.firstBonusPoint;
-    res.handlingFee = transactionSetting.handlingFee;
-    res.serviceFee = transactionSetting.serviceFee;
+    transactionSetting.forEach((e) => {
+      switch (e.key) {
+        case 'FirstReward':
+          res.firstBonusPoint = parseInt(e.val);
+          break;
+        case 'AccumulatedReward':
+          res.accumulatedReward = parseInt(e.val);
+          break;
+        case 'AccumulatedRewardLevel':
+          accumulatedRewardLevel = parseInt(e.val);
+          break;
+        case 'AtmHandlingFee':
+          if (payMethod === 4) {
+            res.handlingFee = parseInt(e.val);
+          }
+          break;
+        case 'BarCodeHandlingFee':
+          if (payMethod === 3) {
+            res.handlingFee = parseInt(e.val);
+          }
+          break;
+        case 'ServiceFee':
+          res.serviceFee = parseInt(e.val);
+          break;
+      }
+    });
   }
   if (bos === 1) {
     if (!buyOptionId) {
@@ -61,13 +87,19 @@ async function calculationTransation(
     if (!setting) {
       throw new Error('bodyBuyOptionId not found');
     }
-    const firstBonus = await transactionModel.readUserFirstBonus(userId);
-    if (!firstBonus || !firstBonus.firstBonus) {
+    const dbData = await transactionModel.
+        readUserFirstBonusAndAccumulatedAmount(userId);
+    if (!dbData || !dbData.firstBonus) {
       res.firstBonusPoint = 0;
+    }
+    if (!dbData ||
+      dbData.accumulateTaken||
+      accumulatedRewardLevel > dbData.accumulatedAmount + setting.dollars) {
+      res.accumulatedReward = 0;
     }
     res.twd = setting.dollars;
     res.point = setting.point;
-    res.bonusPoint = setting.bouns;
+    res.bonusPoint = setting.bouns + res.accumulatedReward;
     res.totalPoints = res.point + res.bonusPoint + res.firstBonusPoint;
     res.totalDollars = res.twd + res.handlingFee + res.serviceFee;
   }
@@ -131,7 +163,7 @@ export class TransactionService {
       account: 0,
       code: 0,
     };
-    if (param.bodyPayMethod !== 1 && param.bodyPayMethod !== 2) {
+    if (param.bodyPayMethod === 4) {
       if (param.bodyBankId) {
         const dbBankData = await bankAccountModel.readOneBankAccount(
             {pathId: param.bodyBankId},
@@ -163,16 +195,19 @@ export class TransactionService {
       serviceFee,
       totalDollars,
       totalPoints,
+      accumulatedReward,
     } = await calculationTransation(
         param.bodyBos,
         param.bodyBuyOptionId,
         param.bodyPoint,
         session.userInfo!.id,
+        param.bodyPayMethod,
     );
-    if (firstBonusPoint !== 0) {
+    if (firstBonusPoint !== 0 || accumulatedReward > 0) {
       await this.transactionModel.updateUserFirstBonus(
         session.userInfo?.id!,
-        false);
+        false,
+        accumulatedReward > 0);
     }
     const res = await this.transactionModel.createTransaction(
         param,
@@ -200,39 +235,6 @@ export class TransactionService {
 
     // custom end createTransaction
   }
-  async updateTransactionState(
-      param :requestTypes.UpdateTransactionStateParams,
-      session: Express.Request['session'],
-  ) {
-    // custom begin updateTransactionState
-    if (!session.transaction) {
-      return;
-    }
-    const res = await this.transactionModel.updateTransactionState(
-        param,
-        {
-          userId: session.userInfo!.id,
-          tId: session.transaction.id,
-        },
-    ).catch((e) =>{
-      throw e;
-    });
-    if (param.bodyState) {
-      await wSCIModel.pub(session.transaction.id,
-          JSON.stringify({
-            state: res.state,
-          }),
-      );
-      session.transaction.process = param.bodyState;
-    }
-    if (param.bodyState === 4) {
-      session.transaction = undefined;
-    }
-    await wSCTModel.pub(JSON.stringify(res));
-    return res;
-
-    // custom end updateTransactionState
-  }
   async getTransactionCalculation(
       param :requestTypes.GetTransactionCalculationParams,
       session: Express.Request['session'],
@@ -247,13 +249,16 @@ export class TransactionService {
       firstBonusPoint,
       handlingFee,
       serviceFee,
+      accumulatedReward,
     } = await calculationTransation(
         param.bodyBos,
         param.bodyBuyOptionId,
         param.bodyPoint,
         session.userInfo!.id,
+        param.bodyPayMethod,
     );
     return {
+      accumulatedReward,
       totalPoints,
       point,
       bonusPoint,
@@ -307,15 +312,27 @@ export class TransactionService {
       return err.response.data.code;
     });
     if (gsPayQuery !== 4021 && gsPayQuery.data) {
-      const res = {
-        'orderNo': gsPayQuery.data.data.OrderNo,
-        'memberOrderNo': gsPayQuery.data.data.MemberOrderNo,
-        'amount': gsPayQuery.data.data.Amount,
-        'status': gsPayQuery.data.data.Status,
-        'bankName': gsPayQuery.data.data.BankName,
-        'paymentInfo': gsPayQuery.data.data.PaymentInfo,
-      };
-      return res;
+      if (param.bodyType === 3) {
+        const res = {
+          'orderNo': gsPayQuery.data.data.OrderNo,
+          'memberOrderNo': gsPayQuery.data.data.MemberOrderNo,
+          'amount': gsPayQuery.data.data.Amount,
+          'status': gsPayQuery.data.data.Status,
+          'bankName': gsPayQuery.data.data.BankName,
+          'paymentInfo': gsPayQuery.data.data.PaymentInfo,
+        };
+        return res;
+      }
+      if (param.bodyType === 4) {
+        const res = {
+          'orderNo': gsPayQuery.data.data.OrderNo,
+          'memberOrderNo': gsPayQuery.data.data.MemberOrderNo,
+          'amount': gsPayQuery.data.data.Amount,
+          'status': gsPayQuery.data.data.Status,
+          'paymentInfo': gsPayQuery.data.data.PaymentInfo,
+        };
+        return res;
+      }
     }
     const db = await this.transactionModel.postGSPayDeposit(param, {});
     if (db) {
@@ -326,6 +343,7 @@ export class TransactionService {
         memberOrderNo: param.bodyTransactionId,
         memo: '我是memo要顯示什麼?',
         productName: `${db.point} 大頭家幣`,
+        gateway: param.bodyType,
       })
           .catch((err) => {
             throw new errors.CodeError(
@@ -371,17 +389,27 @@ export class TransactionService {
             res.bos = 1;
           }
         }
+        let selfGameUid: any = null;
+        let counterpartyGameUid: any = null;
         if (res.transactionRecive) {
-          res.counterpartyGameUid = res.transactionRecive.user.gameUid;
-        } else {
-          res.counterpartyGameUid = null;
+          if (res.transactionRecive.user!.id === session.userInfo!.id ) {
+            selfGameUid = res.transactionRecive.user!.gameUid;
+          } else {
+            counterpartyGameUid = res.transactionRecive.user!.gameUid;
+          }
         }
-        res.selfGameUid = res.user.gameUid;
-        delete res.transactionRecive;
-        delete res.user;
-        delete res.userId;
+        if (session.userInfo!.id === res.user!.id) {
+          selfGameUid = res.user!.gameUid;
+        } else {
+          counterpartyGameUid = res.user!.gameUid;
+        }
+        delete (res as any).transactionRecive;
+        delete (res as any).user;
+        delete (res as any).userId;
         Object.assign(e, {
           payMethod: payMethodMap[e.payMethod as 1|2|3|4],
+          selfGameUid,
+          counterpartyGameUid,
         });
         return res;
       }),
@@ -578,6 +606,9 @@ export class TransactionService {
       }
       if (res.state === 3 || res.state === 99) {
         await subscribeExpiredeModel.del(res.id);
+      }
+      if (res.state === 4) {
+        await this.transactionModel.updateUserAccumulation(res.userId, res.twd);
       }
     }
     return res;

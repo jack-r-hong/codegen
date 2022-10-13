@@ -342,6 +342,9 @@ const userVerifyResponeFormat2 = async (data: any) => {
     bankAccounts,
   };
 };
+const getReferralCodde = (code: number) => {
+  return code.toString().padStart(10, '0');
+};
 
 // custom end import
 
@@ -513,6 +516,27 @@ export class UserService {
     });
 
     // custom begin readManyUserBackstage2
+    const dbData = await this.userModel.readManyUserSumBackstage(
+        res.map((e) => e.id),
+    );
+    return res.map((e) => {
+      const user = e;
+      const transactionData = {
+        accumulatioin: 0,
+        orderCount: 0,
+      };
+      const referral = {
+        referralCode: getReferralCodde(e.referral!.id),
+        rebate: e.referral?.rebate,
+      };
+      const t = dbData.find((item) => item.userId === e.id);
+      if (t) {
+        transactionData.accumulatioin = t._sum.twd??0;
+        transactionData.orderCount = t._count;
+      }
+      delete (user as any).referral;
+      return Object.assign(user, transactionData, referral);
+    });
 
     // custom end readManyUserBackstage2
     return res;
@@ -538,19 +562,22 @@ export class UserService {
       session: Express.Request['session'],
   ) {
     // custom begin forgetPasswordPhoneCheck
-    const res = await this.userModel.phoneCheck(param, {});
-    if (!res) {
-      throw new errors.CodeError('Phone not fount', 404, -1002);
-    }
     const code = Math.random().toFixed(6).substring(2);
     const phonePrefix = '886';
     const phone = param.bodyPhone.replace(/^0/, '');
+    const res = await this.userModel.phoneCheck({
+      bodyPhone: phone,
+    }, {});
+    if (!res) {
+      throw new errors.CodeError('Phone not fount', 404, -1002);
+    }
     session.userPasswordReset = {
       verify: code,
       phonePrefix,
       phone,
     };
     await getPhoneCheck(phonePrefix, phone, code);
+    return {success: true};
 
     // custom end forgetPasswordPhoneCheck
   }
@@ -564,6 +591,7 @@ export class UserService {
       return {success: true};
     }
     throw new errors.CodeError('Verify code error', 403, -1005);
+
     // custom end forgetPasswordPhoneCheckVerify
   }
   async forgetPasswordReset(
@@ -571,8 +599,7 @@ export class UserService {
       session: Express.Request['session'],
   ) {
     // custom begin forgetPasswordReset
-    if (session.userPasswordReset &&
-      session.userPasswordReset.verify === param.bodyVerify
+    if (session.userPasswordReset
     ) {
       if (param.bodyPassword !== param.bodyPasswordCheck) {
         throw new errors.CodeError('check password error', 403, -1006);
@@ -597,7 +624,6 @@ export class UserService {
       });
       return {success: true};
     }
-
     throw new errors.CodeError('Verify code error', 403, -1005);
 
     // custom end forgetPasswordReset

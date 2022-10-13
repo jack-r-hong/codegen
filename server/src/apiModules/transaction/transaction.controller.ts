@@ -52,34 +52,6 @@ export class TransactionController implements Controller {
           next(e);
         });
   }
-  @Put('/transaction')
-  @Validator(validSchemas.updateTransactionStateValidator)
-  async updateTransactionState(
-      req: transactionParams.UpdateTransactionStateRequest,
-      res: Response,
-      next: NextFunction,
-  ) {
-    // custom begin updateTransactionStateCheck
-
-    // custom end updateTransactionStateCheck
-    TransactionController.service.updateTransactionState(
-        transactionParams.UpdateTransactionStateRequestConvert(
-            req.body,
-            req.query,
-            req.params,
-            req.cookies,
-        ),
-        req.session,
-    )
-        .then((result) =>{
-          // custom begin updateTransactionState
-          res.json({result});
-
-          // custom end updateTransactionState
-        }).catch((e) => {
-          next(e);
-        });
-  }
   @Post('/transaction/calculation')
   @Validator(validSchemas.getTransactionCalculationValidator)
   async getTransactionCalculation(

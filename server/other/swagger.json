@@ -36,6 +36,10 @@
       "description" : "Operations about transaction"
     },
     {
+      "name" : "transactionSetting",
+      "description" : "Operations about transaction setting"
+    },    
+    {
       "name" : "bankAccount",
       "description" : "Operations about user"
     },
@@ -379,10 +383,7 @@
             "application/json" : {
               "schema" : {
                 "type" : "object",
-                "properties" : {
-                  "verify" : {
-                    "type": "string"
-                  },                  
+                "properties" : {            
                   "password" : {
                     "$ref" : "#/components/schemas/User/properties/password"
                   },
@@ -1479,38 +1480,6 @@
         "security" : [ {
           "cookieAuth" : [ ]
         } ]
-      },
-      "put" : {
-        "tags" : [ "transaction" ],
-        "summary" : "Updated transaction",
-        "description" : "This can only be done by the logged in user.",
-        "operationId" : "updateTransactionState",
-        "responses" : {
-          "200" : {
-            "$ref" : "#/components/responses/Transaction"
-          },
-          "400" : {
-            "$ref" : "#/components/responses/BadRequest"
-          },
-          "401" : {
-            "$ref" : "#/components/responses/Unauthorized"
-          },
-          "403" : {
-            "$ref" : "#/components/responses/Forbidden"
-          },
-          "404" : {
-            "$ref" : "#/components/responses/NotFound"
-          },
-          "409" : {
-            "$ref" : "#/components/responses/Conflict"
-          }
-        },
-        "requestBody" : {
-          "$ref" : "#/components/requestBodies/UpdateTransaction"
-        },
-        "security" : [ {
-          "cookieAuth" : [ ]
-        } ]
       }
     },
     "/transaction/calculation" : {     
@@ -2072,7 +2041,38 @@
           }
         }
       }      
-    },        
+    },  
+    "/backstage/transaction/setting" : {     
+      "get" : {
+        "tags" : [ "transactionSetting" ],
+        "summary" : "get exchang rate",
+        "operationId" : "getAllSetting",            
+        "responses" : {
+          "200" : {
+            "$ref":  "#/components/responses/TransactionSetting"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "transactionSetting" ],
+        "summary" : "get exchang rate",
+        "operationId" : "updateSetting",    
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/UpdateOneSetting"
+        },                     
+        "responses" : {
+          "200" : {
+            "$ref":  "#/components/responses/TransactionSetting"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          }
+        }
+      }      
+    },           
     "/bank" : {     
       "post" : {
         "tags" : [ "bankAccount" ],
@@ -2810,6 +2810,14 @@
             "type": "boolean",
             "default": true
           },
+          "accumulatedAmount": {
+            "type": "integer",
+            "default": "0"
+          },
+          "accumulateTaken": {
+            "type": "boolean",
+            "default": "false"
+          },          
           "remark": {
             "type" : "string",
             "nullable": true
@@ -2833,7 +2841,7 @@
             "pattern": "^\\d{2}.\\d{2}$",
             "precision": 4,
             "scale": 2
-          }
+          }        
         }
       },   
       "ReferralMap" : {
@@ -2868,45 +2876,7 @@
             "nullable": true
           }          
         }
-      },
-      "UserTransaction" : {
-        "type" : "object",
-        "description" : "database",
-        "properties" : {
-          "id" : {
-            "type" : "integer"
-          },
-          "atcbw" : {
-            "type" : "integer",
-            "description": "可提領金額"
-          },          
-          "cta" : {
-            "type" : "integer",
-            "description": "累計交易金額"
-          },
-          "cnot" : {
-            "type" : "integer",
-            "description": "累積交易筆數"
-          },          
-          "rebate" : {
-            "type" : "integer",
-            "description": "回扣",
-            "nullable": true
-          },             
-          "limit" : {
-            "type" : "integer",
-            "description": "交易額度"
-          },          
-          "updatedAt" : {
-            "type" : "string",
-            "format" : "date-time"
-          },           
-          "userId" : {
-            "$ref" : "#/components/schemas/User/properties/id",
-            "unique": true
-          }
-        }
-      },              
+      },            
       "UserVerifyPhoto" : {
         "type" : "object",
         "description" : "database",
@@ -3873,6 +3843,33 @@
         },
         "required" : true
       },    
+      "UpdateOneSetting" : {
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "firstReward" : {
+                  "type": "integer"
+                },  
+                "accumulatedReward" : {
+                  "type": "integer"
+                },  
+                "atmHandlingFee" : {
+                  "type": "integer"
+                }, 
+                "barCodeHandlingFee" : {
+                  "type": "integer"
+                },                 
+                "serviceFee" : {
+                  "type": "integer"
+                }                                                                                                                
+              }
+            }
+          }
+        },
+        "required" : true
+      },          
       "User" : {
         "content" : {
           "application/json" : {
@@ -4304,7 +4301,8 @@
                     "type": "string"
                   },
                   "BankName": {
-                    "type": "string"
+                    "type": "string",
+                    "nullable": true
                   },
                   "PaymentInfo": {
                     "type": "string"
@@ -4338,10 +4336,12 @@
                     "type": "string"
                   },
                   "Bank": {
-                    "type": "string"
+                    "type": "string",
+                    "nullable": true
                   },
                   "Account": {
-                    "type": "string"
+                    "type": "string",
+                    "nullable": true
                   },
                   "Sign": {
                     "type": "string"
@@ -4582,12 +4582,12 @@
                   "userStatus" : {
                     "$ref" : "#/components/schemas/User/properties/userStatus"
                   },
-                  "userTransaction" : {
-                    "$ref" : "#/components/schemas/UserTransaction"
-                  },
                   "level" : {
                     "$ref" : "#/components/schemas/User/properties/level"
-                  }                                                  
+                  },
+                  "gameUid" : {
+                    "$ref" : "#/components/schemas/User/properties/gameUid"
+                  }                                            
                 }
               }          
             }
@@ -5041,6 +5041,33 @@
           }
         }
       },      
+      "TransactionSetting" : {
+        "description" : "Ok",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "firstReward" : {
+                  "type": "integer"
+                },  
+                "accumulatedReward" : {
+                  "type": "integer"
+                },  
+                "atmHandlingFee" : {
+                  "type": "integer"
+                }, 
+                "handlingFee" : {
+                  "type": "integer"
+                },                 
+                "serviceFee" : {
+                  "type": "integer"
+                }                                              
+              }                
+            }
+          }
+        }
+      },         
       "ReadManyPayManage" : {
         "description" : "Ok",
         "content" : {

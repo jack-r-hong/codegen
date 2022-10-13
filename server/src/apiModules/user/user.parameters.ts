@@ -617,7 +617,6 @@ export const ForgetPasswordPhoneCheckVerifyRequestConvert = (
 type ForgetPasswordResetReqBody = {
   password: string,
 passwordCheck: string,
-verify: string,
 }
 
 type ForgetPasswordResetReqQuery = {
@@ -640,7 +639,6 @@ export interface ForgetPasswordResetRequest extends TypedRequest<
 export type ForgetPasswordResetParams = {
 bodyPassword: string,
 bodyPasswordCheck: string,
-bodyVerify: string,
 }
 
 
@@ -653,7 +651,6 @@ export const ForgetPasswordResetRequestConvert = (
   return {
     bodyPassword: body.password,
     bodyPasswordCheck: body.passwordCheck,
-    bodyVerify: body.verify,
   };
 };
 type LoginUserReqBody = {

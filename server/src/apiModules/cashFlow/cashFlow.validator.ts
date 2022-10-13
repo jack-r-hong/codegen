@@ -39,6 +39,11 @@ export const notifyPaidValidator: Schema = {
   'Account': {
     in: 'body',
     isString: true,
+optional: {
+  options: {
+    nullable: true,
+  },
+},
   },
   'Amount': {
     in: 'body',
@@ -47,6 +52,11 @@ export const notifyPaidValidator: Schema = {
   'Bank': {
     in: 'body',
     isString: true,
+optional: {
+  options: {
+    nullable: true,
+  },
+},
   },
   'MemberOrderNo': {
     in: 'body',
@@ -73,6 +83,11 @@ export const notifyTakeNumberValidator: Schema = {
   'BankName': {
     in: 'body',
     isString: true,
+optional: {
+  options: {
+    nullable: true,
+  },
+},
   },
   'DueTime': {
     in: 'body',

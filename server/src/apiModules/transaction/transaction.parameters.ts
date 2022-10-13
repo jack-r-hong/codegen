@@ -68,42 +68,6 @@ export const CreateTransactionRequestConvert = (
     bodyPoint: typeof body.point === 'number' ? body.point : undefined,
   };
 };
-type UpdateTransactionStateReqBody = {
-  state: string|undefined,
-}
-
-type UpdateTransactionStateReqQuery = {
-}
-
-type UpdateTransactionStateReqParams = {
-}
-
-type UpdateTransactionStateReqCookie = {
-}
-
-export interface UpdateTransactionStateRequest extends TypedRequest<
-  UpdateTransactionStateReqBody,
-  UpdateTransactionStateReqQuery,
-  UpdateTransactionStateReqParams,
-  UpdateTransactionStateReqCookie
->{
-}
-
-export type UpdateTransactionStateParams = {
-bodyState: number|undefined,
-}
-
-
-export const UpdateTransactionStateRequestConvert = (
-    body: UpdateTransactionStateReqBody,
-    query: UpdateTransactionStateReqQuery,
-    path: UpdateTransactionStateReqParams,
-    cookie: UpdateTransactionStateReqCookie,
-): UpdateTransactionStateParams => {
-  return {
-    bodyState: typeof body.state === 'number' ? body.state : undefined,
-  };
-};
 type GetTransactionCalculationReqBody = {
   bos: string,
 buyOptionId: string|undefined,

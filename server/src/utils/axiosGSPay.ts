@@ -11,13 +11,16 @@ export async function getGSPayDeposit(param : {
   memberOrderNo : string,
   memo : string,
   productName : string,
+  gateway: number
+
 }) {
+  const gsGateway = param.gateway === 3? 'cvs_barcode' : 'bank_virtual';
   const data = {
     Account: gsPayAccount,
     Amount: param.amount,
     ClinetAccount: param.clinetAccount,
     DueTime: param.dueTime,
-    Gateway: 'bank_virtual',
+    Gateway: gsGateway,
     MemberOrderNo: param.memberOrderNo,
     Memo: param.memo,
     ProductName: param.productName,

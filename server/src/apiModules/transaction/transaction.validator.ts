@@ -77,29 +77,6 @@ optional: {
     },
   },
 };
-export const updateTransactionStateValidator: Schema = {
-  'state': {
-    in: 'body',
-    isInt: true,
-optional: {
-  options: {
-    nullable: true,
-  },
-},
-    matches: {
-      options: /^(1|2|3|4|99)/,
-    },
-  },
-  'JSESSIONID': {
-    in: 'cookies',
-    custom: {
-      options: (value, {req, location, path}) => {
-        sessions.cookieAuthSessionVerify(req['session']);
-        return true;
-      },
-    },
-  },
-};
 export const getTransactionCalculationValidator: Schema = {
   'bos': {
     in: 'body',

@@ -99,9 +99,9 @@ export const NotifyGrantRequestConvert = (
   };
 };
 type NotifyPaidReqBody = {
-  Account: string,
+  Account: string|undefined,
 Amount: string,
-Bank: string,
+Bank: string|undefined,
 MemberOrderNo: string,
 OrderNo: string,
 Sign: string,
@@ -126,9 +126,9 @@ export interface NotifyPaidRequest extends TypedRequest<
 }
 
 export type NotifyPaidParams = {
-bodyAccount: string,
+bodyAccount: string|undefined,
 bodyAmount: string,
-bodyBank: string,
+bodyBank: string|undefined,
 bodyMemberOrderNo: string,
 bodyOrderNo: string,
 bodySign: string,
@@ -154,7 +154,7 @@ export const NotifyPaidRequestConvert = (
 };
 type NotifyTakeNumberReqBody = {
   Amount: string,
-BankName: string,
+BankName: string|undefined,
 DueTime: string,
 MemberOrderNo: string,
 OrderNo: string,
@@ -182,7 +182,7 @@ export interface NotifyTakeNumberRequest extends TypedRequest<
 
 export type NotifyTakeNumberParams = {
 bodyAmount: string,
-bodyBankName: string,
+bodyBankName: string|undefined,
 bodyDueTime: string,
 bodyMemberOrderNo: string,
 bodyOrderNo: string,

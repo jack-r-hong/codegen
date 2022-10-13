@@ -10,6 +10,7 @@ import './backstageAdmin/backstageAdmin.controller';
 import './chatroom/chatroom.controller';
 import './cashFlow/cashFlow.controller';
 import './userLevel/userLevel.controller';
+import './transactionSetting/transactionSetting.controller';
 import path from 'path';
 import fs from 'fs';
 
@@ -49,7 +50,7 @@ const requireController = () => {
 export const registerController = (app : Application) => {
   const controllers = Container.getMany(ControllerToken);
 
-  controllers.map((e: Controller) => {
+  controllers.forEach((e: Controller) => {
     e.appUse.use(app);
   });
 };

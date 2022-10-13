@@ -410,10 +410,6 @@ export const forgetPasswordResetValidator: Schema = {
 
     },
   },
-  'verify': {
-    in: 'body',
-    isString: true,
-  },
 };
 export const loginUserValidator: Schema = {
   'password': {

@@ -71,7 +71,7 @@ export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
           d.isAgent = isAgent;
           d.image = await getQrcode(userId as string),
           ws.send(event.msg(d));
-          if (d.state === 4 || d.state === 0) {
+          if (d.state === 4 || d.state === 99) {
             wSCIModel.subscriberQuit(subscriber).then(()=> {});
             setTimeout(() => {
               ws.close();

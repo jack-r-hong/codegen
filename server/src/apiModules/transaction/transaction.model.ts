@@ -74,39 +74,6 @@ export class TransactionModel {
 
     // custom end createTransaction
   }
-  async updateTransactionState(
-      param: requestTypes.UpdateTransactionStateParams,
-      customParam: any,
-  ) {
-    // custom begin updateTransactionState
-    const res: Prisma.Transaction | null = await prisma.transaction.update({
-      where: {
-        id: customParam.tId,
-      },
-      data: {
-        state: param.bodyState,
-      },
-    }).catch((e) => {
-      throw e;
-    }).finally(() => {
-      prisma.$disconnect();
-    });
-    if (param.bodyState === 2) {
-      await prisma.transactionRecive.create({
-        data: {
-          userId: customParam.userId,
-          transactionId: res.id,
-        },
-      }).catch((e) => {
-        throw e;
-      }).finally(() => {
-        prisma.$disconnect();
-      });
-    }
-    return res;
-
-    // custom end updateTransactionState
-  }
   async getTransactionCalculation(
       param: requestTypes.GetTransactionCalculationParams,
       customParam: any,
@@ -204,7 +171,7 @@ export class TransactionModel {
     } else if (param.queryState === 'completed') {
       state = 4;
     };
-    const res: any[] | null = await prisma.transaction.findMany({
+    const res = await prisma.transaction.findMany({
       where: {
         OR: [
           {
@@ -245,6 +212,7 @@ export class TransactionModel {
         timeout: true,
         user: {
           select: {
+            id: true,
             gameUid: true,
           },
         },
@@ -252,6 +220,7 @@ export class TransactionModel {
           select: {
             user: {
               select: {
+                id: true,
                 gameUid: true,
               },
             },
@@ -638,7 +607,7 @@ export class TransactionModel {
     return res;
   }
   async readTransactionSetting() {
-    const res = await prisma.transactionSetting.findFirst({
+    const res = await prisma.transactionSetting.findMany({
     }).catch((e) => {
       throw e;
     }).finally(() => {
@@ -646,13 +615,15 @@ export class TransactionModel {
     });
     return res;
   }
-  async readUserFirstBonus(id: string) {
+  async readUserFirstBonusAndAccumulatedAmount(id: string) {
     const res = await prisma.user.findUnique({
       where: {
         id,
       },
       select: {
         firstBonus: true,
+        accumulatedAmount: true,
+        accumulateTaken: true,
       },
     }).catch((e) => {
       throw e;
@@ -661,16 +632,35 @@ export class TransactionModel {
     });
     return res;
   }
-  async updateUserFirstBonus(id: string, firstBonus: boolean) {
+  async updateUserFirstBonus(
+      id: string,
+      firstBonus: boolean,
+      accumulateTaken: boolean,
+  ) {
     const res = await prisma.user.update({
       where: {
         id,
       },
       data: {
         firstBonus,
+        accumulateTaken,
       },
-      select: {
-        firstBonus: true,
+    }).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+    return res;
+  }
+  async updateUserAccumulation(id: string, amount: number) {
+    const res = await prisma.user.update({
+      where: {
+        id,
+      },
+      data: {
+        accumulatedAmount: {
+          increment: amount,
+        },
       },
     }).catch((e) => {
       throw e;

@@ -345,6 +345,7 @@ export class UserController implements Controller {
     )
         .then((result) =>{
           // custom begin forgetPasswordPhoneCheck
+          res.json(result);
 
           // custom end forgetPasswordPhoneCheck
         }).catch((e) => {
@@ -372,6 +373,7 @@ export class UserController implements Controller {
     )
         .then((result) =>{
           // custom begin forgetPasswordPhoneCheckVerify
+          res.json(result);
 
           // custom end forgetPasswordPhoneCheckVerify
         }).catch((e) => {
@@ -399,6 +401,7 @@ export class UserController implements Controller {
     )
         .then((result) =>{
           // custom begin forgetPasswordReset
+          res.json(result);
 
           // custom end forgetPasswordReset
         }).catch((e) => {

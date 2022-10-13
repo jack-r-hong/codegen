@@ -12,6 +12,7 @@
     "mig-dev-c": "prisma migrate dev --create-only --name ",
     "mig-dev": "prisma migrate dev --name ",
     "mig-dep": "prisma migrate deploy",
+    "mig-rolled-back": "prisma migrate resolve --rolled-back",
     "gen": "prisma generate ",
     "lint": "eslint src/*.ts"
   },
