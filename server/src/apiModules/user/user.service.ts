@@ -7,7 +7,6 @@ import bcrypt from 'bcrypt';
 import svgCaptcha from 'svg-captcha';
 import {promises as fs} from 'fs';
 import {getPhoneCheck} from '../../utils/axios';
-import {query} from 'express-validator';
 type LoginStatus = {
   id: string;
   gameUid: string | null;
@@ -362,13 +361,33 @@ export class UserService {
       session: Express.Request['session'],
   ) {
     // custom begin getUserBackstageAgents
-    const res = await this.userModel.getUserBackstageAgents(
+    const res = await this.userModel.readManyUserBackstage(
         param,
-        {},
+        true,
     ).catch((e) =>{
       throw e;
     });
-    return res;
+    const dbData = await this.userModel.readManyUserSumBackstage(
+        res.map((e) => e.id),
+    );
+    return res.map((e) => {
+      const user = e;
+      const transactionData = {
+        accumulatioin: 0,
+        orderCount: 0,
+      };
+      const referral = {
+        referralCode: getReferralCodde(e.referral!.id),
+        rebate: e.referral?.rebate,
+      };
+      const t = dbData.find((item) => item.userId === e.id);
+      if (t) {
+        transactionData.accumulatioin = t._sum.twd??0;
+        transactionData.orderCount = t._count;
+      }
+      delete (user as any).referral;
+      return Object.assign(user, transactionData, referral);
+    });
 
     // custom end getUserBackstageAgents
   }

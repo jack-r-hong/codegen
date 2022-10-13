@@ -9,9 +9,15 @@ const prisma = new Prisma.PrismaClient();
 export class UserLevelModel {
   async readManyBackstageUserLevel(
       param: requestTypes.ReadManyBackstageUserLevelParams,
+      // custom begin readManyBackstageUserLevelParam
+
+      // custom end readManyBackstageUserLevelParam
   ) {
     const res = await prisma.userLevel.findMany({
       where: {
+      // custom begin readManyBackstageUserLevelWhere
+
+      // custom end readManyBackstageUserLevelWhere
       },
       select: {
         des: true,
@@ -30,6 +36,9 @@ export class UserLevelModel {
   }
   async createOneBackstageUserLevel(
       param: requestTypes.CreateOneBackstageUserLevelParams,
+      // custom begin createOneBackstageUserLevelParam
+
+      // custom end createOneBackstageUserLevelParam
   ) {
     const res = await prisma.userLevel.create({
       data: {
@@ -45,6 +54,9 @@ export class UserLevelModel {
   }
   async deleteOneBackstageUserLevel(
       param: requestTypes.DeleteOneBackstageUserLevelParams,
+      // custom begin deleteOneBackstageUserLevelParam
+
+      // custom end deleteOneBackstageUserLevelParam
   ) {
     const res = await prisma.userLevel.delete({
       where: {
@@ -59,6 +71,9 @@ export class UserLevelModel {
   }
   async updateOneBackstageUserLevel(
       param: requestTypes.UpdateOneBackstageUserLevelParams,
+      // custom begin updateOneBackstageUserLevelParam
+
+      // custom end updateOneBackstageUserLevelParam
   ) {
     const res = await prisma.userLevel.update({
       where: {

@@ -10,6 +10,9 @@ export class TransactionModel {
   async createTransaction(
       param: requestTypes.CreateTransactionParams,
       customParam: any,
+      // custom begin createTransactionParam
+
+      // custom end createTransactionParam
   ) {
     // custom begin createTransaction
     const res: any = await prisma.$transaction([
@@ -77,6 +80,9 @@ export class TransactionModel {
   async getTransactionCalculation(
       param: requestTypes.GetTransactionCalculationParams,
       customParam: any,
+      // custom begin getTransactionCalculationParam
+
+      // custom end getTransactionCalculationParam
   ) {
     // custom begin getTransactionCalculation
 
@@ -85,6 +91,9 @@ export class TransactionModel {
   async getExchangeRateBuy(
       param: requestTypes.GetExchangeRateBuyParams,
       customParam: any,
+      // custom begin getExchangeRateBuyParam
+
+      // custom end getExchangeRateBuyParam
   ) {
     // custom begin getExchangeRateBuy
     const res = await prisma.exchangeRateBuy.findMany(
@@ -100,6 +109,9 @@ export class TransactionModel {
   async getExchangeRateSell(
       param: requestTypes.GetExchangeRateSellParams,
       customParam: any,
+      // custom begin getExchangeRateSellParam
+
+      // custom end getExchangeRateSellParam
   ) {
     // custom begin getExchangeRateSell
     const res = await prisma.exchangeRateSell.findMany(
@@ -115,6 +127,9 @@ export class TransactionModel {
   async postGSPayDeposit(
       param: requestTypes.PostGSPayDepositParams,
       customParam: any,
+      // custom begin postGSPayDepositParam
+
+      // custom end postGSPayDepositParam
   ) {
     // custom begin postGSPayDeposit
     const res = await prisma.transaction.findUnique({
@@ -142,6 +157,9 @@ export class TransactionModel {
   async readMyTransaction(
       param: requestTypes.ReadMyTransactionParams,
       customParam: any,
+      // custom begin readMyTransactionParam
+
+      // custom end readMyTransactionParam
   ) {
     // custom begin readMyTransaction
     let state :undefined | any = undefined;
@@ -237,13 +255,28 @@ export class TransactionModel {
     }).finally(() => {
       prisma.$disconnect();
     });
-    return res;
+    return res.map((e) => {
+      const result = e;
+      let state = e.state;
+      if (e.timeout) {
+        state = 98;
+      }
+      if (e.appeal) {
+        state = 97;
+      }
+      return Object.assign(result, {
+        state,
+      });
+    });
 
     // custom end readMyTransaction
   }
   async getPayPhoto(
       param: requestTypes.GetPayPhotoParams,
       customParam: any,
+      // custom begin getPayPhotoParam
+
+      // custom end getPayPhotoParam
   ) {
     // custom begin getPayPhoto
     const res = await prisma.payManage.findFirst({
@@ -269,6 +302,9 @@ export class TransactionModel {
   }
   async readOneTransaction(
       param: requestTypes.ReadOneTransactionParams,
+      // custom begin readOneTransactionParam
+
+      // custom end readOneTransactionParam
   ) {
     const res = await prisma.transaction.findUnique({
       where: {
@@ -325,6 +361,9 @@ export class TransactionModel {
   async updateTransaction(
       param: requestTypes.UpdateTransactionParams,
       customParam: any,
+      // custom begin updateTransactionParam
+
+      // custom end updateTransactionParam
   ) {
     // custom begin updateTransaction
     let data : { pairedAt: Date;} |
@@ -456,12 +495,19 @@ export class TransactionModel {
       prisma.$disconnect();
     });
     return res.map((e) => {
-      let t = e;
-      t = Object.assign(t, {
-        name: t.user?.name,
-        gameUid: t.user?.gameUid,
+      const result = e;
+      let state = e.state;
+      if (e.timeout) {
+        state = 98;
+      }
+      if (e.appeal) {
+        state = 97;
+      }
+      return Object.assign(result, {
+        state,
+        name: result.user?.name,
+        gameUid: result.user?.gameUid,
       });
-      return t;
     });
   }
   async readRealtimeCountTransaction(
@@ -625,7 +671,6 @@ export class TransactionModel {
         firstBonusTemp: true,
         userAccumulatedReward: {
           where: {
-
           },
         },
       },

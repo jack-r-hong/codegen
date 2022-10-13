@@ -10,6 +10,9 @@ export class CashFlowModel {
   async customPage(
       param: requestTypes.CustomPageParams,
       customParam: any,
+      // custom begin customPageParam
+
+      // custom end customPageParam
   ) {
     // custom begin customPage
 
@@ -18,6 +21,9 @@ export class CashFlowModel {
   async notifyGrant(
       param: requestTypes.NotifyGrantParams,
       customParam: any,
+      // custom begin notifyGrantParam
+
+      // custom end notifyGrantParam
   ) {
     // custom begin notifyGrant
 
@@ -26,6 +32,9 @@ export class CashFlowModel {
   async notifyPaid(
       param: requestTypes.NotifyPaidParams,
       customParam: any,
+      // custom begin notifyPaidParam
+
+      // custom end notifyPaidParam
   ) {
     // custom begin notifyPaid
 
@@ -34,6 +43,9 @@ export class CashFlowModel {
   async notifyTakeNumber(
       param: requestTypes.NotifyTakeNumberParams,
       customParam: any,
+      // custom begin notifyTakeNumberParam
+
+      // custom end notifyTakeNumberParam
   ) {
     // custom begin notifyTakeNumber
 
@@ -42,6 +54,9 @@ export class CashFlowModel {
   async takeNumberSuccess(
       param: requestTypes.TakeNumberSuccessParams,
       customParam: any,
+      // custom begin takeNumberSuccessParam
+
+      // custom end takeNumberSuccessParam
   ) {
     // custom begin takeNumberSuccess
 

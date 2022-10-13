@@ -10,6 +10,9 @@ export class BackstageAdminModel {
   async getAdminFromId(
       param: requestTypes.GetAdminFromIdParams,
       customParam: any,
+      // custom begin getAdminFromIdParam
+
+      // custom end getAdminFromIdParam
   ) {
     // custom begin getAdminFromId
     const res: any | null = await prisma.backstageAdmin.findUnique({
@@ -32,6 +35,9 @@ export class BackstageAdminModel {
   async adminLogin(
       param: requestTypes.AdminLoginParams,
       customParam: any,
+      // custom begin adminLoginParam
+
+      // custom end adminLoginParam
   ) {
     // custom begin adminLogin
     const res: any | null = await prisma.backstageAdmin.findUnique({
@@ -58,6 +64,9 @@ export class BackstageAdminModel {
   async adminRegister(
       param: requestTypes.AdminRegisterParams,
       customParam: any,
+      // custom begin adminRegisterParam
+
+      // custom end adminRegisterParam
   ) {
     // custom begin adminRegister
     const res: any | null = await prisma.backstageAdmin.create({

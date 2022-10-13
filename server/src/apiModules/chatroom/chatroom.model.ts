@@ -10,6 +10,9 @@ export class ChatroomModel {
   async serviceToken(
       param: requestTypes.ServiceTokenParams,
       customParam: any,
+      // custom begin serviceTokenParam
+
+      // custom end serviceTokenParam
   ) {
     // custom begin serviceToken
     const res = await prisma.user.findUnique({
@@ -32,6 +35,9 @@ export class ChatroomModel {
   async transactionServiceToken(
       param: requestTypes.TransactionServiceTokenParams,
       customParam: any,
+      // custom begin transactionServiceTokenParam
+
+      // custom end transactionServiceTokenParam
   ) {
     // custom begin transactionServiceToken
 
@@ -40,6 +46,9 @@ export class ChatroomModel {
   async transactionToken(
       param: requestTypes.TransactionTokenParams,
       customParam: any,
+      // custom begin transactionTokenParam
+
+      // custom end transactionTokenParam
   ) {
     // custom begin transactionToken
     const res = await prisma.transaction.findUnique({

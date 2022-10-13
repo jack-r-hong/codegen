@@ -10,6 +10,9 @@ export class BankAccountModel {
   async getBackstageBankAccountReson(
       param: requestTypes.GetBackstageBankAccountResonParams,
       customParam: any,
+      // custom begin getBackstageBankAccountResonParam
+
+      // custom end getBackstageBankAccountResonParam
   ) {
     // custom begin getBackstageBankAccountReson
     const res: any | null = await prisma.bankAccountVerifyReson.findMany()
@@ -25,6 +28,9 @@ export class BankAccountModel {
   async createBackstageBankAccountsReson(
       param: requestTypes.CreateBackstageBankAccountsResonParams,
       customParam: any,
+      // custom begin createBackstageBankAccountsResonParam
+
+      // custom end createBackstageBankAccountsResonParam
   ) {
     // custom begin createBackstageBankAccountsReson
     const res: any | null = await prisma.bankAccountVerifyReson.create({
@@ -44,6 +50,9 @@ export class BankAccountModel {
   async deleteBackstageBankAccountReson(
       param: requestTypes.DeleteBackstageBankAccountResonParams,
       customParam: any,
+      // custom begin deleteBackstageBankAccountResonParam
+
+      // custom end deleteBackstageBankAccountResonParam
   ) {
     // custom begin deleteBackstageBankAccountReson
     const res: any | null = await prisma.bankAccountVerifyReson.delete({
@@ -63,6 +72,9 @@ export class BankAccountModel {
   async updateBackstageBankAccountReson(
       param: requestTypes.UpdateBackstageBankAccountResonParams,
       customParam: any,
+      // custom begin updateBackstageBankAccountResonParam
+
+      // custom end updateBackstageBankAccountResonParam
   ) {
     // custom begin updateBackstageBankAccountReson
     const res: any | null = await prisma.bankAccountVerifyReson.update({
@@ -85,6 +97,9 @@ export class BankAccountModel {
   async getBackstageBankAccounts(
       param: requestTypes.GetBackstageBankAccountsParams,
       customParam: any,
+      // custom begin getBackstageBankAccountsParam
+
+      // custom end getBackstageBankAccountsParam
   ) {
     // custom begin getBackstageBankAccounts
     const res = await prisma.bankAccount.findMany({
@@ -143,6 +158,9 @@ export class BankAccountModel {
   async putBackstageBankAccounts(
       param: requestTypes.PutBackstageBankAccountsParams,
       customParam: any,
+      // custom begin putBackstageBankAccountsParam
+
+      // custom end putBackstageBankAccountsParam
   ) {
     // custom begin putBackstageBankAccounts
     const transactionArray :any[] = [];
@@ -292,6 +310,9 @@ export class BankAccountModel {
   async createBankAccounts(
       param: requestTypes.CreateBankAccountsParams,
       customParam: any,
+      // custom begin createBankAccountsParam
+
+      // custom end createBankAccountsParam
   ) {
     // custom begin createBankAccounts
     const res = await prisma.$transaction(
@@ -326,6 +347,9 @@ export class BankAccountModel {
   async getMyBankAccounts(
       param: requestTypes.GetMyBankAccountsParams,
       customParam: any,
+      // custom begin getMyBankAccountsParam
+
+      // custom end getMyBankAccountsParam
   ) {
     // custom begin getMyBankAccounts
     const res: any | null = await prisma.bankAccount.findMany({
@@ -352,10 +376,14 @@ export class BankAccountModel {
   }
   async readOneBankAccount(
       param: requestTypes.ReadOneBankAccountParams,
+      // custom begin readOneBankAccountParam
+
+      // custom end readOneBankAccountParam
   ) {
     const res = await prisma.bankAccount.findUnique({
       where: {
         id: param.pathId,
+        
       },
       select: {
         account: true,

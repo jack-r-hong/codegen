@@ -88,8 +88,8 @@ async function calculationTransation(
     res.twd = setting.dollars;
     res.point = setting.point;
     res.bonusPoint = setting.bouns;
-    res.totalPoints = res.point + res.bonusPoint + res.firstBonusPoint;
-    res.totalDollars = res.twd + res.handlingFee + res.serviceFee;
+    res.totalPoints = res.point + res.bonusPoint + res.firstBonusPoint - res.handlingFee - res.serviceFee;
+    res.totalDollars = res.twd;
   }
   if (bos === 2) {
     if (!sellPoint) {
@@ -101,9 +101,9 @@ async function calculationTransation(
       throw new Error('sell setting no found');
     }
     res.point = sellPoint;
-    res.twd = Math.floor(res.point / setting.rate);
-    res.totalPoints = res.point;
-    res.totalDollars = res.twd - res.handlingFee - res.serviceFee;
+    res.totalPoints = (res.point - res.handlingFee - res.serviceFee);
+    res.twd = Math.floor(res.totalPoints / setting.rate);
+    res.totalDollars = res.twd;
   }
   return res;
 }
@@ -122,6 +122,12 @@ subscribeExpiredeModel.sub((key) => {
         true,
     )
         .then((res) => {
+          wSCIModel.pub(
+              res.id,
+              JSON.stringify({
+                state: res.state,
+              }),
+          );
           console.log(res);
         })
         .catch((err) => {
@@ -162,7 +168,7 @@ export class TransactionService {
           code: dbBankData.code,
         };
       } else {
-        throw new errors.CodeError('bankId not found', 400, -3001);
+        throw new errors.CodeError('bankId not found', 400, -3010);
       }
     }
     const dbUserData = await userModel.getUserMyStatus(
@@ -170,7 +176,7 @@ export class TransactionService {
         {userId: session.userInfo?.id!},
     );
     if (!dbUserData || dbUserData.userStatus !== 1) {
-      throw new errors.CodeError('user no auth', 403, -3002);
+      throw new errors.CodeError('user no auth', 403, -3011);
     }
     const {
       twd,
@@ -188,6 +194,10 @@ export class TransactionService {
         session.userInfo!.id,
         param.bodyPayMethod,
     );
+    if (totalDollars < 0 || totalPoints < 0) {
+      throw new errors.CodeError('Dollars or points less than zero.',
+          4000, -3013);
+    }
     if (firstBonusPoint !== 0) {
       await this.transactionModel.updateUserFirstBonus(
         session.userInfo?.id!,
@@ -241,7 +251,6 @@ export class TransactionService {
         session.userInfo!.id,
         param.bodyPayMethod,
     );
-    
     return {
       totalPoints,
       point,
@@ -509,7 +518,6 @@ export class TransactionService {
     if (!session.userInfo) {
       throw new Error('userInfo not found');
     }
-
     if (
       param.bodyState === 2 &&
       session.userInfo.isAgent &&

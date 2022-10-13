@@ -10,6 +10,9 @@ export class UserVerifyPhotoModel {
   async getBackstageUserVerifyPhoto(
       param: requestTypes.GetBackstageUserVerifyPhotoParams,
       customParam: any,
+      // custom begin getBackstageUserVerifyPhotoParam
+
+      // custom end getBackstageUserVerifyPhotoParam
   ) {
     // custom begin getBackstageUserVerifyPhoto
     const res: any | null = prisma.userVerifyPhoto.findFirst(
@@ -37,6 +40,9 @@ export class UserVerifyPhotoModel {
   async getUserVerifyPhoto(
       param: requestTypes.GetUserVerifyPhotoParams,
       customParam: any,
+      // custom begin getUserVerifyPhotoParam
+
+      // custom end getUserVerifyPhotoParam
   ) {
     // custom begin getUserVerifyPhoto
     const res: any | null = prisma.userVerifyPhoto.findMany(
@@ -62,6 +68,9 @@ export class UserVerifyPhotoModel {
   }
   async uploadManyVerifyPhoto(
       param: requestTypes.UploadManyVerifyPhotoParams,
+      // custom begin uploadManyVerifyPhotoParam
+
+      // custom end uploadManyVerifyPhotoParam
       files: Express.Multer.File[],
       ownerId: string,
   ) {

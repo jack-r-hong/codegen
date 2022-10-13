@@ -4580,6 +4580,9 @@
                   "gameUid" : {
                     "$ref" : "#/components/schemas/User/properties/gameUid"
                   },
+                  "isAgent" : {
+                    "$ref" : "#/components/schemas/User/properties/isAgent"
+                  },                  
                   "remark" : {
                     "$ref" : "#/components/schemas/User/properties/remark"
                   }                                                         

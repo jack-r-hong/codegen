@@ -53,7 +53,8 @@ const prisma = new Prisma.PrismaClient();
       where: {
         {{#each d.parameters}}
         {{name}}: param.{{in}}{{fpc name}},
-        {{/each}}
+        {{/each}}    
+        
       },
       select: {
         {{#each d.responses.200.content.[application/json].schema.properties as |v|}}
@@ -103,6 +104,9 @@ const prisma = new Prisma.PrismaClient();
           {{/if}}
         {{/if}}
       {{/each}}
+      // custom begin {{d.operationId}}Where
+{{{lookup ../../custom (add d.operationId "Where")}}}
+      // custom end {{d.operationId}}Where
       },
       select: {
         {{#each d.responses.200.content.[application/json].schema.items.properties}}
@@ -251,6 +255,9 @@ export class {{fpc tag}}Model {
         {{#if (equal (model_type d.operationId) "custom")  }}
       customParam: any,
         {{/if}}
+      // custom begin {{d.operationId}}Param
+{{{lookup ../../custom (add d.operationId "Param")}}}
+      // custom end {{d.operationId}}Param
         {{#if (equal (model_type d.operationId) "uploadMany")  }}
       files: Express.Multer.File[],
       ownerId: string,

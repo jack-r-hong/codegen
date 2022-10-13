@@ -10,6 +10,9 @@ export class UserModel {
   async getUserBackstageAgents(
       param: requestTypes.GetUserBackstageAgentsParams,
       customParam: any,
+      // custom begin getUserBackstageAgentsParam
+
+      // custom end getUserBackstageAgentsParam
   ) {
     // custom begin getUserBackstageAgents
     const res: any[] | null = await prisma.user.findMany({
@@ -41,6 +44,9 @@ export class UserModel {
   async readBackstageUserReson(
       param: requestTypes.ReadBackstageUserResonParams,
       customParam: any,
+      // custom begin readBackstageUserResonParam
+
+      // custom end readBackstageUserResonParam
   ) {
     // custom begin readBackstageUserReson
     const res = await prisma.userVerifyReson.findMany()
@@ -56,6 +62,9 @@ export class UserModel {
   async createBackstageUserReson(
       param: requestTypes.CreateBackstageUserResonParams,
       customParam: any,
+      // custom begin createBackstageUserResonParam
+
+      // custom end createBackstageUserResonParam
   ) {
     // custom begin createBackstageUserReson
     const res = await prisma.userVerifyReson.create({
@@ -74,6 +83,9 @@ export class UserModel {
   async deleteBackstageUserReson(
       param: requestTypes.DeleteBackstageUserResonParams,
       customParam: any,
+      // custom begin deleteBackstageUserResonParam
+
+      // custom end deleteBackstageUserResonParam
   ) {
     // custom begin deleteBackstageUserReson
     const res = await prisma.userVerifyReson.delete({
@@ -92,6 +104,9 @@ export class UserModel {
   async updateBackstageUserReson(
       param: requestTypes.UpdateBackstageUserResonParams,
       customParam: any,
+      // custom begin updateBackstageUserResonParam
+
+      // custom end updateBackstageUserResonParam
   ) {
     // custom begin updateBackstageUserReson
     const res = await prisma.userVerifyReson.update({
@@ -113,6 +128,9 @@ export class UserModel {
   async updateBackstageUser(
       param: requestTypes.UpdateBackstageUserParams,
       customParam: any,
+      // custom begin updateBackstageUserParam
+
+      // custom end updateBackstageUserParam
   ) {
     // custom begin updateBackstageUser
     const fields = {
@@ -253,10 +271,14 @@ export class UserModel {
   }
   async readOneBackstageUser(
       param: requestTypes.ReadOneBackstageUserParams,
+      // custom begin readOneBackstageUserParam
+
+      // custom end readOneBackstageUserParam
   ) {
     const res = await prisma.user.findUnique({
       where: {
         id: param.pathId,
+
       },
       select: {
         address: true,
@@ -318,6 +340,9 @@ export class UserModel {
   }
   async updateOneBackstageUser(
       param: requestTypes.UpdateOneBackstageUserParams,
+      // custom begin updateOneBackstageUserParam
+
+      // custom end updateOneBackstageUserParam
   ) {
     const res = await prisma.user.update({
       where: {
@@ -337,6 +362,9 @@ export class UserModel {
   async readBackstageUserTransaction(
       param: requestTypes.ReadBackstageUserTransactionParams,
       customParam: any,
+      // custom begin readBackstageUserTransactionParam
+
+      // custom end readBackstageUserTransactionParam
   ) {
     // custom begin readBackstageUserTransaction
     const res: any[] | null = await prisma.transaction.findMany({
@@ -381,13 +409,20 @@ export class UserModel {
   }
   async readManyUserBackstage(
       param: requestTypes.ReadManyUserBackstageParams,
+      // custom begin readManyUserBackstageParam
+      isAgent?: boolean,
+      // custom end readManyUserBackstageParam
   ) {
     const res = await prisma.user.findMany({
       where: {
+      // custom begin readManyUserBackstageWhere
+        isAgent,
+      // custom end readManyUserBackstageWhere
       },
       select: {
         gameUid: true,
         id: true,
+        isAgent: true,
         level: true,
         phone: true,
         phonePrefix: true,
@@ -408,6 +443,7 @@ export class UserModel {
       },
       skip: param.queryPage * param.queryTake,
       take: param.queryTake,
+
     }).catch((e) => {
       throw e;
     }).finally(() => {
@@ -418,6 +454,9 @@ export class UserModel {
   async captcha(
       param: requestTypes.CaptchaParams,
       customParam: any,
+      // custom begin captchaParam
+
+      // custom end captchaParam
   ) {
     // custom begin captcha
 
@@ -426,6 +465,9 @@ export class UserModel {
   async forgetPasswordPhoneCheck(
       param: requestTypes.ForgetPasswordPhoneCheckParams,
       customParam: any,
+      // custom begin forgetPasswordPhoneCheckParam
+
+      // custom end forgetPasswordPhoneCheckParam
   ) {
     // custom begin forgetPasswordPhoneCheck
 
@@ -434,6 +476,9 @@ export class UserModel {
   async forgetPasswordPhoneCheckVerify(
       param: requestTypes.ForgetPasswordPhoneCheckVerifyParams,
       customParam: any,
+      // custom begin forgetPasswordPhoneCheckVerifyParam
+
+      // custom end forgetPasswordPhoneCheckVerifyParam
   ) {
     // custom begin forgetPasswordPhoneCheckVerify
 
@@ -442,6 +487,9 @@ export class UserModel {
   async forgetPasswordReset(
       param: requestTypes.ForgetPasswordResetParams,
       customParam: any,
+      // custom begin forgetPasswordResetParam
+
+      // custom end forgetPasswordResetParam
   ) {
     // custom begin forgetPasswordReset
     const res = await prisma.user.update({
@@ -466,6 +514,9 @@ export class UserModel {
   async loginUser(
       param: requestTypes.LoginUserParams,
       customParam: any,
+      // custom begin loginUserParam
+
+      // custom end loginUserParam
   ) {
     // custom begin loginUser
     const res = await prisma.user.findUnique({
@@ -496,6 +547,9 @@ export class UserModel {
   async logoutUser(
       param: requestTypes.LogoutUserParams,
       customParam: any,
+      // custom begin logoutUserParam
+
+      // custom end logoutUserParam
   ) {
     // custom begin logoutUser
 
@@ -504,6 +558,9 @@ export class UserModel {
   async getRealVerify(
       param: requestTypes.GetRealVerifyParams,
       customParam: any,
+      // custom begin getRealVerifyParam
+
+      // custom end getRealVerifyParam
   ) {
     // custom begin getRealVerify
     const res = await prisma.user.findUnique({
@@ -599,6 +656,9 @@ export class UserModel {
   async postRealVerify(
       param: requestTypes.PostRealVerifyParams,
       customParam: any,
+      // custom begin postRealVerifyParam
+
+      // custom end postRealVerifyParam
   ) {
     // custom begin postRealVerify
     const originalUser = await prisma.user.findUnique({
@@ -730,6 +790,9 @@ export class UserModel {
   async putRealVerify(
       param: requestTypes.PutRealVerifyParams,
       customParam: any,
+      // custom begin putRealVerifyParam
+
+      // custom end putRealVerifyParam
   ) {
     // custom begin putRealVerify
     const res: any | null = await prisma.user.update({
@@ -770,6 +833,9 @@ export class UserModel {
   async registerUser(
       param: requestTypes.RegisterUserParams,
       customParam: any,
+      // custom begin registerUserParam
+
+      // custom end registerUserParam
   ) {
     // custom begin registerUser
     let referralMap: undefined | {
@@ -837,6 +903,9 @@ export class UserModel {
   async phoneCheck(
       param: requestTypes.PhoneCheckParams,
       customParam: any,
+      // custom begin phoneCheckParam
+
+      // custom end phoneCheckParam
   ) {
     // custom begin phoneCheck
     const res = await prisma.user.findUnique({
@@ -862,6 +931,9 @@ export class UserModel {
   async getUserMyStatus(
       param: requestTypes.GetUserMyStatusParams,
       customParam: any,
+      // custom begin getUserMyStatusParam
+
+      // custom end getUserMyStatusParam
   ) {
     // custom begin getUserMyStatus
     const res =
@@ -887,6 +959,9 @@ export class UserModel {
   }
   async updateOneyUser(
       param: requestTypes.UpdateOneyUserParams,
+      // custom begin updateOneyUserParam
+
+      // custom end updateOneyUserParam
   ) {
     const res = await prisma.user.update({
       where: {

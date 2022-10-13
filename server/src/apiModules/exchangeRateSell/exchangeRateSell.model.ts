@@ -9,9 +9,15 @@ const prisma = new Prisma.PrismaClient();
 export class ExchangeRateSellModel {
   async readManyBackstageExchangeRateSell(
       param: requestTypes.ReadManyBackstageExchangeRateSellParams,
+      // custom begin readManyBackstageExchangeRateSellParam
+
+      // custom end readManyBackstageExchangeRateSellParam
   ) {
     const res = await prisma.exchangeRateSell.findMany({
       where: {
+      // custom begin readManyBackstageExchangeRateSellWhere
+
+      // custom end readManyBackstageExchangeRateSellWhere
       },
       select: {
         des: true,
@@ -38,6 +44,9 @@ export class ExchangeRateSellModel {
   }
   async createOneBackstageExchangeRateSell(
       param: requestTypes.CreateOneBackstageExchangeRateSellParams,
+      // custom begin createOneBackstageExchangeRateSellParam
+
+      // custom end createOneBackstageExchangeRateSellParam
   ) {
     const res = await prisma.exchangeRateSell.create({
       data: {
@@ -56,6 +65,9 @@ export class ExchangeRateSellModel {
   }
   async deleteOneBackstageExchangeRateSell(
       param: requestTypes.DeleteOneBackstageExchangeRateSellParams,
+      // custom begin deleteOneBackstageExchangeRateSellParam
+
+      // custom end deleteOneBackstageExchangeRateSellParam
   ) {
     const res = await prisma.exchangeRateSell.delete({
       where: {
@@ -70,6 +82,9 @@ export class ExchangeRateSellModel {
   }
   async updateOneBackstageExchangeRateSell(
       param: requestTypes.UpdateOneBackstageExchangeRateSellParams,
+      // custom begin updateOneBackstageExchangeRateSellParam
+
+      // custom end updateOneBackstageExchangeRateSellParam
   ) {
     const res = await prisma.exchangeRateSell.update({
       where: {

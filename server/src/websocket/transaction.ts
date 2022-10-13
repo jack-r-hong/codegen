@@ -45,7 +45,6 @@ export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
 
     const query = qs.parse(queryString);
     const {login_session: userId, transaction_id: transactionId} = query;
-    console.log(userId, transactionId);
 
     // 判斷 is agent
 

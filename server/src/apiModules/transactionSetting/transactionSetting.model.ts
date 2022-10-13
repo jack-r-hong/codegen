@@ -10,6 +10,9 @@ export class TransactionSettingModel {
   async getAllSetting(
       param: requestTypes.GetAllSettingParams,
       customParam: any,
+      // custom begin getAllSettingParam
+
+      // custom end getAllSettingParam
   ) {
     // custom begin getAllSetting
     const res = await prisma.transactionSetting.findMany({
@@ -25,6 +28,9 @@ export class TransactionSettingModel {
   async updateSetting(
       param: requestTypes.UpdateSettingParams,
       customParam: any,
+      // custom begin updateSettingParam
+
+      // custom end updateSettingParam
   ) {
     // custom begin updateSetting
     enum ParamMap{

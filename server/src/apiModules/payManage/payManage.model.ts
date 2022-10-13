@@ -9,11 +9,17 @@ const prisma = new Prisma.PrismaClient();
 export class PayManageModel {
   async readManyBackstagePayManage(
       param: requestTypes.ReadManyBackstagePayManageParams,
+      // custom begin readManyBackstagePayManageParam
+
+      // custom end readManyBackstagePayManageParam
   ) {
     const res = await prisma.payManage.findMany({
       where: {
     type: param.queryType,
     userId: param.queryUserId,
+      // custom begin readManyBackstagePayManageWhere
+
+      // custom end readManyBackstagePayManageWhere
       },
       select: {
         code: true,
@@ -38,6 +44,9 @@ export class PayManageModel {
   async careateBackstagePayManage(
       param: requestTypes.CareateBackstagePayManageParams,
       customParam: any,
+      // custom begin careateBackstagePayManageParam
+
+      // custom end careateBackstagePayManageParam
   ) {
     // custom begin careateBackstagePayManage
     const res: any | null = await prisma.payManage.create({
@@ -60,6 +69,9 @@ export class PayManageModel {
   async deleteQrCode(
       param: requestTypes.DeleteQrCodeParams,
       customParam: any,
+      // custom begin deleteQrCodeParam
+
+      // custom end deleteQrCodeParam
   ) {
     // custom begin deleteQrCode
     const res: Prisma.PayManage | null = await prisma.payManage.findUnique({
@@ -90,6 +102,9 @@ export class PayManageModel {
   }
   async uploadManyQrCode(
       param: requestTypes.UploadManyQrCodeParams,
+      // custom begin uploadManyQrCodeParam
+
+      // custom end uploadManyQrCodeParam
       files: Express.Multer.File[],
       ownerId: string,
   ) {
@@ -113,6 +128,9 @@ export class PayManageModel {
   }
   async deleteOneBackstagePayManage(
       param: requestTypes.DeleteOneBackstagePayManageParams,
+      // custom begin deleteOneBackstagePayManageParam
+
+      // custom end deleteOneBackstagePayManageParam
   ) {
     const res = await prisma.payManage.delete({
       where: {
@@ -128,6 +146,9 @@ export class PayManageModel {
   async updateBackstagePayManage(
       param: requestTypes.UpdateBackstagePayManageParams,
       customParam: any,
+      // custom begin updateBackstagePayManageParam
+
+      // custom end updateBackstagePayManageParam
   ) {
     // custom begin updateBackstagePayManage
     const res: Prisma.PayManage | null = await prisma.payManage.update({
