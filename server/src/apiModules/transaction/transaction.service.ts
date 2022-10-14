@@ -91,7 +91,7 @@ async function calculationTransation(
     }
     if (dbData && dbData.referralMap && dbData.referralMap.referral) {
       res.rebate = dbData.referralMap.referral.rebate
-          .mul(setting.dollars).floor().toNumber();
+          .mul(setting.dollars).div(100).ceil().toNumber();
       rebateRate = dbData.referralMap.referral.rebate;
       referralId = dbData.referralMap.referral.id;
     }
