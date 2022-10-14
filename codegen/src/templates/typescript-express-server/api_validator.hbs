@@ -25,6 +25,11 @@ import * as sessions from '../../sessions';
       },
     },
         {{/if}}
+        {{#if p.schema.pattern }}
+    matches: {
+      options: {{p.schema.pattern}},
+    },
+        {{/if}}        
         {{#if (equal p.schema.type "integer") }}
     isInt: true,
         {{/if}}
@@ -90,6 +95,11 @@ optional: {
     {{#if p.required }}
 notEmpty: true,
     {{/if}}
+    {{#if p.pattern }}
+matches: {
+  options: /{{p.pattern}}/,
+},
+    {{/if}}            
     {{#if (equal p.format "email") }}
     isEmail: true,
     {{/if}}    

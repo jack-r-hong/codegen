@@ -60,11 +60,11 @@ export const ReadManyBackstageExchangeRateSellRequestConvert = (
   };
 };
 type CreateOneBackstageExchangeRateSellReqBody = {
-  des: string,
-rangeLower: string,
-rangeUpper: string,
-rate: string,
-type: string,
+            des: string,
+          rangeLower: number,
+          rangeUpper: number,
+          rate: number,
+          type: number,
 }
 
 type CreateOneBackstageExchangeRateSellReqQuery = {
@@ -101,10 +101,10 @@ export const CreateOneBackstageExchangeRateSellRequestConvert = (
 ): CreateOneBackstageExchangeRateSellParams => {
   return {
     bodyDes: body.des,
-    bodyRangeLower: parseInt(body.rangeLower),
-    bodyRangeUpper: parseInt(body.rangeUpper),
-    bodyRate: parseInt(body.rate),
-    bodyType: parseInt(body.type),
+    bodyRangeLower: body.rangeLower,
+    bodyRangeUpper: body.rangeUpper,
+    bodyRate: body.rate,
+    bodyType: body.type,
   };
 };
 type DeleteOneBackstageExchangeRateSellReqBody = {
@@ -145,10 +145,10 @@ export const DeleteOneBackstageExchangeRateSellRequestConvert = (
   };
 };
 type UpdateOneBackstageExchangeRateSellReqBody = {
-  des: string,
-rangeLower: string,
-rangeUpper: string,
-rate: string,
+            des: string,
+          rangeLower: number,
+          rangeUpper: number,
+          rate: number,
 }
 
 type UpdateOneBackstageExchangeRateSellReqQuery = {
@@ -188,9 +188,9 @@ export const UpdateOneBackstageExchangeRateSellRequestConvert = (
   return {
     pathId: parseInt(path.id),
     bodyDes: body.des,
-    bodyRangeLower: parseInt(body.rangeLower),
-    bodyRangeUpper: parseInt(body.rangeUpper),
-    bodyRate: parseInt(body.rate),
+    bodyRangeLower: body.rangeLower,
+    bodyRangeUpper: body.rangeUpper,
+    bodyRate: body.rate,
   };
 };
 

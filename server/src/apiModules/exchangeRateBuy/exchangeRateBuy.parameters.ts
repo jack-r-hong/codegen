@@ -60,11 +60,11 @@ export const ReadManyBackstageExchangeRateBuyRequestConvert = (
   };
 };
 type CreateOneBackstageExchangeRateBuyReqBody = {
-  bouns: string,
-des: string,
-dollars: string,
-point: string,
-type: string,
+            bouns: number,
+          des: string,
+          dollars: number,
+          point: number,
+          type: number,
 }
 
 type CreateOneBackstageExchangeRateBuyReqQuery = {
@@ -100,11 +100,11 @@ export const CreateOneBackstageExchangeRateBuyRequestConvert = (
     cookie: CreateOneBackstageExchangeRateBuyReqCookie,
 ): CreateOneBackstageExchangeRateBuyParams => {
   return {
-    bodyBouns: parseInt(body.bouns),
+    bodyBouns: body.bouns,
     bodyDes: body.des,
-    bodyDollars: parseInt(body.dollars),
-    bodyPoint: parseInt(body.point),
-    bodyType: parseInt(body.type),
+    bodyDollars: body.dollars,
+    bodyPoint: body.point,
+    bodyType: body.type,
   };
 };
 type DeleteOneBackstageExchangeRateBuyReqBody = {
@@ -145,10 +145,10 @@ export const DeleteOneBackstageExchangeRateBuyRequestConvert = (
   };
 };
 type UpdateOneBackstageExchangeRateBuyReqBody = {
-  bouns: string,
-des: string,
-dollars: string,
-point: string,
+            bouns: number,
+          des: string,
+          dollars: number,
+          point: number,
 }
 
 type UpdateOneBackstageExchangeRateBuyReqQuery = {
@@ -187,10 +187,10 @@ export const UpdateOneBackstageExchangeRateBuyRequestConvert = (
 ): UpdateOneBackstageExchangeRateBuyParams => {
   return {
     pathId: parseInt(path.id),
-    bodyBouns: parseInt(body.bouns),
+    bodyBouns: body.bouns,
     bodyDes: body.des,
-    bodyDollars: parseInt(body.dollars),
-    bodyPoint: parseInt(body.point),
+    bodyDollars: body.dollars,
+    bodyPoint: body.point,
   };
 };
 

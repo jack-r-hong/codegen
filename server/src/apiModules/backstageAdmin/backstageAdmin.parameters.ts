@@ -15,7 +15,7 @@ interface TypedRequest<
 
 
 type GetAdminFromIdReqBody = {
-  id: string,
+            id: string,
 }
 
 type GetAdminFromIdReqQuery = {
@@ -51,8 +51,8 @@ export const GetAdminFromIdRequestConvert = (
   };
 };
 type AdminLoginReqBody = {
-  account: string,
-password: string,
+            account: string,
+          password: string,
 }
 
 type AdminLoginReqQuery = {
@@ -90,8 +90,8 @@ export const AdminLoginRequestConvert = (
   };
 };
 type AdminRegisterReqBody = {
-  account: string,
-password: string,
+            account: string,
+          password: string,
 }
 
 type AdminRegisterReqQuery = {

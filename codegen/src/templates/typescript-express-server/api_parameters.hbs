@@ -30,14 +30,22 @@ interface TypedRequest<
         {{ @key}}: {
             {{#each p.items.properties as |i|}}
               {{#if (equal p.type "integer") }}
-                {{ @key}}: string,
+                {{ @key}}: number,
               {{else}}
                 {{ @key}}: string,
               {{/if}}
             {{/each}} 
         }[]
       {{~else~}}
-        {{ @key}}: string
+        {{~#if (equal p.type "integer") }}
+          {{ @key}}: number
+        {{~else}}
+        {{~#if (equal p.type "number") }}
+          {{ @key}}: number
+        {{~else}}
+          {{ @key}}: string
+        {{~/if}}
+        {{~/if}}
       {{~/if~}}  
       {{~ > nullable~}}       
     {{/each}}  
@@ -138,7 +146,7 @@ export type {{fpc data.operationId}}Params = {
     {{#if (or  p.nullable p.default) ~}}
     body{{fpc @key}}: typeof body.{{@key}} === 'number' ? body.{{@key}} : undefined,
     {{else ~}}
-    body{{fpc @key}}: parseInt(body.{{@key}}),
+    body{{fpc @key}}: body.{{@key}},
     {{/if}}
   {{else ~}}
     {{#if (equal p.type "boolean") ~}}

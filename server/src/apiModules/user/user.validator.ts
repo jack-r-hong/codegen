@@ -289,7 +289,7 @@ export const readOneBackstageUserValidator: Schema = {
     notEmpty: true,
   },
 };
-export const updateOneBackstageUserValidator: Schema = {
+export const UpdateUserStatusOrRemarkOrRebateValidator: Schema = {
   'id': {
     in: 'params',
     isString: true,
@@ -302,6 +302,17 @@ optional: {
   options: {
     nullable: true,
   },
+},
+  },
+  'rebate': {
+    in: 'body',
+    optional: {
+  options: {
+    nullable: true,
+  },
+},
+matches: {
+  options: /^\d{1,2}.\d{2}$/,
 },
   },
   'remark': {

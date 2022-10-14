@@ -239,20 +239,20 @@ export class UserController implements Controller {
         });
   }
   @Put('/backstage/user/:id')
-  @Validator(validSchemas.updateOneBackstageUserValidator)
-  // custom begin updateOneBackstageUserDecorator
+  @Validator(validSchemas.UpdateUserStatusOrRemarkOrRebateValidator)
+  // custom begin UpdateUserStatusOrRemarkOrRebateDecorator
 
-  // custom end updateOneBackstageUserDecorator
-  async updateOneBackstageUser(
-      req: userParams.UpdateOneBackstageUserRequest,
+  // custom end UpdateUserStatusOrRemarkOrRebateDecorator
+  async UpdateUserStatusOrRemarkOrRebate(
+      req: userParams.UpdateUserStatusOrRemarkOrRebateRequest,
       res: Response,
       next: NextFunction,
   ) {
-    // custom begin updateOneBackstageUserCheck
+    // custom begin UpdateUserStatusOrRemarkOrRebateCheck
 
-    // custom end updateOneBackstageUserCheck
-    UserController.service.updateOneBackstageUser(
-        userParams.UpdateOneBackstageUserRequestConvert(
+    // custom end UpdateUserStatusOrRemarkOrRebateCheck
+    UserController.service.UpdateUserStatusOrRemarkOrRebate(
+        userParams.UpdateUserStatusOrRemarkOrRebateRequestConvert(
             req.body,
             req.query,
             req.params,
@@ -261,7 +261,10 @@ export class UserController implements Controller {
         req.session,
     )
         .then((result) =>{
+          // custom begin UpdateUserStatusOrRemarkOrRebate
           res.json(result);
+
+          // custom end UpdateUserStatusOrRemarkOrRebate
         }).catch((e) => {
           next(e);
         });

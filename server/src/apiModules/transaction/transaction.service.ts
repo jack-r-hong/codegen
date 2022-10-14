@@ -47,7 +47,11 @@ async function calculationTransation(
     serviceFee: 0,
     totalPoints: 0,
     totalDollars: 0,
+    rebateRate: 0,
+    rebate: 0,
   };
+  let rebateRate = null;
+  let referralId = null;
   const transactionSetting = await transactionModel.readTransactionSetting();
   if (transactionSetting) {
     transactionSetting.forEach((e) => {
@@ -81,14 +85,21 @@ async function calculationTransation(
       throw new Error('bodyBuyOptionId not found');
     }
     const dbData = await transactionModel.
-        readUserFirstBonus(userId);
+        readUserFirstBonusAndRebate(userId);
     if (!dbData || !dbData.firstBonus || !dbData.firstBonusTemp) {
       res.firstBonusPoint = 0;
+    }
+    if (dbData && dbData.referralMap && dbData.referralMap.referral) {
+      res.rebate = dbData.referralMap.referral.rebate
+          .mul(setting.dollars).floor().toNumber();
+      rebateRate = dbData.referralMap.referral.rebate;
+      referralId = dbData.referralMap.referral.id;
     }
     res.twd = setting.dollars;
     res.point = setting.point;
     res.bonusPoint = setting.bouns;
-    res.totalPoints = res.point + res.bonusPoint + res.firstBonusPoint - res.handlingFee - res.serviceFee;
+    res.totalPoints = res.point + res.bonusPoint + res.firstBonusPoint -
+      res.handlingFee - res.serviceFee;
     res.totalDollars = res.twd;
   }
   if (bos === 2) {
@@ -105,7 +116,7 @@ async function calculationTransation(
     res.twd = Math.floor(res.totalPoints / setting.rate);
     res.totalDollars = res.twd;
   }
-  return res;
+  return Object.assign(res, {rebateRate, referralId});
 }
 /**
  * 過期訂單
@@ -187,6 +198,9 @@ export class TransactionService {
       serviceFee,
       totalDollars,
       totalPoints,
+      rebateRate,
+      rebate,
+      referralId,
     } = await calculationTransation(
         param.bodyBos,
         param.bodyBuyOptionId,
@@ -196,7 +210,7 @@ export class TransactionService {
     );
     if (totalDollars < 0 || totalPoints < 0) {
       throw new errors.CodeError('Dollars or points less than zero.',
-          4000, -3013);
+          400, -3013);
     }
     if (firstBonusPoint !== 0) {
       await this.transactionModel.updateUserFirstBonus(
@@ -206,19 +220,23 @@ export class TransactionService {
     }
     const res = await this.transactionModel.createTransaction(
         param,
+        {},
         {
+          account: dbUserData.gameUid??'',
+          bonusPoint: bonusPoint + firstBonusPoint,
+          point,
+          twd,
           userId: session.userInfo?.id!,
-          bankName: bankData.name,
           bankAccount: bankData.account,
           bankCode: bankData.code,
-          twd,
-          point,
-          bonusPoint: bonusPoint + firstBonusPoint,
-          account: dbUserData.gameUid??'',
+          bankName: bankData.name,
           handlingFee,
           serviceFee,
           totalDollars,
           totalPoints,
+          rebate,
+          rebateRate,
+          referralId,
         },
     ).catch((e) =>{
       throw e;

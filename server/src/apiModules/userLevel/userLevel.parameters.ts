@@ -48,8 +48,8 @@ export const ReadManyBackstageUserLevelRequestConvert = (
   };
 };
 type CreateOneBackstageUserLevelReqBody = {
-  des: string,
-level: string,
+            des: string,
+          level: number,
 }
 
 type CreateOneBackstageUserLevelReqQuery = {
@@ -87,7 +87,7 @@ export const CreateOneBackstageUserLevelRequestConvert = (
   return {
     pathId: parseInt(path.id),
     bodyDes: body.des,
-    bodyLevel: parseInt(body.level),
+    bodyLevel: body.level,
   };
 };
 type DeleteOneBackstageUserLevelReqBody = {
@@ -128,8 +128,8 @@ export const DeleteOneBackstageUserLevelRequestConvert = (
   };
 };
 type UpdateOneBackstageUserLevelReqBody = {
-  des: string,
-level: string,
+            des: string,
+          level: number,
 }
 
 type UpdateOneBackstageUserLevelReqQuery = {
@@ -167,7 +167,7 @@ export const UpdateOneBackstageUserLevelRequestConvert = (
   return {
     pathId: parseInt(path.id),
     bodyDes: body.des,
-    bodyLevel: parseInt(body.level),
+    bodyLevel: body.level,
   };
 };
 

@@ -3,7 +3,7 @@
   "info" : {
     "description" : "This is a sample Petstore server.  You can find\nout more about Swagger at\n[http://swagger.io](http://swagger.io) or on\n[irc.freenode.net, #swagger](http://swagger.io/irc/).\n",
     "version" : "robot_car",
-    "title" : "Swagger Petstore",
+    "title" : "Coin Bank",
     "termsOfService" : "http://swagger.io/terms/",
     "contact" : {
       "email" : "apiteam@swagger.io"
@@ -15,15 +15,12 @@
   },
   "servers" : [ 
     {
-      "description" : "test server",
-      "url" : "https://192.168.10.119/api"
-    },
-    {
       "description" : "api",
       "url" : "https://127.0.0.1/api"
     }, 
     {
-      "url" : "http://127.0.0.1:4000/api"
+      "description" : "test server",
+      "url" : "https://192.168.10.119/api"
     }
   ],
   "tags" : [
@@ -74,7 +71,11 @@
     {
       "name" : "userLevel",
       "description" : "Operations about cashFlow"
-    }           
+    },
+    {
+      "name" : "rebate",
+      "description" : "Operations about rebate"
+    }         
   ],
   "paths" : {
     "/captcha" : {
@@ -267,11 +268,24 @@
                       "type" : "object",
                       "properties" : {
                         "id" : {
-                          "type" : "integer"
+                          "type" : "string",
+                          "format": "uuid"
                         },
                         "userStatus": {
                           "$ref" : "#/components/schemas/User/properties/userStatus"
-                        }
+                        },
+                        "phone": {
+                          "$ref" : "#/components/schemas/User/properties/phone"
+                        },
+                        "gameUid": {
+                          "$ref" : "#/components/schemas/User/properties/gameUid"
+                        },
+                        "referralCode": {
+                          "type": "string"
+                        },
+                        "isAgent": {
+                          "$ref" : "#/components/schemas/User/properties/isAgent"
+                        }                                 
                       }
                     }
                   }
@@ -789,10 +803,10 @@
       },
       "put" : {
         "tags" : [ "user" ],
-        "summary" : "Logs user into the system",
-        "operationId" : "updateOneBackstageUser", 
+        "summary" : "UpdateUserStatusOrRemarkOrRebate",
+        "operationId" : "UpdateUserStatusOrRemarkOrRebate", 
         "requestBody": {
-          "$ref": "#/components/requestBodies/UpdateUserStatusOrRemark"
+          "$ref": "#/components/requestBodies/UpdateUserStatusOrRemarkOrRebate"
         },           
         "parameters" : [ 
           {
@@ -1394,7 +1408,7 @@
     "/transaction" : {     
       "post" : {
         "tags" : [ "transaction" ],
-        "summary" : "post transaction by id",
+        "summary" : "createTransaction",
         "operationId" : "createTransaction",    
         "requestBody" : {
           "$ref" : "#/components/requestBodies/CreateTransaction"
@@ -1416,15 +1430,15 @@
             "$ref" : "#/components/responses/NotFound"
           }
         },
-        "security" : [ {
+        "security" : [{
           "cookieAuth" : [ ]
-        } ]
+        }]
       }
     },
     "/transaction/calculation" : {     
       "post" : {
         "tags" : [ "transaction" ],
-        "summary" : "post transaction by id",
+        "summary" : "getTransactionCalculation",
         "operationId" : "getTransactionCalculation",    
         "requestBody" : {
           "$ref" : "#/components/requestBodies/GetTransactionCalculation"
@@ -2793,7 +2807,8 @@
             "$ref" : "#/components/schemas/Referral/properties/id"
           },        
           "userId": {
-            "$ref" : "#/components/schemas/User/properties/id"
+            "$ref" : "#/components/schemas/User/properties/id",
+            "unique": true
           }           
         }
       },                 
@@ -3168,6 +3183,18 @@
           },
           "totalPoints" : {
             "type" : "integer"
+          },
+          "rebateRate" : {
+            "type" : "number",
+            "format" : "decimal",
+            "pattern": "^\\d{2}.\\d{2}$",
+            "precision": 4,
+            "scale": 2,
+            "nullable": true
+          },
+          "rebate" : {
+            "type" : "integer",
+            "nullable": true
           }
         }
       },
@@ -3369,7 +3396,7 @@
         "description" : "List of user object",
         "required" : true
       },   
-      "UpdateUserStatusOrRemark" : {
+      "UpdateUserStatusOrRemarkOrRebate" : {
         "content" : {
           "application/json" : {
             "schema" : {
@@ -3382,7 +3409,16 @@
                 "remark" : {
                   "type": "string",
                   "nullable": true
-                }           
+                },
+                "rebate" : {
+                  "type" : "number",
+                  "format" : "decimal",
+                  "nullable": true,
+                  "pattern": "^\\d{1,2}.\\d{2}$",
+                  "precision": 4,
+                  "scale": 2
+                  
+                }                
               }
             }
           }

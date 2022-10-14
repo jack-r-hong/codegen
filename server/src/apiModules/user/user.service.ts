@@ -379,20 +379,28 @@ export class UserService {
     const dbData = await this.userModel.readManyUserSumBackstage(
         res.map((e) => e.id),
     );
+    const dbData2 = await this.userModel.readManyUserRebateSumBackstage(
+        res.map((e) => e.id),
+    );
     return res.map((e) => {
       const user = e;
       const transactionData = {
         accumulatioin: 0,
         orderCount: 0,
+        rebateAmount: 0,
       };
       const referral = {
         referralCode: getReferralCodde(e.referral!.id),
-        rebate: e.referral?.rebate,
+        rebate: e.referral?.rebate.toNumber(),
       };
       const t = dbData.find((item) => item.userId === e.id);
+      const t2 = dbData2.find(((item) => item.referralId === e.referral!.id));
       if (t) {
         transactionData.accumulatioin = t._sum.twd??0;
         transactionData.orderCount = t._count;
+      }
+      if (t2) {
+        transactionData.rebateAmount = t2._sum.rebate??0;
       }
       delete (user as any).referral;
       return Object.assign(user, transactionData, referral);
@@ -495,24 +503,20 @@ export class UserService {
     // custom end readOneBackstageUser2
     return res;
   }
-  async updateOneBackstageUser(
-      param :requestTypes.UpdateOneBackstageUserParams,
+  async UpdateUserStatusOrRemarkOrRebate(
+      param :requestTypes.UpdateUserStatusOrRemarkOrRebateParams,
       session: Express.Request['session'],
   ) {
-    // custom begin updateOneBackstageUser
-
-    // custom end updateOneBackstageUser
-
-    const res = await this.userModel.updateOneBackstageUser(
+    // custom begin UpdateUserStatusOrRemarkOrRebate
+    const res = await this.userModel.UpdateUserStatusOrRemarkOrRebate(
         param,
+        {},
     ).catch((e) =>{
       throw e;
     });
-
-    // custom begin updateOneBackstageUser2
-
-    // custom end updateOneBackstageUser2
     return res;
+
+    // custom end UpdateUserStatusOrRemarkOrRebate
   }
   async readBackstageUserTransaction(
       param :requestTypes.ReadBackstageUserTransactionParams,
@@ -547,20 +551,28 @@ export class UserService {
     const dbData = await this.userModel.readManyUserSumBackstage(
         res.map((e) => e.id),
     );
+    const dbData2 = await this.userModel.readManyUserRebateSumBackstage(
+        res.map((e) => e.id),
+    );
     return res.map((e) => {
       const user = e;
       const transactionData = {
         accumulatioin: 0,
         orderCount: 0,
+        rebateAmount: 0,
       };
       const referral = {
         referralCode: getReferralCodde(e.referral!.id),
-        rebate: e.referral?.rebate,
+        rebate: e.referral?.rebate.toNumber(),
       };
       const t = dbData.find((item) => item.userId === e.id);
+      const t2 = dbData2.find(((item) => item.referralId === e.referral!.id));
       if (t) {
         transactionData.accumulatioin = t._sum.twd??0;
         transactionData.orderCount = t._count;
+      }
+      if (t2) {
+        transactionData.rebateAmount = t2._sum.rebate??0;
       }
       delete (user as any).referral;
       return Object.assign(user, transactionData, referral);

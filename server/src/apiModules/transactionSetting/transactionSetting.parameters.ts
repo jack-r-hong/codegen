@@ -48,10 +48,10 @@ export const GetAllSettingRequestConvert = (
   };
 };
 type UpdateSettingReqBody = {
-  atmHandlingFee: string,
-barCodeHandlingFee: string,
-firstReward: string,
-serviceFee: string,
+            atmHandlingFee: number,
+          barCodeHandlingFee: number,
+          firstReward: number,
+          serviceFee: number,
 }
 
 type UpdateSettingReqQuery = {
@@ -86,10 +86,10 @@ export const UpdateSettingRequestConvert = (
     cookie: UpdateSettingReqCookie,
 ): UpdateSettingParams => {
   return {
-    bodyAtmHandlingFee: parseInt(body.atmHandlingFee),
-    bodyBarCodeHandlingFee: parseInt(body.barCodeHandlingFee),
-    bodyFirstReward: parseInt(body.firstReward),
-    bodyServiceFee: parseInt(body.serviceFee),
+    bodyAtmHandlingFee: body.atmHandlingFee,
+    bodyBarCodeHandlingFee: body.barCodeHandlingFee,
+    bodyFirstReward: body.firstReward,
+    bodyServiceFee: body.serviceFee,
   };
 };
 

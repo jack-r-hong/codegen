@@ -339,12 +339,14 @@ export class UserModel {
     }
     return res;
   }
-  async updateOneBackstageUser(
-      param: requestTypes.UpdateOneBackstageUserParams,
-      // custom begin updateOneBackstageUserParam
+  async UpdateUserStatusOrRemarkOrRebate(
+      param: requestTypes.UpdateUserStatusOrRemarkOrRebateParams,
+      customParam: any,
+      // custom begin UpdateUserStatusOrRemarkOrRebateParam
 
-      // custom end updateOneBackstageUserParam
+      // custom end UpdateUserStatusOrRemarkOrRebateParam
   ) {
+    // custom begin UpdateUserStatusOrRemarkOrRebate
     const res = await prisma.user.update({
       where: {
         id: param.pathId,
@@ -352,6 +354,11 @@ export class UserModel {
       data: {
         level: param.bodyLevel,
         remark: param.bodyRemark,
+        referral: {
+          update: {
+            rebate: param.bodyRebate,
+          },
+        },
       },
     }).catch((e) => {
       throw e;
@@ -359,6 +366,8 @@ export class UserModel {
       prisma.$disconnect();
     });
     return res;
+
+    // custom end UpdateUserStatusOrRemarkOrRebate
   }
   async readBackstageUserTransaction(
       param: requestTypes.ReadBackstageUserTransactionParams,
@@ -1009,6 +1018,29 @@ export class UserModel {
         state: 4,
         userId: {
           in: userIdList,
+        },
+      },
+    }).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+    return res;
+  }
+  async readManyUserRebateSumBackstage(
+      userIdList: string[],
+  ) {
+    const res = await prisma.transaction.groupBy({
+      by: ['referralId'],
+      _sum: {
+        rebate: true,
+      },
+      where: {
+        state: 4,
+        referral: {
+          userId: {
+            in: userIdList,
+          },
         },
       },
     }).catch((e) => {

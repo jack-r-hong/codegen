@@ -48,12 +48,12 @@ export const CustomPageRequestConvert = (
   };
 };
 type NotifyGrantReqBody = {
-  Amount: string,
-Fee: string,
-MemberOrderNo: string,
-OrderNo: string,
-Sign: string,
-Status: string,
+            Amount: number,
+          Fee: number,
+          MemberOrderNo: string,
+          OrderNo: string,
+          Sign: string,
+          Status: string,
 }
 
 type NotifyGrantReqQuery = {
@@ -90,8 +90,8 @@ export const NotifyGrantRequestConvert = (
     cookie: NotifyGrantReqCookie,
 ): NotifyGrantParams => {
   return {
-    bodyAmount: parseInt(body.Amount),
-    bodyFee: parseInt(body.Fee),
+    bodyAmount: body.Amount,
+    bodyFee: body.Fee,
     bodyMemberOrderNo: body.MemberOrderNo,
     bodyOrderNo: body.OrderNo,
     bodySign: body.Sign,
@@ -99,13 +99,13 @@ export const NotifyGrantRequestConvert = (
   };
 };
 type NotifyPaidReqBody = {
-  Account: string|undefined,
-Amount: string,
-Bank: string|undefined,
-MemberOrderNo: string,
-OrderNo: string,
-Sign: string,
-Status: string,
+            Account: string|undefined,
+          Amount: string,
+          Bank: string|undefined,
+          MemberOrderNo: string,
+          OrderNo: string,
+          Sign: string,
+          Status: string,
 }
 
 type NotifyPaidReqQuery = {
@@ -153,14 +153,14 @@ export const NotifyPaidRequestConvert = (
   };
 };
 type NotifyTakeNumberReqBody = {
-  Amount: string,
-BankName: string|undefined,
-DueTime: string,
-MemberOrderNo: string,
-OrderNo: string,
-PaymentInfo: string,
-Sign: string,
-Status: string,
+            Amount: string,
+          BankName: string|undefined,
+          DueTime: string,
+          MemberOrderNo: string,
+          OrderNo: string,
+          PaymentInfo: string,
+          Sign: string,
+          Status: string,
 }
 
 type NotifyTakeNumberReqQuery = {

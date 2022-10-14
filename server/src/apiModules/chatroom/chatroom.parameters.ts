@@ -15,7 +15,7 @@ interface TypedRequest<
 
 
 type ServiceTokenReqBody = {
-  userId: string,
+            userId: string,
 }
 
 type ServiceTokenReqQuery = {
@@ -51,7 +51,7 @@ export const ServiceTokenRequestConvert = (
   };
 };
 type TransactionServiceTokenReqBody = {
-  transactionId: string,
+            transactionId: string,
 }
 
 type TransactionServiceTokenReqQuery = {
@@ -87,7 +87,7 @@ export const TransactionServiceTokenRequestConvert = (
   };
 };
 type TransactionTokenReqBody = {
-  transactionId: string,
+            transactionId: string,
 }
 
 type TransactionTokenReqQuery = {

@@ -11,6 +11,39 @@ export class TransactionModel {
       param: requestTypes.CreateTransactionParams,
       customParam: any,
       // custom begin createTransactionParam
+      {
+        account,
+        bonusPoint,
+        point,
+        twd,
+        userId,
+        bankAccount,
+        bankCode,
+        bankName,
+        handlingFee,
+        serviceFee,
+        totalDollars,
+        totalPoints,
+        rebate,
+        rebateRate,
+        referralId,
+      }: {
+        account: string,
+        bonusPoint: number,
+        point: number,
+        twd: number,
+        userId: string,
+        bankAccount: number,
+        bankCode: number,
+        bankName: string,
+        handlingFee: number,
+        serviceFee: number,
+        totalDollars: number,
+        totalPoints: number,
+        rebate: number,
+        rebateRate: number
+        referralId: null | number
+      },
 
       // custom end createTransactionParam
   ) {
@@ -18,20 +51,23 @@ export class TransactionModel {
     const res: any = await prisma.$transaction([
       prisma.transaction.create({
         data: {
-          account: customParam.account,
-          bonusPoint: customParam.bonusPoint,
+          account,
+          bonusPoint,
           bos: param.bodyBos,
-          point: customParam.point,
-          twd: customParam.twd,
-          userId: customParam.userId,
-          bankAccount: customParam.bankAccount,
-          bankCode: customParam.bankCode,
-          bankName: customParam.bankName,
+          point,
+          twd,
+          userId,
+          bankAccount,
+          bankCode,
+          bankName,
           payMethod: param.bodyPayMethod,
-          handlingFee: customParam.handlingFee,
-          serviceFee: customParam.serviceFee,
-          totalDollars: customParam.totalDollars,
-          totalPoints: customParam.totalPoints,
+          handlingFee,
+          serviceFee,
+          totalDollars,
+          totalPoints,
+          rebate,
+          rebateRate,
+          referralId,
         },
         select: {
           id: true,
@@ -56,7 +92,7 @@ export class TransactionModel {
       }),
       prisma.transactionQrcode.upsert({
         create: {
-          userId: customParam.userId,
+          userId,
           data: Buffer.from(param.bodyImage?? '', 'base64'),
           code: param.bodyCode?? '',
         },
@@ -65,7 +101,7 @@ export class TransactionModel {
           code: param.bodyCode?? '',
         },
         where: {
-          userId: customParam.userId,
+          userId,
         },
       }),
     ]).catch((e) => {
@@ -662,7 +698,7 @@ export class TransactionModel {
     });
     return res;
   }
-  async readUserFirstBonus(id: string) {
+  async readUserFirstBonusAndRebate(id: string) {
     const res = await prisma.user.findUnique({
       where: {
         id,
@@ -670,8 +706,14 @@ export class TransactionModel {
       select: {
         firstBonus: true,
         firstBonusTemp: true,
-        userAccumulatedReward: {
-          where: {
+        referralMap: {
+          select: {
+            referral: {
+              select: {
+                id: true,
+                rebate: true,
+              },
+            },
           },
         },
       },

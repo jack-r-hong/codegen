@@ -15,13 +15,13 @@ interface TypedRequest<
 
 
 type CreateTransactionReqBody = {
-  bankId: string|undefined,
-bos: string,
-buyOptionId: string|undefined,
-code: string|undefined,
-image: string|undefined,
-payMethod: string,
-point: string|undefined,
+            bankId: number|undefined,
+          bos: number,
+          buyOptionId: number|undefined,
+          code: string|undefined,
+          image: string|undefined,
+          payMethod: number,
+          point: number|undefined,
 }
 
 type CreateTransactionReqQuery = {
@@ -60,19 +60,19 @@ export const CreateTransactionRequestConvert = (
 ): CreateTransactionParams => {
   return {
     bodyBankId: typeof body.bankId === 'number' ? body.bankId : undefined,
-    bodyBos: parseInt(body.bos),
+    bodyBos: body.bos,
     bodyBuyOptionId: typeof body.buyOptionId === 'number' ? body.buyOptionId : undefined,
     bodyCode: body.code,
     bodyImage: body.image,
-    bodyPayMethod: parseInt(body.payMethod),
+    bodyPayMethod: body.payMethod,
     bodyPoint: typeof body.point === 'number' ? body.point : undefined,
   };
 };
 type GetTransactionCalculationReqBody = {
-  bos: string,
-buyOptionId: string|undefined,
-payMethod: string,
-point: string|undefined,
+            bos: number,
+          buyOptionId: number|undefined,
+          payMethod: number,
+          point: number|undefined,
 }
 
 type GetTransactionCalculationReqQuery = {
@@ -107,9 +107,9 @@ export const GetTransactionCalculationRequestConvert = (
     cookie: GetTransactionCalculationReqCookie,
 ): GetTransactionCalculationParams => {
   return {
-    bodyBos: parseInt(body.bos),
+    bodyBos: body.bos,
     bodyBuyOptionId: typeof body.buyOptionId === 'number' ? body.buyOptionId : undefined,
-    bodyPayMethod: parseInt(body.payMethod),
+    bodyPayMethod: body.payMethod,
     bodyPoint: typeof body.point === 'number' ? body.point : undefined,
   };
 };
@@ -180,8 +180,8 @@ export const GetExchangeRateSellRequestConvert = (
   };
 };
 type PostGSPayDepositReqBody = {
-  transactionId: string,
-type: string,
+            transactionId: string,
+          type: number,
 }
 
 type PostGSPayDepositReqQuery = {
@@ -215,7 +215,7 @@ export const PostGSPayDepositRequestConvert = (
 ): PostGSPayDepositParams => {
   return {
     bodyTransactionId: body.transactionId,
-    bodyType: parseInt(body.type),
+    bodyType: body.type,
   };
 };
 type ReadMyTransactionReqBody = {
@@ -352,7 +352,7 @@ export const ReadOneTransactionRequestConvert = (
   };
 };
 type UpdateTransactionReqBody = {
-  state: string|undefined,
+            state: number|undefined,
 }
 
 type UpdateTransactionReqQuery = {

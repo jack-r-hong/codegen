@@ -93,7 +93,7 @@ export const ReadBackstageUserResonRequestConvert = (
   };
 };
 type CreateBackstageUserResonReqBody = {
-  des: string,
+            des: string,
 }
 
 type CreateBackstageUserResonReqQuery = {
@@ -166,7 +166,7 @@ export const DeleteBackstageUserResonRequestConvert = (
   };
 };
 type UpdateBackstageUserResonReqBody = {
-  des: string,
+            des: string,
 }
 
 type UpdateBackstageUserResonReqQuery = {
@@ -206,34 +206,34 @@ export const UpdateBackstageUserResonRequestConvert = (
   };
 };
 type UpdateBackstageUserReqBody = {
-  address: string,
-addressResonId: string|undefined,
-area: string,
-areaResonId: string|undefined,
-birthdate: string,
-birthdateResonId: string|undefined,
-city: string,
-cityResonId: string|undefined,
-country: string,
-countryResonId: string|undefined,
-gameUid: string,
-gameUidResonId: string|undefined,
-idCard: string,
-idCardDate: string,
-idCardDateResonId: string|undefined,
-idCardPhoto: string,
-idCardPhotoResonId: string|undefined,
-idCardPosiition: string,
-idCardPosiitionResonId: string|undefined,
-idCardResonId: string|undefined,
-idCardType: string,
-idCardTypeResonId: string|undefined,
-lineId: string,
-lineIdResonId: string|undefined,
-name: string,
-nameResonId: string|undefined,
-selfie: string,
-selfieResonId: string|undefined,
+            address: number,
+          addressResonId: number|undefined,
+          area: number,
+          areaResonId: number|undefined,
+          birthdate: number,
+          birthdateResonId: number|undefined,
+          city: number,
+          cityResonId: number|undefined,
+          country: number,
+          countryResonId: number|undefined,
+          gameUid: number,
+          gameUidResonId: number|undefined,
+          idCard: number,
+          idCardDate: number,
+          idCardDateResonId: number|undefined,
+          idCardPhoto: number,
+          idCardPhotoResonId: number|undefined,
+          idCardPosiition: number,
+          idCardPosiitionResonId: number|undefined,
+          idCardResonId: number|undefined,
+          idCardType: number,
+          idCardTypeResonId: number|undefined,
+          lineId: number,
+          lineIdResonId: number|undefined,
+          name: number,
+          nameResonId: number|undefined,
+          selfie: number,
+          selfieResonId: number|undefined,
 }
 
 type UpdateBackstageUserReqQuery = {
@@ -296,33 +296,33 @@ export const UpdateBackstageUserRequestConvert = (
 ): UpdateBackstageUserParams => {
   return {
       pathId: path.id,
-    bodyAddress: parseInt(body.address),
+    bodyAddress: body.address,
     bodyAddressResonId: typeof body.addressResonId === 'number' ? body.addressResonId : undefined,
-    bodyArea: parseInt(body.area),
+    bodyArea: body.area,
     bodyAreaResonId: typeof body.areaResonId === 'number' ? body.areaResonId : undefined,
-    bodyBirthdate: parseInt(body.birthdate),
+    bodyBirthdate: body.birthdate,
     bodyBirthdateResonId: typeof body.birthdateResonId === 'number' ? body.birthdateResonId : undefined,
-    bodyCity: parseInt(body.city),
+    bodyCity: body.city,
     bodyCityResonId: typeof body.cityResonId === 'number' ? body.cityResonId : undefined,
-    bodyCountry: parseInt(body.country),
+    bodyCountry: body.country,
     bodyCountryResonId: typeof body.countryResonId === 'number' ? body.countryResonId : undefined,
-    bodyGameUid: parseInt(body.gameUid),
+    bodyGameUid: body.gameUid,
     bodyGameUidResonId: typeof body.gameUidResonId === 'number' ? body.gameUidResonId : undefined,
-    bodyIdCard: parseInt(body.idCard),
-    bodyIdCardDate: parseInt(body.idCardDate),
+    bodyIdCard: body.idCard,
+    bodyIdCardDate: body.idCardDate,
     bodyIdCardDateResonId: typeof body.idCardDateResonId === 'number' ? body.idCardDateResonId : undefined,
-    bodyIdCardPhoto: parseInt(body.idCardPhoto),
+    bodyIdCardPhoto: body.idCardPhoto,
     bodyIdCardPhotoResonId: typeof body.idCardPhotoResonId === 'number' ? body.idCardPhotoResonId : undefined,
-    bodyIdCardPosiition: parseInt(body.idCardPosiition),
+    bodyIdCardPosiition: body.idCardPosiition,
     bodyIdCardPosiitionResonId: typeof body.idCardPosiitionResonId === 'number' ? body.idCardPosiitionResonId : undefined,
     bodyIdCardResonId: typeof body.idCardResonId === 'number' ? body.idCardResonId : undefined,
-    bodyIdCardType: parseInt(body.idCardType),
+    bodyIdCardType: body.idCardType,
     bodyIdCardTypeResonId: typeof body.idCardTypeResonId === 'number' ? body.idCardTypeResonId : undefined,
-    bodyLineId: parseInt(body.lineId),
+    bodyLineId: body.lineId,
     bodyLineIdResonId: typeof body.lineIdResonId === 'number' ? body.lineIdResonId : undefined,
-    bodyName: parseInt(body.name),
+    bodyName: body.name,
     bodyNameResonId: typeof body.nameResonId === 'number' ? body.nameResonId : undefined,
-    bodySelfie: parseInt(body.selfie),
+    bodySelfie: body.selfie,
     bodySelfieResonId: typeof body.selfieResonId === 'number' ? body.selfieResonId : undefined,
   };
 };
@@ -363,46 +363,49 @@ export const ReadOneBackstageUserRequestConvert = (
             pathId: path.id,
   };
 };
-type UpdateOneBackstageUserReqBody = {
-  level: string|undefined,
-remark: string|undefined,
+type UpdateUserStatusOrRemarkOrRebateReqBody = {
+            level: number|undefined,
+          rebate: number|undefined,
+          remark: string|undefined,
 }
 
-type UpdateOneBackstageUserReqQuery = {
+type UpdateUserStatusOrRemarkOrRebateReqQuery = {
 }
 
-type UpdateOneBackstageUserReqParams = {
+type UpdateUserStatusOrRemarkOrRebateReqParams = {
       id: string
 ,
 }
 
-type UpdateOneBackstageUserReqCookie = {
+type UpdateUserStatusOrRemarkOrRebateReqCookie = {
 }
 
-export interface UpdateOneBackstageUserRequest extends TypedRequest<
-  UpdateOneBackstageUserReqBody,
-  UpdateOneBackstageUserReqQuery,
-  UpdateOneBackstageUserReqParams,
-  UpdateOneBackstageUserReqCookie
+export interface UpdateUserStatusOrRemarkOrRebateRequest extends TypedRequest<
+  UpdateUserStatusOrRemarkOrRebateReqBody,
+  UpdateUserStatusOrRemarkOrRebateReqQuery,
+  UpdateUserStatusOrRemarkOrRebateReqParams,
+  UpdateUserStatusOrRemarkOrRebateReqCookie
 >{
 }
 
-export type UpdateOneBackstageUserParams = {
+export type UpdateUserStatusOrRemarkOrRebateParams = {
       pathId: string
 bodyLevel: number|undefined,
+bodyRebate: number|undefined,
 bodyRemark: string|undefined,
 }
 
 
-export const UpdateOneBackstageUserRequestConvert = (
-    body: UpdateOneBackstageUserReqBody,
-    query: UpdateOneBackstageUserReqQuery,
-    path: UpdateOneBackstageUserReqParams,
-    cookie: UpdateOneBackstageUserReqCookie,
-): UpdateOneBackstageUserParams => {
+export const UpdateUserStatusOrRemarkOrRebateRequestConvert = (
+    body: UpdateUserStatusOrRemarkOrRebateReqBody,
+    query: UpdateUserStatusOrRemarkOrRebateReqQuery,
+    path: UpdateUserStatusOrRemarkOrRebateReqParams,
+    cookie: UpdateUserStatusOrRemarkOrRebateReqCookie,
+): UpdateUserStatusOrRemarkOrRebateParams => {
   return {
       pathId: path.id,
     bodyLevel: typeof body.level === 'number' ? body.level : undefined,
+    bodyRebate: body.rebate,
     bodyRemark: body.remark,
   };
 };
@@ -540,8 +543,8 @@ export const CaptchaRequestConvert = (
   };
 };
 type ForgetPasswordPhoneCheckReqBody = {
-  phone: string,
-phonePrefix: string,
+            phone: string,
+          phonePrefix: string,
 }
 
 type ForgetPasswordPhoneCheckReqQuery = {
@@ -579,7 +582,7 @@ export const ForgetPasswordPhoneCheckRequestConvert = (
   };
 };
 type ForgetPasswordPhoneCheckVerifyReqBody = {
-  verify: string,
+            verify: string,
 }
 
 type ForgetPasswordPhoneCheckVerifyReqQuery = {
@@ -615,8 +618,8 @@ export const ForgetPasswordPhoneCheckVerifyRequestConvert = (
   };
 };
 type ForgetPasswordResetReqBody = {
-  password: string,
-passwordCheck: string,
+            password: string,
+          passwordCheck: string,
 }
 
 type ForgetPasswordResetReqQuery = {
@@ -654,9 +657,9 @@ export const ForgetPasswordResetRequestConvert = (
   };
 };
 type LoginUserReqBody = {
-  password: string,
-phone: string,
-phonePrefix: string,
+            password: string,
+          phone: string,
+          phonePrefix: string,
 }
 
 type LoginUserReqQuery = {
@@ -762,25 +765,25 @@ export const GetRealVerifyRequestConvert = (
   };
 };
 type PostRealVerifyReqBody = {
-  address: string,
-area: string,
+            address: string,
+          area: string,
         bankAccounts: {
                 account: string,
                 code: string,
                 name: string,
                 order: string,
         }[],
-birthdate: string,
-city: string,
-country: string,
-gameUid: string,
-idCard: string,
-idCardDate: string,
-idCardPosiition: string,
-idCardType: string,
-lineId: string,
-linePay: string,
-name: string,
+          birthdate: string,
+          city: string,
+          country: string,
+          gameUid: string,
+          idCard: string,
+          idCardDate: string,
+          idCardPosiition: string,
+          idCardType: number,
+          lineId: string,
+          linePay: string,
+          name: string,
 }
 
 type PostRealVerifyReqQuery = {
@@ -834,10 +837,10 @@ export const PostRealVerifyRequestConvert = (
     bodyArea: body.area,
     bodyBankAccounts: body.bankAccounts.map((body :any) => {
       return {
-        bodyAccount: parseInt(body.account),
-        bodyCode: parseInt(body.code),
+        bodyAccount: body.account,
+        bodyCode: body.code,
         bodyName: body.name,
-        bodyOrder: parseInt(body.order),
+        bodyOrder: body.order,
       };
     }),
     bodyBirthdate: body.birthdate,
@@ -847,19 +850,19 @@ export const PostRealVerifyRequestConvert = (
     bodyIdCard: body.idCard,
     bodyIdCardDate: body.idCardDate,
     bodyIdCardPosiition: body.idCardPosiition,
-    bodyIdCardType: parseInt(body.idCardType),
+    bodyIdCardType: body.idCardType,
     bodyLineId: body.lineId,
     bodyLinePay: body.linePay,
     bodyName: body.name,
   };
 };
 type RegisterUserReqBody = {
-  captcha: string,
-password: string,
-passwordCheck: string,
-phone: string,
-phoneCaptcha: string,
-promoteCode: string,
+            captcha: string,
+          password: string,
+          passwordCheck: string,
+          phone: string,
+          phoneCaptcha: string,
+          promoteCode: string,
 }
 
 type RegisterUserReqQuery = {
@@ -905,7 +908,7 @@ export const RegisterUserRequestConvert = (
   };
 };
 type PhoneCheckReqBody = {
-  phone: string,
+            phone: string,
 }
 
 type PhoneCheckReqQuery = {

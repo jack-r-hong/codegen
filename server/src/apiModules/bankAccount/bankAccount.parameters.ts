@@ -48,7 +48,7 @@ export const GetBackstageBankAccountResonRequestConvert = (
   };
 };
 type CreateBackstageBankAccountsResonReqBody = {
-  des: string,
+            des: string,
 }
 
 type CreateBackstageBankAccountsResonReqQuery = {
@@ -121,7 +121,7 @@ export const DeleteBackstageBankAccountResonRequestConvert = (
   };
 };
 type UpdateBackstageBankAccountResonReqBody = {
-  des: string,
+            des: string,
 }
 
 type UpdateBackstageBankAccountResonReqQuery = {
@@ -256,15 +256,15 @@ export const PutBackstageBankAccountsRequestConvert = (
       pathUserId: path.userId,
     bodyDataList: body.dataList.map((body :any) => {
       return {
-        bodyAccount: parseInt(body.account),
+        bodyAccount: body.account,
         bodyAccountResonId: typeof body.accountResonId === 'number' ? body.accountResonId : undefined,
-        bodyCode: parseInt(body.code),
+        bodyCode: body.code,
         bodyCodeResonId: typeof body.codeResonId === 'number' ? body.codeResonId : undefined,
-        bodyName: parseInt(body.name),
+        bodyName: body.name,
         bodyNameResonId: typeof body.nameResonId === 'number' ? body.nameResonId : undefined,
-        bodyPhoto: parseInt(body.photo),
+        bodyPhoto: body.photo,
         bodyPhotoResonId: typeof body.photoResonId === 'number' ? body.photoResonId : undefined,
-        bodyVerifyId: parseInt(body.verifyId),
+        bodyVerifyId: body.verifyId,
       };
     }),
   };
@@ -314,10 +314,10 @@ export const CreateBankAccountsRequestConvert = (
   return {
     bodyData: body.data.map((body :any) => {
       return {
-        bodyAccount: parseInt(body.account),
-        bodyCode: parseInt(body.code),
+        bodyAccount: body.account,
+        bodyCode: body.code,
         bodyName: body.name,
-        bodyOrder: parseInt(body.order),
+        bodyOrder: body.order,
       };
     }),
   };

@@ -60,8 +60,8 @@ export const ReadManyBackstagePayManageRequestConvert = (
   };
 };
 type CareateBackstagePayManageReqBody = {
-  type: string,
-userId: string,
+            type: number,
+          userId: string,
 }
 
 type CareateBackstagePayManageReqQuery = {
@@ -94,7 +94,7 @@ export const CareateBackstagePayManageRequestConvert = (
     cookie: CareateBackstagePayManageReqCookie,
 ): CareateBackstagePayManageParams => {
   return {
-    bodyType: parseInt(body.type),
+    bodyType: body.type,
     bodyUserId: body.userId,
   };
 };
@@ -210,9 +210,9 @@ export const DeleteOneBackstagePayManageRequestConvert = (
   };
 };
 type UpdateBackstagePayManageReqBody = {
-  code: string,
-remark: string,
-status: string|undefined,
+            code: string,
+          remark: string,
+          status: number|undefined,
 }
 
 type UpdateBackstagePayManageReqQuery = {

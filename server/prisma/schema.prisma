@@ -123,6 +123,7 @@ model Referral {
   userId String @map("user_id")  @unique
   
     // custom begin Referral
+  transaction Transaction[]
 
     // custom end Referral
 }
@@ -131,7 +132,7 @@ model ReferralMap {
   referral Referral? @relation(fields: [referralId], references: [id])
   referralId Int @map("referral_id")  
   user User? @relation(fields: [userId], references: [id])
-  userId String @map("user_id")  
+  userId String @map("user_id")  @unique
   
     // custom begin ReferralMap
 
@@ -150,6 +151,8 @@ model Transaction {
   id  String @id @default(uuid()) @map("id")                 
   payMethod  Int  @map("pay_method")                 
   point  Int  @map("point")                 
+  rebate  Int?   @map("rebate")                 
+  rebateRate  Decimal?    @db.Decimal(4, 2)  @map("rebate_rate")                 
   serviceFee  Int  @map("service_fee")                 
   state  Int  @default(1)  @map("state")                 
   timeout  Boolean  @default(false)  @map("timeout")                 
@@ -166,6 +169,8 @@ model Transaction {
   pairedAt DateTime? @map("pair_at")
   paidAt DateTime? @map("paid_at") 
   completedAt DateTime? @map("completed_at") 
+  referralId Int? @map("referral_id") 
+  referral Referral?   @relation(fields: [referralId], references: [id])
 
     // custom end Transaction
 }
@@ -211,7 +216,7 @@ model User {
   level Int @map("level") @default(1) 
   payManage PayManage[]
   referral Referral?
-  referralMap ReferralMap[]
+  referralMap ReferralMap?
   transaction Transaction[]
   transactionRecive TransactionRecive[]
   userVerify UserVerify?
