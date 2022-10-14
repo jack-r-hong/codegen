@@ -488,68 +488,7 @@
         "security" : [ {
           "cookieAuth" : [ ]
         } ]
-      },
-      "put" : {
-        "tags" : [ "user" ],
-        "summary" : "Logs user into the system",
-        "operationId" : "putRealVerify",
-        "requestBody" : {
-          "$ref" : "#/components/requestBodies/UserUpdateRealVerify"
-        },
-        "responses" : {
-          "200" : {
-            "description" : "successful operation",
-            "headers" : {
-              "X-Rate-Limit" : {
-                "description" : "calls per hour allowed by the user",
-                "schema" : {
-                  "type" : "integer",
-                  "format" : "int32"
-                }
-              },
-              "X-Expires-After" : {
-                "description" : "date in UTC when token expires",
-                "schema" : {
-                  "type" : "string",
-                  "format" : "date-time"
-                }
-              }
-            },
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "type" : "object",
-                  "properties" : {
-                    "result": {
-                      "type" : "object",
-                      "properties" : {
-                        "id" : {
-                          "type" : "integer"
-                        }                        
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "400" : {
-            "$ref" : "#/components/responses/BadRequest"
-          },
-          "401" : {
-            "$ref" : "#/components/responses/Unauthorized"
-          },
-          "403" : {
-            "$ref" : "#/components/responses/Forbidden"
-          },          
-          "409" : {
-            "description": "bank account duplicate"
-          }          
-        },
-        "security" : [ {
-          "cookieAuth" : [ ]
-        } ]
-      }      
+      }  
     },      
     "/real_verify/photo": {
       "get" : {
@@ -2816,7 +2755,11 @@
           "remark": {
             "type" : "string",
             "nullable": true
-          }
+          },
+          "linePay": {
+            "type" : "string",
+            "nullable": true
+          }          
         }
       }, 
       "Referral" : {
@@ -3533,6 +3476,10 @@
                   "description": "residence address",
                   "type" : "string"
                 },
+                "linePay" : {
+                  "description": "linePay",
+                  "type" : "string"
+                },
                 "bankAccounts": {
                   "type": "array",
                   "items":{
@@ -3553,7 +3500,7 @@
                       }                                            
                     }
                   }
-                } 
+                }
               }
             }
           }
@@ -4494,7 +4441,10 @@
                 },
                 "gameUid" : {
                   "type" : "string"
-                },                                
+                },  
+                "linePay" : {
+                  "type" : "string"
+                },
                 "userVerifyPhoto": {
                   "type" : "array",
                   "items":{ 

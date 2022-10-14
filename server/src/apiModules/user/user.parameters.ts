@@ -779,6 +779,7 @@ idCardDate: string,
 idCardPosiition: string,
 idCardType: string,
 lineId: string,
+linePay: string,
 name: string,
 }
 
@@ -817,6 +818,7 @@ bodyIdCardDate: string,
 bodyIdCardPosiition: string,
 bodyIdCardType: number,
 bodyLineId: string,
+bodyLinePay: string,
 bodyName: string,
 }
 
@@ -847,75 +849,7 @@ export const PostRealVerifyRequestConvert = (
     bodyIdCardPosiition: body.idCardPosiition,
     bodyIdCardType: parseInt(body.idCardType),
     bodyLineId: body.lineId,
-    bodyName: body.name,
-  };
-};
-type PutRealVerifyReqBody = {
-  address: string,
-area: string,
-birthdate: string,
-city: string,
-country: string,
-gameUid: string|undefined,
-idCard: string,
-idCardDate: string,
-idCardPosiition: string,
-idCardType: string,
-lineId: string|undefined,
-name: string,
-}
-
-type PutRealVerifyReqQuery = {
-}
-
-type PutRealVerifyReqParams = {
-}
-
-type PutRealVerifyReqCookie = {
-}
-
-export interface PutRealVerifyRequest extends TypedRequest<
-  PutRealVerifyReqBody,
-  PutRealVerifyReqQuery,
-  PutRealVerifyReqParams,
-  PutRealVerifyReqCookie
->{
-}
-
-export type PutRealVerifyParams = {
-bodyAddress: string,
-bodyArea: string,
-bodyBirthdate: string,
-bodyCity: string,
-bodyCountry: string,
-bodyGameUid: string|undefined,
-bodyIdCard: string,
-bodyIdCardDate: string,
-bodyIdCardPosiition: string,
-bodyIdCardType: number,
-bodyLineId: string|undefined,
-bodyName: string,
-}
-
-
-export const PutRealVerifyRequestConvert = (
-    body: PutRealVerifyReqBody,
-    query: PutRealVerifyReqQuery,
-    path: PutRealVerifyReqParams,
-    cookie: PutRealVerifyReqCookie,
-): PutRealVerifyParams => {
-  return {
-    bodyAddress: body.address,
-    bodyArea: body.area,
-    bodyBirthdate: body.birthdate,
-    bodyCity: body.city,
-    bodyCountry: body.country,
-    bodyGameUid: body.gameUid,
-    bodyIdCard: body.idCard,
-    bodyIdCardDate: body.idCardDate,
-    bodyIdCardPosiition: body.idCardPosiition,
-    bodyIdCardType: parseInt(body.idCardType),
-    bodyLineId: body.lineId,
+    bodyLinePay: body.linePay,
     bodyName: body.name,
   };
 };

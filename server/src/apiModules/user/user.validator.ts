@@ -512,6 +512,10 @@ export const postRealVerifyValidator: Schema = {
     in: 'body',
     isString: true,
   },
+  'linePay': {
+    in: 'body',
+    isString: true,
+  },
   'name': {
     in: 'body',
     isString: true,
@@ -519,85 +523,6 @@ export const postRealVerifyValidator: Schema = {
       options: {
         max: 30,
         min: 1,
-      },
-
-    },
-  },
-  'JSESSIONID': {
-    in: 'cookies',
-    custom: {
-      options: (value, {req, location, path}) => {
-        sessions.cookieAuthSessionVerify(req['session']);
-        return true;
-      },
-    },
-  },
-};
-export const putRealVerifyValidator: Schema = {
-  'address': {
-    in: 'body',
-    isString: true,
-  },
-  'area': {
-    in: 'body',
-    isString: true,
-  },
-  'birthdate': {
-    in: 'body',
-    isString: true,
-  },
-  'city': {
-    in: 'body',
-    isString: true,
-  },
-  'country': {
-    in: 'body',
-    isString: true,
-  },
-  'gameUid': {
-    in: 'body',
-    isString: true,
-optional: {
-  options: {
-    nullable: true,
-  },
-},
-  },
-  'idCard': {
-    in: 'body',
-    isString: true,
-  },
-  'idCardDate': {
-    in: 'body',
-    isString: true,
-  },
-  'idCardPosiition': {
-    in: 'body',
-    isString: true,
-  },
-  'idCardType': {
-    in: 'body',
-    isInt: true,
-    matches: {
-      options: /^(1|2|3)/,
-    },
-  },
-  'lineId': {
-    in: 'body',
-    isString: true,
-optional: {
-  options: {
-    nullable: true,
-  },
-},
-  },
-  'name': {
-    in: 'body',
-    isString: true,
-    isLength: {
-      options: {
-        max: 30,
-        min: 3,
       },
 
     },

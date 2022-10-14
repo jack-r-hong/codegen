@@ -278,7 +278,7 @@ export class UserModel {
     const res = await prisma.user.findUnique({
       where: {
         id: param.pathId,
-
+        
       },
       select: {
         address: true,
@@ -293,6 +293,7 @@ export class UserModel {
         idCardPosiition: true,
         idCardType: true,
         lineId: true,
+        linePay: true,
         name: true,
         userVerifyPhoto: true,
         // custom begin readOneBackstageUser
@@ -588,6 +589,7 @@ export class UserModel {
         area: true,
         address: true,
         userVerifyPhoto: true,
+        linePay: true,
         userVerify: {
           select: {
             address: true,
@@ -703,6 +705,7 @@ export class UserModel {
         country: param.bodyCountry,
         gameUid: param.bodyGameUid,
         lineId: param.bodyLineId,
+        linePay: param.bodyLinePay,
         idCard: param.bodyIdCard,
         idCardDate: param.bodyIdCardDate,
         idCardPosiition: param.bodyIdCardPosiition,
@@ -792,49 +795,6 @@ export class UserModel {
     return res;
 
     // custom end postRealVerify
-  }
-  async putRealVerify(
-      param: requestTypes.PutRealVerifyParams,
-      customParam: any,
-      // custom begin putRealVerifyParam
-
-      // custom end putRealVerifyParam
-  ) {
-    // custom begin putRealVerify
-    const res: any | null = await prisma.user.update({
-      data: {
-        name: param.bodyName,
-        lineId: param.bodyLineId,
-        gameUid: param.bodyGameUid,
-        birthdate: param.bodyBirthdate,
-        country: param.bodyCountry,
-        idCard: param.bodyIdCard,
-        idCardDate: param.bodyIdCardDate,
-        idCardPosiition: param.bodyIdCardPosiition,
-        idCardType: param.bodyIdCardType,
-        city: param.bodyCity,
-        area: param.bodyArea,
-        address: param.bodyArea,
-        userStatus: 3,
-      },
-      where: {
-        id: customParam.userId,
-      },
-      select: {
-        id: true,
-        userStatus: true,
-      },
-    }).catch((e) => {
-      throw e;
-    }).finally(() => {
-      prisma.$disconnect();
-    });
-    if (res === null) {
-      throw new errors.NotFindError;
-    }
-    return res;
-
-    // custom end putRealVerify
   }
   async registerUser(
       param: requestTypes.RegisterUserParams,

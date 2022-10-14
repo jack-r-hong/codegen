@@ -32,6 +32,7 @@ const userVerifyResponeFormat = async (data: any) => {
     address,
     userVerify,
     userVerifyPhoto,
+    linePay,
   } = data;
   const verifyDes = {
     name: '',
@@ -155,6 +156,11 @@ const userVerifyResponeFormat = async (data: any) => {
       des: verifyDes.address,
       verify: userVerify.address,
     },
+    linePay: {
+      val: linePay,
+      des: null,
+      verify: null,
+    },
     idCardPhoto: {
       val: [
         photos.idCard1,
@@ -190,6 +196,7 @@ const userVerifyResponeFormat2 = async (data: any) => {
     userVerify,
     userVerifyPhoto,
     bankAccount,
+    linePay,
   } = data;
   const verify = {
     name: userVerify.name,
@@ -335,6 +342,7 @@ const userVerifyResponeFormat2 = async (data: any) => {
     city,
     area,
     address,
+    linePay,
     verify,
     verifyDes,
     idCardPhoto: [photos.idCard1, photos.idCard2],
@@ -729,20 +737,6 @@ export class UserService {
 
     // custom end postRealVerify
   }
-  async putRealVerify(
-      param :requestTypes.PutRealVerifyParams,
-      session: Express.Request['session'],
-  ) {
-    // custom begin putRealVerify
-    const res = await this.userModel.putRealVerify(param,
-        {userId: session.userInfo?.id!})
-        .catch((e) =>{
-          throw e;
-        });
-    return res;
-
-    // custom end putRealVerify
-  }
   async registerUser(
       param :requestTypes.RegisterUserParams,
       session: Express.Request['session'],
@@ -812,9 +806,9 @@ export class UserService {
       phonePrefix,
       phone,
     };
-
     await getPhoneCheck(phonePrefix, phone, code);
     return {success: true};
+
     // custom end phoneCheck
   }
   async getUserMyStatus(

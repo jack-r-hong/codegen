@@ -361,6 +361,7 @@ export class UserController implements Controller {
   @Validator(validSchemas.forgetPasswordPhoneCheckValidator)
   // custom begin forgetPasswordPhoneCheckDecorator
   @limiter(2, 1)
+
   // custom end forgetPasswordPhoneCheckDecorator
   async forgetPasswordPhoneCheck(
       req: userParams.ForgetPasswordPhoneCheckRequest,
@@ -573,37 +574,6 @@ export class UserController implements Controller {
           next(e);
         });
   }
-  @Put('/real_verify')
-  @Validator(validSchemas.putRealVerifyValidator)
-  // custom begin putRealVerifyDecorator
-
-  // custom end putRealVerifyDecorator
-  async putRealVerify(
-      req: userParams.PutRealVerifyRequest,
-      res: Response,
-      next: NextFunction,
-  ) {
-    // custom begin putRealVerifyCheck
-
-    // custom end putRealVerifyCheck
-    UserController.service.putRealVerify(
-        userParams.PutRealVerifyRequestConvert(
-            req.body,
-            req.query,
-            req.params,
-            req.cookies,
-        ),
-        req.session,
-    )
-        .then((result) =>{
-          // custom begin putRealVerify
-          res.json({result});
-
-          // custom end putRealVerify
-        }).catch((e) => {
-          next(e);
-        });
-  }
   @Post('/register')
   @Validator(validSchemas.registerUserValidator)
   // custom begin registerUserDecorator
@@ -639,6 +609,7 @@ export class UserController implements Controller {
   @Validator(validSchemas.phoneCheckValidator)
   // custom begin phoneCheckDecorator
   @limiter(2, 4)
+
   // custom end phoneCheckDecorator
   async phoneCheck(
       req: userParams.PhoneCheckRequest,
