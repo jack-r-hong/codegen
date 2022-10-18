@@ -16,6 +16,55 @@ interface ChatroomHandlerInterface {
     handleReadEvent: () => void
     handleSendEvent: (data: any) => void
     readySend: () => void
+    subscriberQuit: () => void
+}
+
+interface LobbyHandlerInterface {
+  chatroomHandler: ChatroomHandlerInterface| null;
+  handleChangeRoomEvent: (data: any) => void
+  ws?: WebSocket
+}
+
+export class RobbyHandler implements LobbyHandlerInterface {
+  chatroomHandler: ChatroomHandlerInterface| null = null;
+  ws: WebSocket;
+  userId: string;
+  transactionId: string;
+  userName: string;
+  isAgent: boolean;
+  isCS: boolean;
+  constructor(
+      ws: WebSocket,
+      userId: string,
+      userName: string,
+      isAgent: boolean,
+      isCS: boolean,
+  ) {
+    this.ws = ws;
+    this.userId = userId;
+    this.transactionId = '';
+    this.userName = userName;
+    this.isAgent = isAgent;
+    this.isCS = isCS;
+  }
+  async handleChangeRoomEvent(data: any) {
+    this.transactionId = data.transactionId;
+    // close subscriber
+    if (this.chatroomHandler) {
+      this.chatroomHandler.subscriberQuit();
+    }
+
+    this.chatroomHandler = new TransactionChatroomHandler(
+        this.userId,
+        this.transactionId,
+        this.userName,
+        this.isAgent,
+        this.isCS,
+        this.ws,
+    );
+
+    event.eventName = 'changeRoom';
+  }
 }
 
 class ChatroomHandler {
@@ -92,6 +141,10 @@ class ChatroomHandler {
     delete res.userId;
     return res;
   };
+
+  subscriberQuit() {
+    wsClientChatroomModel.subscriberQuit(this.subscriber).then(()=> {});
+  }
 }
 
 
@@ -107,19 +160,21 @@ export class TransactionChatroomHandler extends ChatroomHandler
       userName: string,
       isAgent: boolean,
       isCS: boolean,
-      cursor: number,
       ws: WebSocket,
   ) {
     super(
         userId,
         userName,
-        cursor,
+        0,
         ws,
-        transactionId + 'ttt',
+        transactionId + 'Transaction',
     );
     this.transactionId = transactionId;
     this.isAgent = isAgent;
     this.isCS = isCS;
+    this.getCursor().then((res) => {
+      this.cursor = res;
+    });
   }
 
   handleReadEvent() {
@@ -189,5 +244,15 @@ export class TransactionChatroomHandler extends ChatroomHandler
         }), this.transactionId);
       }
     }
+  }
+
+  async getCursor() {
+    const cursorRes = await chatroomModel.getTransactionCursor(
+        this.transactionId,
+        this.userId);
+    if (cursorRes) {
+      return cursorRes.cursor;
+    }
+    return 0;
   }
 }

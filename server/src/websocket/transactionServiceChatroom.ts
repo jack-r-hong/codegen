@@ -7,6 +7,7 @@ import {ChatroomModel}
   from '../apiModules/chatroom/chatroom.model';
 import {Service, Container} from 'typedi';
 import {IncomingMessage} from 'http';
+import {RobbyHandler} from './chatroomHandler';
 
 const event = new WSEvent('transaction_service_chatroom');
 const wsClientChatroomModel = Container.get(WSClientChatroomModel);
@@ -22,15 +23,7 @@ export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
   userName?: string;
   isAgent?: boolean;
   isCS?: boolean;
-  cursor: number = 0;
-  messageList? :{
-    id: number;
-    text: string;
-    name: string;
-    userId: string;
-    role: number;
-    transactionId: string;
-  }[];
+  // cursor: number = 0;
   ws?: WebSocket;
   subscriberNewMessage?: any;
   subscriberRoom?: any;
@@ -50,19 +43,31 @@ export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
 
     const self = this;
 
+    const robbyHandler = new RobbyHandler(
+        ws,
+        this.userId,
+        this.userName,
+        false,
+        true,
+    );
+
     ws.on('message', async function message(message: string) {
       const data = event.parse(message).data;
 
       if (data.event === 'send') {
-        self.handleSendEvent(data.data);
+        if (robbyHandler.chatroomHandler) {
+          robbyHandler.chatroomHandler.handleSendEvent(data.data);
+        }
       }
 
       if (data.event === 'read') {
-        self.handleReadEvent(data.data);
+        if (robbyHandler.chatroomHandler) {
+          robbyHandler.chatroomHandler.handleReadEvent();
+        }
       }
 
       if (data.event === 'changeRoom') {
-        self.handleChangeRoomEvent(data.data);
+        robbyHandler.handleChangeRoomEvent(data.data);
       }
     });
 
@@ -74,25 +79,10 @@ export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
       ws.send(event.msg('bit'));
     }, 15000);
 
-
     ws.on('close', () => {
       wsClientChatroomModel.subscriberQuit(self.subscriberRoom).then(()=> {});
       clearInterval(timer);
     });
-  };
-
-  dataFormat = (data: any) => {
-    return {
-      id: data.id,
-      userId: data.userId,
-      data: data.type === 'image' && data.data?
-        data.data.toString('base64'): data.text,
-      type: data.type,
-      time: data.createdAt,
-      name: data.name,
-      role: data.role,
-      read: data.id < this.cursor || this.userId === data.userId,
-    };
   };
 
   readDataFormat = (data: any) => {
@@ -152,104 +142,6 @@ export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
           return this.readDataFormat(e);
         }),
     ));
-  }
-
-  async sendNotify() {
-    event.eventName = 'notify';
-    const messageList = (await wsClientChatroomModel.get())
-        .map((e) => JSON.parse(e));
-      this.ws!.send(event.msg({
-        unreadCouunt: messageList.filter((e: any) => {
-          return e.id > this.cursor && this.userId !== e.userId;
-        }).length,
-      }));
-  }
-
-  handleSendEvent(data: any) {
-    if (this.userId && this.transactionId) {
-      data.name = this.userName;
-      data.userId = this.userId;
-      chatroomModel.createTransactionMessage(
-          this.transactionId,
-          this.userId,
-          data.type,
-          data.name?? '',
-            data.type === 'text'? data.data: '',
-          data.type === 'image'? Buffer.from(data.data, 'base64'): undefined,
-          this.isAgent? 2: (this.isCS? 3: 1),
-      ).then((e) => {
-        wsClientChatroomModel.push(JSON.stringify({
-          id: e.id,
-          userId: e.userId,
-        }));
-        wsClientChatroomModel.pub(
-            JSON.stringify(this.dataFormat(e)),
-        );
-      }).catch((e) => console.log(e));
-    }
-  }
-
-  handleReadEvent(data: any) {
-    if (this.transactionId) {
-      chatroomModel.upsertTransactionCursor(
-          this.transactionId,
-            this.userId!,
-      );
-
-      this.sendNotify().then();
-    }
-  }
-
-  isSelf = (data: any) => {
-    const res = Object.assign(data, {isSelf: this.userId === data.userId});
-    delete res.userId;
-    return res;
-  };
-
-  async handleChangeRoomEvent(data: any) {
-    this.transactionId = data.transactionId;
-
-    event.eventName = 'changeRoom';
-    this.createSubscriberRoom();
-    const res = await chatroomModel.getTransactionMessages(
-        this.transactionId!,
-    );
-
-    this.ws!.send(event.msg(
-        res.map((e) => {
-          return this.isSelf(this.dataFormat(e));
-        }),
-    ));
-
-    for (const e of res) {
-      e.data = null;
-    }
-
-    if ((await wsClientChatroomModel.get()).length === 0) {
-      for (const e of res) {
-        await wsClientChatroomModel.push(JSON.stringify({
-          id: e.id,
-          userId: e.userId,
-        }));
-      }
-    }
-  }
-
-  async createSubscriberRoom() {
-    const self = this;
-
-    if (this.subscriberRoom) {
-      wsClientChatroomModel.subscriberQuit(this.subscriberRoom).then(()=> {});
-    }
-
-    this.subscriberRoom = await wsClientChatroomModel.sub(
-        (message: any)=>{
-          event.eventName = 'send';
-          const data = JSON.parse(message);
-          self.ws!.send(event.msg(self.isSelf(data)));
-
-          self.sendNotify().then();
-        });
   }
 
   async createSubscriberNewMessage() {

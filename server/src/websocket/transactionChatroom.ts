@@ -1,16 +1,10 @@
 import WebSocket from 'ws';
 import {WSToken, WSOnMessage, MyWebSocketServer, WSEvent} from './base';
-import {
-  WSClientChatroomModel} from '../redisClient/models/webSocketModels';
-import {ChatroomModel}
-  from '../apiModules/chatroom/chatroom.model';
-import {Service, Container} from 'typedi';
+import {Service} from 'typedi';
 import {IncomingMessage} from 'http';
 import {TransactionChatroomHandler} from './chatroomHandler';
 
 const event = new WSEvent('transaction_chatroom');
-const wsClientChatroomModel = Container.get(WSClientChatroomModel);
-const chatroomModel = Container.get(ChatroomModel);
 
 @Service({id: WSToken, multiple: true})
 export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
@@ -25,28 +19,22 @@ export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
   onStartMessage = async (ws: WebSocket, req: IncomingMessage) => {
     const url = req.url;
     const token = this.checkToken(url);
+
     if (!token) {
       ws.send(event.msg({error: true, message: 'notAuth'}));
+      return;
     }
 
     const {userId, userName, transactionId, isAgent, isCS} =
     token as {userId: string, userName: string,
       transactionId: string, isAgent: boolean, isCS: boolean};
 
-    const cursorRes = await chatroomModel.getTransactionCursor(
-        transactionId, userId);
-    let cursor = 0;
-    if (cursorRes) {
-      cursor = cursorRes.cursor;
-    }
-
-    const wsHandle = new TransactionChatroomHandler(
+    const wsHandler = new TransactionChatroomHandler(
         userId,
         transactionId,
         userName,
         isAgent,
         isCS,
-        cursor,
         ws,
     );
 
@@ -54,17 +42,17 @@ export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
       const data = event.parse(message).data;
 
       if (data.event === 'send') {
-        wsHandle.handleSendEvent(data.data);
+        wsHandler.handleSendEvent(data.data);
       }
 
       if (data.event === 'read') {
-        wsHandle.handleReadEvent();
+        wsHandler.handleReadEvent();
       }
     });
 
-    await wsHandle.readySend();
+    await wsHandler.readySend();
 
-    await wsHandle.sendNotify();
+    await wsHandler.sendNotify();
 
     const timer = setInterval(() => {
       event.eventName = 'bit';
@@ -72,7 +60,7 @@ export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
     }, 15000);
 
     ws.on('close', () => {
-      wsClientChatroomModel.subscriberQuit(wsHandle.subscriber).then(()=> {});
+      wsHandler.subscriberQuit();
       clearInterval(timer);
     });
   };
