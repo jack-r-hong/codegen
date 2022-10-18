@@ -3,10 +3,11 @@
 import WebSocket, {WebSocketServer} from 'ws';
 import {IncomingMessage} from 'http';
 
+import {chatroomKey} from '../jwt';
 
 import {Token, Service} from 'typedi';
 import {Duplex} from 'stream';
-
+import qs from 'qs';
 
 export const WSToken = new Token('WSToken');
 
@@ -31,6 +32,33 @@ export class MyWebSocketServer extends WebSocketServer {
   constructor(
   ) {
     super({noServer: true});
+  }
+
+  checkToken(url: string | undefined) {
+    if (!url) {
+      return false;
+    }
+
+    const queryString = url.split('?')[1];
+
+    if (!queryString) {
+      return false;
+    }
+
+    const query = qs.parse(queryString);
+    const {token} = query;
+
+    if (!token) {
+      return false;
+    }
+
+    const tokenV = chatroomKey.tokenVerify(token as string);
+
+    if (!token || !tokenV) {
+      return false;
+    }
+
+    return tokenV;
   }
 
   onConnection(

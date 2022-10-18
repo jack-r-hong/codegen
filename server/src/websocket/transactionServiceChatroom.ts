@@ -1,17 +1,15 @@
 import WebSocket from 'ws';
 import {WSToken, WSOnMessage, MyWebSocketServer, WSEvent} from './base';
 import {
-  WSClientTransactionModel,
+  WSClientChatroomModel,
   WSClientServiceModel} from '../redisClient/models/webSocketModels';
 import {ChatroomModel}
   from '../apiModules/chatroom/chatroom.model';
-import {chatroomKey} from '../jwt';
 import {Service, Container} from 'typedi';
 import {IncomingMessage} from 'http';
-import qs from 'qs';
 
 const event = new WSEvent('transaction_service_chatroom');
-const wSCIModel = Container.get(WSClientTransactionModel);
+const wsClientChatroomModel = Container.get(WSClientChatroomModel);
 const wSClientServiceModel = Container.get(WSClientServiceModel);
 
 const chatroomModel = Container.get(ChatroomModel);
@@ -43,38 +41,7 @@ export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
   }
 
   onStartMessage = async (ws: WebSocket, req: IncomingMessage) => {
-    // const url = req.url;
     this.ws = ws;
-    // if (!url) {
-    //   ws.send(event.msg({error: true, message: 'notAuth'}));
-    //   return;
-    // }
-
-    // const queryString = url.split('?')[1];
-
-    // if (!queryString) {
-    //   ws.send(event.msg({error: true, message: 'notAuth'}));
-    //   return;
-    // }
-
-    // const query = qs.parse(queryString);
-    // const {token} = query;
-
-    // if (!token) {
-    //   ws.send(event.msg({error: true, message: 'notAuth'}));
-    //   return;
-    // }
-
-    // const tokenV = chatroomKey.tokenVerify(token as string);
-
-    // if (!token || !tokenV) {
-    //   ws.send(event.msg({error: true, message: 'notAuth'}));
-    //   return;
-    // }
-
-    // const {userId, userName, isAgent, isCS} =
-    //  tokenV as {userId: string, userName: string,
-    //   transactionId: string, isAgent: boolean, isCS: boolean};
 
     this.userId = 'CS';
     this.userName = 'CS';
@@ -109,7 +76,7 @@ export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
 
 
     ws.on('close', () => {
-      wSCIModel.subscriberQuit(self.subscriberRoom).then(()=> {});
+      wsClientChatroomModel.subscriberQuit(self.subscriberRoom).then(()=> {});
       clearInterval(timer);
     });
   };
@@ -189,7 +156,8 @@ export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
 
   async sendNotify() {
     event.eventName = 'notify';
-    const messageList = (await wSCIModel.get()).map((e) => JSON.parse(e));
+    const messageList = (await wsClientChatroomModel.get())
+        .map((e) => JSON.parse(e));
       this.ws!.send(event.msg({
         unreadCouunt: messageList.filter((e: any) => {
           return e.id > this.cursor && this.userId !== e.userId;
@@ -210,11 +178,11 @@ export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
           data.type === 'image'? Buffer.from(data.data, 'base64'): undefined,
           this.isAgent? 2: (this.isCS? 3: 1),
       ).then((e) => {
-        wSCIModel.push(JSON.stringify({
+        wsClientChatroomModel.push(JSON.stringify({
           id: e.id,
           userId: e.userId,
         }));
-        wSCIModel.pub(
+        wsClientChatroomModel.pub(
             JSON.stringify(this.dataFormat(e)),
         );
       }).catch((e) => console.log(e));
@@ -257,9 +225,9 @@ export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
       e.data = null;
     }
 
-    if ((await wSCIModel.get()).length === 0) {
+    if ((await wsClientChatroomModel.get()).length === 0) {
       for (const e of res) {
-        await wSCIModel.push(JSON.stringify({
+        await wsClientChatroomModel.push(JSON.stringify({
           id: e.id,
           userId: e.userId,
         }));
@@ -271,10 +239,10 @@ export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
     const self = this;
 
     if (this.subscriberRoom) {
-      wSCIModel.subscriberQuit(this.subscriberRoom).then(()=> {});
+      wsClientChatroomModel.subscriberQuit(this.subscriberRoom).then(()=> {});
     }
 
-    this.subscriberRoom = await wSCIModel.sub(
+    this.subscriberRoom = await wsClientChatroomModel.sub(
         (message: any)=>{
           event.eventName = 'send';
           const data = JSON.parse(message);

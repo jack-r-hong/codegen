@@ -29,13 +29,33 @@ export class WSClientQueueModel extends
 }
 
 @Service()
+export class WSClientRealModel extends
+  Mixin(Queue, WebSocketBase) {
+  constructor() {
+    super();
+  }
+
+  override key: string = super.setKey('wsreal');
+}
+
+@Service()
+export class WSClientChatroomModel extends
+  Mixin(Queue, WebSocketBase) {
+  constructor() {
+    super();
+  }
+
+  override key: string = super.setKey('wschat');
+}
+
+@Service()
 export class WSClientTransactionModel extends
   Mixin(Queue, WebSocketBase) {
   constructor() {
     super();
   }
 
-  override key: string = super.setKey('wsct');
+  override key: string = super.setKey('wstran');
 }
 
 @Service()

@@ -17,7 +17,6 @@ import './transactionServiceChatroom';
 
 export class WebsocketApp {
   wss: WebSocket.Server<WebSocket.WebSocket>;
-  ws!: WebSocket.WebSocket;
   path = '/ws';
   server;
 

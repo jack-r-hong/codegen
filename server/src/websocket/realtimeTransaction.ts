@@ -1,7 +1,7 @@
 import WebSocket from 'ws';
 import {WSToken, WSOnMessage, MyWebSocketServer, WSEvent} from './base';
 import {
-  WSClientTransactionModel} from '../redisClient/models/webSocketModels';
+  WSClientRealModel} from '../redisClient/models/webSocketModels';
 import {UserModel} from '../apiModules/user/user.model';
 import {TransactionModel} from '../apiModules/transaction/transaction.model';
 import {Service, Container} from 'typedi';
@@ -9,7 +9,7 @@ import {IncomingMessage} from 'http';
 import qs from 'qs';
 
 const event = new WSEvent('realtime_transaction');
-const wSCIModel = Container.get(WSClientTransactionModel);
+const wsClientRealModel = Container.get(WSClientRealModel);
 const userModel = Container.get(UserModel);
 const transactionModel = Container.get(TransactionModel);
 
@@ -90,7 +90,7 @@ export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
       return;
     }
 
-    const subscriber = await wSCIModel.sub(
+    const subscriber = await wsClientRealModel.sub(
         async (message: any)=>{
           event.eventName = 'update';
           const d = JSON.parse(message);
@@ -107,7 +107,7 @@ export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
     }, 4000);
 
     ws.on('close', () => {
-      wSCIModel.subscriberQuit(subscriber).then(()=> {});
+      wsClientRealModel.subscriberQuit(subscriber).then(()=> {});
       clearInterval(timer);
     });
   };
