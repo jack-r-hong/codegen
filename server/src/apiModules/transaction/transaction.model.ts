@@ -365,6 +365,7 @@ export class TransactionModel {
         totalPoints: true,
         twd: true,
         // custom begin readOneTransaction
+        paid: true,
         user: {
           select: {
             name: true,

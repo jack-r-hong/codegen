@@ -84,6 +84,7 @@ export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
       state: resTran.state,
       bos: resTran.bos,
       ready: true,
+      paid: resTran.paid,
       image: await getQrcode(userId as string),
     }));
 
