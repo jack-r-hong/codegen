@@ -529,6 +529,7 @@ export class TransactionModel {
           select: {
             name: true,
             gameUid: true,
+            remark: true,
           },
         },
       },

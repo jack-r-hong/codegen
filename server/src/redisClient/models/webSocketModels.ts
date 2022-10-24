@@ -27,7 +27,9 @@ export class WSClientQueueModel extends
 
   override key: string = super.setKey('psm');
 }
-
+/**
+ * 通知及時資料，可以使用暫存資料提升效能
+ */
 @Service()
 export class WSClientRealModel extends
   Mixin(Queue, WebSocketBase) {

@@ -8,9 +8,12 @@ import {Container} from 'typedi';
 import {
   WSClientIdModel,
   WSClientTransactionModel,
-  SubscribeExpiredeModel} from '../../redisClient/models/webSocketModels';
+  SubscribeExpiredeModel,
+  WSClientRealModel,
+} from '../../redisClient/models/webSocketModels';
 const wSCIModel = Container.get(WSClientIdModel);
 const wSCTModel = Container.get(WSClientTransactionModel);
+const wsClientRealModel = Container.get(WSClientRealModel);
 import {BankAccountModel} from '../bankAccount/bankAccount.model';
 import {UserModel} from '../user/user.model';
 import {ExchangeRateBuyModel} from '../exchangeRateBuy/exchangeRateBuy.model';
@@ -140,6 +143,9 @@ subscribeExpiredeModel.sub((key) => {
                 paid: res.paid,
               }),
           );
+          wsClientRealModel.pub(
+              JSON.stringify(res),
+          );
           console.log(res);
         })
         .catch((err) => {
@@ -243,7 +249,7 @@ export class TransactionService {
     ).catch((e) =>{
       throw e;
     });
-    await wSCTModel.pub(JSON.stringify({}));
+    await wsClientRealModel.pub(JSON.stringify(res));
     await subscribeExpiredeModel.setExpirKey(
         `${expiredTranId}${res.id}`, peddingTimeout);
     return res;
@@ -601,7 +607,7 @@ export class TransactionService {
             paid: res.paid,
           }),
       );
-      await wSCTModel.pub(JSON.stringify(res));
+      await wsClientRealModel.pub(JSON.stringify(res));
       session.transaction.process = param.bodyState;
       if (res.state === 2) {
         await subscribeExpiredeModel.setExpirKey(
