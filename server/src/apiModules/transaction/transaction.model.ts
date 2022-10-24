@@ -555,6 +555,7 @@ export class TransactionModel {
         state,
         name: result.user?.name,
         gameUid: result.user?.gameUid,
+        remark: result.user?.remark,
       });
     });
   }

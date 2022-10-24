@@ -248,7 +248,7 @@ export class TransactionService {
     ).catch((e) =>{
       throw e;
     });
-    await wsClientRealModel.pub(JSON.stringify(res));
+    await wsClientRealModel.pub('');
     await subscribeExpiredeModel.setExpirKey(
         `${expiredTranId}${res.id}`, peddingTimeout);
     return res;

@@ -84,7 +84,6 @@ export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
     const subscriber = await wsClientRealModel.sub(
         async (message: any)=>{
           event.eventName = 'update';
-          const d = JSON.parse(message);
 
           ws.send(event.msg(await getNewData(userId as string)));
         });

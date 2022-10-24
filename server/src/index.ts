@@ -1,3 +1,6 @@
+(BigInt.prototype as any).toJSON = function() {
+  return this.toString();
+};
 import 'reflect-metadata';
 import fs from 'fs';
 import http from 'http';
