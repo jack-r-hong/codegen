@@ -137,6 +137,7 @@ subscribeExpiredeModel.sub((key) => {
               res.id,
               JSON.stringify({
                 state: res.state,
+                paid: res.paid,
               }),
           );
           console.log(res);
@@ -163,6 +164,7 @@ export class TransactionService {
       session: Express.Request['session'],
   ) {
     // custom begin createTransaction
+
     let bankData: any = {
       name: '',
       account: 0,
@@ -596,6 +598,7 @@ export class TransactionService {
           param.pathId,
           JSON.stringify({
             state: res.state,
+            paid: res.paid,
           }),
       );
       await wSCTModel.pub(JSON.stringify(res));

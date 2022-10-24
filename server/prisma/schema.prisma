@@ -149,6 +149,7 @@ model Transaction {
   createdAt  DateTime  @default(now()) @map("created_at")                 
   handlingFee  Int  @map("handling_fee")                 
   id  String @id @default(uuid()) @map("id")                 
+  paid  Boolean  @default(false)  @map("paid")                 
   payMethod  Int  @map("pay_method")                 
   point  Int  @map("point")                 
   rebate  Int?   @map("rebate")                 

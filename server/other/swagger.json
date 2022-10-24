@@ -3141,7 +3141,11 @@
             "description" : "status map:\n  * `99` - Failed\n * `1` - Pending\n * `2` - Pair Completed\n * `3` - Pay or recive Completed\n * `4` - Completed\n",
             "enum" : [1, 2, 3, 4, 99],
             "default": 1
-          },   
+          }, 
+          "paid" : {
+            "type" : "boolean",
+            "default": "false"
+          },           
           "timeout": {
             "type" : "boolean",
             "default": "false"

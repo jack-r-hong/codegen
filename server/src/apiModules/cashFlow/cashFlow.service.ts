@@ -50,18 +50,46 @@ export class CashFlowService {
     if (tranRes.state !== 2) {
       return;
     }
-    const res = await transactionModel.updateTransaction({
-      bodyState: 3,
-      pathId: param.bodyMemberOrderNo,
-    }, {});
-    if (res === 'bodyState error') {
-      return;
+    if (
+      tranRes.bos === 1 &&
+      (
+        tranRes.payMethod === 3 ||
+        tranRes.payMethod === 4
+      )
+    ) {
+      const res = await transactionModel.updateTransaction({
+        bodyState: 2,
+        pathId: param.bodyMemberOrderNo,
+      }, {});
+      if (res === 'bodyState error') {
+        return;
+      }
+      await wSCIModel.pub(param.bodyMemberOrderNo,
+          JSON.stringify({
+            state: res.state,
+            paid: res.paid,
+          }),
+      );
     }
-    await wSCIModel.pub(param.bodyMemberOrderNo,
-        JSON.stringify({
-          state: res.state,
-        }),
-    );
+    if (
+      tranRes.bos === 2 &&
+      tranRes.payMethod === 4
+    ) {
+      const res = await transactionModel.updateTransaction({
+        bodyState: 2,
+        pathId: param.bodyMemberOrderNo,
+      }, {}, true);
+      if (res === 'bodyState error') {
+        return;
+      }
+      await wSCIModel.pub(param.bodyMemberOrderNo,
+          JSON.stringify({
+            state: res.state,
+            paid: res.paid,
+          }),
+      );
+    }
+
 
     // custom end notifyPaid
   }

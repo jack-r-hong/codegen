@@ -345,7 +345,7 @@ export class TransactionModel {
     const res = await prisma.transaction.findUnique({
       where: {
         id: param.pathId,
-        
+
       },
       select: {
         account: true,
@@ -399,13 +399,15 @@ export class TransactionModel {
       param: requestTypes.UpdateTransactionParams,
       customParam: any,
       // custom begin updateTransactionParam
-
+      paid? : boolean,
       // custom end updateTransactionParam
   ) {
     // custom begin updateTransaction
+
     let data : { pairedAt: Date;} |
     {completedAt: Date;} |
     {state: number;} |
+    {paid : boolean}|
     {
       paidAt: Date,
       transactionRecive: {
@@ -415,15 +417,22 @@ export class TransactionModel {
       },
     };
     if (param.bodyState === 2) {
-      data = {
-        pairedAt: new Date(),
-        state: param.bodyState,
-        transactionRecive: {
-          create: {
-            userId: customParam.userId,
+      if (paid) {
+        data = {
+          pairedAt: new Date(),
+          paid,
+        };
+      } else {
+        data = {
+          pairedAt: new Date(),
+          state: param.bodyState,
+          transactionRecive: {
+            create: {
+              userId: customParam.userId,
+            },
           },
-        },
-      };
+        };
+      }
     } else if (param.bodyState === 3) {
       data = {
         pairedAt: new Date(),
