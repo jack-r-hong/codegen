@@ -23,7 +23,7 @@ model BackstageAdmin {
     // custom end BackstageAdmin
 }
 model BankAccount {
-  account  Int  @map("account")                 
+  account  BigInt  @map("account")                 
   code  Int  @map("code")                 
   id  Int @id @default(autoincrement()) @map("id")                 
   name  String  @map("name")                 
@@ -141,7 +141,7 @@ model ReferralMap {
 model Transaction {
   account  String  @map("account")                 
   appeal  Boolean  @default(false)  @map("appeal")                 
-  bankAccount  Int  @map("bank_account")                 
+  bankAccount  BigInt  @map("bank_account")                 
   bankCode  Int  @map("bank_code")                 
   bankName  String  @map("bank_name")                 
   bonusPoint  Int  @map("bonus_point")                 

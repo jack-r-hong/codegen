@@ -345,7 +345,7 @@ export class TransactionModel {
     const res = await prisma.transaction.findUnique({
       where: {
         id: param.pathId,
-
+        
       },
       select: {
         account: true,
@@ -401,10 +401,10 @@ export class TransactionModel {
       customParam: any,
       // custom begin updateTransactionParam
       paid? : boolean,
+
       // custom end updateTransactionParam
   ) {
     // custom begin updateTransaction
-
     let data : { pairedAt: Date;} |
     {completedAt: Date;} |
     {state: number;} |

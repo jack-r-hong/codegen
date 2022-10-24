@@ -3011,8 +3011,7 @@
         "description" : "database",
         "properties" : {
           "id" : {
-            "type" : "integer",
-            "format" : "int64"
+            "type" : "integer"
           },
           "name" : {
             "type" : "string"
@@ -3021,7 +3020,8 @@
             "type" : "integer"
           },         
           "account" : {
-            "type" : "integer"
+            "type" : "integer",
+            "format" : "int64"
           }, 
           "status" : {
             "type" : "integer",
@@ -3047,8 +3047,7 @@
         "description" : "database",
         "properties" : {
           "id" : {
-            "type" : "integer",
-            "format" : "int64"
+            "type" : "integer"
           },
           "name" : {
             "type" : "integer"
@@ -3171,7 +3170,8 @@
             "type" : "integer"
           },         
           "bankAccount" : {
-            "type" : "integer"
+            "type" : "integer",
+            "format": "int64"
           },           
           "user" : {
             "$ref" : "#/components/schemas/User"

@@ -751,7 +751,7 @@ export class UserModel {
           let status :any = 1;
           const bank = originalBank.find((bank) => bank.order === e.bodyOrder);
           if (bank) {
-            if (bank.account !== e.bodyAccount) {
+            if (Number(bank.account) !== e.bodyAccount) {
               updateVerify.update.account = 1;
             }
             if (bank.code !== e.bodyCode) {

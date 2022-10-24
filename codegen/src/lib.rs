@@ -88,6 +88,7 @@ fn type_convert<'a>(t:  &'a str, mode:  &'a str, format:  &'a str ) ->  &'a str{
         "string" if format == "date-time" => "DateTime",
         "string" if mode == "schema" => "String",
         "string" => "string",
+        "integer" if format == "int64" && mode == "schema"  => "BigInt",
         "integer" if mode == "schema" => "Int",
         "integer" => "number",
         "number" if format == "decimal" && mode == "schema" => "Decimal",

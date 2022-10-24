@@ -170,7 +170,6 @@ export class TransactionService {
       session: Express.Request['session'],
   ) {
     // custom begin createTransaction
-
     let bankData: any = {
       name: '',
       account: 0,
