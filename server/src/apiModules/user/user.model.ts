@@ -333,10 +333,6 @@ export class UserModel {
     }).finally(() => {
       prisma.$disconnect();
     });
-
-    if (res === null) {
-      throw new errors.NotFindError;
-    }
     return res;
   }
   async UpdateUserStatusOrRemarkOrRebate(
@@ -663,9 +659,6 @@ export class UserModel {
     }).finally(() => {
       prisma.$disconnect();
     });
-    if (res === null) {
-      throw new errors.NotFindError;
-    }
     return res;
 
     // custom end getRealVerify
@@ -737,9 +730,6 @@ export class UserModel {
     }).finally(() => {
       prisma.$disconnect();
     });
-    if (res === null) {
-      throw new errors.NotFindError;
-    }
     const originalBank = await prisma.bankAccount.findMany({
       where: {
         userId: customParam.userId,

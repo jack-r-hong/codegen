@@ -498,6 +498,9 @@ export class UserService {
     });
 
     // custom begin readOneBackstageUser2
+    if (!res) {
+      throw errors.NotFoundReadOneBackstageUser;
+    }
     return userVerifyResponeFormat(res);
 
     // custom end readOneBackstageUser2
@@ -727,6 +730,9 @@ export class UserService {
         .catch((e) =>{
           throw e;
         });
+    if (!dataHandle) {
+      throw errors.NotFoundGetRealVerify;
+    }
     return userVerifyResponeFormat2(dataHandle);
 
     // custom end getRealVerify
@@ -741,6 +747,9 @@ export class UserService {
         .catch((e) =>{
           throw e;
         });
+    if (!res) {
+      throw errors.NotFoundGetRealVerify;
+    }
     return res;
 
     // custom end postRealVerify
@@ -830,7 +839,7 @@ export class UserService {
       throw e;
     });
     if (!res) {
-      throw new errors.LoginFailError;
+      throw errors.LoginFailed;
     }
     session.userInfo = {
       id: session.userInfo!.id,

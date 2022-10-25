@@ -1,11 +1,19 @@
-class ResponsError extends Error {
+export class ResponsError extends Error {
   status: number;
   code: number;
-  constructor(name: string, message: string, status: number, code: number) {
+  cnMsg: string;
+  constructor(
+      name: string,
+      message: string,
+      status: number,
+      code: number,
+      cnMsg: string,
+  ) {
     super(message);
     this.name = name;
     this.status = status??500;
     this.code = code??0;
+    this.cnMsg = cnMsg;
   }
 }
 
@@ -16,6 +24,7 @@ export const {{@key}} = new ResponsError(
     '{{content.[application/json].schema.properties.message.example}}',
     {{content.[application/json].schema.properties.status.example}},
     {{content.[application/json].schema.properties.code.example}},
+    '{{content.[application/json].schema.properties.cnMsg.example}}',
 );
     {{/if}}
 {{/each}}

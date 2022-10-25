@@ -47,6 +47,9 @@ export class CashFlowService {
     const tranRes = await transactionModel.readOneTransaction({
       pathId: param.bodyMemberOrderNo,
     });
+    if (!tranRes) {
+      return;
+    }
     if (tranRes.state !== 2) {
       return;
     }

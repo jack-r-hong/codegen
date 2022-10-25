@@ -72,10 +72,6 @@ const prisma = new Prisma.PrismaClient();
     }).finally(() => {
       prisma.$disconnect();
     });
-
-    if (res === null) {
-      throw new errors.NotFindError;
-    }
 {{/inline}}
 
 {{~#*inline "JSESSIONID"}}

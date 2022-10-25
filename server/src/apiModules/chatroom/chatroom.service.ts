@@ -26,7 +26,7 @@ export class ChatroomService {
           throw e;
         });
     if (!res) {
-      throw new errors.AuthenticationFailedError;
+      throw errors.UserNotAuthorized;
     }
     if (res && res.id === session.userInfo?.id) {
       return chatroomKey.generateAccessToken({
@@ -34,7 +34,7 @@ export class ChatroomService {
         userId: res.id,
       });
     }
-    throw new errors.AuthenticationFailedError;
+    throw errors.UserNotAuthorized;
 
     // custom end serviceToken
   }
@@ -63,7 +63,7 @@ export class ChatroomService {
           throw e;
         });
     if (!res) {
-      throw new errors.AuthenticationFailedError;
+      throw errors.UserNotAuthorized;
     }
     if (res.user && res.user.id === session.userInfo?.id) {
       return chatroomKey.generateAccessToken({
@@ -86,7 +86,7 @@ export class ChatroomService {
         isCS: false,
       });
     }
-    throw new errors.AuthenticationFailedError;
+    throw errors.UserNotAuthorized;
 
     // custom end transactionToken
   }

@@ -390,10 +390,6 @@ export class TransactionModel {
     }).finally(() => {
       prisma.$disconnect();
     });
-
-    if (res === null) {
-      throw new errors.NotFindError;
-    }
     return res;
   }
   async updateTransaction(

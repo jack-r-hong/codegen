@@ -62,7 +62,7 @@ export const cookieAuthSessionVerify = (
     session: Session,
 ) => {
   if (!session.userInfo) {
-    throw new errors.AuthenticationFailedError('AuthenticationFailed');
+    throw errors.UserNotAuthorized;
   }
   return true;
 };

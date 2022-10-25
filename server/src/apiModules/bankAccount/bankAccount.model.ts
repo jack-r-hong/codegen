@@ -401,10 +401,6 @@ export class BankAccountModel {
     }).finally(() => {
       prisma.$disconnect();
     });
-
-    if (res === null) {
-      throw new errors.NotFindError;
-    }
     return res;
   }
   // custom begin model

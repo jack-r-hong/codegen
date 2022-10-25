@@ -28,11 +28,11 @@ export class UserVerifyPhotoService {
       throw e;
     });
     if (!res || !res.path) {
-      throw new errors.NotFindError;
+      throw errors.NotFoundUserVerifyPhoto;
     }
     const data = await fs.readFile(res.path, 'base64')
         .catch(() => {
-          throw new errors.NotFindError;
+          throw errors.NotFoundUserVerifyPhoto;
         });
     return data;
 

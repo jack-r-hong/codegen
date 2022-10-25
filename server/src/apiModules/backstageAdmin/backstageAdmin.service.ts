@@ -48,7 +48,7 @@ export class BackstageAdminService {
         };
       }
     }
-    throw new errors.LoginFailError;
+    throw errors.LoginFailed;
 
     // custom end adminLogin
   }

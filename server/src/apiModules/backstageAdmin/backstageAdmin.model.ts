@@ -54,9 +54,6 @@ export class BackstageAdminModel {
     }).finally(() => {
       prisma.$disconnect();
     });
-    if (res === null) {
-      throw new errors.NotFindError;
-    }
     return res;
 
     // custom end adminLogin

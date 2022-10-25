@@ -180,6 +180,9 @@ export class TransactionService {
         const dbBankData = await bankAccountModel.readOneBankAccount(
             {pathId: param.bodyBankId},
         );
+        if (!dbBankData) {
+          throw errors.BankIdNotFound;
+        }
         bankData = {
           name: dbBankData.name,
           account: dbBankData.account,
@@ -455,7 +458,7 @@ export class TransactionService {
     const transaction = await this.transactionModel.readTransaction(
         param.queryTransactionId);
     if (!transaction) {
-      throw new errors.NotFindError;
+      throw errors.TransactionQRCodeNotFound;
     }
     if (transaction.bos === 1) {
       /** 查配對者已啟用的QRcode */
@@ -509,7 +512,7 @@ export class TransactionService {
     let gameUid = null;
     let receiveName = null;
     let receiveGameUid = null;
-    if ( !res.user) {
+    if ( !res || !res.user) {
       return;
     }
     if (res.bos === 2) {
@@ -555,6 +558,14 @@ export class TransactionService {
     /** check is auth user */
     if (!session.userInfo) {
       throw errors.UserNotAuthorized;
+    }
+    /** 超時阻擋狀態變更  */
+    if (thisTransaciotn.timeout) {
+      throw errors.TransactionUpdateStateTimeout;
+    }
+    /** 申訴時阻擋狀態變更  */
+    if (thisTransaciotn.appeal) {
+      throw errors.TransactionUpdateStateAppeal;
     }
     if (
       /** 狀態改為2時,這個user必須為agent,且不是自己發出的請求*/

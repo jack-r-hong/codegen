@@ -5307,9 +5307,6 @@
           }
         }
       },                                
-      "BadRequest" : {
-        "description" : "Bad request"
-      },
       "Unauthorized" : {
         "description" : "Unauthorized"
       },
@@ -5342,32 +5339,7 @@
             }
           }
         }   
-      },
-      "UserNotAuthorized" : {
-        "description" : "error",
-        "content" : {
-          "application/json" : {
-            "schema" : {
-              "type": "object",
-              "properties": {
-                "status" : {
-                  "type" : "integer",
-                  "example": 403
-                },   
-                "code" : {
-                  "type" : "integer",
-                  "example": -1008
-                },
-                "message": {
-                  "type": "string",
-                  "example": "User is not authorized"
-                }
-                
-              }                  
-            }
-          }
-        }           
-      },      
+      },     
       "PhoneNotFound" : {
         "description" : "error",
         "content" : {
@@ -5386,8 +5358,11 @@
                 "message": {
                   "type": "string",
                   "example": "Phone not found"
-                }
-                
+                },
+                "cnMsg": {
+                  "type": "string",
+                  "example": "此電話未註冊"
+                }                
               }                  
             }
           }
@@ -5411,7 +5386,11 @@
                 "message": {
                   "type": "string",
                   "example": "verification code incorrect"
-                }
+                },
+                "cnMsg": {
+                  "type": "string",
+                  "example": "驗證碼錯誤"
+                }      
                 
               }                  
             }
@@ -5436,7 +5415,11 @@
                 "message": {
                   "type": "string",
                   "example": "check password incorrect"
-                }
+                },
+                "cnMsg": {
+                  "type": "string",
+                  "example": "兩次密碼不相符"
+                }      
                 
               }                  
             }
@@ -5461,7 +5444,11 @@
                 "message": {
                   "type": "string",
                   "example": "Login failed"
-                }
+                },
+                "cnMsg": {
+                  "type": "string",
+                  "example": "帳號或密碼錯誤"
+                }      
                 
               }                  
             }
@@ -5486,7 +5473,11 @@
                 "message": {
                   "type": "string",
                   "example": "Captcha Incorrect"
-                }
+                },
+                "cnMsg": {
+                  "type": "string",
+                  "example": "圖形驗證失敗"
+                }      
                 
               }                  
             }
@@ -5511,7 +5502,11 @@
                 "message": {
                   "type": "string",
                   "example": "Referral code no map to the user"
-                }
+                },
+                "cnMsg": {
+                  "type": "string",
+                  "example": "此邀請碼未有對應使用者，請重新輸入或不輸入"
+                }      
                 
               }                  
             }
@@ -5536,13 +5531,162 @@
                 "message": {
                   "type": "string",
                   "example": "Phone is confilct"
-                }
+                },
+                "cnMsg": {
+                  "type": "string",
+                  "example": "電話號碼重複"
+                }      
                 
               }                  
             }
           }
         }           
       },
+      "UserNotAuthorized" : {
+        "description" : "error",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type": "object",
+              "properties": {
+                "status" : {
+                  "type" : "integer",
+                  "example": 403
+                },   
+                "code" : {
+                  "type" : "integer",
+                  "example": -1008
+                },
+                "message": {
+                  "type": "string",
+                  "example": "User is not authorized"
+                },
+                "cnMsg": {
+                  "type": "string",
+                  "example": "使用者未經認證，請重新登入。"
+                }      
+                
+              }                  
+            }
+          }
+        }           
+      },      
+      "UserCookieExpired" : {
+        "description" : "error",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type": "object",
+              "properties": {
+                "status" : {
+                  "type" : "integer",
+                  "example": 401
+                },   
+                "code" : {
+                  "type" : "integer",
+                  "example": -1009
+                },
+                "message": {
+                  "type": "string",
+                  "example": "cookies expired"
+                },
+                "cnMsg": {
+                  "type": "string",
+                  "example": "認證過期請重新登入。"
+                }      
+                
+              }                  
+            }
+          }
+        }           
+      },  
+      "NotFoundGetRealVerify" : {
+        "description" : "error",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type": "object",
+              "properties": {
+                "status" : {
+                  "type" : "integer",
+                  "example": 404
+                },   
+                "code" : {
+                  "type" : "integer",
+                  "example": -1010
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Not found user real verify"
+                },
+                "cnMsg": {
+                  "type": "string",
+                  "example": "沒有找到使用者認證資料。"
+                }      
+                
+              }                  
+            }
+          }
+        }           
+      },   
+      "NotFoundReadOneBackstageUser" : {
+        "description" : "error",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type": "object",
+              "properties": {
+                "status" : {
+                  "type" : "integer",
+                  "example": 404
+                },   
+                "code" : {
+                  "type" : "integer",
+                  "example": -1011
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Not found user"
+                },
+                "cnMsg": {
+                  "type": "string",
+                  "example": "沒有找到使用者資料"
+                }      
+                
+              }                  
+            }
+          }
+        }           
+      },  
+      "NotFoundUserVerifyPhoto" : {
+        "description" : "error",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type": "object",
+              "properties": {
+                "status" : {
+                  "type" : "integer",
+                  "example": 404
+                },   
+                "code" : {
+                  "type" : "integer",
+                  "example": -1012
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Not found user verify photo"
+                },
+                "cnMsg": {
+                  "type": "string",
+                  "example": "找不到使用者圖片"
+                }      
+                
+              }                  
+            }
+          }
+        }           
+      },                         
       "BankIdNotFound" : {
         "description" : "error",
         "content" : {
@@ -5552,7 +5696,7 @@
               "properties": {
                 "status" : {
                   "type" : "integer",
-                  "example": 400
+                  "example": 404
                 },   
                 "code" : {
                   "type" : "integer",
@@ -5561,7 +5705,11 @@
                 "message": {
                   "type": "string",
                   "example": "Bank id not found"
-                }
+                },
+                "cnMsg": {
+                  "type": "string",
+                  "example": "找不到使用銀行資料"
+                }      
                 
               }                  
             }
@@ -5586,7 +5734,11 @@
                 "message": {
                   "type": "string",
                   "example": "User is not authorized"
-                }
+                },
+                "cnMsg": {
+                  "type": "string",
+                  "example": "使用者尚未完成實名驗證，請完成驗證後再次操作。"
+                }      
                 
               }                  
             }
@@ -5611,7 +5763,11 @@
                 "message": {
                   "type": "string",
                   "example": "Dollars or points less than zero."
-                }
+                },
+                "cnMsg": {
+                  "type": "string",
+                  "example": "該交易訂單的點數或金額小於或等於零。"
+                }   
                 
               }                  
             }
@@ -5636,7 +5792,11 @@
                 "message": {
                   "type": "string",
                   "example": "Dollars or points less than zero."
-                }
+                },
+                "cnMsg": {
+                  "type": "string",
+                  "example": "第三方支付取號失敗。"
+                }   
                 
               }                  
             }
@@ -5661,8 +5821,11 @@
                 "message": {
                   "type": "string",
                   "example": "post gspay: order not found."
-                }
-                
+                },
+                "cnMsg": {
+                  "type": "string",
+                  "example": "該交易單號與第三方支付訂單不匹配，請重新申請交易。"
+                }   
               }                  
             }
           }
@@ -5686,7 +5849,11 @@
                 "message": {
                   "type": "string",
                   "example": "Transaction QR Code Not Found"
-                }
+                },
+                "cnMsg": {
+                  "type": "string",
+                  "example": "找不到付款QRcode。"
+                }   
                 
               }                  
             }
@@ -5711,7 +5878,11 @@
                 "message": {
                   "type": "string",
                   "example": "Transaction order not found."
-                }
+                },
+                "cnMsg": {
+                  "type": "string",
+                  "example": "找不到該訂單"
+                }   
                 
               }                  
             }
@@ -5736,7 +5907,11 @@
                 "message": {
                   "type": "string",
                   "example": "The user is not authorized to update the order."
-                }
+                },
+                "cnMsg": {
+                  "type": "string",
+                  "example": "該使用者無權限更新訂單狀態。"
+                }   
                 
               }                  
             }
@@ -5761,7 +5936,11 @@
                 "message": {
                   "type": "string",
                   "example": "The order already timeout."
-                }
+                },
+                "cnMsg": {
+                  "type": "string",
+                  "example": "此訂單已經過期。"
+                }   
                 
               }                  
             }
@@ -5786,14 +5965,78 @@
                 "message": {
                   "type": "string",
                   "example": "The order is appeal."
-                }
-                
+                },
+                "cnMsg": {
+                  "type": "string",
+                  "example": "訂單申訴中。"
+                }   
               }                  
             }
           }
         }           
-      }                                                             
-                
+      },
+      "ServerError" : {
+        "description" : "error",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type": "object",
+              "properties": {
+                "status" : {
+                  "type" : "integer",
+                  "example": 500
+                },   
+                "code" : {
+                  "type" : "integer",
+                  "example": -4001
+                },
+                "message": {
+                  "type": "string",
+                  "example": "server error"
+                },
+                "cnMsg": {
+                  "type": "string",
+                  "example": "伺服器錯誤"
+                }   
+              }                  
+            }
+          }
+        }           
+      },
+      "BadRequest" : {
+        "description" : "error",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type": "object",
+              "properties": {
+                "status" : {
+                  "type" : "integer",
+                  "example": 400
+                },   
+                "code" : {
+                  "type" : "integer",
+                  "example": -4002
+                },
+                "message": {
+                  "type": "string",
+                  "example": "server error"
+                },
+                "detail": {
+                  "type": "object",
+                  "properties": {
+
+                  }
+                },
+                "cnMsg": {
+                  "type": "string",
+                  "example": "參數錯誤"
+                }   
+              }                  
+            }
+          }
+        }           
+      }                                                                           
     },
     "securitySchemes" : {
       "cookieAuth" : {
