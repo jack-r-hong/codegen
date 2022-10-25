@@ -1,0 +1,21 @@
+class ResponsError extends Error {
+  status: number;
+  code: number;
+  constructor(name: string, message: string, status: number, code: number) {
+    super(message);
+    this.name = name;
+    this.status = status??500;
+    this.code = code??0;
+  }
+}
+
+{{#each responses as |res|}}
+    {{#if (equal res.description "error")}}
+export const {{@key}} = new ResponsError(
+    '{{@key}}',
+    '{{content.[application/json].schema.properties.message.example}}',
+    {{content.[application/json].schema.properties.status.example}},
+    {{content.[application/json].schema.properties.code.example}},
+);
+    {{/if}}
+{{/each}}

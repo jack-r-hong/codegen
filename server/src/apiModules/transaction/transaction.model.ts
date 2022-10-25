@@ -436,7 +436,7 @@ export class TransactionModel {
       }
     } else if (param.bodyState === 3) {
       data = {
-        pairedAt: new Date(),
+        paidAt: new Date(),
         state: param.bodyState,
       };
     } else if (param.bodyState === 4) {
@@ -688,6 +688,8 @@ export class TransactionModel {
         userId: true,
         state: true,
         bos: true,
+        timeout: true,
+        appeal: true,
         transactionRecive: {
           select: {
             userId: true,

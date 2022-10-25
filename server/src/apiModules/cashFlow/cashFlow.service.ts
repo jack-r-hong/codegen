@@ -58,7 +58,7 @@ export class CashFlowService {
       )
     ) {
       const res = await transactionModel.updateTransaction({
-        bodyState: 2,
+        bodyState: 3,
         pathId: param.bodyMemberOrderNo,
       }, {});
       if (res === 'bodyState error') {

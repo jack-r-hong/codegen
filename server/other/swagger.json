@@ -298,6 +298,9 @@
           },
           "401" : {
             "$ref" : "#/components/responses/Unauthorized"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/LoginFailed"
           }
         }
       }
@@ -351,7 +354,11 @@
           },
           "401" : {
             "$ref" : "#/components/responses/Unauthorized"
-          }
+          },
+          "404" : {
+            "$ref" : "#/components/responses/PhoneNotFound"
+          }          
+          
         }
       }
     },  
@@ -383,6 +390,9 @@
           },
           "401" : {
             "$ref" : "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref" : "#/components/responses/VerificationCodeIncorrect"
           }
         }
       }
@@ -418,7 +428,10 @@
           },
           "401" : {
             "$ref" : "#/components/responses/Unauthorized"
-          }
+          },
+          "403" : {
+            "$ref" : "#/components/responses/VerificationCodeIncorrect"
+          }          
         }
       }
     },           
@@ -5329,8 +5342,458 @@
             }
           }
         }   
-      }
-      
+      },
+      "UserNotAuthorized" : {
+        "description" : "error",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type": "object",
+              "properties": {
+                "status" : {
+                  "type" : "integer",
+                  "example": 403
+                },   
+                "code" : {
+                  "type" : "integer",
+                  "example": -1008
+                },
+                "message": {
+                  "type": "string",
+                  "example": "User is not authorized"
+                }
+                
+              }                  
+            }
+          }
+        }           
+      },      
+      "PhoneNotFound" : {
+        "description" : "error",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type": "object",
+              "properties": {
+                "status" : {
+                  "type" : "integer",
+                  "example": 404
+                },   
+                "code" : {
+                  "type" : "integer",
+                  "example": -1001
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Phone not found"
+                }
+                
+              }                  
+            }
+          }
+        }           
+      },
+      "VerificationCodeIncorrect" : {
+        "description" : "error",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type": "object",
+              "properties": {
+                "status" : {
+                  "type" : "integer",
+                  "example": 403
+                },   
+                "code" : {
+                  "type" : "integer",
+                  "example": -1002
+                },
+                "message": {
+                  "type": "string",
+                  "example": "verification code incorrect"
+                }
+                
+              }                  
+            }
+          }
+        }           
+      },
+      "CheckPasswordIncorrect" : {
+        "description" : "error",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type": "object",
+              "properties": {
+                "status" : {
+                  "type" : "integer",
+                  "example": 403
+                },   
+                "code" : {
+                  "type" : "integer",
+                  "example": -1003
+                },
+                "message": {
+                  "type": "string",
+                  "example": "check password incorrect"
+                }
+                
+              }                  
+            }
+          }
+        }           
+      },
+      "LoginFailed" : {
+        "description" : "error",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type": "object",
+              "properties": {
+                "status" : {
+                  "type" : "integer",
+                  "example": 403
+                },   
+                "code" : {
+                  "type" : "integer",
+                  "example": -1004
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Login failed"
+                }
+                
+              }                  
+            }
+          }
+        }           
+      },
+      "CaptchaIncorrect" : {
+        "description" : "error",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type": "object",
+              "properties": {
+                "status" : {
+                  "type" : "integer",
+                  "example": 401
+                },   
+                "code" : {
+                  "type" : "integer",
+                  "example": -1005
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Captcha Incorrect"
+                }
+                
+              }                  
+            }
+          }
+        }           
+      },
+      "RegisterReferralCode" : {
+        "description" : "error",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type": "object",
+              "properties": {
+                "status" : {
+                  "type" : "integer",
+                  "example": 401
+                },   
+                "code" : {
+                  "type" : "integer",
+                  "example": -1006
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Referral code no map to the user"
+                }
+                
+              }                  
+            }
+          }
+        }           
+      },
+      "PhoneConfilct" : {
+        "description" : "error",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type": "object",
+              "properties": {
+                "status" : {
+                  "type" : "integer",
+                  "example": 409
+                },   
+                "code" : {
+                  "type" : "integer",
+                  "example": -1007
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Phone is confilct"
+                }
+                
+              }                  
+            }
+          }
+        }           
+      },
+      "BankIdNotFound" : {
+        "description" : "error",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type": "object",
+              "properties": {
+                "status" : {
+                  "type" : "integer",
+                  "example": 400
+                },   
+                "code" : {
+                  "type" : "integer",
+                  "example": -3001
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Bank id not found"
+                }
+                
+              }                  
+            }
+          }
+        }           
+      },
+      "TransationUserIsNotAuthorized" : {
+        "description" : "error",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type": "object",
+              "properties": {
+                "status" : {
+                  "type" : "integer",
+                  "example": 403
+                },   
+                "code" : {
+                  "type" : "integer",
+                  "example": -3002
+                },
+                "message": {
+                  "type": "string",
+                  "example": "User is not authorized"
+                }
+                
+              }                  
+            }
+          }
+        }           
+      },
+      "CreateTransationDollarsLessZero" : {
+        "description" : "error",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type": "object",
+              "properties": {
+                "status" : {
+                  "type" : "integer",
+                  "example": 400
+                },   
+                "code" : {
+                  "type" : "integer",
+                  "example": -3003
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Dollars or points less than zero."
+                }
+                
+              }                  
+            }
+          }
+        }           
+      },
+      "GsPayDepositError" : {
+        "description" : "error",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type": "object",
+              "properties": {
+                "status" : {
+                  "type" : "integer",
+                  "example": 400
+                },   
+                "code" : {
+                  "type" : "integer",
+                  "example": -3004
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Dollars or points less than zero."
+                }
+                
+              }                  
+            }
+          }
+        }           
+      },
+      "GsPayOrderNotFound" : {
+        "description" : "error",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type": "object",
+              "properties": {
+                "status" : {
+                  "type" : "integer",
+                  "example": 404
+                },   
+                "code" : {
+                  "type" : "integer",
+                  "example": -3005
+                },
+                "message": {
+                  "type": "string",
+                  "example": "post gspay: order not found."
+                }
+                
+              }                  
+            }
+          }
+        }           
+      },
+      "TransactionQRCodeNotFound" : {
+        "description" : "error",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type": "object",
+              "properties": {
+                "status" : {
+                  "type" : "integer",
+                  "example": 404
+                },   
+                "code" : {
+                  "type" : "integer",
+                  "example": -3006
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Transaction QR Code Not Found"
+                }
+                
+              }                  
+            }
+          }
+        }           
+      },
+      "TransactionOrderNotFound" : {
+        "description" : "error",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type": "object",
+              "properties": {
+                "status" : {
+                  "type" : "integer",
+                  "example": 404
+                },   
+                "code" : {
+                  "type" : "integer",
+                  "example": -3006
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Transaction order not found."
+                }
+                
+              }                  
+            }
+          }
+        }           
+      },
+      "TransactionUpdateStateError" : {
+        "description" : "error",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type": "object",
+              "properties": {
+                "status" : {
+                  "type" : "integer",
+                  "example": 403
+                },   
+                "code" : {
+                  "type" : "integer",
+                  "example": -3007
+                },
+                "message": {
+                  "type": "string",
+                  "example": "The user is not authorized to update the order."
+                }
+                
+              }                  
+            }
+          }
+        }           
+      },
+      "TransactionUpdateStateTimeout" : {
+        "description" : "error",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type": "object",
+              "properties": {
+                "status" : {
+                  "type" : "integer",
+                  "example": 403
+                },   
+                "code" : {
+                  "type" : "integer",
+                  "example": -3008
+                },
+                "message": {
+                  "type": "string",
+                  "example": "The order already timeout."
+                }
+                
+              }                  
+            }
+          }
+        }           
+      },
+      "TransactionUpdateStateAppeal" : {
+        "description" : "error",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type": "object",
+              "properties": {
+                "status" : {
+                  "type" : "integer",
+                  "example": 403
+                },   
+                "code" : {
+                  "type" : "integer",
+                  "example": -3008
+                },
+                "message": {
+                  "type": "string",
+                  "example": "The order is appeal."
+                }
+                
+              }                  
+            }
+          }
+        }           
+      }                                                             
+                
     },
     "securitySchemes" : {
       "cookieAuth" : {

@@ -609,7 +609,7 @@ export class UserService {
       bodyPhone: phone,
     }, {});
     if (!res) {
-      throw new errors.CodeError('Phone not fount', 404, -1002);
+      throw errors.PhoneNotFound;
     }
     session.userPasswordReset = {
       verify: code,
@@ -630,7 +630,7 @@ export class UserService {
       session.userPasswordReset.verify === param.bodyVerify) {
       return {success: true};
     }
-    throw new errors.CodeError('Verify code error', 403, -1005);
+    throw errors.VerificationCodeIncorrect;
 
     // custom end forgetPasswordPhoneCheckVerify
   }
@@ -639,10 +639,9 @@ export class UserService {
       session: Express.Request['session'],
   ) {
     // custom begin forgetPasswordReset
-    if (session.userPasswordReset
-    ) {
+    if (session.userPasswordReset) {
       if (param.bodyPassword !== param.bodyPasswordCheck) {
-        throw new errors.CodeError('check password error', 403, -1006);
+        throw errors.CheckPasswordIncorrect;
       }
       const saltRounds = 10;
       const myPlaintextPassword = param.bodyPassword;
@@ -664,7 +663,7 @@ export class UserService {
       });
       return {success: true};
     }
-    throw new errors.CodeError('Verify code error', 403, -1005);
+    throw errors.VerificationCodeIncorrect;
 
     // custom end forgetPasswordReset
   }
@@ -698,10 +697,7 @@ export class UserService {
         return result;
       }
     }
-    if (res === null) {
-      throw new errors.CodeError('Login failed', 403, -1008);
-    }
-    throw new errors.CodeError('Login failed', 403, -1008);
+    throw errors.LoginFailed;
 
     // custom end loginUser
   }
@@ -761,10 +757,10 @@ export class UserService {
       param.bodyPhoneCaptcha !== session.userRegister.verify||
       param.bodyCaptcha !== session.captcha
     ) {
-      throw new errors.CaptchaError;
+      throw errors.CaptchaIncorrect;
     }
     if (param.bodyPassword !== param.bodyPasswordCheck) {
-      throw new errors.CaptchaError;
+      throw errors.CheckPasswordIncorrect;
     }
     const saltRounds = 10;
     const myPlaintextPassword = param.bodyPassword;
@@ -792,8 +788,7 @@ export class UserService {
       throw e;
     });
     if ((res as {success: boolean}).success === false) {
-      throw new errors.CodeError('referral code no map to the user',
-          404, -1007 );
+      throw errors.RegisterReferralCode;
     }
     session.destroy(() => {});
     return {success: true};
@@ -808,7 +803,7 @@ export class UserService {
     /** todo: send phone message api */
     const res = await this.userModel.phoneCheck(param, {});
     if (res) {
-      throw new errors.CodeError('phone is confilct', 409, -1001);
+      throw errors.PhoneConfilct;
     }
     const code = Math.random().toFixed(6).substring(2);
     const phonePrefix = '886';

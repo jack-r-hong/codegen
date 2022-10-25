@@ -2,6 +2,7 @@ import httpErrors from 'http-errors';
 import {Prisma} from '@prisma/client';
 import {Result} from 'express-validator';
 import {Request, Response, NextFunction} from 'express';
+import * as responseErrors from './responseErrors';
 
 
 class WrongPasswordError extends Error {
@@ -56,15 +57,18 @@ class CodeError extends Error {
   }
 }
 
-export const errors = {
-  WrongPasswordError,
-  NotFindError,
-  DuplicateUniqueField,
-  AuthenticationFailedError,
-  LoginFailError,
-  CaptchaError,
-  CodeError,
-};
+export const errors = Object.assign(
+    responseErrors,
+    {
+      WrongPasswordError,
+      NotFindError,
+      DuplicateUniqueField,
+      AuthenticationFailedError,
+      LoginFailError,
+      CaptchaError,
+      CodeError,
+    },
+);
 
 export const errorHandle = (
     err :httpErrors.HttpError | Result | Prisma.PrismaClientKnownRequestError,

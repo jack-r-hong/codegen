@@ -186,7 +186,7 @@ export class TransactionService {
           code: dbBankData.code,
         };
       } else {
-        throw new errors.CodeError('bankId not found', 400, -3010);
+        throw errors.BankIdNotFound;
       }
     }
     const dbUserData = await userModel.getUserMyStatus(
@@ -194,7 +194,7 @@ export class TransactionService {
         {userId: session.userInfo?.id!},
     );
     if (!dbUserData || dbUserData.userStatus !== 1) {
-      throw new errors.CodeError('user no auth', 403, -3011);
+      throw errors.TransationUserIsNotAuthorized;
     }
     const {
       twd,
@@ -216,9 +216,9 @@ export class TransactionService {
         param.bodyPayMethod,
     );
     if (totalDollars < 0 || totalPoints < 0) {
-      throw new errors.CodeError('Dollars or points less than zero.',
-          400, -3013);
+      throw errors.CreateTransationDollarsLessZero;
     }
+    /** 更新使用者是否首購 */
     if (firstBonusPoint !== 0) {
       await this.transactionModel.updateUserFirstBonus(
         session.userInfo?.id!,
@@ -248,7 +248,9 @@ export class TransactionService {
     ).catch((e) =>{
       throw e;
     });
+    /** 通知即時訂單更新 */
     await wsClientRealModel.pub('');
+    /** 設定過期時間 */
     await subscribeExpiredeModel.setExpirKey(
         `${expiredTranId}${res.id}`, peddingTimeout);
     return res;
@@ -329,7 +331,11 @@ export class TransactionService {
     }).catch((err) => {
       return err.response.data.code;
     });
-    if (gsPayQuery !== 4021 && gsPayQuery.data) {
+    /** 有找到這張訂單 */
+    if (
+      gsPayQuery !== 4021 &&
+      gsPayQuery.data) {
+      /** 超商儲值 */
       if (param.bodyType === 3) {
         const res = {
           'orderNo': gsPayQuery.data.data.OrderNo,
@@ -341,6 +347,7 @@ export class TransactionService {
         };
         return res;
       }
+      /** atm */
       if (param.bodyType === 4) {
         const res = {
           'orderNo': gsPayQuery.data.data.OrderNo,
@@ -352,6 +359,7 @@ export class TransactionService {
         return res;
       }
     }
+    /** 找訂單 user 資料並儲值取號 */
     const db = await this.transactionModel.postGSPayDeposit(param, {});
     if (db) {
       const res = await getGSPayDeposit({
@@ -364,14 +372,17 @@ export class TransactionService {
         gateway: param.bodyType,
       })
           .catch((err) => {
-            throw new errors.CodeError(
+            throw errors.GsPayDepositError;
+            /**
+             *             throw new errors.CodeError(
                 err.response.data.msg,
                 err.response.data.code,
                 -3003);
+             */
           });
       return res.data;
     }
-    throw new errors.CodeError('post gspay: order not found', 404, -3004);
+    throw errors.GsPayOrderNotFound;
 
     // custom end postGSPayDeposit
   }
@@ -447,6 +458,7 @@ export class TransactionService {
       throw new errors.NotFindError;
     }
     if (transaction.bos === 1) {
+      /** 查配對者已啟用的QRcode */
       const res = await this.transactionModel.getPayPhoto(
           param,
           {userId: session.userInfo?.id},
@@ -461,6 +473,7 @@ export class TransactionService {
         };
       }
     } else {
+      /** 查交易前上傳的qrCode */
       const res = await this.transactionModel.readTransactionQrcode(
           transaction.userId,
       ).catch((e) =>{
@@ -473,7 +486,7 @@ export class TransactionService {
         };
       }
     }
-    throw new errors.NotFindError;
+    throw errors.TransactionQRCodeNotFound;
 
     // custom end getPayPhoto
   }
@@ -536,14 +549,15 @@ export class TransactionService {
         param.pathId,
     );
     if (!thisTransaciotn) {
-      throw new errors.NotFindError('thisTransaciotn');
+      throw errors.TransactionOrderNotFound;
     }
     const {bos, userId, state, transactionRecive} = thisTransaciotn;
     /** check is auth user */
     if (!session.userInfo) {
-      throw new Error('userInfo not found');
+      throw errors.UserNotAuthorized;
     }
     if (
+      /** 狀態改為2時,這個user必須為agent,且不是自己發出的請求*/
       param.bodyState === 2 &&
       session.userInfo.isAgent &&
       userId !== session.userInfo.id &&
@@ -553,9 +567,11 @@ export class TransactionService {
       state === 2 &&
       (
         (
+          /** 買單的情況下自己為請求者 */
           bos === 1 &&
           userId === session.userInfo.id
         ) || (
+          /** 賣單的情況下自己為配對者 */
           bos === 2 &&
           transactionRecive &&
           transactionRecive.userId === session.userInfo.id
@@ -576,9 +592,10 @@ export class TransactionService {
         )
       )
     ) {} else if (
+      /** 取消邏輯不明 */
       param.bodyState === 99
     ) {} else {
-      throw new errors.CodeError('updateTransaction', 403, -3005);
+      throw errors.TransactionUpdateStateError;
     }
     const res = await this.transactionModel.updateTransaction(
         param,
@@ -587,18 +604,10 @@ export class TransactionService {
       throw e;
     });
     if (res === 'bodyState error') {
-      throw new errors.CodeError('updateTransaction', 403, -3005);
-    }
-    if (!session.transaction) {
-      session.transaction = {
-        id: param.pathId,
-        requestUserId: res.userId,
-        receiveUserId: session.userInfo!.id,
-        process: res.state,
-        bos: res.bos,
-      };
+      throw errors.TransactionUpdateStateError;
     }
     if (typeof param.bodyState === 'number') {
+      /** 更新交易狀態 */
       await wSCIModel.pub(
           param.pathId,
           JSON.stringify({
@@ -606,18 +615,22 @@ export class TransactionService {
             paid: res.paid,
           }),
       );
+      /** 更新即時訂單 */
       await wsClientRealModel.pub(JSON.stringify(res));
-      session.transaction.process = param.bodyState;
+      /** 設定訂單付款過期時間 */
       if (res.state === 2) {
         await subscribeExpiredeModel.setExpirKey(
             `${expiredTranId}${res.id}`, payTimeout);
       }
+      /** 停止過期狀態 */
       if (res.state === 3 || res.state === 99) {
         await subscribeExpiredeModel.del(res.id);
       }
+      /** 訂單取消時返回首次儲值狀態 */
       if (res.state === 99) {
         await this.transactionModel.updateUserFirstBonusCancel(res.userId);
       }
+      /** 完成訂單並更新user 累積獎勵及首儲狀態 */
       if (res.state === 4) {
         await this.transactionModel.updateUserAccumulation(res.userId, res.twd);
         await this.transactionModel.updateUserFirstBonus(

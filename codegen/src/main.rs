@@ -210,5 +210,12 @@ fn main() -> Result<(), Box<dyn Error>> {
     let db_schema_path = "../server/prisma/schema.prisma";
     write_file(&mut handlebars, db_schema_data, &db_schema_path, file_type, &template_path, "db" )?;            
 
+    let mut responses_errors = Map::new();
+    responses_errors.insert("responses".to_string(), swagger_data["components"]["responses"].clone() );
+
+    let file_type = "error";
+    let db_schema_path = "../server/src/responseErrors.ts";
+    write_file(&mut handlebars, responses_errors.clone(), &db_schema_path, file_type, &template_path, "responses" )?;  
+
     Ok(())
 }
