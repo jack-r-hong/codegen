@@ -169,6 +169,7 @@ model Transaction {
   transactionChatroomCursor TransactionChatroomCursor[]   
   pairedAt DateTime? @map("pair_at")
   paidAt DateTime? @map("paid_at") 
+  expiredAt DateTime? @map("expired_at") 
   completedAt DateTime? @map("completed_at") 
   referralId Int? @map("referral_id") 
   referral Referral?   @relation(fields: [referralId], references: [id])

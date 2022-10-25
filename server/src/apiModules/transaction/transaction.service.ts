@@ -125,8 +125,11 @@ async function calculationTransation(
  * 過期訂單
  */
 const expiredTranId = 'expiredTranId';
+/** 等待配對超時時間  */
 const peddingTimeout = 5 * 60;
-const payTimeout = 65 * 60;
+/** 等待付款超時時間  */
+const payTimeout = 64 * 60;
+/** 過期事件，之後整理 */
 const subscribeExpiredeModel = Container.get(SubscribeExpiredeModel);
 subscribeExpiredeModel.sub((key) => {
   if (key.match(/^expiredTranId/) ) {
@@ -228,6 +231,8 @@ export class TransactionService {
         true,
         false);
     }
+    const expiredAt = new Date();
+    expiredAt.setSeconds(expiredAt.getSeconds() + peddingTimeout);
     const res = await this.transactionModel.createTransaction(
         param,
         {},
@@ -247,6 +252,7 @@ export class TransactionService {
           rebate,
           rebateRate,
           referralId,
+          expiredAt,
         },
     ).catch((e) =>{
       throw e;
@@ -608,9 +614,15 @@ export class TransactionService {
     ) {} else {
       throw errors.TransactionUpdateStateError;
     }
+
+    const expiredAt = new Date();
+    expiredAt.setSeconds(expiredAt.getSeconds() + payTimeout);
+
     const res = await this.transactionModel.updateTransaction(
         param,
         {userId: session.userInfo?.id},
+        false,
+        expiredAt,
     ).catch((e) =>{
       throw e;
     });

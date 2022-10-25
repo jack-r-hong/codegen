@@ -27,6 +27,7 @@ export class TransactionModel {
         rebate,
         rebateRate,
         referralId,
+        expiredAt,
       }: {
         account: string,
         bonusPoint: number,
@@ -42,7 +43,8 @@ export class TransactionModel {
         totalPoints: number,
         rebate: number,
         rebateRate: number
-        referralId: null | number
+        referralId: null | number,
+        expiredAt: Date,
       },
 
       // custom end createTransactionParam
@@ -68,6 +70,7 @@ export class TransactionModel {
           rebate,
           rebateRate,
           referralId,
+          expiredAt,
         },
         select: {
           id: true,
@@ -83,6 +86,7 @@ export class TransactionModel {
           payMethod: true,
           createdAt: true,
           state: true,
+          expiredAt: true,
           user: {
             select: {
               gameUid: true,
@@ -345,7 +349,7 @@ export class TransactionModel {
     const res = await prisma.transaction.findUnique({
       where: {
         id: param.pathId,
-        
+
       },
       select: {
         account: true,
@@ -365,6 +369,7 @@ export class TransactionModel {
         totalPoints: true,
         twd: true,
         // custom begin readOneTransaction
+        expiredAt: true,
         paid: true,
         user: {
           select: {
@@ -397,12 +402,13 @@ export class TransactionModel {
       customParam: any,
       // custom begin updateTransactionParam
       paid? : boolean,
-
+      expiredAt?: Date,
       // custom end updateTransactionParam
   ) {
     // custom begin updateTransaction
     let data : { pairedAt: Date;} |
     {completedAt: Date;} |
+    {expiredAt: Date;} |
     {state: number;} |
     {paid : boolean}|
     {
@@ -421,6 +427,7 @@ export class TransactionModel {
         };
       } else {
         data = {
+          expiredAt,
           pairedAt: new Date(),
           state: param.bodyState,
           transactionRecive: {
