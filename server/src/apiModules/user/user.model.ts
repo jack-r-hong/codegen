@@ -165,11 +165,17 @@ export class UserModel {
           status: true,
         },
       });
-      userBank.forEach((e) => {
+      /** 只要有一個銀行狀態為通過就通過 */
+      const bankIsVerify = userBank.every((e) => {
         if (e.status !== 2) {
-          isVerified = false;
+          return true;
         }
+        return false;
       });
+
+      if (!bankIsVerify) {
+        isVerified = false;
+      }
     }
     const userStatus = isVerified? 1: 4;
     const userVerifyRes = await prisma.userVerify.update({
@@ -278,7 +284,7 @@ export class UserModel {
     const res = await prisma.user.findUnique({
       where: {
         id: param.pathId,
-        
+
       },
       select: {
         address: true,
@@ -671,11 +677,50 @@ export class UserModel {
       // custom end postRealVerifyParam
   ) {
     // custom begin postRealVerify
+
     const originalUser = await prisma.user.findUnique({
       where: {
         id: customParam.userId,
       },
     });
+
+    const originalBank = await prisma.bankAccount.findMany({
+      where: {
+        userId: customParam.userId,
+      },
+    });
+
+    if (!originalUser) {
+      return;
+    }
+    /** 所有欄位都沒變的話，不改狀態 */
+    let userStatus = originalUser.userStatus;
+
+    /** 如果銀行帳號更新後只要有一個通過驗證，使用者狀態由使用者資料判斷，
+     * 否則狀態改為3
+     */
+
+    const bankIsUnmodify = param.bodyBankAccounts.some((ele) => {
+      const bank = originalBank.find((bank) => bank.order === ele.bodyOrder);
+      if (bank) {
+        /** 已驗證狀態 且欄位沒變*/
+        if (
+          bank.status === 2 &&
+          Number(bank.account) === ele.bodyAccount &&
+          bank.code === ele.bodyCode &&
+          bank.name === ele.bodyName
+        ) {
+          return true;
+        }
+        return false;
+      }
+      return false;
+    });
+
+    if (!bankIsUnmodify) {
+      userStatus = 3;
+    }
+
     enum FieldMap {
       address = 'bodyAddress',
       area ='bodyArea',
@@ -690,15 +735,17 @@ export class UserModel {
       idCardType ='bodyIdCardType',
       name ='bodyName',
     }
+
     const updataVerifyData : any = {};
-    if (originalUser) {
-      for (const e of (Object.keys(FieldMap) as (keyof typeof FieldMap)[])) {
-        if (originalUser[e] !== param[FieldMap[e]]) {
-          updataVerifyData[e] = 1;
-        }
+
+    for (const e of (Object.keys(FieldMap) as (keyof typeof FieldMap)[])) {
+      if (originalUser[e] !== param[FieldMap[e]]) {
+        userStatus = 3;
+        updataVerifyData[e] = 1;
       }
     }
-    const res = await prisma.user.update({
+
+    const userUpdate = prisma.user.update({
       data: {
         address: param.bodyAddress,
         area: param.bodyArea,
@@ -713,7 +760,7 @@ export class UserModel {
         idCardPosiition: param.bodyIdCardPosiition,
         idCardType: param.bodyIdCardType,
         name: param.bodyName,
-        userStatus: 3,
+        userStatus,
         userVerify: {
           update: updataVerifyData,
         },
@@ -725,72 +772,71 @@ export class UserModel {
         id: true,
         userStatus: true,
       },
-    }).catch((e) => {
-      throw e;
-    }).finally(() => {
-      prisma.$disconnect();
     });
-    const originalBank = await prisma.bankAccount.findMany({
-      where: {
-        userId: customParam.userId,
-      },
-    });
-    await prisma.$transaction(
-        param.bodyBankAccounts.map((e, i) => {
-          let updateVerify :any = {update: {}};
-          let status :any = 1;
-          const bank = originalBank.find((bank) => bank.order === e.bodyOrder);
-          if (bank) {
-            if (Number(bank.account) !== e.bodyAccount) {
-              updateVerify.update.account = 1;
-            }
-            if (bank.code !== e.bodyCode) {
-              updateVerify.update.code = 1;
-            }
-            if (bank.name !== e.bodyName) {
-              updateVerify.update.name = 1;
-            }
-          }
-          if (Object.keys(updateVerify.update).length <= 0) {
-            updateVerify = undefined;
-            status = undefined;
-          }
-          return prisma.bankAccount.upsert({
-            where: {
-              uniqueOrder: {
-                userId: customParam.userId,
-                order: e.bodyOrder,
-              },
-            },
-            update: {
-              account: e.bodyAccount,
-              code: e.bodyCode,
-              name: e.bodyName,
-              status,
-              bankAccountVerify: updateVerify,
-            },
+
+    const bodyBankAccountsMap = param.bodyBankAccounts.map((e) => {
+      let updateVerify :any = {update: {}};
+      let status :any = 1;
+      const bank = originalBank.find((bank) => bank.order === e.bodyOrder);
+      if (bank) {
+        if (Number(bank.account) !== e.bodyAccount) {
+          updateVerify.update.account = 1;
+        }
+        if (bank.code !== e.bodyCode) {
+          updateVerify.update.code = 1;
+        }
+        if (bank.name !== e.bodyName) {
+          updateVerify.update.name = 1;
+        }
+      }
+      if (Object.keys(updateVerify.update).length <= 0) {
+        updateVerify = undefined;
+        status = undefined;
+      }
+      return prisma.bankAccount.upsert({
+        where: {
+          uniqueOrder: {
+            userId: customParam.userId,
+            order: e.bodyOrder,
+          },
+        },
+        update: {
+          account: e.bodyAccount,
+          code: e.bodyCode,
+          name: e.bodyName,
+          status,
+          bankAccountVerify: updateVerify,
+        },
+        create: {
+          userId: customParam.userId,
+          order: e.bodyOrder,
+          account: e.bodyAccount,
+          code: e.bodyCode,
+          name: e.bodyName,
+          bankAccountVerify: {
             create: {
-              userId: customParam.userId,
-              order: e.bodyOrder,
-              account: e.bodyAccount,
-              code: e.bodyCode,
-              name: e.bodyName,
-              bankAccountVerify: {
-                create: {
-                  account: 1,
-                  code: 1,
-                  name: 1,
-                  photo: 1,
-                },
-              },
+              account: 1,
+              code: 1,
+              name: 1,
+              photo: 1,
             },
-          });
-        }),
+          },
+        },
+      });
+    });
+
+    const tran: ((typeof bodyBankAccountsMap[0])
+    | (typeof userUpdate))[] = bodyBankAccountsMap;
+    tran.splice(0, 0, userUpdate);
+
+    const res = await prisma.$transaction(
+        tran,
     ).catch((e) => {
       throw e;
     }).finally(() => {
       prisma.$disconnect();
     });
+
     return res;
 
     // custom end postRealVerify

@@ -191,16 +191,17 @@ export class BankAccountModel {
         },
       });
     };
-    let isAllPass = true;
+    let isAllPass = false;
     for (const e of param.bodyDataList) {
       let status = 1;
-      if (e.bodyName === 2 &&
+      if (
+        e.bodyName === 2 &&
         e.bodyAccount === 2 &&
         e.bodyCode === 2 &&
-        e.bodyPhoto === 2) {
+        e.bodyPhoto === 2
+      ) {
         status = 2;
-      } else {
-        isAllPass = false;
+        isAllPass = true;
       }
       transactionArray.push(
           prisma.bankAccountVerify.update({
@@ -277,6 +278,7 @@ export class BankAccountModel {
       },
     });
     if (isAllPass && verify) {
+      /** 驗證user 基本狀態 */
       isAllPass = (Object.keys(verify) as (keyof typeof verify)[]
       ).every((e) => {
         if (verify[e] === 2) {
@@ -285,7 +287,6 @@ export class BankAccountModel {
         return false;
       });
     }
-    console.log(isAllPass);
     transactionArray.push(
         prisma.user.update({
           where: {
@@ -383,7 +384,7 @@ export class BankAccountModel {
     const res = await prisma.bankAccount.findUnique({
       where: {
         id: param.pathId,
-        
+
       },
       select: {
         account: true,
