@@ -23,6 +23,8 @@ import {
   getGSPayDeposit,
   getGSPayQuery,
 } from '../../utils/axiosGSPay';
+import {referralCodeFormat} from '../../utils/referralCodeFormat';
+
 const transactionModel = new TransactionModel();
 const bankAccountModel = new BankAccountModel();
 const userModel = new UserModel();
@@ -442,6 +444,10 @@ export class TransactionService {
         } else {
           counterpartyGameUid = res.user!.gameUid;
         }
+
+        const referralCode = res.user?.referralMap?.referralId?
+        referralCodeFormat(
+            res.user?.referralMap?.referralId!): null;
         delete (res as any).transactionRecive;
         delete (res as any).user;
         delete (res as any).userId;
@@ -449,6 +455,7 @@ export class TransactionService {
           payMethod: payMethodMap[e.payMethod as 1|2|3|4],
           selfGameUid,
           counterpartyGameUid,
+          referralCode,
         });
         return res;
       }),

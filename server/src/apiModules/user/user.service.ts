@@ -7,6 +7,7 @@ import bcrypt from 'bcrypt';
 import svgCaptcha from 'svg-captcha';
 import {promises as fs} from 'fs';
 import {getPhoneCheck} from '../../utils/axios';
+import {referralCodeFormat} from '../../utils/referralCodeFormat';
 type LoginStatus = {
   id: string;
   gameUid: string | null;
@@ -350,9 +351,6 @@ const userVerifyResponeFormat2 = async (data: any) => {
     bankAccounts,
   };
 };
-const getReferralCodde = (code: number) => {
-  return code.toString().padStart(10, '0');
-};
 
 // custom end import
 
@@ -390,7 +388,7 @@ export class UserService {
         rebateAmount: 0,
       };
       const referral = {
-        referralCode: getReferralCodde(e.referral!.id),
+        referralCode: referralCodeFormat(e.referral!.id),
         rebate: e.referral?.rebate.toNumber(),
       };
       const t = dbData.find((item) => item.userId === e.id);
@@ -565,7 +563,7 @@ export class UserService {
         rebateAmount: 0,
       };
       const referral = {
-        referralCode: getReferralCodde(e.referral!.id),
+        referralCode: referralCodeFormat(e.referral!.id),
         rebate: e.referral?.rebate.toNumber(),
       };
       const t = dbData.find((item) => item.userId === e.id);
@@ -695,7 +693,7 @@ export class UserService {
           phone,
           gameUid,
           id,
-          referralCode: getReferralCodde(referral!.id),
+          referralCode: referralCodeFormat(referral!.id),
         };
         return result;
       }
@@ -847,7 +845,7 @@ export class UserService {
       isAgent: res.isAgent,
     };
     const result : LoginStatus= Object.assign(res, {
-      referralCode: getReferralCodde(res.referral!.id),
+      referralCode: referralCodeFormat(res.referral!.id),
     });
     return result;
 

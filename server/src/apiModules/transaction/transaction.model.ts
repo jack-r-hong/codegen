@@ -2,6 +2,7 @@ import {Service} from 'typedi';
 import * as Prisma from '@prisma/client';
 import * as requestTypes from './transaction.parameters';
 import {errors} from '../../errors';
+import {referralCodeFormat} from '../../utils/referralCodeFormat';
 
 const prisma = new Prisma.PrismaClient();
 
@@ -272,6 +273,11 @@ export class TransactionModel {
           select: {
             id: true,
             gameUid: true,
+            referralMap: {
+              select: {
+                referralId: true,
+              },
+            },
           },
         },
         transactionRecive: {
@@ -349,7 +355,7 @@ export class TransactionModel {
     const res = await prisma.transaction.findUnique({
       where: {
         id: param.pathId,
-        
+
       },
       select: {
         account: true,
@@ -536,6 +542,11 @@ export class TransactionModel {
             name: true,
             gameUid: true,
             remark: true,
+            referralMap: {
+              select: {
+                referralId: true,
+              },
+            },
           },
         },
       },
@@ -562,6 +573,8 @@ export class TransactionModel {
         name: result.user?.name,
         gameUid: result.user?.gameUid,
         remark: result.user?.remark,
+        referralCode: result.user?.referralMap?.referralId? referralCodeFormat(
+          result.user?.referralMap?.referralId!): null,
       });
     });
   }
