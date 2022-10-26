@@ -29,7 +29,7 @@ export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
     token as {userId: string, userName: string,
       transactionId: string, isAgent: boolean, isCS: boolean};
 
-    const wsHandler = new TransactionChatroomHandler(
+    const wsHandler = await TransactionChatroomHandler.init(
         userId,
         transactionId,
         userName,
@@ -55,8 +55,7 @@ export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
     await wsHandler.sendNotify();
 
     const timer = setInterval(() => {
-      event.eventName = 'bit';
-      ws.send(event.msg('bit'));
+      ws.send(JSON.stringify({'event': 'bit', 'data': 'bit'}));
     }, 15000);
 
     ws.on('close', () => {

@@ -54,7 +54,7 @@ export class RobbyHandler implements LobbyHandlerInterface {
       this.chatroomHandler.subscriberQuit();
     }
 
-    this.chatroomHandler = new TransactionChatroomHandler(
+    this.chatroomHandler = await TransactionChatroomHandler.init(
         this.userId,
         this.transactionId,
         this.userName,
@@ -70,7 +70,7 @@ export class RobbyHandler implements LobbyHandlerInterface {
 class ChatroomHandler {
   userId: string;
   userName: string;
-  cursor: number = 0;
+  cursor: number;
   ws: WebSocket;
   subscriber: any;
   roomId: string;
@@ -97,6 +97,7 @@ class ChatroomHandler {
     return await wsClientChatroomModel.sub(
         (message: any)=>{
           event.eventName = 'send';
+
           const data = JSON.parse(message);
           self.ws.send(event.msg(self.isSelf(data)));
 
@@ -107,12 +108,10 @@ class ChatroomHandler {
 
   async sendNotify() {
     event.eventName = 'notify';
-    // console.log(this.cursor);
 
     const messageList = (await wsClientChatroomModel
         .get(-1, this.roomId!))
         .map((e) => JSON.parse(e));
-      // console.log(messageList);
 
     this.ws.send(event.msg({
       unreadCouunt: messageList.filter((e: any) => {
@@ -145,8 +144,18 @@ class ChatroomHandler {
   subscriberQuit() {
     wsClientChatroomModel.subscriberQuit(this.subscriber).then(()=> {});
   }
-}
 
+  async pushNewMessage(msg: string) {
+    await wsClientChatroomModel.push(msg, this.roomId);
+  }
+
+  async pubNewMessage(msg: string) {
+    await wsClientChatroomModel.pub(
+        msg,
+        this.roomId,
+    );
+  }
+}
 
 export class TransactionChatroomHandler extends ChatroomHandler
   implements ChatroomHandlerInterface {
@@ -154,7 +163,28 @@ export class TransactionChatroomHandler extends ChatroomHandler
   isAgent: boolean;
   isCS: boolean;
 
-  constructor(
+  private constructor(
+      userId: string,
+      transactionId: string,
+      userName: string,
+      isAgent: boolean,
+      isCS: boolean,
+      ws: WebSocket,
+      cursor: number,
+  ) {
+    super(
+        userId,
+        userName,
+        cursor,
+        ws,
+        transactionId + 'Transaction',
+    );
+    this.transactionId = transactionId;
+    this.isAgent = isAgent;
+    this.isCS = isCS;
+  }
+
+  static async init(
       userId: string,
       transactionId: string,
       userName: string,
@@ -162,19 +192,29 @@ export class TransactionChatroomHandler extends ChatroomHandler
       isCS: boolean,
       ws: WebSocket,
   ) {
-    super(
+    const cursor = await this.getCursor(transactionId, userId);
+    return new TransactionChatroomHandler(
         userId,
+        transactionId,
         userName,
-        0,
+        isAgent,
+        isCS,
         ws,
-        transactionId + 'Transaction',
+        cursor,
     );
-    this.transactionId = transactionId;
-    this.isAgent = isAgent;
-    this.isCS = isCS;
-    this.getCursor().then((res) => {
-      this.cursor = res;
-    });
+  }
+
+  static async getCursor(
+      transactionId: string,
+      userId: string,
+  ) {
+    const cursorRes = await chatroomModel.getTransactionCursor(
+        transactionId,
+        userId);
+    if (cursorRes) {
+      return cursorRes.cursor;
+    }
+    return 0;
   }
 
   handleReadEvent() {
@@ -206,14 +246,14 @@ export class TransactionChatroomHandler extends ChatroomHandler
               data.type === 'text'? data.data: '',
             data.type === 'image'? Buffer.from(data.data, 'base64'): undefined,
             this.isAgent? 2: (this.isCS? 3: 1),
-      ).then((e) => {
-        wsClientChatroomModel.push(JSON.stringify({
+      ).then(async (e) => {
+        await this.pushNewMessage(JSON.stringify({
           id: e.id,
           userId: e.userId,
-        }), this.transactionId);
-        wsClientChatroomModel.pub(
+        }));
+
+        await this.pubNewMessage(
             JSON.stringify(this.dataFormat(e)),
-            this.transactionId,
         );
       }).catch((e) => console.log(e));
     }
@@ -236,12 +276,12 @@ export class TransactionChatroomHandler extends ChatroomHandler
     }
 
     if ((await wsClientChatroomModel
-        .get(-1, this.transactionId!)).length === 0) {
+        .get(-1, this.roomId!)).length === 0) {
       for (const e of res) {
         await wsClientChatroomModel.push(JSON.stringify({
           id: e.id,
           userId: e.userId,
-        }), this.transactionId);
+        }), this.roomId);
       }
     }
   }
