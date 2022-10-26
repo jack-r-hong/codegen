@@ -172,7 +172,6 @@ export class UserModel {
         }
         return false;
       });
-
       if (!bankIsVerify) {
         isVerified = false;
       }
@@ -284,7 +283,7 @@ export class UserModel {
     const res = await prisma.user.findUnique({
       where: {
         id: param.pathId,
-
+        
       },
       select: {
         address: true,
@@ -677,29 +676,24 @@ export class UserModel {
       // custom end postRealVerifyParam
   ) {
     // custom begin postRealVerify
-
     const originalUser = await prisma.user.findUnique({
       where: {
         id: customParam.userId,
       },
     });
-
     const originalBank = await prisma.bankAccount.findMany({
       where: {
         userId: customParam.userId,
       },
     });
-
     if (!originalUser) {
       return;
     }
     /** 所有欄位都沒變的話，不改狀態 */
     let userStatus = originalUser.userStatus;
-
     /** 如果銀行帳號更新後只要有一個通過驗證，使用者狀態由使用者資料判斷，
      * 否則狀態改為3
      */
-
     const bankIsUnmodify = param.bodyBankAccounts.some((ele) => {
       const bank = originalBank.find((bank) => bank.order === ele.bodyOrder);
       if (bank) {
@@ -716,11 +710,9 @@ export class UserModel {
       }
       return false;
     });
-
     if (!bankIsUnmodify) {
       userStatus = 3;
     }
-
     enum FieldMap {
       address = 'bodyAddress',
       area ='bodyArea',
@@ -735,16 +727,13 @@ export class UserModel {
       idCardType ='bodyIdCardType',
       name ='bodyName',
     }
-
     const updataVerifyData : any = {};
-
     for (const e of (Object.keys(FieldMap) as (keyof typeof FieldMap)[])) {
       if (originalUser[e] !== param[FieldMap[e]]) {
         userStatus = 3;
         updataVerifyData[e] = 1;
       }
     }
-
     const userUpdate = prisma.user.update({
       data: {
         address: param.bodyAddress,
@@ -773,7 +762,6 @@ export class UserModel {
         userStatus: true,
       },
     });
-
     const bodyBankAccountsMap = param.bodyBankAccounts.map((e) => {
       let updateVerify :any = {update: {}};
       let status :any = 1;
@@ -824,11 +812,9 @@ export class UserModel {
         },
       });
     });
-
     const tran: ((typeof bodyBankAccountsMap[0])
     | (typeof userUpdate))[] = bodyBankAccountsMap;
     tran.splice(0, 0, userUpdate);
-
     const res = await prisma.$transaction(
         tran,
     ).catch((e) => {
@@ -836,7 +822,6 @@ export class UserModel {
     }).finally(() => {
       prisma.$disconnect();
     });
-
     return res;
 
     // custom end postRealVerify

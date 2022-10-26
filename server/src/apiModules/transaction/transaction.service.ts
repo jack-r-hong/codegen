@@ -144,6 +144,7 @@ subscribeExpiredeModel.sub((key) => {
               JSON.stringify({
                 state: res.state,
                 paid: res.paid,
+                timeout: res.timeout,
               }),
           );
           wsClientRealModel.pub(
@@ -614,10 +615,8 @@ export class TransactionService {
     ) {} else {
       throw errors.TransactionUpdateStateError;
     }
-
     const expiredAt = new Date();
     expiredAt.setSeconds(expiredAt.getSeconds() + payTimeout);
-
     const res = await this.transactionModel.updateTransaction(
         param,
         {userId: session.userInfo?.id},
@@ -636,6 +635,7 @@ export class TransactionService {
           JSON.stringify({
             state: res.state,
             paid: res.paid,
+            timeout: res.timeout,
           }),
       );
       /** 更新即時訂單 */

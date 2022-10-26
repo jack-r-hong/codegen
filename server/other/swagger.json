@@ -5860,35 +5860,6 @@
           }
         }           
       },
-      "TransactionOrderNotFound" : {
-        "description" : "error",
-        "content" : {
-          "application/json" : {
-            "schema" : {
-              "type": "object",
-              "properties": {
-                "status" : {
-                  "type" : "integer",
-                  "example": 404
-                },   
-                "code" : {
-                  "type" : "integer",
-                  "example": -3006
-                },
-                "message": {
-                  "type": "string",
-                  "example": "Transaction order not found."
-                },
-                "cnMsg": {
-                  "type": "string",
-                  "example": "找不到該訂單"
-                }   
-                
-              }                  
-            }
-          }
-        }           
-      },
       "TransactionUpdateStateError" : {
         "description" : "error",
         "content" : {
@@ -5960,7 +5931,7 @@
                 },   
                 "code" : {
                   "type" : "integer",
-                  "example": -3008
+                  "example": -3009
                 },
                 "message": {
                   "type": "string",
@@ -5975,6 +5946,35 @@
           }
         }           
       },
+      "TransactionOrderNotFound" : {
+        "description" : "error",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type": "object",
+              "properties": {
+                "status" : {
+                  "type" : "integer",
+                  "example": 404
+                },   
+                "code" : {
+                  "type" : "integer",
+                  "example": -3010
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Transaction order not found."
+                },
+                "cnMsg": {
+                  "type": "string",
+                  "example": "找不到該訂單"
+                }   
+                
+              }                  
+            }
+          }
+        }           
+      },      
       "ServerError" : {
         "description" : "error",
         "content" : {

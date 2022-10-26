@@ -69,6 +69,8 @@ export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
           const d = JSON.parse(message);
           d.isAgent = isAgent;
           d.image = await getQrcode(userId as string),
+          /** 超時取消 */
+          d.state = d.timeout? 99: d.state;
           ws.send(event.msg(d));
           if (d.state === 4 || d.state === 99) {
             wSCIModel.subscriberQuit(subscriber).then(()=> {});
@@ -78,10 +80,12 @@ export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
           }
         });
 
+    /** 超時取消 */
+    const state = resTran.timeout? 99 : resTran.state;
     event.eventName = 'ready';
     ws.send(event.msg({
       isAgent,
-      state: resTran.state,
+      state,
       bos: resTran.bos,
       ready: true,
       paid: resTran.paid,

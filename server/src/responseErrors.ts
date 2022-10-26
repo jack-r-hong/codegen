@@ -126,7 +126,7 @@ export const TransactionOrderNotFound = new ResponsError(
     'TransactionOrderNotFound',
     'Transaction order not found.',
     404,
-    -3006,
+    -3010,
     '找不到該訂單',
 );
 export const TransactionQRCodeNotFound = new ResponsError(
@@ -140,7 +140,7 @@ export const TransactionUpdateStateAppeal = new ResponsError(
     'TransactionUpdateStateAppeal',
     'The order is appeal.',
     403,
-    -3008,
+    -3009,
     '訂單申訴中。',
 );
 export const TransactionUpdateStateError = new ResponsError(

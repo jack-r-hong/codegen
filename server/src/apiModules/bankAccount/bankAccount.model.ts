@@ -384,7 +384,7 @@ export class BankAccountModel {
     const res = await prisma.bankAccount.findUnique({
       where: {
         id: param.pathId,
-
+        
       },
       select: {
         account: true,
