@@ -2,7 +2,10 @@ import {Service} from 'typedi';
 import * as Prisma from '@prisma/client';
 import * as requestTypes from './transaction.parameters';
 import {errors} from '../../errors';
+// custom begin import
 import {referralCodeFormat} from '../../utils/referralCodeFormat';
+
+// custom end import
 
 const prisma = new Prisma.PrismaClient();
 
@@ -355,7 +358,7 @@ export class TransactionModel {
     const res = await prisma.transaction.findUnique({
       where: {
         id: param.pathId,
-
+        
       },
       select: {
         account: true,

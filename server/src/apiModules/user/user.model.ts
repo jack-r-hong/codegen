@@ -2,6 +2,9 @@ import {Service} from 'typedi';
 import * as Prisma from '@prisma/client';
 import * as requestTypes from './user.parameters';
 import {errors} from '../../errors';
+// custom begin import
+
+// custom end import
 
 const prisma = new Prisma.PrismaClient();
 

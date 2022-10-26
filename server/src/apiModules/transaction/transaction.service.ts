@@ -24,7 +24,6 @@ import {
   getGSPayQuery,
 } from '../../utils/axiosGSPay';
 import {referralCodeFormat} from '../../utils/referralCodeFormat';
-
 const transactionModel = new TransactionModel();
 const bankAccountModel = new BankAccountModel();
 const userModel = new UserModel();
@@ -444,7 +443,6 @@ export class TransactionService {
         } else {
           counterpartyGameUid = res.user!.gameUid;
         }
-
         const referralCode = res.user?.referralMap?.referralId?
         referralCodeFormat(
             res.user?.referralMap?.referralId!): null;
