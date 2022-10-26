@@ -13,6 +13,7 @@
     "mig-dev": "prisma migrate dev --name ",
     "mig-dep": "prisma migrate deploy",
     "mig-rolled-back": "prisma migrate resolve --rolled-back",
+    "codegen": "cd ../codegen && codegen",
     "gen": "prisma generate ",
     "lint": "eslint src/*.ts"
   },
