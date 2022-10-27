@@ -286,7 +286,7 @@ export class UserModel {
     const res = await prisma.user.findUnique({
       where: {
         id: param.pathId,
-        
+
       },
       select: {
         address: true,
@@ -428,42 +428,51 @@ export class UserModel {
 
       // custom end readManyUserBackstageParam
   ) {
-    const res = await prisma.user.findMany({
-      where: {
-      // custom begin readManyUserBackstageWhere
-        isAgent,
+    const res = await prisma.$transaction([
+      prisma.user.findMany({
+        where: {
+        // custom begin readManyUserBackstageWhere
+          isAgent,
 
-      // custom end readManyUserBackstageWhere
-      },
-      select: {
-        gameUid: true,
-        id: true,
-        isAgent: true,
-        level: true,
-        phone: true,
-        phonePrefix: true,
-        remark: true,
-        userStatus: true,
-        // custom begin readManyUserBackstage
-        referral: {
-          select: {
-            id: true,
-            rebate: true,
-          },
+        // custom end readManyUserBackstageWhere
         },
+        select: {
+          gameUid: true,
+          id: true,
+          isAgent: true,
+          level: true,
+          phone: true,
+          phonePrefix: true,
+          remark: true,
+          userStatus: true,
+          // custom begin readManyUserBackstage
+          referral: {
+            select: {
+              id: true,
+              rebate: true,
+            },
+          },
 
-        // custom end readManyUserBackstage
-      },
-      orderBy: {
-        [param.queryOrderByField]: param.queryOrderBy,
-      },
-      skip: param.queryPage * param.queryTake,
-      take: param.queryTake,
-    }).catch((e) => {
+          // custom end readManyUserBackstage
+        },
+        orderBy: {
+          [param.queryOrderByField]: param.queryOrderBy,
+        },
+        skip: param.queryPage * param.queryTake,
+        take: param.queryTake,
+      }),
+      prisma.user.count(),
+      prisma.user.count({
+        where: {
+          userStatus: 3,
+        },
+      }),
+    ]).catch((e) => {
       throw e;
     }).finally(() => {
       prisma.$disconnect();
     });
+
     return res;
   }
   async captcha(

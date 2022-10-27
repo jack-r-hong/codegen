@@ -352,35 +352,26 @@ const userVerifyResponeFormat2 = async (data: any) => {
   };
 };
 
-// custom end import
+const userModel = new UserModel();
 
+const backageUserFormat = async (
+    res: any,
+    count: number,
+    waitVerifyCount: number,
+    take: number,
+) => {
+  const dbData = await userModel.readManyUserSumBackstage(
+      res.map((e: any) => e.id),
+  );
+  const dbData2 = await userModel.readManyUserRebateSumBackstage(
+      res.map((e: any) => e.id),
+  );
+  const totalPage = Math.ceil(count / take);
 
-@Service()
-export class UserService {
-  @Inject()
-  private userModel!: UserModel;
-  // custom begin Inject
-
-  // custom end Inject
-
-  async getUserBackstageAgents(
-      param :requestTypes.GetUserBackstageAgentsParams,
-      session: Express.Request['session'],
-  ) {
-    // custom begin getUserBackstageAgents
-    const res = await this.userModel.readManyUserBackstage(
-        param,
-        true,
-    ).catch((e) =>{
-      throw e;
-    });
-    const dbData = await this.userModel.readManyUserSumBackstage(
-        res.map((e) => e.id),
-    );
-    const dbData2 = await this.userModel.readManyUserRebateSumBackstage(
-        res.map((e) => e.id),
-    );
-    return res.map((e) => {
+  return {
+    totalPage,
+    waitVerifyCount,
+    dataList: res.map((e: any) => {
       const user = e;
       const transactionData = {
         accumulatioin: 0,
@@ -402,7 +393,35 @@ export class UserService {
       }
       delete (user as any).referral;
       return Object.assign(user, transactionData, referral);
+    }),
+  };
+};
+
+// custom end import
+
+
+@Service()
+export class UserService {
+  @Inject()
+  private userModel!: UserModel;
+  // custom begin Inject
+
+  // custom end Inject
+
+  async getUserBackstageAgents(
+      param :requestTypes.GetUserBackstageAgentsParams,
+      session: Express.Request['session'],
+  ) {
+    // custom begin getUserBackstageAgents
+    const res =
+    await this.userModel.readManyUserBackstage(
+        param,
+    ).catch((e) =>{
+      throw e;
     });
+
+
+    return backageUserFormat(...res, param.queryTake);
 
     // custom end getUserBackstageAgents
   }
@@ -542,42 +561,16 @@ export class UserService {
 
     // custom end readManyUserBackstage
 
-    const res = await this.userModel.readManyUserBackstage(
+    const res =
+    await this.userModel.readManyUserBackstage(
         param,
     ).catch((e) =>{
       throw e;
     });
 
     // custom begin readManyUserBackstage2
-    const dbData = await this.userModel.readManyUserSumBackstage(
-        res.map((e) => e.id),
-    );
-    const dbData2 = await this.userModel.readManyUserRebateSumBackstage(
-        res.map((e) => e.id),
-    );
-    return res.map((e) => {
-      const user = e;
-      const transactionData = {
-        accumulatioin: 0,
-        orderCount: 0,
-        rebateAmount: 0,
-      };
-      const referral = {
-        referralCode: referralCodeFormat(e.referral!.id),
-        rebate: e.referral?.rebate.toNumber(),
-      };
-      const t = dbData.find((item) => item.userId === e.id);
-      const t2 = dbData2.find(((item) => item.referralId === e.referral!.id));
-      if (t) {
-        transactionData.accumulatioin = t._sum.twd??0;
-        transactionData.orderCount = t._count;
-      }
-      if (t2) {
-        transactionData.rebateAmount = t2._sum.rebate??0;
-      }
-      delete (user as any).referral;
-      return Object.assign(user, transactionData, referral);
-    });
+    return backageUserFormat(...res, param.queryTake);
+
 
     // custom end readManyUserBackstage2
     return res;

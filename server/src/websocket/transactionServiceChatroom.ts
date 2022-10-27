@@ -23,9 +23,7 @@ export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
   userName?: string;
   isAgent?: boolean;
   isCS?: boolean;
-  // cursor: number = 0;
   ws?: WebSocket;
-  subscriberNewMessage?: any;
   subscriberRoom?: any;
 
   constructor() {
@@ -71,8 +69,8 @@ export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
       }
     });
 
-    await this.sendNewMessage('ready');
-    await this.createSubscriberNewMessage();
+    await robbyHandler.sendNewMessage('ready');
+    await robbyHandler.createSubscriberNewMessage();
 
     const timer = setInterval(() => {
       event.eventName = 'bit';
@@ -85,76 +83,76 @@ export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
     });
   };
 
-  readDataFormat = (data: any) => {
-    return {
-      id: data.id,
-      userId: data.userId,
-      data: data.type === 'image'?
-          '傳送了一張圖片': data.text,
-      type: data.type,
-      time: data.createdAt,
-      name: data.name,
-      role: data.role,
-      unRead: data.unRead,
-      transactionId: data.transactionId,
-    };
-  };
+  // readDataFormat = (data: any) => {
+  //   return {
+  //     id: data.id,
+  //     userId: data.userId,
+  //     data: data.type === 'image'?
+  //         '傳送了一張圖片': data.text,
+  //     type: data.type,
+  //     time: data.createdAt,
+  //     name: data.name,
+  //     role: data.role,
+  //     unRead: data.unRead,
+  //     transactionId: data.transactionId,
+  //   };
+  // };
 
-  async sendNewMessage(eventName: 'ready'| 'newMessage') {
-    event.eventName = eventName;
-    const cursorRes = await chatroomModel.getManyTransactionServiceCursor(
-        this.userId!);
+  // async sendNewMessage(eventName: 'ready'| 'newMessage') {
+  //   event.eventName = eventName;
+  //   const cursorRes = await chatroomModel.getManyTransactionServiceCursor(
+  //       this.userId!);
 
-    const lastMessage = await chatroomModel.getManyTransactionRoomLastMessage();
+  //   const lastMessage = await chatroomModel.getManyTransactionRoomLastMessage();
 
-    const cursorParm = lastMessage.map((e) => {
-      const cursorItem = cursorRes.find((f) => {
-        return e.transactionId === f.transactionId;
-      });
+  //   const cursorParm = lastMessage.map((e) => {
+  //     const cursorItem = cursorRes.find((f) => {
+  //       return e.transactionId === f.transactionId;
+  //     });
 
-      if (cursorItem) {
-        return {
-          transactionId: cursorItem.transactionId,
-          cursor: cursorItem.cursor,
-        };
-      }
+  //     if (cursorItem) {
+  //       return {
+  //         transactionId: cursorItem.transactionId,
+  //         cursor: cursorItem.cursor,
+  //       };
+  //     }
 
-      return {
-        transactionId: e.transactionId,
-        cursor: 0,
-      };
-    });
+  //     return {
+  //       transactionId: e.transactionId,
+  //       cursor: 0,
+  //     };
+  //   });
 
-    const unreadList = await chatroomModel.getTransactionUnread(cursorParm);
-    const sendData = unreadList.map((e, i) => {
-      const msg = lastMessage[i];
-      if (msg) {
-        return Object.assign(msg, {
-          unRead: e,
-        });
-      }
+  //   const unreadList = await chatroomModel.getTransactionUnread(cursorParm);
+  //   const sendData = unreadList.map((e, i) => {
+  //     const msg = lastMessage[i];
+  //     if (msg) {
+  //       return Object.assign(msg, {
+  //         unRead: e,
+  //       });
+  //     }
 
-      return null;
-    });
+  //     return null;
+  //   });
 
-    this.ws!.send(event.msg(
-        sendData.map((e) => {
-          return this.readDataFormat(e);
-        }),
-    ));
-  }
+  //   this.ws!.send(event.msg(
+  //       sendData.map((e) => {
+  //         return this.readDataFormat(e);
+  //       }),
+  //   ));
+  // }
 
-  async createSubscriberNewMessage() {
-    const self = this;
+  // async createSubscriberNewMessage() {
+  //   const self = this;
 
-    if (this.subscriberNewMessage) {
-      wSClientServiceModel.subscriberQuit(this.subscriberNewMessage)
-          .then(()=> {});
-    }
+  //   if (this.subscriberNewMessage) {
+  //     wSClientServiceModel.subscriberQuit(this.subscriberNewMessage)
+  //         .then(()=> {});
+  //   }
 
-    this.subscriberNewMessage = await wSClientServiceModel.sub(
-        (message: any)=>{
-          self.sendNewMessage('newMessage').then();
-        });
-  }
+  //   this.subscriberNewMessage = await wSClientServiceModel.sub(
+  //       (message: any)=>{
+  //         self.sendNewMessage('newMessage').then();
+  //       });
+  // }
 }

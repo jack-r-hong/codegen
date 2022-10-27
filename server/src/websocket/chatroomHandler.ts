@@ -17,6 +17,7 @@ interface ChatroomHandlerInterface {
     handleSendEvent: (data: any) => void
     readySend: () => void
     subscriberQuit: () => void
+    sendNotify: () => void
 }
 
 interface LobbyHandlerInterface {
@@ -33,6 +34,8 @@ export class RobbyHandler implements LobbyHandlerInterface {
   userName: string;
   isAgent: boolean;
   isCS: boolean;
+  subscriberNewMessage?: any;
+
   constructor(
       ws: WebSocket,
       userId: string,
@@ -49,6 +52,8 @@ export class RobbyHandler implements LobbyHandlerInterface {
   }
   async handleChangeRoomEvent(data: any) {
     this.transactionId = data.transactionId;
+    console.log('test');
+
     // close subscriber
     if (this.chatroomHandler) {
       this.chatroomHandler.subscriberQuit();
@@ -64,6 +69,84 @@ export class RobbyHandler implements LobbyHandlerInterface {
     );
 
     event.eventName = 'changeRoom';
+
+
+    await this.chatroomHandler.readySend();
+
+    // await this.chatroomHandler.sendNotify();
+  }
+
+  readDataFormat = (data: any) => {
+    return {
+      id: data.id,
+      userId: data.userId,
+      data: data.type === 'image'?
+          '傳送了一張圖片': data.text,
+      type: data.type,
+      time: data.createdAt,
+      name: data.name,
+      role: data.role,
+      unRead: data.unRead,
+      transactionId: data.transactionId,
+    };
+  };
+
+  async sendNewMessage(eventName: 'ready'| 'newMessage') {
+    event.eventName = eventName;
+    const cursorRes = await chatroomModel.getManyTransactionServiceCursor(
+        this.userId!);
+
+    const lastMessage = await chatroomModel.getManyTransactionRoomLastMessage();
+
+    const cursorParm = lastMessage.map((e) => {
+      const cursorItem = cursorRes.find((f) => {
+        return e.transactionId === f.transactionId;
+      });
+
+      if (cursorItem) {
+        return {
+          transactionId: cursorItem.transactionId,
+          cursor: cursorItem.cursor,
+        };
+      }
+
+      return {
+        transactionId: e.transactionId,
+        cursor: 0,
+      };
+    });
+
+    const unreadList = await chatroomModel.getTransactionUnread(cursorParm);
+    const sendData = unreadList.map((e, i) => {
+      const msg = lastMessage[i];
+      if (msg) {
+        return Object.assign(msg, {
+          unRead: e,
+        });
+      }
+
+      return null;
+    });
+
+    this.ws!.send(event.msg(
+        sendData.map((e) => {
+          return this.readDataFormat(e);
+        }),
+    ));
+  }
+
+  async createSubscriberNewMessage() {
+    const self = this;
+
+    if (this.subscriberNewMessage) {
+      wSClientServiceModel.subscriberQuit(this.subscriberNewMessage)
+          .then(()=> {});
+    }
+
+    this.subscriberNewMessage = await wSClientServiceModel.sub(
+        (message: any)=>{
+          self.sendNewMessage('newMessage').then();
+        });
   }
 }
 
