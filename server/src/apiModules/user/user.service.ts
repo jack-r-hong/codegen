@@ -351,9 +351,7 @@ const userVerifyResponeFormat2 = async (data: any) => {
     bankAccounts,
   };
 };
-
 const userModel = new UserModel();
-
 const backageUserFormat = async (
     res: any,
     count: number,
@@ -366,10 +364,8 @@ const backageUserFormat = async (
   const dbData2 = await userModel.readManyUserRebateSumBackstage(
       res.map((e: any) => e.id),
   );
-  const totalPage = Math.ceil(count / take);
-
   return {
-    totalPage,
+    totalCount: count,
     waitVerifyCount,
     dataList: res.map((e: any) => {
       const user = e;
@@ -416,11 +412,10 @@ export class UserService {
     const res =
     await this.userModel.readManyUserBackstage(
         param,
+        true,
     ).catch((e) =>{
       throw e;
     });
-
-
     return backageUserFormat(...res, param.queryTake);
 
     // custom end getUserBackstageAgents
@@ -561,8 +556,7 @@ export class UserService {
 
     // custom end readManyUserBackstage
 
-    const res =
-    await this.userModel.readManyUserBackstage(
+    const res = await this.userModel.readManyUserBackstage(
         param,
     ).catch((e) =>{
       throw e;
@@ -570,7 +564,6 @@ export class UserService {
 
     // custom begin readManyUserBackstage2
     return backageUserFormat(...res, param.queryTake);
-
 
     // custom end readManyUserBackstage2
     return res;

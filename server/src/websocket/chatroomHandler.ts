@@ -26,57 +26,29 @@ interface LobbyHandlerInterface {
   ws?: WebSocket
 }
 
-export class RobbyHandler implements LobbyHandlerInterface {
+abstract class LobbyHandler {
   chatroomHandler: ChatroomHandlerInterface| null = null;
-  ws: WebSocket;
-  userId: string;
-  transactionId: string;
-  userName: string;
-  isAgent: boolean;
-  isCS: boolean;
   subscriberNewMessage?: any;
+  preMsg: string = '';
+  ws: WebSocket;
 
   constructor(
       ws: WebSocket,
-      userId: string,
-      userName: string,
-      isAgent: boolean,
-      isCS: boolean,
   ) {
     this.ws = ws;
-    this.userId = userId;
-    this.transactionId = '';
-    this.userName = userName;
-    this.isAgent = isAgent;
-    this.isCS = isCS;
-  }
-  async handleChangeRoomEvent(data: any) {
-    this.transactionId = data.transactionId;
-    console.log('test');
-
-    // close subscriber
-    if (this.chatroomHandler) {
-      this.chatroomHandler.subscriberQuit();
-    }
-
-    this.chatroomHandler = await TransactionChatroomHandler.init(
-        this.userId,
-        this.transactionId,
-        this.userName,
-        this.isAgent,
-        this.isCS,
-        this.ws,
-    );
-
-    event.eventName = 'changeRoom';
-
-
-    await this.chatroomHandler.readySend();
-
-    // await this.chatroomHandler.sendNotify();
   }
 
-  readDataFormat = (data: any) => {
+  readDataFormat = (data: {
+    id: number,
+    userId: String,
+    type: String,
+    text: String,
+    createdAt: Date,
+    name: String,
+    role: number,
+    unRead: number,
+    room: String,
+  }) => {
     return {
       id: data.id,
       userId: data.userId,
@@ -87,14 +59,99 @@ export class RobbyHandler implements LobbyHandlerInterface {
       name: data.name,
       role: data.role,
       unRead: data.unRead,
-      transactionId: data.transactionId,
+      room: data.room,
     };
   };
 
+  async handleChangeRoomEvent(
+      chatroomHandler: ChatroomHandlerInterface,
+  ) {
+    // close subscriber
+    if (this.chatroomHandler) {
+      this.chatroomHandler.subscriberQuit();
+    }
+
+    this.chatroomHandler = chatroomHandler;
+
+    event.eventName = 'changeRoom';
+
+    await this.chatroomHandler.readySend();
+
+    await this.chatroomHandler.sendNotify();
+  }
+}
+
+export class TransactionLobbyHandler extends LobbyHandler
+  implements LobbyHandlerInterface {
+  transactionId: string;
+  isAgent: boolean;
+  isCS: boolean;
+  userId: string;
+  userName: string;
+
+  private constructor(
+      ws: WebSocket,
+      userId: string,
+      userName: string,
+      isAgent: boolean,
+      isCS: boolean,
+  ) {
+    super(
+        ws,
+    );
+    this.userId = userId;
+    this.transactionId = '';
+    this.userName = userName;
+    this.isAgent = isAgent;
+    this.isCS = isCS;
+  }
+  override async handleChangeRoomEvent(data: any) {
+    this.transactionId = data.roomId;
+    if (!data || !data.roomId) {
+      return;
+    }
+    super.handleChangeRoomEvent(
+        await TransactionChatroomHandler.init(
+            this.userId,
+            this.transactionId,
+            this.userName,
+            this.isAgent,
+            this.isCS,
+            this.ws,
+        ),
+    );
+  }
+
   async sendNewMessage(eventName: 'ready'| 'newMessage') {
     event.eventName = eventName;
+
+    const sendData = await this.getNewMessage();
+
+    this.ws!.send(event.msg(
+        sendData.map((e) => {
+          if (e) {
+            return this.readDataFormat(
+                {
+                  id: e.id,
+                  userId: e.userId,
+                  type: e.type,
+                  text: e.text,
+                  createdAt: e.createdAt,
+                  name: e.name,
+                  role: e.role,
+                  unRead: e.unRead,
+                  room: e.transactionId,
+                },
+            );
+          }
+          return '';
+        }),
+    ));
+  }
+
+  async getNewMessage() {
     const cursorRes = await chatroomModel.getManyTransactionServiceCursor(
-        this.userId!);
+        this.userId);
 
     const lastMessage = await chatroomModel.getManyTransactionRoomLastMessage();
 
@@ -128,29 +185,180 @@ export class RobbyHandler implements LobbyHandlerInterface {
       return null;
     });
 
-    this.ws!.send(event.msg(
-        sendData.map((e) => {
-          return this.readDataFormat(e);
-        }),
-    ));
+    return sendData;
   }
 
   async createSubscriberNewMessage() {
-    const self = this;
-
     if (this.subscriberNewMessage) {
-      wSClientServiceModel.subscriberQuit(this.subscriberNewMessage)
-          .then(()=> {});
+      await wSClientServiceModel.subscriberQuit(this.subscriberNewMessage);
     }
 
     this.subscriberNewMessage = await wSClientServiceModel.sub(
         (message: any)=>{
-          self.sendNewMessage('newMessage').then();
+        /** 多人發訊息時會有重複通知，與上一次比較若相同則不發新通知 */
+
+          if (this.preMsg !== message) {
+            this.sendNewMessage('newMessage').then();
+          }
+          this.preMsg = message;
         });
+  }
+
+  static async init(
+      ws: WebSocket,
+      userId: string,
+      userName: string,
+      isAgent: boolean,
+      isCS: boolean,
+  ) {
+    const instance = new TransactionLobbyHandler(
+        ws,
+        userId,
+        userName,
+        isAgent,
+        isCS,
+    );
+    await instance.sendNewMessage('ready');
+    await instance.createSubscriberNewMessage();
+
+    return instance;
   }
 }
 
-class ChatroomHandler {
+export class UserChatroomLobbyHandler extends LobbyHandler
+  implements LobbyHandlerInterface {
+  isCS: boolean;
+  userId: string;
+  userName: string;
+
+  private constructor(
+      ws: WebSocket,
+      userId: string,
+      userName: string,
+      isCS: boolean,
+  ) {
+    super(
+        ws,
+    );
+    this.userId = userId;
+    this.userName = userName;
+    this.isCS = isCS;
+  }
+  override async handleChangeRoomEvent(data: any) {
+    if (!data || !data.roomId) {
+      return;
+    }
+    super.handleChangeRoomEvent(
+        await UserChatroomHandler.init(
+            data.roomId,
+            this.userName,
+            this.ws,
+            this.isCS,
+        ),
+    );
+  }
+
+  async sendNewMessage(eventName: 'ready'| 'newMessage') {
+    event.eventName = eventName;
+    const sendData = await this.getNewMessage();
+
+    this.ws!.send(event.msg(
+        sendData.map((e) => {
+          if (e) {
+            return this.readDataFormat(
+                {
+                  id: e.id,
+                  userId: e.userId,
+                  type: e.type,
+                  text: e.text,
+                  createdAt: e.createdAt,
+                  name: e.name,
+                  role: e.role,
+                  unRead: e.unRead,
+                  room: e.userId,
+                },
+            );
+          }
+          return '';
+        }),
+    ));
+  }
+
+  async getNewMessage() {
+    const cursorRes = await chatroomModel.getManyUserChatroomServiceCursor(
+        this.userId);
+
+    const lastMessage = await chatroomModel.getManyUserRoomLastMessage();
+
+    const cursorParm = lastMessage.map((e) => {
+      const cursorItem = cursorRes.find((f) => {
+        return e.userId === f.userId;
+      });
+
+      if (cursorItem) {
+        return {
+          userId: cursorItem.userId,
+          cursor: cursorItem.cursor,
+        };
+      }
+
+      return {
+        userId: e.userId,
+        cursor: 0,
+      };
+    });
+
+    const unreadList = await chatroomModel.getUserChatroomUnread(cursorParm);
+    const sendData = unreadList.map((e, i) => {
+      const msg = lastMessage[i];
+      if (msg) {
+        return Object.assign(msg, {
+          unRead: e,
+        });
+      }
+
+      return null;
+    });
+
+    return sendData;
+  }
+
+  async createSubscriberNewMessage() {
+    if (this.subscriberNewMessage) {
+      await wSClientServiceModel.subscriberQuit(this.subscriberNewMessage);
+    }
+
+    this.subscriberNewMessage = await wSClientServiceModel.sub(
+        (message: any)=>{
+        /** 多人發訊息時會有重複通知，與上一次比較若相同則不發新通知 */
+
+          if (this.preMsg !== message) {
+            this.sendNewMessage('newMessage').then();
+          }
+          this.preMsg = message;
+        });
+  }
+
+  static async init(
+      ws: WebSocket,
+      userId: string,
+      userName: string,
+      isCS: boolean,
+  ) {
+    const instance = new UserChatroomLobbyHandler(
+        ws,
+        userId,
+        userName,
+        isCS,
+    );
+    await instance.sendNewMessage('ready');
+    await instance.createSubscriberNewMessage();
+
+    return instance;
+  }
+}
+
+abstract class ChatroomHandler {
   userId: string;
   userName: string;
   cursor: number;
@@ -201,7 +409,7 @@ class ChatroomHandler {
         return e.id > this.cursor && this.userId !== e.userId;
       }).length,
     }));
-    await wSClientServiceModel.pub('');
+    await wSClientServiceModel.pub(JSON.stringify(messageList[0]??''));
   }
 
   dataFormat = (data: any) => {
@@ -237,6 +445,137 @@ class ChatroomHandler {
         msg,
         this.roomId,
     );
+  }
+}
+const cSName = 'CS';
+export class UserChatroomHandler extends ChatroomHandler
+  implements ChatroomHandlerInterface {
+  isCS: boolean;
+  isUserRoomId: string;
+  private constructor(
+      userId: string,
+      userName: string,
+      ws: WebSocket,
+      cursor: number,
+      isCS: boolean,
+  ) {
+    super(
+        userId,
+        userName,
+        cursor,
+        ws,
+        userId + 'User',
+    );
+    this.isCS = isCS;
+    this.isUserRoomId = userId;
+    this.userId = this.isCS?cSName:this.userId;
+  }
+
+  static async init(
+      userId: string,
+      userName: string,
+      ws: WebSocket,
+      isCS: boolean,
+  ) {
+    const cursor = await this.getCursor(userId, cSName);
+    return new UserChatroomHandler(
+        userId,
+        userName,
+        ws,
+        cursor,
+        isCS,
+    );
+  }
+
+  static async getCursor(
+      roomId: string,
+      userId: string,
+  ) {
+    const cursorRes = await chatroomModel.getUserCursor(
+        roomId,
+        userId);
+    if (cursorRes) {
+      return cursorRes.cursor;
+    }
+    return 0;
+  }
+
+  handleReadEvent() {
+    if (this.isUserRoomId) {
+      chatroomModel.upsertUserCursor(
+          this.isUserRoomId,
+          this.userId,
+      ).then((res) => {
+        this.cursor = res.cursor;
+        this.sendNotify().then();
+      })
+          .catch((e) => {
+            console.log(e);
+          });
+    }
+  }
+
+  handleSendEvent(data: any) {
+    if (this.userId) {
+      data.name = this.userName;
+      data.userId = this.userId;
+      chatroomModel.createUserChatroomMessage(
+          this.userId,
+          data.type,
+          data.name?? '',
+              data.type === 'text'? data.data: '',
+            data.type === 'image'? Buffer.from(data.data, 'base64'): undefined,
+          this.isCS? 3: 1,
+          this.isUserRoomId,
+      ).then(async (e) => {
+        await this.pushNewMessage(JSON.stringify({
+          id: e.id,
+          userId: e.userId,
+        }));
+
+        await this.pubNewMessage(
+            JSON.stringify(this.dataFormat(e)),
+        );
+      }).catch((e) => console.log(e));
+    }
+  }
+
+  async readySend() {
+    event.eventName = 'ready';
+    const res = await chatroomModel.getUserChatroomMessages(
+        this.isUserRoomId,
+    );
+
+    this.ws.send(event.msg(
+        res.map((e) => {
+          const data = this.dataFormat(e);
+          return this.isSelf(data);
+        }),
+    ));
+
+    for (const e of res) {
+      e.data = null;
+    }
+
+    if ((await wsClientChatroomModel
+        .get(-1, this.roomId!)).length === 0) {
+      for (const e of res) {
+        await wsClientChatroomModel.push(JSON.stringify({
+          id: e.id,
+          userId: e.userId,
+        }), this.roomId);
+      }
+    }
+  }
+
+  async getCursor() {
+    const cursorRes = await chatroomModel.getUserCursor(
+        this.userId,
+        this.isCS? cSName: this.isUserRoomId);
+    if (cursorRes) {
+      return cursorRes.cursor;
+    }
+    return 0;
   }
 }
 

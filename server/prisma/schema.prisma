@@ -226,6 +226,8 @@ model User {
   
     // custom begin User
   userAccumulatedReward UserAccumulatedReward[]
+  userChatroomMessange UserChatroomMessange[]
+  userChatroomCursor UserChatroomCursor[]     
   @@unique([phone, phonePrefix], name: "phone_all")
 
     // custom end User
@@ -303,14 +305,25 @@ model UserVerifyResonDes {
 
 
 // custom begin model
-model ServiceChatroom {
+model UserChatroomMessange {
   createdAt  DateTime  @default(now()) @map("created_at")                 
   id  Int @id @default(autoincrement()) @map("id")                 
   name  String  @map("name")                 
   type  String  @map("type")                 
-  userId  String  @map("user_id")                 
+  userId  String  @map("user_id")    
+  roomId String @map("room_id")
+  role  Int     
   text String 
-  data Bytes? @map("data") @db.Blob               
+  data Bytes? @map("data") @db.MediumBlob
+  user User? @relation(fields: [roomId], references: [id], onDelete: Cascade)
+}
+model UserChatroomCursor {
+  id  Int @id @default(autoincrement()) @map("id")         
+  roomId String @map("room_id")
+  userId  String @map("user_id")
+  cursor Int 
+  user User? @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  @@unique([userId, roomId], name: "uniqueUserCursorId")
 }
 model TransactionChatroomMessange {
   createdAt  DateTime  @default(now()) @map("created_at")                 

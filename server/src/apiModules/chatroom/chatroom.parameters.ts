@@ -14,42 +14,6 @@ interface TypedRequest<
 }
 
 
-type ServiceTokenReqBody = {
-            userId: string,
-}
-
-type ServiceTokenReqQuery = {
-}
-
-type ServiceTokenReqParams = {
-}
-
-type ServiceTokenReqCookie = {
-}
-
-export interface ServiceTokenRequest extends TypedRequest<
-  ServiceTokenReqBody,
-  ServiceTokenReqQuery,
-  ServiceTokenReqParams,
-  ServiceTokenReqCookie
->{
-}
-
-export type ServiceTokenParams = {
-bodyUserId: string,
-}
-
-
-export const ServiceTokenRequestConvert = (
-    body: ServiceTokenReqBody,
-    query: ServiceTokenReqQuery,
-    path: ServiceTokenReqParams,
-    cookie: ServiceTokenReqCookie,
-): ServiceTokenParams => {
-  return {
-    bodyUserId: body.userId,
-  };
-};
 type TransactionServiceTokenReqBody = {
             transactionId: string,
 }
@@ -120,6 +84,42 @@ export const TransactionTokenRequestConvert = (
 ): TransactionTokenParams => {
   return {
     bodyTransactionId: body.transactionId,
+  };
+};
+type UserTokenReqBody = {
+            userId: string,
+}
+
+type UserTokenReqQuery = {
+}
+
+type UserTokenReqParams = {
+}
+
+type UserTokenReqCookie = {
+}
+
+export interface UserTokenRequest extends TypedRequest<
+  UserTokenReqBody,
+  UserTokenReqQuery,
+  UserTokenReqParams,
+  UserTokenReqCookie
+>{
+}
+
+export type UserTokenParams = {
+bodyUserId: string,
+}
+
+
+export const UserTokenRequestConvert = (
+    body: UserTokenReqBody,
+    query: UserTokenReqQuery,
+    path: UserTokenReqParams,
+    cookie: UserTokenReqCookie,
+): UserTokenParams => {
+  return {
+    bodyUserId: body.userId,
   };
 };
 

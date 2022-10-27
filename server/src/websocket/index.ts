@@ -1,19 +1,18 @@
-
-
 import WebSocket from 'ws';
 import {Server} from 'http';
-
-
 import {Container} from 'typedi';
 import parse from 'url-parse';
 import {WSOnMessage, WSToken} from './base';
 
 import './transaction';
-import './transactionChatroom';
-import './serviceChatroom';
+
 import './realtimeTransaction';
+
+import './transactionChatroom';
 import './transactionServiceChatroom';
 
+import './userChatroom';
+import './userServiceChatroom';
 
 export class WebsocketApp {
   wss: WebSocket.Server<WebSocket.WebSocket>;

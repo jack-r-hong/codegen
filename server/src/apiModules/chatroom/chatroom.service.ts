@@ -16,28 +16,6 @@ export class ChatroomService {
 
   // custom end Inject
 
-  async serviceToken(
-      param :requestTypes.ServiceTokenParams,
-      session: Express.Request['session'],
-  ) {
-    // custom begin serviceToken
-    const res = await this.chatroomModel.serviceToken(param, {})
-        .catch((e) => {
-          throw e;
-        });
-    if (!res) {
-      throw errors.UserNotAuthorized;
-    }
-    if (res && res.id === session.userInfo?.id) {
-      return chatroomKey.generateAccessToken({
-        userName: res.name?? '',
-        userId: res.id,
-      });
-    }
-    throw errors.UserNotAuthorized;
-
-    // custom end serviceToken
-  }
   async transactionServiceToken(
       param :requestTypes.TransactionServiceTokenParams,
       session: Express.Request['session'],
@@ -89,6 +67,28 @@ export class ChatroomService {
     throw errors.UserNotAuthorized;
 
     // custom end transactionToken
+  }
+  async userToken(
+      param :requestTypes.UserTokenParams,
+      session: Express.Request['session'],
+  ) {
+    // custom begin userToken
+    const res = await this.chatroomModel.userToken(param, {})
+        .catch((e) => {
+          throw e;
+        });
+    if (!res) {
+      throw errors.UserNotAuthorized;
+    }
+    if (res) {
+      return chatroomKey.generateAccessToken({
+        userName: res.name?? '',
+        userId: res.id,
+        isCS: false,
+      });
+    }
+    throw errors.UserNotAuthorized;
+    // custom end userToken
   }
 }
 

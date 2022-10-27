@@ -1084,5 +1084,51 @@ export class UserModel {
     return res;
   }
 
+  async readManyUserBackstage2(
+      param: requestTypes.ReadManyUserBackstageParams,
+      isAgent?: boolean,
+  ) {
+    const res = await prisma.$transaction([
+      prisma.user.findMany({
+        where: {
+          isAgent,
+        },
+        select: {
+          gameUid: true,
+          id: true,
+          isAgent: true,
+          level: true,
+          phone: true,
+          phonePrefix: true,
+          remark: true,
+          userStatus: true,
+          referral: {
+            select: {
+              id: true,
+              rebate: true,
+            },
+          },
+        },
+        orderBy: {
+          [param.queryOrderByField]: param.queryOrderBy,
+        },
+        skip: param.queryPage * param.queryTake,
+        take: param.queryTake,
+      }),
+      prisma.user.count(),
+      prisma.user.count({
+        where: {
+          userStatus: 3,
+        },
+      }),
+    ]).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+
+    return res;
+  }
+
   // custom end model
 }

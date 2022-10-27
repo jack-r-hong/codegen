@@ -24,37 +24,6 @@ export class ChatroomController implements Controller {
   @Inject('app.use')
     appUse!: AppUse;
 
-  @Post('/chatroom/service/token')
-  @Validator(validSchemas.serviceTokenValidator)
-  // custom begin serviceTokenDecorator
-
-  // custom end serviceTokenDecorator
-  async serviceToken(
-      req: chatroomParams.ServiceTokenRequest,
-      res: Response,
-      next: NextFunction,
-  ) {
-    // custom begin serviceTokenCheck
-
-    // custom end serviceTokenCheck
-    ChatroomController.service.serviceToken(
-        chatroomParams.ServiceTokenRequestConvert(
-            req.body,
-            req.query,
-            req.params,
-            req.cookies,
-        ),
-        req.session,
-    )
-        .then((result) =>{
-          // custom begin serviceToken
-          res.json(result);
-
-          // custom end serviceToken
-        }).catch((e) => {
-          next(e);
-        });
-  }
   @Post('/chatroom/transaction/service/token')
   @Validator(validSchemas.transactionServiceTokenValidator)
   // custom begin transactionServiceTokenDecorator
@@ -113,6 +82,36 @@ export class ChatroomController implements Controller {
           res.json(result);
 
           // custom end transactionToken
+        }).catch((e) => {
+          next(e);
+        });
+  }
+  @Post('/chatroom/user/token')
+  @Validator(validSchemas.userTokenValidator)
+  // custom begin userTokenDecorator
+
+  // custom end userTokenDecorator
+  async userToken(
+      req: chatroomParams.UserTokenRequest,
+      res: Response,
+      next: NextFunction,
+  ) {
+    // custom begin userTokenCheck
+
+    // custom end userTokenCheck
+    ChatroomController.service.userToken(
+        chatroomParams.UserTokenRequestConvert(
+            req.body,
+            req.query,
+            req.params,
+            req.cookies,
+        ),
+        req.session,
+    )
+        .then((result) =>{
+          // custom begin userToken
+          res.json(result);
+          // custom end userToken
         }).catch((e) => {
           next(e);
         });

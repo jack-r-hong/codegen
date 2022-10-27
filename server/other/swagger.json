@@ -2556,11 +2556,11 @@
         }
       }               
     },    
-    "/chatroom/service/token" : {     
+    "/chatroom/user/token" : {     
       "post" : {
         "tags" : [ "chatroom" ],
         "summary" : "get token",
-        "operationId" : "serviceToken",                            
+        "operationId" : "userToken",                            
         "requestBody" : {
           "$ref" : "#/components/requestBodies/GetServiceChatToken"
         },              
