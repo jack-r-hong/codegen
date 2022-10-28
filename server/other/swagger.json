@@ -75,7 +75,11 @@
     {
       "name" : "rebate",
       "description" : "Operations about rebate"
-    }         
+    },
+    {
+      "name" : "customService",
+      "description" : "Operations about custom service"
+    }      
   ],
   "paths" : {
     "/captcha" : {
@@ -851,6 +855,41 @@
         }
       }      
     },   
+    "/cs/user/{id}": {
+      "get" : {
+        "tags" : [ "customService" ],
+        "summary" : "Logs user into the system",
+        "operationId" : "getOneBackstageUser", 
+        "parameters" : [ 
+          {
+            "name" : "id",
+            "in" : "path",
+            "schema" : {
+              "type" : "string",
+              "format": "uuid"
+            },
+            "required": true
+          }                   
+        ],                     
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/BackstageUser"
+          },          
+          "400" : {
+            "$ref" : "#/components/responses/BadRequest"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/Unauthorized"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          },          
+          "409" : {
+            "description": "bank account duplicate"
+          }          
+        }
+      }     
+    },    
     "/backstage/user/level": {
       "get" : {
         "tags" : [ "userLevel" ],

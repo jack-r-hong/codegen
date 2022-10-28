@@ -111,6 +111,7 @@ export class ChatroomController implements Controller {
         .then((result) =>{
           // custom begin userToken
           res.json(result);
+
           // custom end userToken
         }).catch((e) => {
           next(e);

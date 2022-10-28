@@ -88,6 +88,7 @@ export class ChatroomService {
       });
     }
     throw errors.UserNotAuthorized;
+
     // custom end userToken
   }
 }

@@ -84,6 +84,7 @@ export class ChatroomModel {
       prisma.$disconnect();
     });
     return res;
+
     // custom end userToken
   }
   // custom begin model
@@ -197,6 +198,7 @@ export class ChatroomModel {
       orderBy: {
         id: 'desc',
       },
+      take: 50,
     }).catch((e) => {
       throw e;
     }).finally(() => {
@@ -350,7 +352,6 @@ export class ChatroomModel {
     });
     return res;
   }
-
   async getManyUserChatroomServiceCursor(
       userId: string,
   ) {
@@ -365,14 +366,14 @@ export class ChatroomModel {
     });
     return res;
   }
-
   async getManyUserRoomLastMessage(
   ) {
     const res = await prisma.userChatroomMessange.findMany({
-      distinct: ['userId'],
+      distinct: ['roomId'],
       orderBy: {
         id: 'desc',
       },
+      take: 50,
     }).catch((e) => {
       throw e;
     }).finally(() => {
@@ -380,7 +381,6 @@ export class ChatroomModel {
     });
     return res;
   }
-
   async getUserChatroomUnread(
       cursorArray: {
       userId: string,

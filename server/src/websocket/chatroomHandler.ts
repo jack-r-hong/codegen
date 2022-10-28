@@ -7,7 +7,6 @@ import {ChatroomModel}
   from '../apiModules/chatroom/chatroom.model';
 import {Container} from 'typedi';
 
-const event = new WSEvent('');
 const wsClientChatroomModel = Container.get(WSClientChatroomModel);
 const chatroomModel = Container.get(ChatroomModel);
 const wSClientServiceModel = Container.get(WSClientServiceModel);
@@ -31,6 +30,7 @@ abstract class LobbyHandler {
   subscriberNewMessage?: any;
   preMsg: string = '';
   ws: WebSocket;
+  event = new WSEvent('');
 
   constructor(
       ws: WebSocket,
@@ -73,7 +73,7 @@ abstract class LobbyHandler {
 
     this.chatroomHandler = chatroomHandler;
 
-    event.eventName = 'changeRoom';
+    this.event.eventName = 'changeRoom';
 
     await this.chatroomHandler.readySend();
 
@@ -122,12 +122,12 @@ export class TransactionLobbyHandler extends LobbyHandler
     );
   }
 
-  async sendNewMessage(eventName: 'ready'| 'newMessage') {
-    event.eventName = eventName;
+  async sendNewMessage() {
+    this.event.eventName = 'newMessage';
 
     const sendData = await this.getNewMessage();
 
-    this.ws!.send(event.msg(
+    this.ws!.send(this.event.msg(
         sendData.map((e) => {
           if (e) {
             return this.readDataFormat(
@@ -198,7 +198,7 @@ export class TransactionLobbyHandler extends LobbyHandler
         /** 多人發訊息時會有重複通知，與上一次比較若相同則不發新通知 */
 
           if (this.preMsg !== message) {
-            this.sendNewMessage('newMessage').then();
+            this.sendNewMessage().then();
           }
           this.preMsg = message;
         });
@@ -218,7 +218,7 @@ export class TransactionLobbyHandler extends LobbyHandler
         isAgent,
         isCS,
     );
-    await instance.sendNewMessage('ready');
+    await instance.sendNewMessage();
     await instance.createSubscriberNewMessage();
 
     return instance;
@@ -258,11 +258,11 @@ export class UserChatroomLobbyHandler extends LobbyHandler
     );
   }
 
-  async sendNewMessage(eventName: 'ready'| 'newMessage') {
-    event.eventName = eventName;
+  async sendNewMessage() {
+    this.event.eventName = 'newMessage';
     const sendData = await this.getNewMessage();
 
-    this.ws!.send(event.msg(
+    this.ws!.send(this.event.msg(
         sendData.map((e) => {
           if (e) {
             return this.readDataFormat(
@@ -333,7 +333,7 @@ export class UserChatroomLobbyHandler extends LobbyHandler
         /** 多人發訊息時會有重複通知，與上一次比較若相同則不發新通知 */
 
           if (this.preMsg !== message) {
-            this.sendNewMessage('newMessage').then();
+            this.sendNewMessage().then();
           }
           this.preMsg = message;
         });
@@ -351,7 +351,7 @@ export class UserChatroomLobbyHandler extends LobbyHandler
         userName,
         isCS,
     );
-    await instance.sendNewMessage('ready');
+    await instance.sendNewMessage();
     await instance.createSubscriberNewMessage();
 
     return instance;
@@ -365,6 +365,7 @@ abstract class ChatroomHandler {
   ws: WebSocket;
   subscriber: any;
   roomId: string;
+  event = new WSEvent('');
 
   constructor(
       userId: string,
@@ -387,10 +388,10 @@ abstract class ChatroomHandler {
     const self = this;
     return await wsClientChatroomModel.sub(
         (message: any)=>{
-          event.eventName = 'send';
+          self.event.eventName = 'send';
 
           const data = JSON.parse(message);
-          self.ws.send(event.msg(self.isSelf(data)));
+          self.ws.send(self.event.msg(self.isSelf(data)));
 
           self.sendNotify().then();
         },
@@ -398,13 +399,13 @@ abstract class ChatroomHandler {
   }
 
   async sendNotify() {
-    event.eventName = 'notify';
+    this.event.eventName = 'notify';
 
     const messageList = (await wsClientChatroomModel
         .get(-1, this.roomId!))
         .map((e) => JSON.parse(e));
 
-    this.ws.send(event.msg({
+    this.ws.send(this.event.msg({
       unreadCouunt: messageList.filter((e: any) => {
         return e.id > this.cursor && this.userId !== e.userId;
       }).length,
@@ -541,12 +542,12 @@ export class UserChatroomHandler extends ChatroomHandler
   }
 
   async readySend() {
-    event.eventName = 'ready';
+    this.event.eventName = 'ready';
     const res = await chatroomModel.getUserChatroomMessages(
         this.isUserRoomId,
     );
 
-    this.ws.send(event.msg(
+    this.ws.send(this.event.msg(
         res.map((e) => {
           const data = this.dataFormat(e);
           return this.isSelf(data);
@@ -682,12 +683,12 @@ export class TransactionChatroomHandler extends ChatroomHandler
   }
 
   async readySend() {
-    event.eventName = 'ready';
+    this.event.eventName = 'ready';
     const res = await chatroomModel.getTransactionMessages(
           this.transactionId!,
     );
 
-    this.ws.send(event.msg(
+    this.ws.send(this.event.msg(
         res.map((e) => {
           return this.isSelf(this.dataFormat(e));
         }),
