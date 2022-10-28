@@ -668,7 +668,7 @@
       "get" : {
         "tags" : [ "user" ],
         "summary" : "backstage",
-        "operationId" : "readManyUserBackstage",
+        "operationId" : "getManyUserBackstage",
         "parameters" : [ 
           {
             "name" : "orderBy",

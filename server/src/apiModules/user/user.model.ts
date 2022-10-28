@@ -286,7 +286,7 @@ export class UserModel {
     const res = await prisma.user.findUnique({
       where: {
         id: param.pathId,
-
+        
       },
       select: {
         address: true,
@@ -421,20 +421,19 @@ export class UserModel {
 
     // custom end readBackstageUserTransaction
   }
-  async readManyUserBackstage(
-      param: requestTypes.ReadManyUserBackstageParams,
-      // custom begin readManyUserBackstageParam
-      isAgent?: boolean,
+  async getManyUserBackstage(
+      param: requestTypes.GetManyUserBackstageParams,
+      customParam: any,
+      // custom begin getManyUserBackstageParam
+      isAgent: boolean,
 
-      // custom end readManyUserBackstageParam
+      // custom end getManyUserBackstageParam
   ) {
+    // custom begin getManyUserBackstage
     const res = await prisma.$transaction([
       prisma.user.findMany({
         where: {
-        // custom begin readManyUserBackstageWhere
           isAgent,
-
-        // custom end readManyUserBackstageWhere
         },
         select: {
           gameUid: true,
@@ -445,15 +444,12 @@ export class UserModel {
           phonePrefix: true,
           remark: true,
           userStatus: true,
-          // custom begin readManyUserBackstage
           referral: {
             select: {
               id: true,
               rebate: true,
             },
           },
-
-          // custom end readManyUserBackstage
         },
         orderBy: {
           [param.queryOrderByField]: param.queryOrderBy,
@@ -472,8 +468,9 @@ export class UserModel {
     }).finally(() => {
       prisma.$disconnect();
     });
-
     return res;
+
+    // custom end getManyUserBackstage
   }
   async captcha(
       param: requestTypes.CaptchaParams,
@@ -1083,9 +1080,8 @@ export class UserModel {
     });
     return res;
   }
-
   async readManyUserBackstage2(
-      param: requestTypes.ReadManyUserBackstageParams,
+      param: requestTypes.GetManyUserBackstageParams,
       isAgent?: boolean,
   ) {
     const res = await prisma.$transaction([
@@ -1126,7 +1122,6 @@ export class UserModel {
     }).finally(() => {
       prisma.$disconnect();
     });
-
     return res;
   }
 

@@ -301,20 +301,20 @@ export class UserController implements Controller {
         });
   }
   @Get('/backstage/users')
-  @Validator(validSchemas.readManyUserBackstageValidator)
-  // custom begin readManyUserBackstageDecorator
+  @Validator(validSchemas.getManyUserBackstageValidator)
+  // custom begin getManyUserBackstageDecorator
 
-  // custom end readManyUserBackstageDecorator
-  async readManyUserBackstage(
-      req: userParams.ReadManyUserBackstageRequest,
+  // custom end getManyUserBackstageDecorator
+  async getManyUserBackstage(
+      req: userParams.GetManyUserBackstageRequest,
       res: Response,
       next: NextFunction,
   ) {
-    // custom begin readManyUserBackstageCheck
+    // custom begin getManyUserBackstageCheck
 
-    // custom end readManyUserBackstageCheck
-    UserController.service.readManyUserBackstage(
-        userParams.ReadManyUserBackstageRequestConvert(
+    // custom end getManyUserBackstageCheck
+    UserController.service.getManyUserBackstage(
+        userParams.GetManyUserBackstageRequestConvert(
             req.body,
             req.query,
             req.params,
@@ -323,7 +323,10 @@ export class UserController implements Controller {
         req.session,
     )
         .then((result) =>{
+          // custom begin getManyUserBackstage
           res.json(result);
+
+          // custom end getManyUserBackstage
         }).catch((e) => {
           next(e);
         });

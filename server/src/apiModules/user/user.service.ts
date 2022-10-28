@@ -410,8 +410,9 @@ export class UserService {
   ) {
     // custom begin getUserBackstageAgents
     const res =
-    await this.userModel.readManyUserBackstage(
+    await this.userModel.getManyUserBackstage(
         param,
+        {},
         true,
     ).catch((e) =>{
       throw e;
@@ -548,25 +549,22 @@ export class UserService {
 
     // custom end readBackstageUserTransaction
   }
-  async readManyUserBackstage(
-      param :requestTypes.ReadManyUserBackstageParams,
+  async getManyUserBackstage(
+      param :requestTypes.GetManyUserBackstageParams,
       session: Express.Request['session'],
   ) {
-    // custom begin readManyUserBackstage
-
-    // custom end readManyUserBackstage
-
-    const res = await this.userModel.readManyUserBackstage(
+    // custom begin getManyUserBackstage
+    const res =
+    await this.userModel.getManyUserBackstage(
         param,
+        {},
+        false,
     ).catch((e) =>{
       throw e;
     });
-
-    // custom begin readManyUserBackstage2
     return backageUserFormat(...res, param.queryTake);
 
-    // custom end readManyUserBackstage2
-    return res;
+    // custom end getManyUserBackstage
   }
   async captcha(
       param :requestTypes.CaptchaParams,

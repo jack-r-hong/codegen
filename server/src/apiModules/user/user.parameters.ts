@@ -464,31 +464,31 @@ export const ReadBackstageUserTransactionRequestConvert = (
             queryEndTime: query.end_time,
   };
 };
-type ReadManyUserBackstageReqBody = {
+type GetManyUserBackstageReqBody = {
   }
 
-type ReadManyUserBackstageReqQuery = {
+type GetManyUserBackstageReqQuery = {
       orderBy: string
       orderByField: string
       page: string
       take: string
 }
 
-type ReadManyUserBackstageReqParams = {
+type GetManyUserBackstageReqParams = {
 }
 
-type ReadManyUserBackstageReqCookie = {
+type GetManyUserBackstageReqCookie = {
 }
 
-export interface ReadManyUserBackstageRequest extends TypedRequest<
-  ReadManyUserBackstageReqBody,
-  ReadManyUserBackstageReqQuery,
-  ReadManyUserBackstageReqParams,
-  ReadManyUserBackstageReqCookie
+export interface GetManyUserBackstageRequest extends TypedRequest<
+  GetManyUserBackstageReqBody,
+  GetManyUserBackstageReqQuery,
+  GetManyUserBackstageReqParams,
+  GetManyUserBackstageReqCookie
 >{
 }
 
-export type ReadManyUserBackstageParams = {
+export type GetManyUserBackstageParams = {
       queryOrderBy: string
       queryOrderByField: string
       queryPage: number
@@ -496,12 +496,12 @@ export type ReadManyUserBackstageParams = {
 }
 
 
-export const ReadManyUserBackstageRequestConvert = (
-    body: ReadManyUserBackstageReqBody,
-    query: ReadManyUserBackstageReqQuery,
-    path: ReadManyUserBackstageReqParams,
-    cookie: ReadManyUserBackstageReqCookie,
-): ReadManyUserBackstageParams => {
+export const GetManyUserBackstageRequestConvert = (
+    body: GetManyUserBackstageReqBody,
+    query: GetManyUserBackstageReqQuery,
+    path: GetManyUserBackstageReqParams,
+    cookie: GetManyUserBackstageReqCookie,
+): GetManyUserBackstageParams => {
   return {
             queryOrderBy: query.orderBy,
             queryOrderByField: query.orderByField,

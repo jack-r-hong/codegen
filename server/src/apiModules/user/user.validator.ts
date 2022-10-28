@@ -362,7 +362,7 @@ export const readBackstageUserTransactionValidator: Schema = {
     },
   },
 };
-export const readManyUserBackstageValidator: Schema = {
+export const getManyUserBackstageValidator: Schema = {
   'orderBy': {
     in: 'query',
     isString: true,
