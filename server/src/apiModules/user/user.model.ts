@@ -3,7 +3,22 @@ import * as Prisma from '@prisma/client';
 import * as requestTypes from './user.parameters';
 import {errors} from '../../errors';
 // custom begin import
-
+const getUserBackstageSelect = {
+  gameUid: true,
+  id: true,
+  isAgent: true,
+  level: true,
+  phone: true,
+  phonePrefix: true,
+  remark: true,
+  userStatus: true,
+  referral: {
+    select: {
+      id: true,
+      rebate: true,
+    },
+  },
+};
 // custom end import
 
 const prisma = new Prisma.PrismaClient();
@@ -286,7 +301,7 @@ export class UserModel {
     const res = await prisma.user.findUnique({
       where: {
         id: param.pathId,
-        
+
       },
       select: {
         address: true,
@@ -457,9 +472,14 @@ export class UserModel {
         skip: param.queryPage * param.queryTake,
         take: param.queryTake,
       }),
-      prisma.user.count(),
       prisma.user.count({
         where: {
+          isAgent,
+        },
+      }),
+      prisma.user.count({
+        where: {
+          isAgent,
           userStatus: 3,
         },
       }),
@@ -482,6 +502,27 @@ export class UserModel {
     // custom begin captcha
 
     // custom end captcha
+  }
+  async getOneCustomServiceUser(
+      param: requestTypes.GetOneCustomServiceUserParams,
+      customParam: any,
+      // custom begin getOneCustomServiceUserParam
+
+      // custom end getOneCustomServiceUserParam
+  ) {
+    // custom begin getOneCustomServiceUser
+    const res = await prisma.user.findUnique({
+      where: {
+        id: param.pathId,
+      },
+      select: getUserBackstageSelect,
+    }).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+    return res;
+    // custom end getOneCustomServiceUser
   }
   async forgetPasswordPhoneCheck(
       param: requestTypes.ForgetPasswordPhoneCheckParams,
@@ -1089,22 +1130,7 @@ export class UserModel {
         where: {
           isAgent,
         },
-        select: {
-          gameUid: true,
-          id: true,
-          isAgent: true,
-          level: true,
-          phone: true,
-          phonePrefix: true,
-          remark: true,
-          userStatus: true,
-          referral: {
-            select: {
-              id: true,
-              rebate: true,
-            },
-          },
-        },
+        select: getUserBackstageSelect,
         orderBy: {
           [param.queryOrderByField]: param.queryOrderBy,
         },

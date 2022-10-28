@@ -128,7 +128,9 @@ export class ChatroomModel {
         userId: true,
         role: true,
         text: true,
+        type: true,
         data: true,
+        createdAt: true,
       },
     }).catch((e) => {
       throw e;
@@ -344,6 +346,8 @@ export class ChatroomModel {
         role: true,
         text: true,
         data: true,
+        type: true,
+        createdAt: true,
       },
     }).catch((e) => {
       throw e;

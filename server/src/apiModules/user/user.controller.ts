@@ -363,6 +363,36 @@ export class UserController implements Controller {
           next(e);
         });
   }
+  @Get('/custom_service/user/:id')
+  @Validator(validSchemas.getOneCustomServiceUserValidator)
+  // custom begin getOneCustomServiceUserDecorator
+
+  // custom end getOneCustomServiceUserDecorator
+  async getOneCustomServiceUser(
+      req: userParams.GetOneCustomServiceUserRequest,
+      res: Response,
+      next: NextFunction,
+  ) {
+    // custom begin getOneCustomServiceUserCheck
+
+    // custom end getOneCustomServiceUserCheck
+    UserController.service.getOneCustomServiceUser(
+        userParams.GetOneCustomServiceUserRequestConvert(
+            req.body,
+            req.query,
+            req.params,
+            req.cookies,
+        ),
+        req.session,
+    )
+        .then((result) =>{
+          // custom begin getOneCustomServiceUser
+          res.json(result);
+          // custom end getOneCustomServiceUser
+        }).catch((e) => {
+          next(e);
+        });
+  }
   @Post('/forget_password/phone_check')
   @Validator(validSchemas.forgetPasswordPhoneCheckValidator)
   // custom begin forgetPasswordPhoneCheckDecorator

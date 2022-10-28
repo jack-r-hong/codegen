@@ -542,6 +542,43 @@ export const CaptchaRequestConvert = (
   return {
   };
 };
+type GetOneCustomServiceUserReqBody = {
+  }
+
+type GetOneCustomServiceUserReqQuery = {
+}
+
+type GetOneCustomServiceUserReqParams = {
+      id: string
+,
+}
+
+type GetOneCustomServiceUserReqCookie = {
+}
+
+export interface GetOneCustomServiceUserRequest extends TypedRequest<
+  GetOneCustomServiceUserReqBody,
+  GetOneCustomServiceUserReqQuery,
+  GetOneCustomServiceUserReqParams,
+  GetOneCustomServiceUserReqCookie
+>{
+}
+
+export type GetOneCustomServiceUserParams = {
+      pathId: string
+}
+
+
+export const GetOneCustomServiceUserRequestConvert = (
+    body: GetOneCustomServiceUserReqBody,
+    query: GetOneCustomServiceUserReqQuery,
+    path: GetOneCustomServiceUserReqParams,
+    cookie: GetOneCustomServiceUserReqCookie,
+): GetOneCustomServiceUserParams => {
+  return {
+            pathId: path.id,
+  };
+};
 type ForgetPasswordPhoneCheckReqBody = {
             phone: string,
           phonePrefix: string,

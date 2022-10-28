@@ -382,6 +382,13 @@ export const getManyUserBackstageValidator: Schema = {
 };
 export const captchaValidator: Schema = {
 };
+export const getOneCustomServiceUserValidator: Schema = {
+  'id': {
+    in: 'params',
+    isString: true,
+    notEmpty: true,
+  },
+};
 export const forgetPasswordPhoneCheckValidator: Schema = {
   'phone': {
     in: 'body',

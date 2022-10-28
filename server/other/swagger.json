@@ -703,7 +703,7 @@
               "type" : "integer",
               "default": 10
             }    
-          }                   
+          }             
         ],            
         "responses" : {
           "200" : {
@@ -855,11 +855,11 @@
         }
       }      
     },   
-    "/cs/user/{id}": {
+    "/custom_service/user/{id}": {
       "get" : {
-        "tags" : [ "customService" ],
+        "tags" : [ "user" ],
         "summary" : "Logs user into the system",
-        "operationId" : "getOneBackstageUser", 
+        "operationId" : "getOneCustomServiceUser", 
         "parameters" : [ 
           {
             "name" : "id",
@@ -1783,6 +1783,41 @@
         } ]
       }      
     },
+    "/custom_service/transaction/{id}": {
+      "get" : {
+        "tags" : [ "user" ],
+        "summary" : "Logs user into the system",
+        "operationId" : "getOneCustomServiceTransaction", 
+        "parameters" : [ 
+          {
+            "name" : "id",
+            "in" : "path",
+            "schema" : {
+              "type" : "string",
+              "format": "uuid"
+            },
+            "required": true
+          }                   
+        ],                     
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/Transaction"
+          },          
+          "400" : {
+            "$ref" : "#/components/responses/BadRequest"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/Unauthorized"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/Forbidden"
+          },          
+          "409" : {
+            "description": "bank account duplicate"
+          }          
+        }
+      }     
+    },     
     "/transaction/exchange_rate/buy" : {     
       "get" : {
         "tags" : [ "transaction" ],

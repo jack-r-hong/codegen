@@ -582,6 +582,17 @@ export class UserService {
 
     // custom end captcha
   }
+  async getOneCustomServiceUser(
+      param :requestTypes.GetOneCustomServiceUserParams,
+      session: Express.Request['session'],
+  ) {
+    // custom begin getOneCustomServiceUser
+    const res = await this.userModel.getOneCustomServiceUser(param, {});
+
+    return await backageUserFormat(res?[res]:[], 0, 0, 0);
+
+    // custom end getOneCustomServiceUser
+  }
   async forgetPasswordPhoneCheck(
       param :requestTypes.ForgetPasswordPhoneCheckParams,
       session: Express.Request['session'],

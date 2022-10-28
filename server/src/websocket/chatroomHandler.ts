@@ -25,6 +25,8 @@ interface LobbyHandlerInterface {
   ws?: WebSocket
 }
 
+// lobby
+
 abstract class LobbyHandler {
   chatroomHandler: ChatroomHandlerInterface| null = null;
   subscriberNewMessage?: any;
@@ -357,6 +359,8 @@ export class UserChatroomLobbyHandler extends LobbyHandler
     return instance;
   }
 }
+
+// chatroom
 
 abstract class ChatroomHandler {
   userId: string;
