@@ -24,6 +24,36 @@ export class TransactionController implements Controller {
   @Inject('app.use')
     appUse!: AppUse;
 
+  @Get('/custom_service/transaction/:id')
+  @Validator(validSchemas.getOneCustomServiceTransactionValidator)
+  // custom begin getOneCustomServiceTransactionDecorator
+
+  // custom end getOneCustomServiceTransactionDecorator
+  async getOneCustomServiceTransaction(
+      req: transactionParams.GetOneCustomServiceTransactionRequest,
+      res: Response,
+      next: NextFunction,
+  ) {
+    // custom begin getOneCustomServiceTransactionCheck
+
+    // custom end getOneCustomServiceTransactionCheck
+    TransactionController.service.getOneCustomServiceTransaction(
+        transactionParams.GetOneCustomServiceTransactionRequestConvert(
+            req.body,
+            req.query,
+            req.params,
+            req.cookies,
+        ),
+        req.session,
+    )
+        .then((result) =>{
+          // custom begin getOneCustomServiceTransaction
+          res.json(result);
+          // custom end getOneCustomServiceTransaction
+        }).catch((e) => {
+          next(e);
+        });
+  }
   @Post('/transaction')
   @Validator(validSchemas.createTransactionValidator)
   // custom begin createTransactionDecorator

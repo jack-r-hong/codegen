@@ -75,11 +75,7 @@
     {
       "name" : "rebate",
       "description" : "Operations about rebate"
-    },
-    {
-      "name" : "customService",
-      "description" : "Operations about custom service"
-    }      
+    }    
   ],
   "paths" : {
     "/captcha" : {
@@ -1785,7 +1781,7 @@
     },
     "/custom_service/transaction/{id}": {
       "get" : {
-        "tags" : [ "user" ],
+        "tags" : [ "transaction" ],
         "summary" : "Logs user into the system",
         "operationId" : "getOneCustomServiceTransaction", 
         "parameters" : [ 

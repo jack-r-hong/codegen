@@ -388,6 +388,7 @@ export class UserController implements Controller {
         .then((result) =>{
           // custom begin getOneCustomServiceUser
           res.json(result);
+
           // custom end getOneCustomServiceUser
         }).catch((e) => {
           next(e);

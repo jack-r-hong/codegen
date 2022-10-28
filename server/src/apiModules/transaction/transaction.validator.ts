@@ -7,6 +7,13 @@ import * as sessions from '../../sessions';
 
 
 
+export const getOneCustomServiceTransactionValidator: Schema = {
+  'id': {
+    in: 'params',
+    isString: true,
+    notEmpty: true,
+  },
+};
 export const createTransactionValidator: Schema = {
   'bankId': {
     in: 'body',

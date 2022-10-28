@@ -35,6 +35,42 @@ const payMethodMap = {
   3: '超商儲值',
   4: 'ATM轉帳',
 };
+
+const readOneOrder = (
+    res: Awaited<ReturnType<typeof transactionModel.readOneTransaction>>,
+) => {
+  let name = null;
+  let gameUid = null;
+  let receiveName = null;
+  let receiveGameUid = null;
+  if ( !res || !res.user) {
+    return;
+  }
+  if (res.bos === 2) {
+    name = res.user.name;
+    gameUid = res.user.gameUid;
+    if (res.transactionRecive && res.transactionRecive.user) {
+      receiveName = res.transactionRecive.user.name;
+      receiveGameUid = res.transactionRecive.user.gameUid;
+    }
+  } else {
+    receiveName = res.user.name;
+    receiveGameUid = res.user.gameUid;
+    if (res.transactionRecive && res.transactionRecive.user) {
+      name = res.transactionRecive.user.name;
+      gameUid = res.transactionRecive.user.gameUid;
+    }
+  }
+  const flatten ={
+    name,
+    gameUid,
+    receiveName,
+    receiveGameUid,
+  };
+  delete (res as any).user;
+  delete (res as any).transactionRecive;
+  return Object.assign(res, flatten);
+};
 async function calculationTransation(
     bos: number,
     buyOptionId: number | undefined,
@@ -170,6 +206,20 @@ export class TransactionService {
 
   // custom end Inject
 
+  async getOneCustomServiceTransaction(
+      param :requestTypes.GetOneCustomServiceTransactionParams,
+      session: Express.Request['session'],
+  ) {
+    // custom begin getOneCustomServiceTransaction
+    const res = await this.transactionModel.readOneTransaction(
+        param,
+    ).catch((e) =>{
+      throw e;
+    });
+
+    return readOneOrder(res);
+    // custom end getOneCustomServiceTransaction
+  }
   async createTransaction(
       param :requestTypes.CreateTransactionParams,
       session: Express.Request['session'],
@@ -520,37 +570,8 @@ export class TransactionService {
     });
 
     // custom begin readOneTransaction2
-    let name = null;
-    let gameUid = null;
-    let receiveName = null;
-    let receiveGameUid = null;
-    if ( !res || !res.user) {
-      return;
-    }
-    if (res.bos === 2) {
-      name = res.user.name;
-      gameUid = res.user.gameUid;
-      if (res.transactionRecive && res.transactionRecive.user) {
-        receiveName = res.transactionRecive.user.name;
-        receiveGameUid = res.transactionRecive.user.gameUid;
-      }
-    } else {
-      receiveName = res.user.name;
-      receiveGameUid = res.user.gameUid;
-      if (res.transactionRecive && res.transactionRecive.user) {
-        name = res.transactionRecive.user.name;
-        gameUid = res.transactionRecive.user.gameUid;
-      }
-    }
-    const flatten ={
-      name,
-      gameUid,
-      receiveName,
-      receiveGameUid,
-    };
-    delete (res as any).user;
-    delete (res as any).transactionRecive;
-    return Object.assign(res, flatten);
+    return readOneOrder(res);
+
 
     // custom end readOneTransaction2
     return res;

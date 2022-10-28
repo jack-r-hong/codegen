@@ -11,6 +11,17 @@ const prisma = new Prisma.PrismaClient();
 
 @Service()
 export class TransactionModel {
+  async getOneCustomServiceTransaction(
+      param: requestTypes.GetOneCustomServiceTransactionParams,
+      customParam: any,
+      // custom begin getOneCustomServiceTransactionParam
+
+      // custom end getOneCustomServiceTransactionParam
+  ) {
+    // custom begin getOneCustomServiceTransaction
+
+    // custom end getOneCustomServiceTransaction
+  }
   async createTransaction(
       param: requestTypes.CreateTransactionParams,
       customParam: any,

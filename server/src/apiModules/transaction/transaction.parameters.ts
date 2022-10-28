@@ -14,6 +14,43 @@ interface TypedRequest<
 }
 
 
+type GetOneCustomServiceTransactionReqBody = {
+  }
+
+type GetOneCustomServiceTransactionReqQuery = {
+}
+
+type GetOneCustomServiceTransactionReqParams = {
+      id: string
+,
+}
+
+type GetOneCustomServiceTransactionReqCookie = {
+}
+
+export interface GetOneCustomServiceTransactionRequest extends TypedRequest<
+  GetOneCustomServiceTransactionReqBody,
+  GetOneCustomServiceTransactionReqQuery,
+  GetOneCustomServiceTransactionReqParams,
+  GetOneCustomServiceTransactionReqCookie
+>{
+}
+
+export type GetOneCustomServiceTransactionParams = {
+      pathId: string
+}
+
+
+export const GetOneCustomServiceTransactionRequestConvert = (
+    body: GetOneCustomServiceTransactionReqBody,
+    query: GetOneCustomServiceTransactionReqQuery,
+    path: GetOneCustomServiceTransactionReqParams,
+    cookie: GetOneCustomServiceTransactionReqCookie,
+): GetOneCustomServiceTransactionParams => {
+  return {
+            pathId: path.id,
+  };
+};
 type CreateTransactionReqBody = {
             bankId: number|undefined,
           bos: number,

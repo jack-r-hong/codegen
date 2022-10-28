@@ -19,6 +19,7 @@ const getUserBackstageSelect = {
     },
   },
 };
+
 // custom end import
 
 const prisma = new Prisma.PrismaClient();
@@ -301,7 +302,7 @@ export class UserModel {
     const res = await prisma.user.findUnique({
       where: {
         id: param.pathId,
-
+        
       },
       select: {
         address: true,
@@ -522,6 +523,7 @@ export class UserModel {
       prisma.$disconnect();
     });
     return res;
+
     // custom end getOneCustomServiceUser
   }
   async forgetPasswordPhoneCheck(

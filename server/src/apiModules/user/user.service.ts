@@ -588,7 +588,6 @@ export class UserService {
   ) {
     // custom begin getOneCustomServiceUser
     const res = await this.userModel.getOneCustomServiceUser(param, {});
-
     return await backageUserFormat(res?[res]:[], 0, 0, 0);
 
     // custom end getOneCustomServiceUser
