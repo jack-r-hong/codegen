@@ -1,18 +1,21 @@
 import WebSocket from 'ws';
-import {WSToken, WSOnMessage, MyWebSocketServer, WSEvent} from './base';
-import {WSClientChatroomModel} from '../redisClient/models/webSocketModels';
+import {WSToken, WSOnMessage, MyWebSocketServer, WSEvent} from '../base';
+import {WSClientChatroomModel} from '../../redisClient/models/webSocketModels';
 import {Service, Container} from 'typedi';
 import {IncomingMessage} from 'http';
-import {UserChatroomLobbyHandler} from './chatroomHandler';
+import {TransactionLobbyHandler} from './chatroomHandler';
 
-const event = new WSEvent('user_service_chatroom');
+const event = new WSEvent('transaction_service_chatroom');
 const wsClientChatroomModel = Container.get(WSClientChatroomModel);
+
 
 @Service({id: WSToken, multiple: true})
 export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
   wsPath: string = `/${event.eventName}`;
+  transactionId?: string;
   userId?: string;
   userName?: string;
+  isAgent?: boolean;
   isCS?: boolean;
   ws?: WebSocket;
   subscriberRoom?: any;
@@ -27,14 +30,16 @@ export class OnTransactionWS extends MyWebSocketServer implements WSOnMessage {
 
     this.userId = 'CS';
     this.userName = 'CS';
+    this.isAgent = false;
     this.isCS = true;
 
     const self = this;
 
-    const lobbyHandler = await UserChatroomLobbyHandler.init(
+    const lobbyHandler = await TransactionLobbyHandler.init(
         ws,
         this.userId,
         this.userName,
+        false,
         true,
     );
 

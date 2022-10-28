@@ -1,5 +1,5 @@
 import WebSocket from 'ws';
-import {WSToken, WSOnMessage, MyWebSocketServer, WSEvent} from './base';
+import {WSToken, WSOnMessage, MyWebSocketServer, WSEvent} from '../base';
 import {Service} from 'typedi';
 import {IncomingMessage} from 'http';
 import {UserChatroomHandler} from './chatroomHandler';

@@ -7,12 +7,13 @@ import {WSOnMessage, WSToken} from './base';
 import './transaction';
 
 import './realtimeTransaction';
+import './customerServiceNotify';
 
-import './transactionChatroom';
-import './transactionServiceChatroom';
+import './chatroom/transactionChatroom';
+import './chatroom/transactionServiceChatroom';
 
-import './userChatroom';
-import './userServiceChatroom';
+import './chatroom/userChatroom';
+import './chatroom/userServiceChatroom';
 
 export class WebsocketApp {
   wss: WebSocket.Server<WebSocket.WebSocket>;

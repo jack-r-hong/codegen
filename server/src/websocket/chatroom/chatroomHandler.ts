@@ -1,11 +1,12 @@
 import WebSocket from 'ws';
-import {WSEvent} from './base';
+import {WSEvent} from '../base';
 import {
   WSClientChatroomModel,
-  WSClientServiceModel} from '../redisClient/models/webSocketModels';
+  WSClientServiceModel} from '../../redisClient/models/webSocketModels';
 import {ChatroomModel}
-  from '../apiModules/chatroom/chatroom.model';
+  from '../../apiModules/chatroom/chatroom.model';
 import {Container} from 'typedi';
+import {OnCustomerService} from '../eventEmit';
 
 const wsClientChatroomModel = Container.get(WSClientChatroomModel);
 const chatroomModel = Container.get(ChatroomModel);
@@ -130,24 +131,27 @@ export class TransactionLobbyHandler extends LobbyHandler
     const sendData = await this.getNewMessage();
 
     this.ws!.send(this.event.msg(
-        sendData.map((e) => {
-          if (e) {
-            return this.readDataFormat(
-                {
-                  id: e.id,
-                  userId: e.userId,
-                  type: e.type,
-                  text: e.text,
-                  createdAt: e.createdAt,
-                  name: e.name,
-                  role: e.role,
-                  unRead: e.unRead,
-                  room: e.transactionId,
-                },
-            );
-          }
-          return '';
-        }),
+        {
+          currentRoom: this.transactionId,
+          dataList: sendData.map((e) => {
+            if (e) {
+              return this.readDataFormat(
+                  {
+                    id: e.id,
+                    userId: e.userId,
+                    type: e.type,
+                    text: e.text,
+                    createdAt: e.createdAt,
+                    name: e.name,
+                    role: e.role,
+                    unRead: e.unRead,
+                    room: e.transactionId,
+                  },
+              );
+            }
+            return '';
+          }),
+        },
     ));
   }
 
@@ -198,11 +202,7 @@ export class TransactionLobbyHandler extends LobbyHandler
     this.subscriberNewMessage = await wSClientServiceModel.sub(
         (message: any)=>{
         /** 多人發訊息時會有重複通知，與上一次比較若相同則不發新通知 */
-
-          if (this.preMsg !== message) {
-            this.sendNewMessage().then();
-          }
-          this.preMsg = message;
+          this.sendNewMessage().then();
         });
   }
 
@@ -232,6 +232,7 @@ export class UserChatroomLobbyHandler extends LobbyHandler
   isCS: boolean;
   userId: string;
   userName: string;
+  userRoomId: string;
 
   private constructor(
       ws: WebSocket,
@@ -245,14 +246,16 @@ export class UserChatroomLobbyHandler extends LobbyHandler
     this.userId = userId;
     this.userName = userName;
     this.isCS = isCS;
+    this.userRoomId = '';
   }
   override async handleChangeRoomEvent(data: any) {
     if (!data || !data.roomId) {
       return;
     }
+    this.userRoomId = data.roomId;
     super.handleChangeRoomEvent(
         await UserChatroomHandler.init(
-            data.roomId,
+            this.userRoomId,
             this.userName,
             this.ws,
             this.isCS,
@@ -265,24 +268,27 @@ export class UserChatroomLobbyHandler extends LobbyHandler
     const sendData = await this.getNewMessage();
 
     this.ws!.send(this.event.msg(
-        sendData.map((e) => {
-          if (e) {
-            return this.readDataFormat(
-                {
-                  id: e.id,
-                  userId: e.userId,
-                  type: e.type,
-                  text: e.text,
-                  createdAt: e.createdAt,
-                  name: e.name,
-                  role: e.role,
-                  unRead: e.unRead,
-                  room: e.userId,
-                },
-            );
-          }
-          return '';
-        }),
+        {
+          currentRoom: this.userRoomId,
+          dataList: sendData.map((e) => {
+            if (e) {
+              return this.readDataFormat(
+                  {
+                    id: e.id,
+                    userId: e.userId,
+                    type: e.type,
+                    text: e.text,
+                    createdAt: e.createdAt,
+                    name: e.name,
+                    role: e.role,
+                    unRead: e.unRead,
+                    room: e.userId,
+                  },
+              );
+            }
+            return '';
+          }),
+        },
     ));
   }
 
@@ -333,11 +339,7 @@ export class UserChatroomLobbyHandler extends LobbyHandler
     this.subscriberNewMessage = await wSClientServiceModel.sub(
         (message: any)=>{
         /** 多人發訊息時會有重複通知，與上一次比較若相同則不發新通知 */
-
-          if (this.preMsg !== message) {
-            this.sendNewMessage().then();
-          }
-          this.preMsg = message;
+          this.sendNewMessage().then();
         });
   }
 
@@ -541,6 +543,7 @@ export class UserChatroomHandler extends ChatroomHandler
         await this.pubNewMessage(
             JSON.stringify(this.dataFormat(e)),
         );
+        OnCustomerService.emit('userChatroom');
       }).catch((e) => console.log(e));
     }
   }
@@ -682,6 +685,7 @@ export class TransactionChatroomHandler extends ChatroomHandler
         await this.pubNewMessage(
             JSON.stringify(this.dataFormat(e)),
         );
+        OnCustomerService.emit('transactionChatroom');
       }).catch((e) => console.log(e));
     }
   }
